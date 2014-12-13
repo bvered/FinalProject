@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -13,21 +14,29 @@ namespace Server
 {
     public static class NHibernateConfig
     {
-        private const string DatabaseFile = "FinalProjectDB.accdb";
+      //  private const string DatabaseFile = "FinalProjectDB.accdb";
 
         public static ISessionFactory CreateSessionFactory()
         {
+
+          return Fluently.Configure()
+   .Database(MsSqlConfiguration.MsSql2012.ConnectionString(c => c.FromConnectionStringWithKey("ConnectionString")))
+      .Mappings(AddMappings)
+                .ExposeConfiguration(BuildSchema)
+                .BuildSessionFactory();
+
+            /*
             return Fluently.Configure()
                 .Database(JetDriverConfiguration.Standard.ConnectionString(SetAccessDbFile))
                 .Mappings(AddMappings)
                 .ExposeConfiguration(BuildSchema)
-                .BuildSessionFactory();
+                .BuildSessionFactory(); */
         }
 
-        private static void SetAccessDbFile(JetDriverConnectionStringBuilder c)
+  /*      private static void SetAccessDbFile(JetDriverConnectionStringBuilder c)
         {
             c.DatabaseFile(DatabaseFile);
-        }
+        } */
 
         private static void AddMappings(MappingConfiguration m)
         {
