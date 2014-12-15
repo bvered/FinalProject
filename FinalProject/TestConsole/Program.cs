@@ -20,13 +20,13 @@ namespace TestConsole
 
             Guid universityId = Guid.NewGuid();
 
-            Teacher.getBestTeachers(session);
+            getBestTeachers(session);
 
             University universityWithId = session.Get<University>(universityId);
             IList<User> allUsers = session.QueryOver<User>().List();
             IList<string> allUserFullNames = session.QueryOver<User>().Select(x => x.FullName).List<string>();
 
-            Comment.getReportedComments(session);
+            getReportedComments(session);
 
             session.Close();
         }
@@ -58,25 +58,63 @@ namespace TestConsole
 
         private void addTeacherCritiries()
         {
-            List<TeacherCriteria> teacherCritias = new List<TeacherCriteria>();
-            teacherCritias.Add(new TeacherCriteria("Student- teacher relationship"));
-            teacherCritias.Add(new TeacherCriteria("Teaching ability"));
-            teacherCritias.Add(new TeacherCriteria("Teachers knowlegde level"));
-            teacherCritias.Add(new TeacherCriteria("The teacher Encouregment for self learning"));
-            teacherCritias.Add(new TeacherCriteria("The teacher interest level"));
+            List<TeacherCriteria> teacherCritias = new List<TeacherCriteria>
+            {
+                new TeacherCriteria("Student- teacher relationship"),
+                new TeacherCriteria("Teaching ability"),
+                new TeacherCriteria("Teachers knowlegde level"),
+                new TeacherCriteria("The teacher Encouregment for self learning"),
+                new TeacherCriteria("The teacher interest level")
+            };
         }
 
         private void addCourseCritiries()
         {
-            List<CourseCriteria> courseCritias = new List<CourseCriteria>();
-            courseCritias.Add(new CourseCriteria("Material ease"));
-            courseCritias.Add(new CourseCriteria("Time investment for home-work"));
-            courseCritias.Add(new CourseCriteria("Number of home-work submissions"));
-            courseCritias.Add(new CourseCriteria("Time invesment for test learning"));
-            courseCritias.Add(new CourseCriteria("Course usability"));
-            courseCritias.Add(new CourseCriteria("Course grades average"));
-            courseCritias.Add(new CourseCriteria("Does the attendance is mandatory"));
-            courseCritias.Add(new CourseCriteria("Does the test has open material/reference Pages"));
+            List<CourseCriteria> courseCritias = new List<CourseCriteria>
+            {
+                new CourseCriteria("Material ease"),
+                new CourseCriteria("Time investment for home-work"),
+                new CourseCriteria("Number of home-work submissions"),
+                new CourseCriteria("Time investment for test learning"),
+                new CourseCriteria("Course usability"),
+                new CourseCriteria("Course grades average"),
+                new CourseCriteria("Does the attendance is mandatory"),
+                new CourseCriteria("Does the test has open material/reference Pages")
+            };
         }
+
+        private static void getReportedComments(ISession session)
+        {
+            IList<CourseComment> courseCommentWithMoreThen5Reports = session.QueryOver<CourseComment>()
+                                                                            .Where(x => x.Reports > 5).List();
+        }
+
+        private static void getBestTeachers(ISession session)
+        {
+            IList<Teacher> bestTeachers = session.QueryOver<Teacher>().OrderBy(x => x.Score).Asc.Take(10).List();
+        }
+
+        private static void getAllUniversities(ISession session)
+        {
+            IList<University> allUniversities = session.QueryOver<University>().List();
+        }
+
+        private static void getAllCoursesPerUniversity(ISession session, University university)
+        {
+            IList<Course> allCourses = session.QueryOver<Course>().Where(x => x.University == university).List();
+        }
+
+        private static void getAllTeacherPerUniversity(ISession session, University university)
+        {
+            IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Universities.Contains(university)).List();
+        }
+
+        private static void getAllTeacherPerCourse(ISession session, Course course)
+        {
+            IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Courses.Contains(course)).List();
+        }
+
+
+
     }
 }

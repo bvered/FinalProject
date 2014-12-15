@@ -37,10 +37,6 @@ namespace Server.Models
             Votes.Add(vote);
         }
 
-        public static void getReportedComments(ISession session)
-        {
-            IList<CourseComment> courseCommentWithMoreThen5Reports = session.QueryOver<CourseComment>()
-                                                                            .Where(x => x.Reports > 5).List();
-        }
+
     }
 }

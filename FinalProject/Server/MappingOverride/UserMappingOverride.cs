@@ -14,7 +14,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<Vote>
+    public class VoteMappingOverride : IAutoMappingOverride<Vote>
     {
         public void Override(AutoMapping<Vote> mapping)
         {
@@ -24,7 +24,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<Course>
+    public class CourseMappingOverride : IAutoMappingOverride<Course>
     {
         public void Override(AutoMapping<Course> mapping)
         {
@@ -34,7 +34,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<Comment>
+    public class CommentMappingOverride : IAutoMappingOverride<Comment>
     {
         public void Override(AutoMapping<Comment> mapping)
         {
@@ -42,7 +42,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<CourseComment>
+    public class CourseCommentMappingOverride : IAutoMappingOverride<CourseComment>
     {
         public void Override(AutoMapping<CourseComment> mapping)
         {
@@ -50,7 +50,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<CourseCriteria>
+    public class CourseCriteriaMappingOverride : IAutoMappingOverride<CourseCriteria>
     {
         public void Override(AutoMapping<CourseCriteria> mapping)
         {
@@ -58,7 +58,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<Faculty>
+    public class FacultyMappingOverride : IAutoMappingOverride<Faculty>
     {
         public void Override(AutoMapping<Faculty> mapping)
         {
@@ -67,7 +67,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<Teacher>
+    public class TeacherMappingOverride : IAutoMappingOverride<Teacher>
     {
         public void Override(AutoMapping<Teacher> mapping)
         {
@@ -75,7 +75,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<TeacherComment>
+    public class TeacherCommentMappingOverride : IAutoMappingOverride<TeacherComment>
     {
         public void Override(AutoMapping<TeacherComment> mapping)
         {
@@ -83,7 +83,7 @@ namespace Server.MappingOverride
         }
     }
 
-    public class UserMappingOverride : IAutoMappingOverride<University>
+    public class UniversityMappingOverride : IAutoMappingOverride<University>
     {
         public void Override(AutoMapping<University> mapping)
         {

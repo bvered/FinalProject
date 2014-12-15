@@ -45,9 +45,6 @@ namespace Server.Models
             TeacherComments.Add(tComment);
         }
 
-        public static void getBestTeachers(ISession session)
-        {
-            IList<Teacher> bestTeachers = session.QueryOver<Teacher>().OrderBy(x => x.Score).Asc.Take(10).List();
-        }
+
     }
 }
