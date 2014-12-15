@@ -15,7 +15,7 @@ namespace Server.Models
         public int Score { get; set; }
         public IList<Comment> Comments { get; set; }
         public IList<Vote> Votes { get; set; }
-
+        
         public User()
         {
             Comments = new List<Comment>();

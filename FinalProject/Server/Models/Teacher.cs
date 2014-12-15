@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace Server.Models
 {
@@ -7,12 +9,16 @@ namespace Server.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public int Score { get; set; }
         public IList<University> Universities { get; set; }
         public IList<Course> Courses { get; set; }
         public IList<TeacherComment> TeacherComments { get; set; }
 
         public Teacher()
         {
+            Universities = new List<University>();
+            Courses = new List<Course>();
+            TeacherComments = new List<TeacherComment>();
         }
 
         public Teacher(string name)
@@ -37,6 +43,11 @@ namespace Server.Models
         public void addTeacherCommnet(TeacherComment tComment)
         {
             TeacherComments.Add(tComment);
+        }
+
+        public static void getBestTeachers(ISession session)
+        {
+            IList<Teacher> bestTeachers = session.QueryOver<Teacher>().OrderBy(x => x.Score).Asc.Take(10).List();
         }
     }
 }

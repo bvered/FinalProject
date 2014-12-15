@@ -13,6 +13,9 @@ namespace Server.Models
 
         public University()
         {
+            Teachers = new List<Teacher>();
+            Courses = new List<Course>();
+            Faculties = new List<Faculty>();
         }
 
         public University(string name)

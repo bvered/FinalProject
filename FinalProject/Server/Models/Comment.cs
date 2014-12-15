@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
+using NHibernate.Criterion;
 
 namespace Server.Models
 {
@@ -15,6 +17,8 @@ namespace Server.Models
 
         public Comment()
         {
+            DateTime = DateTime.Now;
+            Votes = new List<Vote>();
         }
 
         public Comment(User user, string commentText)
@@ -31,6 +35,12 @@ namespace Server.Models
         public void AddVote(Vote vote)
         {
             Votes.Add(vote);
+        }
+
+        public static void getReportedComments(ISession session)
+        {
+            IList<CourseComment> courseCommentWithMoreThen5Reports = session.QueryOver<CourseComment>()
+                                                                            .Where(x => x.Reports > 5).List();
         }
     }
 }
