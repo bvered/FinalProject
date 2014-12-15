@@ -54,10 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MappingOverride\UserMappingOverride.cs" />
     <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\CourseComment.cs" />
     <Compile Include="Models\CourseCriteria.cs" />
+    <Compile Include="Models\CourseCriteriaRating.cs" />
     <Compile Include="Models\CourseInSemester.cs" />
     <Compile Include="Models\TeacherCriteria.cs" />
     <Compile Include="Models\Faculty.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Models\Semester.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\TeacherComment.cs" />
+    <Compile Include="Models\TeacherCriteriaRating.cs" />
     <Compile Include="Models\University.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\Vote.cs" />

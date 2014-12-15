@@ -6,5 +6,15 @@ namespace Server.Models
     {
         public Guid Id { get; set; }
         public string DisplayName { get; set; }
+
+        public TeacherCriteria()
+        {
+        }
+
+        public TeacherCriteria(string name)
+        {
+            Id = new Guid();
+            DisplayName = name;
+        }
     }
 }

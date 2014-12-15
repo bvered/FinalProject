@@ -13,7 +13,23 @@ namespace Server.Models
         public string FacebookUserId { get; set; }
         public bool DefaultPublishRights { get; set; }
         public int Score { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<Vote> Votes { get; set; }
+        public IList<Comment> Comments { get; set; }
+        public IList<Vote> Votes { get; set; }
+
+        public User()
+        {
+            Comments = new List<Comment>();
+            Votes = new List<Vote>();
+        }
+
+        public void addComment(Comment comment)
+        {
+            Comments.Add(comment);
+        }
+
+        public void addVote(Vote vote)
+        {
+            Votes.Add(vote);
+        }
     }
 }
