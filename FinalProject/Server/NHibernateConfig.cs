@@ -10,18 +10,32 @@ using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Tool.hbm2ddl;
 using Server.Models;
+using System.IO;
 
 namespace Server
 {
     public static class NHibernateConfig
     {
+        private const string _dbFile = "ProjectDB.db";
+        public static bool _override = false;
+
         public static ISessionFactory CreateSessionFactory()
         {
             return Fluently.Configure()
-                .Database(MsSqlConfiguration.MsSql2012.ConnectionString(c => c.FromConnectionStringWithKey("ConnectionString")))
-                .Mappings(m => m.AutoMappings.Add(CreateMappings()))
-                .ExposeConfiguration(DropCreateSchema)
+                .Database(SQLiteConfiguration.Standard.UsingFile(_dbFile)                )
+                .Mappings(m=> m.AutoMappings.Add(CreateMappings()))
+                .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();
+        }
+
+        private static void BuildSchema(Configuration config)
+        {
+            if (_override || !File.Exists(_dbFile))
+            {
+                var se = new SchemaExport(config);
+
+                se.Create(false, true);
+            }
         }
 
         private static AutoPersistenceModel CreateMappings()
@@ -32,7 +46,7 @@ namespace Server
                 {
                     c.Add(DefaultCascade.SaveUpdate());
                     c.Add(DefaultLazy.Never());
-                    c.Add<PersistentConvention>();
+                    c.Add(new PersistentConvention());
                 })
                 .UseOverridesFromAssembly((Assembly.GetCallingAssembly()));
         }
@@ -44,6 +58,11 @@ namespace Server
 
         internal class PersistentConvention : IIdConvention
         {
+            public bool Accept(IIdentityInstance id)
+            {
+                return true;
+            }
+
             public void Apply(IIdentityInstance instance)
             {
                 instance.GeneratedBy.Guid();
