@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
-using Server;
-using Server.Models;
+
+using WebServer.App_Data;
+using WebServer.App_Data.Models;
 
 namespace TestConsole
 {
@@ -11,12 +12,10 @@ namespace TestConsole
     {
         private static void Main(string[] args)
         {
-            User newUser = createObjects();
-
-            var sessionFactory = NHibernateConfig.CreateSessionFactory();
+            var sessionFactory = NHibernateConfig.CreateSessionFactory(true);
             ISession session = sessionFactory.OpenSession();
-            session.Save(newUser);
-            session.Flush();
+
+            CreateObjects(session);
 
             Guid universityId = Guid.NewGuid();
 
@@ -27,11 +26,11 @@ namespace TestConsole
             IList<string> allUserFullNames = session.QueryOver<User>().Select(x => x.FullName).List<string>();
 
             getReportedComments(session);
-
+            session.Flush();
             session.Close();
         }
 
-        private static User createObjects()
+        private static User CreateObjects(ISession session)
         {
             User newUser = new User
             {
@@ -40,10 +39,16 @@ namespace TestConsole
                 FullName = "veredb",
                 PasswordHash = "123456",
             };
+            session.Save(newUser);
 
             University newUniversity = new University("Tel-aviv_yafo");
+            session.Save(newUniversity);
+
             Faculty newFaculty = new Faculty("Computer science", newUniversity);
+            session.Save(newFaculty);
+            
             Course newCourse = new Course(newUniversity, 123456, "Math", newFaculty);
+            session.Save(newCourse);
 
             createTeacher(newCourse, newUniversity);
             return newUser;
