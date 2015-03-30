@@ -102,6 +102,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="HtmlPage1.html" />
+    <Content Include="HtmlPage2.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +127,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
+    <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

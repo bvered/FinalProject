@@ -1,24 +1,24 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Courses App</title>
+    <title>Teachers</title>
 </head>
 <body>
 
     <div>
-        <h2>All Courses</h2>
-        <ul id="courses" />
+        <h2>All Teachers</h2>
+        <ul id="teacher" />
     </div>
     <div>
         <h2>Search by ID</h2>
-        <input type="text" id="courseId" size="5" />
+        <input type="text" id="TeacherId" size="5" />
         <input type="button" value="Search" onclick="find();" />
-        <p id="courseDate" />
+        <p id="teacherById" />
     </div>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
     <script>
-        var uri = 'api/courses';
+        var uri = 'api/teachers';
 
         $(document).ready(function () {
             // Send an AJAX request
@@ -27,7 +27,7 @@
                     // On success, 'data' contains a list of products.
                     $.each(data, function (key, item) {
                         // Add a list item for the product.
-                        $('<li>', { text: formatItem(item) }).appendTo($('#courses'));
+                        $('<li>', { text: formatItem(item) }).appendTo($('#teacher'));
                     });
                 });
         });
@@ -37,13 +37,13 @@
         }
 
         function find() {
-            var id = $('#courseId').val();
+            var id = $('#TeacherId').val();
             $.getJSON(uri + '/' + id)
                 .done(function (data) {
-                    $('#courseDate').text(formatItem(data));
+                    $('#teacherById').text(formatItem(data));
                 })
                 .fail(function (jqXHR, textStatus, err) {
-                    $('#courseDate').text('Error: ' + err);
+                    $('#teacherById').text('Error: ' + err);
                 });
         }
     </script>
