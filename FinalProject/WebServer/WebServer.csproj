@@ -100,9 +100,35 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.css" />
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.min.css" />
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap.css" />
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap.min.css" />
+    <Content Include="bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="bootstrap-3.3.4-dist\js\bootstrap.js" />
+    <Content Include="bootstrap-3.3.4-dist\js\bootstrap.min.js" />
+    <Content Include="bootstrap-3.3.4-dist\js\npm.js" />
     <Content Include="Global.asax" />
+    <Content Include="HomePage\HomePage.html" />
+    <Content Include="HomePage\HomePageJS.js" />
     <Content Include="HtmlPage1.html" />
     <Content Include="HtmlPage2.html" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.html" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\88130946%402x.jpg" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\88130946.jpg" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\blank.gif" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\HYPE-458.full.min.js" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\HYPE-458.thin.min.js" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\myrate_hype_generated_script.js" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\PIE.htc" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\._MyRate.html" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._88130946%402x.jpg" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._88130946.jpg" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._blank.gif" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._HYPE-458.full.min.js" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._HYPE-458.thin.min.js" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._myrate_hype_generated_script.js" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._PIE.htc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +153,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
+    <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -135,6 +162,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="HomePage\MyRate\MyRate\MyRate.hyperesources\3B1087-restorable.plist" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\._MyRate.hyperesources" />
+    <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._3B1087-restorable.plist" />
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.css.map" />
+    <Content Include="bootstrap-3.3.4-dist\css\bootstrap.css.map" />
+    <Content Include="bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="bootstrap-3.3.4-dist\fonts\glyphicons-halflings-regular.woff2" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

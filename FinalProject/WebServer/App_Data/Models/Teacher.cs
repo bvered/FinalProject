@@ -7,11 +7,17 @@ namespace WebServer.App_Data.Models
     [DataContract(IsReference = true)]
     public class Teacher : IPersistent
     {
+        [DataMember]
         public Guid Id { get; set; }
+        [DataMember]
         public string Name { get; set; }
+        [DataMember]
         public int Score { get; set; }
+        [DataMember]
         public IList<University> Universities { get; set; }
+        [DataMember]
         public IList<Course> Courses { get; set; }
+        [DataMember]
         public IList<TeacherComment> TeacherComments { get; set; }
 
         public Teacher()

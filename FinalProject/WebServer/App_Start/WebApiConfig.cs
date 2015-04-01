@@ -16,7 +16,7 @@ namespace WebServer
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/<foldername>/{Controllername}/{actionmethod}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
         }

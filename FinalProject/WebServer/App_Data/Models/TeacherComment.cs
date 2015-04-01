@@ -6,7 +6,9 @@ namespace WebServer.App_Data.Models
     [DataContract(IsReference = true)]
     public class TeacherComment : Comment
     {
+        [DataMember]
         public Teacher Teacher { get; set; }
+        [DataMember]
         public IList<TeacherCriteriaRating> CriteriaRatings { get; set; }
 
         public TeacherComment()

@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Teachers</title>
+    <title>Teachers App</title>
 </head>
 <body>
 
@@ -11,9 +11,10 @@
     </div>
     <div>
         <h2>Search by ID</h2>
-        <input type="text" id="TeacherId" size="5" />
+        <input type="text" id="teacherId" size="5" />
         <input type="button" value="Search" onclick="find();" />
         <p id="teacherById" />
+        <p id="commentByID" />
     </div>
 
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
@@ -37,15 +38,41 @@
         }
 
         function find() {
-            var id = $('#TeacherId').val();
+            var id = $('#teacherId').val();
             $.getJSON(uri + '/' + id)
                 .done(function (data) {
                     $('#teacherById').text(formatItem(data));
+                    showComment(data);
                 })
                 .fail(function (jqXHR, textStatus, err) {
                     $('#teacherById').text('Error: ' + err);
                 });
         }
+
+        function formatComment(item) {
+            var listItemInfo = '';
+
+            var comments = item.TeacherComments;
+
+            for (comment in comments)
+            {
+                listItemInfo += '\n' + comments[comment].CommentText;
+            }
+
+            return listItemInfo;    
+        }
+
+        function showComment(data) {
+            var id = $('#teacherId').val();
+            $.getJSON(uri + '/' + id)
+                .done(function (data) {
+                    $('#commentByID').text(formatComment(data));
+                })
+            .fail(function (jqXHR, textStatus, err){
+                $('#commentByID').text('Error: ' + err);
+            });
+        }
+
     </script>
 </body>
 </html>
