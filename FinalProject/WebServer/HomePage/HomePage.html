@@ -8,41 +8,52 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-<link rel="stylesheet" href="/resources/demos/style.css">
+
 
 <head>
     <title>Rate My</title>
- 
+
 </head>
 <body>
-   <!-- <div id="myrate_hype_container" style="margin:auto;position:relative;width:1240px;height:800px;overflow:hidden;" aria-live="polite">
-        <script type="text/javascript" charset="utf-8" src="MyRate/MyRate/MyRate.hyperesources/myrate_hype_generated_script.js?99053"></script>
-    </div> -->
+    <!--<div id="myrate_hype_container" style="margin:auto;position:relative;width:1240px;height:800px;overflow:hidden;" aria-live="polite">
+         <script type="text/javascript" charset="utf-8" src="HomePage/MyRate/MyRate/MyRate.hyperesources/myrate_hype_generated_script.js?99053"></script>
+     </div>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="HomePageJS.js"></script>
+
     <h1> Rate My School</h1>
 
     <div class="radio">
         <label>
-            <input type="radio" name="optionsRadios" id="optionsRadioCourses" value="option1" checked>
+            <input type="radio" name="optionsRadio" id="optionsRadioCourses" value="option1" onchange="SmartSearch()" checked>
             Courses
         </label>
     </div>
     <div class="radio">
         <label>
-            <input type="radio" name="optionsRadios" id="optionsRadioTeachers" value="option2">
+            <input type="radio" name="optionsRadio" id="optionsRadioTeachers" value="option2" onchange="SmartSearch()">
             Teachers
         </label>
     </div>
 
-    <div class="col-lg-6">
-        <div class="input-group ui-widget">
-            <input id="tags" type="text" class="form-control" placeholder="Search for...">
-        </div>
+<div class="col-lg-6">
+    <div class="input-group">
+        <input id="tags" type="text" class="form-control" placeholder="Search for...">
         <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Go!</button>
-        </span>
+                <button class="btn btn-default" type="button">Go!</button>
+            </span>
     </div>
+</div>
 
+    <div class="btn-group" role="group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            +
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu">
+            <li><a href="#">Add Teacher</a></li>
+            <li><a href="#">Add Courses</a></li>
+        </ul>
+    </div>
+    <script src="HomePageJS.js"></script>
 </body>
 </html>
