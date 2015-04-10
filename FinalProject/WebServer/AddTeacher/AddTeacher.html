@@ -11,34 +11,28 @@
 </head>
 <body>
 
-<div class="form-group">
-    <label>Teacher Name</label>
-    <input class="form-control" type="text" id="TeacherName" placeholder="Enter Full Name">
-</div>
+    <div class="form-group">
+        <label>Teacher Name</label>
+        <input class="form-control" type="text" id="TeacherName" placeholder="Enter Full Name">
+    </div>
 
-    <div class="form-group has-error has-feedback">
+    <div class="form-group has-error has-feedback" id="universityWrap">
         <label class="control-label">University Name</label>
-        <input class="form-control" type="text" id="UniversityName" placeholder="Enter University Name" onchange="checkUniveristy()">
-        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-        <span id="inputError2Status" class="sr-only">(error)</span>
-     </div>
-<label hidden>This univeristy doesn't exits on our data-base. Please add it! </label>
+        <input class="form-control" type="text" id="UniversityName" placeholder="Enter University Name" onkeyup="checkUniveristy()" />
+        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" id="UniversityInput"></span>
+        <span id="input2Status" class="sr-only">(error)</span>
+    </div>
+    <label hidden="true" id="universityError">This univeristy doesn't exits on our data-base. Please add it! </label>
 
 
-<div class="form-group">
-    <label>Course Name</label>
-    <input class="form-control" type="text" id="CourseName" placeholder="Enter Course Name">
-</div>
-<label hidden>This course doesn't exits on our data-base. Please add it! </label>
+    <button onclick=" checkAndAdd()">Submit</button>
 
-<button onclick=" checkAndAdd()">Submit</button>
+    <label id="TeacherExists" hidden="true">We already have this teacher!</label>
+    <a id="TeachersLink" hidden="true" href="#">Click here to see the teachers rate!</a>
 
-<label hidden>We already have this teacher!</label>
-<a hidden href="#">Click here to see the teachers rate!</a>
+    <label hidden="true" id="addTeacherSuccessfuly">Thank you for adding the new teacher! </label>
 
-<label hidden>Thank you for adding the new teacher! </label>
-
-<script src="AddTeacher.js"></script>
+    <script src="AddTeacher.js"></script>
 
 </body>
 </html>

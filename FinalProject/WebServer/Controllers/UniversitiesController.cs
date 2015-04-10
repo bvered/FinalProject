@@ -13,11 +13,11 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetUniversities")]
-        public IList<string> GetAllTeachersNames()
+        public IList<string> GetAllUniversitiesNames()
         {
             using (var session = DBHelper.OpenSession())
             {
-                return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
+                return session.QueryOver<University>().Select(x => x.Name).List<string>();
             }
         }
     }

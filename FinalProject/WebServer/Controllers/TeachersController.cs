@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 
@@ -41,5 +42,34 @@ namespace WebServer.Controllers
                 return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
             }
         }
+
+        [HttpPost]
+        [ActionName("AddTeacher")]
+        public void AddTeacher([FromBody]CreateTeacherCommand createCommand)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                var university = session.QueryOver<University>().Where(x => x.Name == createCommand.UniversityName).SingleOrDefault();
+
+                var teacher = new Teacher
+                {
+                    Name = createCommand.Name,
+                    Universities = new[] {university},
+                };
+
+                session.Save(teacher);
+
+                transaction.Commit();
+            }
+        }
+
+
+    }
+
+    public class CreateTeacherCommand
+    {
+        public string Name { get; set; }
+        public string UniversityName { get; set; }
     }
 }
