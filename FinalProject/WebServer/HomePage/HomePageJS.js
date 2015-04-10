@@ -1,9 +1,9 @@
 ﻿function SmartSearch() {
     var uri;
     if (($("#optionsRadioCourses")[0]).checked) {
-        uri = '/api/HomePage/GetCourses';
+        uri = '/api/Courses/GetCourses';
     } else {
-        uri = '/api/HomePage/GetTeachers';
+        uri = '/api/Teachers/GetTeachers';
     }
     $.getJSON(uri)
         .done(function (data) {

@@ -31,5 +31,15 @@ namespace WebServer.Controllers
                 return Ok(teacher);
             }
         }
+
+        [HttpGet]
+        [ActionName("GetTeachers")]
+        public IList<string> GetAllTeachersNames()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
+            }
+        }
     }
 }

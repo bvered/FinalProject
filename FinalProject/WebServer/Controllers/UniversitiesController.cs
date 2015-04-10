@@ -9,20 +9,10 @@ using WebServer.App_Data.Models;
 
 namespace WebServer.Controllers
 {
-    public class HomePageController : ApiController
+    public class UniversitiesController : ApiController
     {
         [HttpGet]
-        [ActionName("GetCourses")]
-        public IList<string> GetAllCoursesNames()
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                return session.QueryOver<Course>().Select(x => x.Name).List<string>();
-            }
-        }
-
-        [HttpGet]
-        [ActionName("GetTeachers")]
+        [ActionName("GetUniversities")]
         public IList<string> GetAllTeachersNames()
         {
             using (var session = DBHelper.OpenSession())
