@@ -4,7 +4,7 @@ var uri2 = '/api/Universities/GetUniversities';
 var uri3 = '/api/Teachers/GetTeachers';
 
 var allCourses;
-$.getJSON(uri).done(function(data) {
+$.getJSON(uri).done(function (data) {
     allCourses = data;
 
     console.log(allCourses);
@@ -14,7 +14,7 @@ $.getJSON(uri).done(function(data) {
 });
 
 var allUniversites;
-$.getJSON(uri2).done(function(data) {
+$.getJSON(uri2).done(function (data) {
     allUniversites = data;
 
     console.log(allUniversites);
@@ -24,24 +24,26 @@ $.getJSON(uri2).done(function(data) {
 });
 
 var allTeachers;
-$.getJSON(uri3).done(function(data) {
+$.getJSON(uri3).done(function (data) {
     allTeachers = data;
     console.log(allTeachers);
 });
 
 function checkAndAdd() {
-    if ((allUniversites.indexOf($("#UniversityName").val()) < 0)) { //if the university doesn't exists
-        inputError("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-        hideAllLabels();
-    } else if (allTeachers.indexOf($("#TeacherName").val()) >= 0) { //if the teacher already exists
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
+
+    if 
+
+    if ((allUniversites.indexOf($("#UniversityName").val()) < 0) && allTeachers.indexOf($("#TeacherName").val()) < 0) {
+        addTeacher($("#TeacherName").val() ,$("#UniversityName").val());
+        $("#addTeacherSuccessfuly")[0].hidden = false;
+    } else {
         $("#TeacherExists")[0].hidden = false;
         $("#TeachersLink")[0].hidden = false;
-        $("#TeachersLink")[0].href = "#"+ $("#TeacherName").val();
-    } else { //if we can add the new teacher
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-        hideAllLabels();
-        addTeacher($("#TeacherName").val(), $("#UniversityName").val());
+        $("#TeachersLink")[0].href = "#";
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
     }
 };
 
@@ -69,31 +71,17 @@ function inputError(divId, inputId, inputStatusId, labelId) {
 function addTeacher(teacherName, universityName) {
     var uri4 = '/api/Teachers/AddTeacher';
 
-    $(function() {
+    $(function () {
         var teacher = {
             Name: teacherName,
             UniversityName: universityName
         };
 
-        var request = $.ajax({
+        $.ajax({
             type: "POST",
             data: JSON.stringify(teacher),
             url: uri4,
             contentType: "application/json"
         });
-
-        request.done(function() {
-            $("#addTeacherSuccessfuly")[0].hidden = false;
-            $("#HomePage")[0].hidden = false;
-        });
-
-        request.fail(function(jqXhr, textStatus) {
-            alert("Request failed: " + textStatus);
-        });
     });
-}
-
-function hideAllLabels() {
-    $("#TeacherExists")[0].hidden = true;
-    $("#TeachersLink")[0].hidden = true;
 }
