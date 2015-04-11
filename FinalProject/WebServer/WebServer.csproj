@@ -129,6 +129,8 @@
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._HYPE-458.thin.min.js" />
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._myrate_hype_generated_script.js" />
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._PIE.htc" />
+    <Content Include="SearchResultsPage\SearchResultPage.html" />
+    <Content Include="SearchResultsPage\SearchResultPageJS.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +157,7 @@
     <Compile Include="App_Data\DBHelper.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
+    <Compile Include="Controllers\SearchResultController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
