@@ -100,6 +100,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddTeacher\AddTeacher.html" />
+    <Content Include="AddTeacher\AddTeacher.js" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.css" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.min.css" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap.css" />
@@ -110,7 +112,7 @@
     <Content Include="bootstrap-3.3.4-dist\js\npm.js" />
     <Content Include="Global.asax" />
     <Content Include="HomePage\HomePage.html" />
-    <Content Include="HomePage\HomePageJS.js" />
+    <Content Include="HomePage\HomePage.js" />
     <Content Include="HtmlPage1.html" />
     <Content Include="HtmlPage2.html" />
     <Content Include="HomePage\MyRate\MyRate\MyRate.html" />
@@ -156,8 +158,10 @@
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
     <Compile Include="Controllers\HomePageController.cs" />
+    <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\SearchResultController.cs" />
+    <Compile Include="Controllers\UniversitiesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
