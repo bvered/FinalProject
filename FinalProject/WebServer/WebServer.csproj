@@ -157,8 +157,6 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
-    <Compile Include="Controllers\HomePageController.cs" />
-    <Compile Include="Controllers\HomePageController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="Controllers\SearchResultController.cs" />
     <Compile Include="Controllers\UniversitiesController.cs" />

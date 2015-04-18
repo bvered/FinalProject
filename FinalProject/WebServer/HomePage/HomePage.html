@@ -18,25 +18,25 @@
 
     <h1> Rate My School</h1>
 
-    <div class="radio">
-        <label>
-            <input type="radio" name="optionsRadio" id="optionsRadioCourses" value="option1" onchange="SmartSearch()" checked>
-            Courses
-        </label>
-    </div>
-    <div class="radio">
-        <label>
-            <input type="radio" name="optionsRadio" id="optionsRadioTeachers" value="option2" onchange=" SmartSearch() ">
-            Teachers
-        </label>
-    </div>
+    <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
+        <div class="radio">
+            <label>
+                <input type="radio" name="optionsRadio" id="optionsRadioCourses" value="Courses" onchange=" SmartSearch() " checked>
+                Courses
+            </label>
+        </div>
+        <div class="radio">
+            <label>
+                <input type="radio" name="optionsRadio" id="optionsRadioTeachers" value="Teachers" onchange=" SmartSearch() ">
+                Teachers
+            </label>
+        </div>
 
-    <form action="/HtmlPage1.html" method="GET">
         <div class="col-lg-6">
             <div class="input-group">
                 <input id="tags" type="text" name="SearchText" class="form-control" placeholder="Search for..." />
                 <span class="input-group-btn">
-                    <input type="submit" class="btn btn-default" value="Go" />
+                    <input type="submit" class="btn btn-default" value="Go" onclick=" sendForSearch() " />
                 </span>
             </div>
         </div>
