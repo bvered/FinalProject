@@ -31,5 +31,26 @@ namespace WebServer.Controllers
                 return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
             }
         }
+
+        [HttpGet]
+        [ActionName("GetAllTeachers")]
+        public IList<Teacher> GetAllTeachers()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                return session.QueryOver<Teacher>().List();
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetAllAllCourses")]
+        public IList<Course> GetAllAllCourses()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                return session.QueryOver<Course>().List();
+            }
+        }
+
     }
 }

@@ -51,6 +51,8 @@ namespace TestConsole
             session.Save(newCourse);
 
             Teacher newTeacher = createTeacher(newCourse, newUniversity);
+            newTeacher.addUniversity(new University("Ben Gurion"));
+            newTeacher.addCourse(new Course(newUniversity,1111, "Algebra", newFaculty));
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Great teacher!!", newTeacher));
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "This teacher Sucks!!", newTeacher));
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Oh my godsshshshhs his the worst!!!\n", newTeacher));
