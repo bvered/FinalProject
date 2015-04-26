@@ -57,6 +57,11 @@
             for (comment in comments)
             {
                 listItemInfo += '\n' + comments[comment].CommentText;
+                var ratings = ratings[rating].CriteriaRatings;
+                for (rating in ratings)
+                {
+                    listItemInfo += '\n' + ratings[rating].Criteria.DisplayName + ': ' + ratings[rating].Rating;
+                }
             }
 
             return listItemInfo;    
