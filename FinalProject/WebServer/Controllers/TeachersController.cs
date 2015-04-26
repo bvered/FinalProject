@@ -64,6 +64,29 @@ namespace WebServer.Controllers
             }
         }
 
+        [HttpPost]
+        [ActionName("AddComment")]
+        public void AddComment([FromBody]CreateTeacherComment comment)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                var teacher = session.QueryOver<Teacher>().Where(x => x.Id.ToString() == comment.Id).SingleOrDefault();
+
+                var teacherComment = new TeacherComment(User, comment.Comment, teacher, comment.Ratings); // Why not?
+
+                session.Save(teacher);
+
+                transaction.Commit();
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetCriterias")]
+        public IList<string> GetAllCriterias()
+        {
+            return TeacherComment.criteriaList();
+        } 
 
     }
 
@@ -71,5 +94,12 @@ namespace WebServer.Controllers
     {
         public string Name { get; set; }
         public string UniversityName { get; set; }
+    }
+
+    public class CreateTeacherComment
+    {
+        public string Id { get; set; }
+        public List<int> Ratings { get; set; }
+        public string Comment { get; set; }
     }
 }
