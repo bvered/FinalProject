@@ -3,14 +3,13 @@ var uri = '/api/Teachers/GetCriterias';
 var uri2 = '/api/Teachers/AddComment';
 var uri3 = '/api/Teachers/GetTeachers';
 
+var teacherFound;
+
 var allCriterias;
 $.getJSON(uri).done(function(data) {
     allCriterias = data;
-
     console.log(allCriterias);
-    $("#CriteriaName").autocomplete({
-        source: allCourses
-    });
+    populateCriterias();
 });
 
 var allTeachers;
@@ -69,7 +68,57 @@ function addComment(TeacherId, CommentText, Ratings) {
     });
 }
 
-function hideAllLabels() {
-    $("#TeacherExists")[0].hidden = true;
-    $("#TeachersLink")[0].hidden = true;
+function populateCriterias() {
+    var divToAppend = document.getElementById("newCommentForm");
+    var commentBox = document.createElement("textarea");
+    commentBox.placeholder = "Write something..";
+    commentBox.id = "TeacherNewCommetBox";
+    divToAppend.appendChild(commentBox);
+    divToAppend.appendChild(document.createElement("BR"));
+    for (ratingText in allCriterias) {
+        var criteriaText = allCriterias[ratingText];
+        var labelInput = document.createElement("Label");
+        labelInput.id = "criteriaText" + ratingText;
+        labelInput.innerHTML = criteriaText;
+
+        var inputText = document.createElement("INPUT");
+        inputText.id = "criteriaRating" + ratingText;
+        inputText.name = "criteriaRating" + ratingText;
+        inputText.type = "number";
+        inputText.min = "0";
+        inputText.max = "5";
+
+        divToAppend.appendChild(labelInput);
+        divToAppend.appendChild(inputText);
+
+        divToAppend.appendChild(document.createElement("BR"));
+    }
+}
+
+function showTeacherCommentsById(teacher) {
+    var divToAppend = document.getElementById("allCommentsOfTeacher");
+
+    var allComments = teacher.TeacherComments;
+    for (comment in allComments) {
+        printComment(divToAppend, allComments[comment], comment);
+    }
+}
+
+function printComment(divToAppend, comment, itr) {
+    var commentBox = document.createElement("textarea");
+    commentBox.placeholder = comment.CommentText;
+    commentBox.id = "TeacherCommet" + itr;
+    divToAppend.appendChild(commentBox);
+    for (rating in CriteriaRatings) {
+        var ratingString = CriteriaRatings[rating].Criteria.DisplayName;
+        var ratingNumber = CriteriaRatings[rating].Criteria.Rating;
+
+        var labelForRatingString = document.createElement("Label");
+        labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
+        labelForRatingString.innerHTML = ratingString;
+
+        var labelForRatingNumber = document.createElement("Label");
+        labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
+        labelForRatingNumber.innerHTML = ratingString;
+    }
 }

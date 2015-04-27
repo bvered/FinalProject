@@ -11,27 +11,22 @@
 </head>
 <body>
 
-    <div class="form-group">
-        <label>Teacher Name</label>
+    <div id="newCommentForm" class="form-group">
+        <label id="TeacherId">Teacher Name</label>
         <input class="form-control" type="text" id="TeacherName" placeholder="Enter Full Name">
+        <br />
     </div>
 
-    <div class="form-group has-error has-feedback" id="universityWrap">
-        <label class="control-label">University Name</label>
-        <input class="form-control" type="text" id="UniversityName" placeholder="Enter University Name" onkeyup="checkUniveristy()" />
-        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" id="UniversityInput"></span>
-        <span id="input2Status" class="sr-only">(error)</span>
+    <div id="allCommentsOfTeacher">
+
     </div>
 
     <button onclick=" checkAndAdd()">Submit</button><br />
-
-    <label id="TeacherExists" hidden="true">We already have this teacher!</label><br />
-    <a id="TeachersLink" hidden="true" href="#">Click here to see the teachers rate!</a><br />
-
-    <label hidden="true" id="addCommentSuccessfuly">Thank you for adding the new teacher! </label><br/>
+    <label hidden="true" id="addCommentSuccessfuly">Thank you for adding the new comment! </label>
+    <br />
     <a id="HomePage" hidden="true" href="/HomePage/HomePage.html">Go back to home page</a><br />
 
-<script src="AddTeacher.js"></script>
+    <script src="AddTeacherComment.js"></script>
 
 </body>
 </html>
