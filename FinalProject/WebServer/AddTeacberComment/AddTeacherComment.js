@@ -40,14 +40,20 @@ function inputError(divId, inputId, inputStatusId, labelId) {
     $(labelId)[0].hidden = false;
 };
 
-function addComment(TeacherId, CommentText, Ratings) {
+function addComment() {
     var uri4 = '/api/Teachers/AddComment';
 
     $(function() {
+        var ratings = [];
+        for(criteria in allCriterias) {
+            ratings.push(document.getElementById("criteriaRating"+criteria).value);
+        }
+
         var comment = {
             Id: UserId,
-            Comment: Comment,
-            Ratings: Ratings
+            teacher: document.getElementById("TeacherId").value,
+            Comment: document.getElementById("TeacherNewCommetBox").value,
+            Ratings: ratings
         };
 
         var request = $.ajax({
@@ -56,12 +62,9 @@ function addComment(TeacherId, CommentText, Ratings) {
             url: uri4,
             contentType: "application/json"
         });
-
         request.done(function() {
-            $("#addTeacherSuccessfuly")[0].hidden = false;
-            $("#HomePage")[0].hidden = false;
+            document.getElementById("newCommentForm").fadeOut("slow");
         });
-
         request.fail(function(jqXhr, textStatus) {
             alert("Request failed: " + textStatus);
         });
@@ -93,6 +96,10 @@ function populateCriterias() {
 
         divToAppend.appendChild(document.createElement("BR"));
     }
+    var sendButton = document.createElement("BUTTON");
+    sendButton.id = "SendNewCommentButton";
+    sendButton.onclick = addComment();
+    divToAppend.appendChild(sendButton);
 }
 
 function showTeacherCommentsById(teacher) {
