@@ -8,6 +8,8 @@ namespace WebServer.Controllers
 {
     public class CoursesController : ApiController
     {
+        [HttpGet]
+        [ActionName("GetAllCourses")]
         public IEnumerable<Course> GetAllCourses()
         {
             using (var session = DBHelper.OpenSession())
