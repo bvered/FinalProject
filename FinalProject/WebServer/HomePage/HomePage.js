@@ -1,9 +1,12 @@
 ﻿function SmartSearch() {
     var uri;
-    if (($("#optionsRadioCourses")[0]).checked) {
+    if (($("#dropDownRes1")[0]).value.trim() == "Courses") {
         uri = '/api/Courses/GetCourses';
-    } else {
+    } else if (($("#dropDownRes1")[0]).value.trim() == "Teachers") {
         uri = '/api/Teachers/GetTeachers';
+    }
+    else if (($("#dropDownRes1")[0]).value.trim() == "All") {
+        uri = '/api/SmartSearch/GetAll';
     }
     $.getJSON(uri)
         .done(function (data) {
@@ -14,4 +17,12 @@
         });
 };
 
+
 $(document).load(SmartSearch());
+
+function change1(choose) {
+    var sellText = $(choose).text();
+    $("#dropDownRes1").html(sellText + '<span class=\caret\"></span>');
+    $("#dropDownRes1").attr('value', sellText);
+    SmartSearch();
+}
