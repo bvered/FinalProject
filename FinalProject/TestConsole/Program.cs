@@ -46,7 +46,9 @@ namespace TestConsole
 
             Faculty newFaculty = new Faculty("Computer science", newUniversity);
             session.Save(newFaculty);
-            
+
+            newUniversity.Faculties.Add(newFaculty);
+
             Course newCourse = new Course(newUniversity, 123456, "Math", newFaculty);
             session.Save(newCourse);
 

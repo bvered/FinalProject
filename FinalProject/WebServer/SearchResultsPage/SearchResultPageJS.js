@@ -10,7 +10,7 @@ function ShowResults() {
     var query_string = new Object();
     getQuertyString(query_string);
 
-    if (query_string["optionsRadio"] === "All") {
+    if (query_string["search"] === "All") {
         var teachersArrayResult = [];
         var coursesArrayResult = [];
         uri = '/api/Teachers/GetTeachers';
@@ -28,7 +28,7 @@ function ShowResults() {
             showCoursesData(coursesArrayResult);
         }
     }
-    else if (query_string["optionsRadio"] === "Courses") {
+    else if (query_string["search"] === "Courses") {
         uri = '/api/Courses/GetCourses';
         arrayResult = new Array();
         getData(uri, query_string, arrayResult);
@@ -36,19 +36,18 @@ function ShowResults() {
             window.location = '/HomePage/HomePage.html?optionsRadio=Courses&SearchText=' + arrayResult[0];
         }
         showCoursesData(arrayResult);
-    } else if (query_string["optionsRadio"] === "Teachers") {
+    } else if (query_string["search"] === "Teachers") {
         uri = '/api/Teachers/GetTeachers';
         arrayResult = new Array();
         getData(uri, query_string, arrayResult);
-        if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+/*        if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
             window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + arrayResult[0];
         }
-        showTeachersData(arrayResult);
+        showTeachersData(arrayResult);*/
     }
 }
 
 function getQuertyString(query_string) {
-   // var query_string = {};
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
@@ -65,8 +64,6 @@ function getQuertyString(query_string) {
             query_string[pair[0]].push(pair[1]);
         }
     }
-
-//    return query_string;
 }
 
 function getData(uri, query_string, arrayResult) {
@@ -81,6 +78,10 @@ function getData(uri, query_string, arrayResult) {
         if (arrayResult.length == 0) {
             document.write("No matches found");
         }
+       /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+            window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + arrayResult[0];
+        }*/
+        showTeachersData(arrayResult);
     })
     .fail(function (jqXHR, textStatus, err) {
         console.log(err);
