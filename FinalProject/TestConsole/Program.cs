@@ -53,21 +53,25 @@ namespace TestConsole
             Course newCourse2 = new Course(newUniversity, 1111, "Algebra", newFaculty);
             session.Save(newCourse2);
 
-            Teacher newTeacher = createTeacher(newCourse, newUniversity);
+            Teacher newTeacher = createTeacher("Romina",newCourse, newUniversity);
             newTeacher.addUniversity(new University("Ben Gurion"));
             newTeacher.addCourse(newCourse2);
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Great teacher!!", newTeacher));
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "This teacher Sucks!!", newTeacher));
             newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Oh my godsshshshhs his the worst!!!\n", newTeacher));
 
+            Teacher newTeacher2 = createTeacher("Amir", newCourse, newUniversity);
+            newTeacher.addTeacherCommnet(new TeacherComment(newUser, "wow!!", newTeacher2));
+
             session.Save(newTeacher);
+            session.Save(newTeacher2);
 
             return newUser;
         }
 
-        private static Teacher createTeacher(Course newCourse, University newUniversity)
+        private static Teacher createTeacher(string teacherName,Course newCourse, University newUniversity)
         {
-            Teacher newTeacher = new Teacher("Romina");
+            Teacher newTeacher = new Teacher(teacherName);
             newTeacher.addCourse(newCourse);
             newTeacher.addUniversity(newUniversity);
 
