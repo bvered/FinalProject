@@ -11,39 +11,12 @@ function ShowResults() {
     getQuertyString(query_string);
 
     if (query_string["search"] === "All") {
-        var teachersArrayResult = [];
-        var coursesArrayResult = [];
-        uri = '/api/Teachers/GetTeachers';
-        teachersArrayResult = getData(uri, query_string);
-        uri = '/api/Courses/GetCourses';
-        coursesArrayResult = getData(uri, query_string);
-
-        if (teachersArrayResult.length == 0 && coursesArrayResult.length == 0) {
-        } else if (teachersArrayResult.length == 1 && coursesArrayResult.length == 0) {
-            window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + teachersArrayResult[0];
-        } else if (teachersArrayResult.length == 0 && coursesArrayResult.length == 1) {
-            window.location = '/HomePage/HomePage.html?optionsRadio=Courses&SearchText=' + coursesArrayResult[0];
-        } else {
-            showTeachersData(teachersArrayResult);
-            showCoursesData(coursesArrayResult);
-        }
+        getAllData(query_string);
     }
     else if (query_string["search"] === "Courses") {
-        uri = '/api/Courses/GetCourses';
-        arrayResult = new Array();
-        getData(uri, query_string, arrayResult);
-        if (arrayResult.length == 1) {  /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-            window.location = '/HomePage/HomePage.html?optionsRadio=Courses&SearchText=' + arrayResult[0];
-        }
-        showCoursesData(arrayResult);
+        getCourseData(query_string, arrayResult);
     } else if (query_string["search"] === "Teachers") {
-        uri = '/api/Teachers/GetTeachers';
-        arrayResult = new Array();
-        getData(uri, query_string, arrayResult);
-/*        if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-            window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + arrayResult[0];
-        }
-        showTeachersData(arrayResult);*/
+        getTeacherData(query_string);
     }
 }
 
@@ -66,8 +39,10 @@ function getQuertyString(query_string) {
     }
 }
 
-function getData(uri, query_string, arrayResult) {
+function getTeacherData(query_string) {
     var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Teachers/GetTeachers';
+    var arrayResult = [];
     $.getJSON(uri)
     .done(function (data) {
         for (i in data) {
@@ -78,13 +53,77 @@ function getData(uri, query_string, arrayResult) {
         if (arrayResult.length == 0) {
             document.write("No matches found");
         }
-       /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-            window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + arrayResult[0];
-        }*/
-        showTeachersData(arrayResult);
-    })
-    .fail(function (jqXHR, textStatus, err) {
-        console.log(err);
+            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
+             }*/
+        else {
+            showTeachersData(arrayResult);
+        }
+    });
+}
+
+function getCourseData(query_string) {
+    var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Courses/GetCourses';
+    var arrayResult = [];
+    $.getJSON(uri)
+    .done(function (data) {
+        for (i in data) {
+            if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                arrayResult.push(data[i]);
+            }
+        }
+        if (arrayResult.length == 0) {
+            document.write("No matches found");
+        }
+            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
+             }*/
+        else {
+            showCoursesData(arrayResult);
+        }
+    });
+}
+
+function getAllData(query_string) {
+    var coursesArrayResult = [];
+    var teachersArrayResult = [];
+    var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Courses/GetCourses';
+    var arrayResult = [];
+    $.getJSON(uri)
+    .done(function (data) {
+        for (i in data) { //search for courses
+            if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                coursesArrayResult.push(data[i]);
+            }
+        }
+        if (coursesArrayResult.length == 1) {//להעביר לעמוד של הצגת קורס
+            window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
+        }
+        else if (coursesArrayResult.length > 1) {
+            showCoursesData(coursesArrayResult);
+        }
+        else if (coursesArrayResult.length == 0) {
+            uri = '/api/Teachers/GetTeachers';
+            $.getJSON(uri)
+            .done(function (data) {
+                for (i in data) { //search for teachers
+                    if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                        teachersArrayResult.push(data[i]);
+                    }
+                }
+                if (teachersArrayResult.length == 1) { //אין תוצאות קורסים, ויש תוצאה אחת למרצים
+                    window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
+                }
+                else if (teachersArrayResult.length == 0) { // אין תוצאות קורסים ואין תוצאות מרצים.
+                    document.write("No matches found");
+                }
+                else {
+                    showTeachersData(teachersArrayResult);
+                }
+            });
+        }
     });
 }
 
@@ -102,7 +141,7 @@ function showTeachersData(arrayResult) {
                     newButton.type = 'submit';
                     newButton.id = 'Teacher';
                     newButton.onclick = function () {
-                        window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + newButton.value;
+                        window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + newButton.value;
                     }
                     document.body.appendChild(newButton);
 
@@ -134,7 +173,7 @@ function showCoursesData(arrayResult) {
                     newButton.type = 'submit';
                     newButton.id = 'Course';
                     newButton.onclick = function () {
-                        window.location = '/HomePage/HomePage.html?optionsRadio=Courses&SearchText=' + newButton.value;
+                        window.location = '/HomePage/HomePage.html?search=Courses&SearchText=' + newButton.value;
                     }
                     document.body.appendChild(newButton);
 
