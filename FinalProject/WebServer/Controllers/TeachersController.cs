@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using NHibernate;
@@ -75,7 +75,7 @@ namespace WebServer.Controllers
             {
                 var teacher = session.QueryOver<Teacher>().Where(x => x.Id.ToString() == comment.Id).SingleOrDefault();
 
-                var teacherComment = new TeacherComment(User, comment.Comment, teacher, comment.Ratings);
+                var teacherComment = new TeacherComment(null, comment.Comment, teacher, comment.Ratings);
 
                 session.Save(teacher);
 
@@ -88,7 +88,7 @@ namespace WebServer.Controllers
         public IList<string> GetAllCriterias()
         {
             return TeacherComment.criteriaList();
-        } 
+        }
 
     }
 
