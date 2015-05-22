@@ -50,7 +50,5 @@ namespace WebServer.App_Data.Models
         {
             TeacherComments.Add(tComment);
         }
-
-
     }
 }
