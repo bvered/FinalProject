@@ -1,0 +1,16 @@
+﻿body {
+}
+
+
+footer
+{
+    font-size: 20;
+    background: #D0D0D0;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100%;
+    overflow:hidden;
+    text-align: center;
+}

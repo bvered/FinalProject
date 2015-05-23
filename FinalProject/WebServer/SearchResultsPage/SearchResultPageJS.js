@@ -98,7 +98,7 @@ function getAllData(query_string) {
                 coursesArrayResult.push(data[i]);
             }
         }
-        if (coursesArrayResult.length == 1) {//להעביר לעמוד של הצגת קורס
+        if (coursesArrayResult.length == 1) {///////// להעביר לעמוד של הצגת קורס של גיל!!!!
             window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
         }
         else if (coursesArrayResult.length > 1) {
@@ -114,6 +114,7 @@ function getAllData(query_string) {
                     }
                 }
                 if (teachersArrayResult.length == 1) { //אין תוצאות קורסים, ויש תוצאה אחת למרצים
+                    ///////להעביר לעמוד הצגת תוצאות מרצים של גילללללללל!!!
                     window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
                 }
                 else if (teachersArrayResult.length == 0) { // אין תוצאות קורסים ואין תוצאות מרצים.
@@ -129,6 +130,10 @@ function getAllData(query_string) {
 
 function showTeachersData(arrayResult) {
     var uri = '/api/Teachers/GetAllTeachers';
+
+    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); ///////לעשות העברה לעמוד של ורדי של הוספת קורס!!!!! ולא מרצה!!!
+    $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
+
     $.getJSON(uri)
         .done(function (data) {
             var j = 0;
@@ -140,7 +145,7 @@ function showTeachersData(arrayResult) {
                     newButton.value = data[i].Name;
                     newButton.type = 'submit';
                     newButton.id = 'Teacher';
-                    newButton.onclick = function () {
+                    newButton.onclick = function () { //////////להעביר לעמוד הצגת מרצה של גיללללללל
                         window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + newButton.value;
                     }
                     document.body.appendChild(newButton);
@@ -162,6 +167,10 @@ function showTeachersData(arrayResult) {
 
 function showCoursesData(arrayResult) {
     var uri = '/api/Courses/GetAllCourses';
+
+    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); ///////לעשות העברה לעמוד של ורדי של הוספת קורס!!!!! ולא מרצה!!!
+    $("#resultAdd").text('Cant find the requested course? CLICK HERE to add');
+
     $.getJSON(uri)
         .done(function (data) { //כל הקורסים
             var j = 0;
@@ -172,7 +181,7 @@ function showCoursesData(arrayResult) {
                     newButton.value = data[i].Name;
                     newButton.type = 'submit';
                     newButton.id = 'Course';
-                    newButton.onclick = function () {
+                    newButton.onclick = function () { ////להעביר לעמוד הצגת קורס של גיללללל
                         window.location = '/HomePage/HomePage.html?search=Courses&SearchText=' + newButton.value;
                     }
                     document.body.appendChild(newButton);

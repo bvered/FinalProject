@@ -131,6 +131,7 @@
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._HYPE-458.thin.min.js" />
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._myrate_hype_generated_script.js" />
     <Content Include="HomePage\MyRate\__MACOSX\MyRate\MyRate.hyperesources\._PIE.htc" />
+    <Content Include="SearchResultsPage\SearchResultPageCSS.css" />
     <Content Include="SearchResultsPage\SearchResultPage.html" />
     <Content Include="SearchResultsPage\SearchResultPageJS.js" />
     <Content Include="Web.config" />
