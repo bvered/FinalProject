@@ -42,5 +42,35 @@ namespace WebServer.Controllers
                 return session.QueryOver<Course>().Select(x => x.Name).List<string>();
             }
         }
+
+        [HttpPost]
+        [ActionName("AddCourse")]
+        public void AddCourse([FromBody]CreateCourseCommand createCommand)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                var university = session.QueryOver<University>().Where(x => x.Name == createCommand.UniversityName).SingleOrDefault();
+                var teacher = session.QueryOver<Teacher>().Where(x => x.Name == createCommand.TeacherName).SingleOrDefault();
+
+                var course = new Course
+                {
+                    Name = createCommand.Name,
+                    University = university,
+                    Teachers = new []{teacher}
+                };
+
+                session.Save(course);
+
+                transaction.Commit();
+            }
+        }
+    }
+
+    public class CreateCourseCommand
+    {
+        public string Name { get; set; }
+        public string UniversityName { get; set; }
+        public string TeacherName { get; set; }
     }
 }
