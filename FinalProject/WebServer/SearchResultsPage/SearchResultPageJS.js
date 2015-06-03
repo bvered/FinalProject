@@ -1,4 +1,5 @@
-﻿
+﻿/// לאחר שמציגים תוצאות, להוסיף בתחתית העמוד :
+//לא מוצא את המרצה שאתה מחפש , לחץ כאן להוספה
 $(document).ready(function () { ShowResults() });
 
 function ShowResults() {
@@ -6,8 +7,20 @@ function ShowResults() {
     var arrayResult = [];
     var isTeacher;
 
-    //get the data from the url
-    var query_string = {};
+    var query_string = new Object();
+    getQuertyString(query_string);
+
+    if (query_string["search"] === "All") {
+        getAllData(query_string);
+    }
+    else if (query_string["search"] === "Courses") {
+        getCourseData(query_string, arrayResult);
+    } else if (query_string["search"] === "Teachers") {
+        getTeacherData(query_string);
+    }
+}
+
+function getQuertyString(query_string) {
     var query = window.location.search.substring(1);
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
@@ -24,86 +37,153 @@ function ShowResults() {
             query_string[pair[0]].push(pair[1]);
         }
     }
+}
 
-    if (query_string["optionsRadio"] === "Courses") {
-        uri = '/api/SearchResult/GetCourses';
-        isTeacher = 0;
-    } else {
-        uri = '/api/SearchResult/GetTeachers';
-        isTeacher = 1;
-    }
-
+function getTeacherData(query_string) {
     var dataToSearch = query_string["SearchText"];
-        $.getJSON(uri)
+    var uri = '/api/Teachers/GetTeachers';
+    var arrayResult = [];
+    $.getJSON(uri)
+    .done(function (data) {
+        for (i in data) {
+            if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                arrayResult.push(data[i]);
+            }
+        }
+        if (arrayResult.length == 0) {
+            document.write("No matches found");
+        }
+            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
+             }*/
+        else {
+            showTeachersData(arrayResult);
+        }
+    });
+}
+
+function getCourseData(query_string) {
+    var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Courses/GetCourses';
+    var arrayResult = [];
+    $.getJSON(uri)
+    .done(function (data) {
+        for (i in data) {
+            if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                arrayResult.push(data[i]);
+            }
+        }
+        if (arrayResult.length == 0) {
+            document.write("No matches found");
+        }
+            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
+             }*/
+        else {
+            showCoursesData(arrayResult);
+        }
+    });
+}
+
+function getAllData(query_string) {
+    var coursesArrayResult = [];
+    var teachersArrayResult = [];
+    var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Courses/GetCourses';
+    var arrayResult = [];
+    $.getJSON(uri)
+    .done(function (data) {
+        for (i in data) { //search for courses
+            if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                coursesArrayResult.push(data[i]);
+            }
+        }
+        if (coursesArrayResult.length == 1) {//להעביר לעמוד של הצגת קורס
+            window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
+        }
+        else if (coursesArrayResult.length > 1) {
+            showCoursesData(coursesArrayResult);
+        }
+        else if (coursesArrayResult.length == 0) {
+            uri = '/api/Teachers/GetTeachers';
+            $.getJSON(uri)
+            .done(function (data) {
+                for (i in data) { //search for teachers
+                    if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
+                        teachersArrayResult.push(data[i]);
+                    }
+                }
+                if (teachersArrayResult.length == 1) { //אין תוצאות קורסים, ויש תוצאה אחת למרצים
+                    window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
+                }
+                else if (teachersArrayResult.length == 0) { // אין תוצאות קורסים ואין תוצאות מרצים.
+                    document.write("No matches found");
+                }
+                else {
+                    showTeachersData(teachersArrayResult);
+                }
+            });
+        }
+    });
+}
+
+function showTeachersData(arrayResult) {
+    var uri = '/api/Teachers/GetAllTeachers';
+    $.getJSON(uri)
         .done(function (data) {
             var j = 0;
             for (i in data) {
-                if (dataToSearch == data[i] || data[i].indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
-                    arrayResult.push(data[i]);
-                    j++;
+                if (data[i].Name == arrayResult[j]) {
+
+                    var newButton = document.createElement('input');
+                    newButton.type = 'button';
+                    newButton.value = data[i].Name;
+                    newButton.type = 'submit';
+                    newButton.id = 'Teacher';
+                    newButton.onclick = function () {
+                        window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + newButton.value;
+                    }
+                    document.body.appendChild(newButton);
+
+                    for (k in data[i].Universities) {
+                        var University = document.createTextNode(data[i].Universities[k].Name + ', '); //אוניברסיטה
+                        document.body.appendChild(University);
+                    }
+
+                    ////מה זה לא מראה לי רשימה באורך 2 זה מראה לי שאיןקורסים בכלל למרות שבשרת יש
+                    for (l in data[i].Courses) {
+                        var course = document.createTextNode(data[i].Courses[l].Name + ', '); //קורסים
+                        document.body.appendChild(course);
+                    }
                 }
             }
-            if (arrayResult.length == 0) {
-                document.write("No matches found");
-            }
-            else {
-                //הצגת מידע על מרצים
-                if (isTeacher == 1) {
-                    var uri = '/api/SearchResult/GetAllTeachers';
-                    $.getJSON(uri)
-                        .done(function (data) {
-                            var j = 0;
-                            for (i in data) {
-                                if (data[i].Name == arrayResult[j]) {
-
-                                    var newButton = document.createElement('input');
-                                    newButton.type = 'button';
-                                    newButton.value = data[i].Name;
-                                    newButton.type = 'submit';
-                                    newButton.id = 'Teacher';
-                                    newButton.onclick = function () {
-                                        window.location = '/HomePage/HomePage.html?optionsRadio=Teachers&SearchText=' + newButton.value;
-                                    }
-                                    document.body.appendChild(newButton);
-
-                                    for (k in data[i].Universities) {
-                                        var University = document.createTextNode(data[i].Universities[k].Name + ', ' ); //אוניברסיטה
-
-                                        document.body.appendChild(University);
-                                    }
-                                    k = 0;
-
-                                    ////מה זה לא מראה לי רשימה באורך 2 זה מראה לי שאיןקורסים בכלל למרות שבשרת יש
-                                    for (l in data[i].Courses) {
-                                 //       document.write(data[i].Courses[l].Name);
-                                   //     document.write(" ");
-                                    }
-                                    l = 0;
-                                }
-                            }
-
-                        });
-                }
-                    //הצגת מידע על קורסים
-                else {
-                    var uri = '/api/SearchResult/GetAllAllCourses';
-                    $.getJSON(uri)
-                        .done(function (data) { //כל הקורסים
-                            var j = 0;
-                            for (i in data) {
-                                if (data[i].Name == arrayResult[j]) {
-                                    document.write(arrayResult[j].toString());
-                                    document.write("</br>");
-
-                                    //////לא מצליחה להציג את הפקולטות!!! זה עושה UNDEFINED
-                                    document.write(data[i].Faculty.Name + ", " + data[i].University.Name);
-                                    document.write(" ");
-                                    }
-                                    document.write("</br>");
-                                }
-                        });
-                }
-            }
-
         });
-};
+}
+
+function showCoursesData(arrayResult) {
+    var uri = '/api/Courses/GetAllCourses';
+    $.getJSON(uri)
+        .done(function (data) { //כל הקורסים
+            var j = 0;
+            for (i in data) {
+                if (data[i].Name == arrayResult[j]) {
+                    var newButton = document.createElement('input');
+                    newButton.type = 'button';
+                    newButton.value = data[i].Name;
+                    newButton.type = 'submit';
+                    newButton.id = 'Course';
+                    newButton.onclick = function () {
+                        window.location = '/HomePage/HomePage.html?search=Courses&SearchText=' + newButton.value;
+                    }
+                    document.body.appendChild(newButton);
+
+                    //////לא מצליחה להציג את הפקולטות!!! זה עושה UNDEFINED
+                    var Faculty = document.createTextNode(data[i].Faculty.Name + ', ');// פקולטות
+                    document.body.appendChild(Faculty);
+
+                    var University = document.createTextNode(data[i].University.Name);
+                    document.body.appendChild(University);
+                }
+            }
+        });
+}
