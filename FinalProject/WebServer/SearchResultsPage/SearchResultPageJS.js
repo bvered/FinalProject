@@ -53,9 +53,8 @@ function getTeacherData(query_string) {
         if (arrayResult.length == 0) {
             document.write("No matches found");
         }
-            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
-             }*/
+        if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
+            window.location = '/AddTeacberComment/AddTeacherComment.html&Teacher=' + arrayResult[0];
         else {
             showTeachersData(arrayResult);
         }

@@ -20,27 +20,26 @@ namespace WebServer.Controllers
             }
         }
 
-        public IHttpActionResult GetTeacher(Guid id)
+        [HttpGet]
+        [ActionName("GetTeacher")]
+        public IHttpActionResult GetTeacher([FromUri]string id)
         {
-            using (var session = DBHelper.OpenSession())
-            {
-                var teacher = session.Get<Teacher>(id);
-
-                if (teacher == null)
-                {
+            using (var session = DBHelper.OpenSession()) {
+                var teacher =  session.QueryOver<Teacher>()
+                .Where(t => t.Name == id)
+                .List();
+                if (teacher == null) {
                     return NotFound();
                 }
-
+                
                 return Ok(teacher);
             }
         }
 
         [HttpGet]
         [ActionName("GetTeachers")]
-        public IList<string> GetAllTeachersNames()
-        {
-            using (var session = DBHelper.OpenSession())
-            {
+        public IList<string> GetAllTeachersNames() {
+            using (var session = DBHelper.OpenSession()) {
                 return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
             }
         }
@@ -75,8 +74,14 @@ namespace WebServer.Controllers
             {
                 var teacher = session.QueryOver<Teacher>().Where(x => x.Id.ToString() == comment.Id).SingleOrDefault();
 
-                var teacherComment = new TeacherComment(null, comment.Comment, teacher, comment.Ratings);
-
+                if (teacher != null)
+                {
+                    List<int> ratings = new List<int>();
+                    foreach(var rating in comment.Ratings) {
+                        ratings.Add(Convert.ToInt32(rating));
+                    }
+                    teacher.addTeacherCommnet(new TeacherComment(null, comment.Comment, teacher, ratings));
+                }
                 session.Save(teacher);
 
                 transaction.Commit();
@@ -101,7 +106,7 @@ namespace WebServer.Controllers
     public class CreateTeacherComment
     {
         public string Id { get; set; }
-        public List<int> Ratings { get; set; }
+        public List<string> Ratings { get; set; }
         public string Comment { get; set; }
     }
 }

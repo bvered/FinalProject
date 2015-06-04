@@ -9,15 +9,12 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
-<body>
-
-    <div id="newCommentForm" class="form-group">
-        <label id="TeacherId">Teacher Name</label>
-        <br />
-            <button onclick=" checkAndAdd()">Submit</button><br />
-    </div>
-
+<body onload="loadView()">
     <div id="TeacherInfoDiv"></div>
+    <div id="NewCommentDiv"></div>
+    <div id="UniversitiesDiv"></div>
+    <div id="CoursesDiv"></div>
+    <div id="CommentsDiv"></div>
     <a id="HomePage" hidden="true" href="/HomePage/HomePage.html">Go back to home page</a><br />
 
     <script src="AddTeacherComment.js"></script>

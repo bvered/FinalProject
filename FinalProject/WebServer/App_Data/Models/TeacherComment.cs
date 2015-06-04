@@ -19,7 +19,7 @@ namespace WebServer.App_Data.Models
         public TeacherComment(User user, string commentText, Teacher teacher) :
             base(user, commentText)
         {
-                Teacher = teacher;
+            Teacher = teacher;
             CriteriaRatings = teachersDefaultCriterias();
         }
 

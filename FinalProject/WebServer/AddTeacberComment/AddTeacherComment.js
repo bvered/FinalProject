@@ -1,160 +1,197 @@
-﻿
-var uri = '/api/Teachers/GetCriterias';
+﻿var uri = '/api/Teachers/GetCriterias';
 var uri2 = '/api/Teachers/AddComment';
-var uri3 = '/api/Teachers/GetTeachers';   
-var uri4 = '/api/Teachers/AddComment'; 
-var uri5 = '/api/Teachers/GetTeacher';
+var uri3 = '/api/Teachers/GetTeachers';
+var uri4 = '/api/Teachers/GetTeacher';
 
-var teacherFound;
+var teacher;
 var allCriterias;
 var allTeachers;
 var teacherInfoList;
 
 var TeacherInfoDiv = document.getElementById("TeacherInfoDiv");
-var teacherCommentsDiv = document.getElementById("TeacherCommentsDiv");
+var newCommentDiv = document.getElementById("NewCommentDiv");
+var uniDiv = document.getElementById("UniversitiesDiv");
+var teacherCourseDiv = document.getElementById("CoursesDiv");
+var teacherCommentsDiv = document.getElementById("CommentsDiv");
 
-$.getJSON(uri).done(function(data) {
-    allCriterias = data;
-    console.log(allCriterias);
-    populateCriterias();
-});
+function getParameterByName(name) {
+    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+        results = regex.exec(location.search);
+    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
-$.getJSON(uri3).done(function(data) {
-    allTeachers = data;
-});
+function loadView() {
+    if (loadCommentsCriteras() == false) {
+        showLoadingTeacherFailed();
+        return;
+    }
+    didSucceedLoadingTeacher = loadTeacher();
+    if (didSucceedLoadingTeacher == true) {
+        printInformationOfTeacher();
+    } else {
+        showLoadingTeacherFailed();
+    }
+}
+function loadCommentsCriteras() {
+    succeed = false;
+
+    var request = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",
+        success: function (data) {
+            if (data.length > 0) {
+                allCriterias = data;
+                succeed = true;
+            } else {
+                succeed == false;
+            }
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
+}
+
+function loadTeacher() {
+    id = getParameterByName('id');
+    succeed = false;
+
+    var request = $.ajax({
+        type: "GET",
+        url: uri4 + "/" + id,
+        contentType: "application/json",
+        success: function (data) {
+            if (data.length == 1) {
+                teacher = data[0];
+                succeed = true;
+            } else {
+                succeed == false;
+            }
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
+}
 
 function printInformationOfTeacher() {
-    $.getJSON(uri5).done(function(data) {
-	    teacher = data;
-	    showTeacherInfoToUser(teacher);
-	    showTeacherCommentsByTeacher(teacher);
-	});
+    showTeacherInfoToUser();
+    showCommentOptions();
+    showTeacherUniversities();
+    showTeacherCourses()
+    showTeacherCommentsByTeacher();
 }
 
-function showTeacherInfoToUser(teacher) {
-	addPropertyToDiv(teacher.Name);
-	addPropertyToDiv(teacher.Score);
+function showTeacherInfoToUser() {
+    var teacherNameLabel = document.createElement("Label");
+    teacherNameLabel.id = "propertyLabelTeacherName";
+    teacherNameLabel.innerHTML = "Teacher name: " + teacher.Name;
+    TeacherInfoDiv.appendChild(teacherNameLabel);
+    TeacherInfoDiv.appendChild(document.createElement('br'));
+
+    var teacherScoreLabel = document.createElement("Label");
+    teacherScoreLabel.id = "propertyLabelTeacherScore";
+    teacherScoreLabel.innerHTML = "Teacher average score: " + teacher.Score;
+    TeacherInfoDiv.appendChild(teacherScoreLabel);
+    TeacherInfoDiv.appendChild(document.createElement('br'));
 }
 
-function addPropertyToDiv(key, value)
-{
-	var keyLabelElement = document.createElement("Label");
-	keyLabelElement.id = "propertyLabelDescriptionId"+key;
-	keyLabelElement.innerHTML = key;
-	TeacherInfoDiv.appendChild(keyLabelElement);
-
-	var ValueLabelElement = document.createElement("Label");
-	ValueLabelElement.id = "propertyLabelValueId"+key;
-	ValueLabelElement.innerHTML = value;
-	TeacherInfoDiv.appendChild(ValueLabelElement);
+function showTeacherUniversities() {
+    var universityLabel = document.createElement("Label");
+    universityLabel.id = "universityLabel";
+    universityLabel.innerHTML = "Universities: ";
+    uniDiv.appendChild(universityLabel);
+    uniDiv.appendChild(document.createElement('br'));
+    if (teacher.Universities.length > 0) {
+        for (university in teacher.Universities) {
+            var universityLink = document.createElement('a');
+            universityLink.id = "universityLink" + university;
+            universityLink.href = '/University/University.html&University=' + teacher.Universities[university].Name;
+            universityLink.innerHTML = teacher.Universities[university].Name;
+            uniDiv.appendChild(universityLink);
+            uniDiv.appendChild(document.createElement('br'));
+        }
+    }
+    else {
+        var noUniversityLabel = document.createElement("Label");
+        noUniversityLabel.id = "noUniversityLabel";
+        noUniversityLabel.innerHTML = "No universities found for: " + Teacher.Name + ".";
+        TeacherInfoDiv.appendChild(noUniversityLabel);
+    }
 }
 
-function printUniversities(teacher)
-{
-	var universityLabel = document.createElement("Label");
-	universityLabel.id = "universityLabel";
-	universityLabel.innerHTML = "Universities";
-	TeacherInfoDiv.appendChild(universityLabel);
-	if (teacher.Universities.length > 0)
-	{
-		for (university in teacher.Universities)
-		{
-		    var universityButton = document.createElement("BUTTON");
-	    	universityButton.id = "universityLink"+university;
-		    universityButton.appendChild(document.createTextNode(teacher.Universities[university].Name));
-	    	universityButton.onclick = // TODO: Send to correct University;
-	    	TeacherInfoDiv.appendChild(universityButton);
-		}
-	}
-	else 
-	{
-		var noUniversityLabel = document.createElement("Label");
-		noUniversityLabel.id = "noUniversityLabel";
-		noUniversityLabel.innerHTML = "No universities found for: " + Teacher.Name + ".";
-		TeacherInfoDiv.appendChild(noUniversityLabel);
-	}
+function showTeacherCourses() {
+    var courseLabel = document.createElement("Label");
+    courseLabel.id = "courseLabel";
+    courseLabel.innerHTML = "Courses";
+    teacherCourseDiv.appendChild(courseLabel);
+    teacherCourseDiv.appendChild(document.createElement('br'));
+    if (teacher.Courses.length > 0) {
+        for (course in teacher.Courses) {
+            var courseButton = document.createElement('a');
+            courseButton.id = "courseLink" + course;
+            courseButton.href = '/Course/Course.html&Course=' + teacher.Courses[course].Name;
+            courseButton.innerHTML = teacher.Courses[course].Name;
+            teacherCourseDiv.appendChild(courseButton);
+            teacherCourseDiv.appendChild(document.createElement('br'));
+        }
+    }
+    else {
+        var noCourseLabel = document.createElement("Label");
+        noCourseLabel.id = "noCourseLabel";
+        noCourseLabel.innerHTML = "No courses found for: " + teacher.Name + ".";
+        teacherCourseDiv.appendChild(noCourseLabel);
+        teacherCourseDiv.appendChild(document.createElement('br'));
+    }
 }
 
-function printCourses(teacher)
-{
-	var courseLabel = document.createElement("Label");
-	courseLabel.id = "courseLabel";
-	courseLabel.innerHTML = "Courses";
-	TeacherInfoDiv.appendChild(courseLabel);
-	if (teacher.Courses.length > 0)
-	{
-		for (course in teacher.Courses)
-		{
-		    var courseButton = document.createElement("BUTTON");
-	    	courseButton.id = "universityLink"+university;
-		    courseButton.appendChild(document.createTextNode(teacher.Courses[course].Name));
-	    	courseButton.onclick = // TODO: Send to correct University;
-	    	TeacherInfoDiv.appendChild(courseButton);
-		}
-	}
-	else 
-	{
-		var noCourseLabel = document.createElement("Label");
-		noCourseLabel.id = "noCourseLabel";
-		noCourseLabel.innerHTML = "No courses found for: " + Teacher.Name + ".";
-		TeacherInfoDiv.appendChild(noUniversityLabel);
-	}
-}
+function showTeacherCommentsByTeacher() {
+    var commentsLabel = document.createElement("Label");
+    commentsLabel.id = "commentsLabel";
+    commentsLabel.innerHTML = "Comments";
+    teacherCourseDiv.appendChild(commentsLabel);
+    teacherCommentsDiv.appendChild(document.createElement('br'));
 
-function showTeacherCommentsByTeacher(teacher) {
     var allComments = teacher.TeacherComments;
     for (comment in allComments) {
-        printComment(teacherCommentDiv, allComments[comment], comment);
+        printComment(allComments[comment], comment);
     }
 }
 
-function checkAndAdd() {
-    var addComment = new Array();
-    addComment.push($("#TeacherId").val());
-    addComment.push($("#CommentText").val());
-    for(criteria in allCriterias) {
-        addComment.push($("Rating"+criteria).val());
+function printComment(comment, itr) {
+    var commentBox = document.createElement("textarea");
+    commentBox.placeholder = comment.CommentText;
+    commentBox.id = "TeacherCommet" + itr;
+    teacherCommentsDiv.appendChild(commentBox);
+    for (rating in comment.CriteriaRatings) {
+        //var ratingString = comment.CriteriaRatings[rating].Criteria.DisplayName;
+        //var ratingNumber = comment.CriteriaRatings[rating].Rating;
+
+        //var labelForRatingString = document.createElement("Label");
+        //labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
+        //labelForRatingString.innerHTML = ratingString;
+
+        //var labelForRatingNumber = document.createElement("Label");
+        //labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
+        //labelForRatingNumber.innerHTML = ratingString;
+
+        //teacherCommentsDiv.appendChild(labelForRatingString);
+        //teacherCommentsDiv.appendChild(labelForRatingNumber);
     }
-};
-
-function addComment() {
-    $(function() {
-        var ratings = [];
-        for(criteria in allCriterias) {
-            ratings.push(document.getElementById("criteriaRating"+criteria).value);
-        }
-
-        var comment = {
-            Id: UserId,
-            teacher: document.getElementById("TeacherId").value,
-            Comment: document.getElementById("TeacherNewCommetBox").value,
-            Ratings: ratings
-        };
-
-        var request = $.ajax({
-            type: "POST",
-            data: JSON.stringify(comment),
-            url: uri4,
-            contentType: "application/json"
-        });
-        request.done(function() {
-            document.getElementById("newCommentForm").fadeOut("slow");
-            divToAppend.display = none;
-        });
-        request.fail(function(jqXhr, textStatus) {
-            alert("Request failed: " + textStatus);
-        });
-        var divToAppend = document.getElementById("newCommentForm");
-    });
 }
 
-function populateCriterias() {
-    var divToAppend = document.getElementById("newCommentForm");
+function showCommentOptions() {
     var commentBox = document.createElement("textarea");
     commentBox.placeholder = "Write something..";
     commentBox.id = "TeacherNewCommetBox";
-    divToAppend.appendChild(commentBox);
-    divToAppend.appendChild(document.createElement("BR"));
+    teacherCommentsDiv.appendChild(commentBox);
+    teacherCommentsDiv.appendChild(document.createElement('br'));
     for (ratingText in allCriterias) {
         var criteriaText = allCriterias[ratingText];
         var labelInput = document.createElement("Label");
@@ -168,32 +205,46 @@ function populateCriterias() {
         inputText.min = "0";
         inputText.max = "5";
 
-        divToAppend.appendChild(labelInput);
-        divToAppend.appendChild(inputText);
+        teacherCommentsDiv.appendChild(labelInput);
+        teacherCommentsDiv.appendChild(inputText);
 
-        divToAppend.appendChild(document.createElement("BR"));
+        teacherCommentsDiv.appendChild(document.createElement("BR"));
     }
     var sendButton = document.createElement("BUTTON");
-    sendButton.onclick = addComment();
-    divToAppend.appendChild(sendButton);
+    sendButton.innerHTML = "Add Comment";
+    sendButton.onclick = addComment;
+    teacherCommentsDiv.appendChild(sendButton);
 }
 
-function printComment(divToAppend, comment, itr) {
-    var commentBox = document.createElement("textarea");
-    commentBox.placeholder = comment.CommentText;
-    commentBox.id = "TeacherCommet" + itr;
-    divToAppend.appendChild(commentBox);
-    for (rating in CriteriaRatings) {
-        var ratingString = CriteriaRatings[rating].Criteria.DisplayName;
-        var ratingNumber = CriteriaRatings[rating].Criteria.Rating;
+function showLoadingTeacherFailed() {
+    var failedSearchLabel = document.createElement("Label");
+    failedSearchLabel.id = "failedSearchLabel";
+    failedSearchLabel.innerHTML = "Failed to find user, re-directing to homepage";
+    TeacherInfoDiv.appendChild(failedSearchLabel);
+}
 
-        var labelForRatingString = document.createElement("Label");
-        labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
-        labelForRatingString.innerHTML = ratingString;
-
-        var labelForRatingNumber = document.createElement("Label");
-        labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-        labelForRatingNumber.innerHTML = ratingString;
+function addComment() {
+    var ratings = [];
+    for (criteria in allCriterias) {
+        ratings.push(document.getElementById("criteriaRating" + criteria).value);
     }
+    var comment = {
+        Id: teacher.$id,
+        Ratings: ratings,
+        Comment: document.getElementById("TeacherNewCommetBox").value,
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(comment),
+        url: uri2,
+        contentType: "application/json",
+        success: function () {
+            newCommentDiv.fadeOut("slow");
+            newCommentDiv.display = none;
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("Request failed: " + textStatus);
+        },
+        async: false
+    });
 }
-
