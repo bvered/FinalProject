@@ -102,6 +102,7 @@
   <ItemGroup>
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
+    <Content Include="AddFile\AddFile.html" />
     <Content Include="AddTeacberComment\AddTeacherComment.js" />
     <Content Include="AddTeacberComment\AddTeacherComment.html" />
     <Content Include="AddTeacher\AddTeacher.html" />
@@ -150,16 +151,17 @@
     <Compile Include="App_Data\Models\CourseInSemester.cs" />
     <Compile Include="App_Data\Models\Faculty.cs" />
     <Compile Include="App_Data\Models\IPersistent.cs" />
+    <Compile Include="App_Data\Models\UplodedFile.cs" />
     <Compile Include="App_Data\Models\Semester.cs" />
     <Compile Include="App_Data\Models\Teacher.cs" />
     <Compile Include="App_Data\Models\TeacherComment.cs" />
     <Compile Include="App_Data\Models\TeacherCriteria.cs" />
     <Compile Include="App_Data\Models\TeacherCriteriaRating.cs" />
     <Compile Include="App_Data\Models\University.cs" />
-    <Compile Include="App_Data\Models\User.cs" />
     <Compile Include="App_Data\Models\Vote.cs" />
     <Compile Include="App_Data\NHibernateConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AddFileController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
     <Compile Include="Controllers\SmartSearchController.cs" />

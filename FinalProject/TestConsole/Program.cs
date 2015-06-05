@@ -22,25 +22,14 @@ namespace TestConsole
             getBestTeachers(session);
 
             University universityWithId = session.Get<University>(universityId);
-            IList<User> allUsers = session.QueryOver<User>().List();
-            IList<string> allUserFullNames = session.QueryOver<User>().Select(x => x.FullName).List<string>();
 
             getReportedComments(session);
             session.Flush();
             session.Close();
         }
 
-        private static User CreateObjects(ISession session)
+        private static void CreateObjects(ISession session)
         {
-            User newUser = new User
-            {
-                LoginEmail = "vered631gmailcom",
-                BirthDate = new DateTime(1991, 07, 03),
-                FullName = "veredb",
-                PasswordHash = "123456",
-            };
-            session.Save(newUser);
-
             University newUniversity = new University("Tel-aviv_yafo");
             session.Save(newUniversity);
 
@@ -58,17 +47,16 @@ namespace TestConsole
             Teacher newTeacher = createTeacher("Romina",newCourse, newUniversity);
             newTeacher.addUniversity(new University("Ben Gurion"));
             newTeacher.addCourse(newCourse2);
-            newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Great teacher!!", newTeacher));
-            newTeacher.addTeacherCommnet(new TeacherComment(newUser, "This teacher Sucks!!", newTeacher));
-            newTeacher.addTeacherCommnet(new TeacherComment(newUser, "Oh my godsshshshhs his the worst!!!\n", newTeacher));
+            newTeacher.addTeacherCommnet(new TeacherComment( "Great teacher!!", newTeacher));
+            newTeacher.addTeacherCommnet(new TeacherComment( "This teacher Sucks!!", newTeacher));
+            newTeacher.addTeacherCommnet(new TeacherComment( "Oh my godsshshshhs his the worst!!!\n", newTeacher));
 
             Teacher newTeacher2 = createTeacher("Amir", newCourse, newUniversity);
-            newTeacher.addTeacherCommnet(new TeacherComment(newUser, "wow!!", newTeacher2));
+            newTeacher.addTeacherCommnet(new TeacherComment( "wow!!", newTeacher2));
 
             session.Save(newTeacher);
             session.Save(newTeacher2);
 
-            return newUser;
         }
 
         private static Teacher createTeacher(string teacherName,Course newCourse, University newUniversity)

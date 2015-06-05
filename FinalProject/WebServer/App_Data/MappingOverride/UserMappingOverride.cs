@@ -4,22 +4,10 @@ using WebServer.App_Data.Models;
 
 namespace WebServer.App_Data.MappingOverride
 {
-    public class UserMappingOverride : IAutoMappingOverride<User>
-    {
-
-        public void Override(AutoMapping<User> mapping)
-        {
-            mapping.Map(x => x.LoginEmail).Not.Nullable();
-            mapping.Map(x => x.PasswordHash).Not.Nullable();
-            mapping.Map(x => x.FullName).Not.Nullable();
-        }
-    }
-
     public class VoteMappingOverride : IAutoMappingOverride<Vote>
     {
         public void Override(AutoMapping<Vote> mapping)
         {
-            mapping.References(x => x.User).Not.Nullable();
             mapping.Map(x => x.Liked).Not.Nullable();
             mapping.References(x => x.Comment).Not.Nullable();
         }
@@ -29,17 +17,8 @@ namespace WebServer.App_Data.MappingOverride
     {
         public void Override(AutoMapping<Course> mapping)
         {
-            mapping.Map(x => x.CourseId).Not.Nullable();
             mapping.Map(x => x.Name).Not.Nullable();
             mapping.References(x => x.University).Not.Nullable();
-        }
-    }
-
-    public class CommentMappingOverride : IAutoMappingOverride<Comment>
-    {
-        public void Override(AutoMapping<Comment> mapping)
-        {
-            mapping.References(x => x.User).Not.Nullable();
         }
     }
 
@@ -89,6 +68,15 @@ namespace WebServer.App_Data.MappingOverride
         public void Override(AutoMapping<University> mapping)
         {
             mapping.Map(x => x.Name).Not.Nullable();
+        }
+    }
+
+    public class UplodedFileMappingOverride : IAutoMappingOverride<UplodedFile>
+    {
+        public void Override(AutoMapping<UplodedFile> mapping)
+        {
+            mapping.Map(x => x.File).Not.Nullable();
+            mapping.Map(x => x.FileName).Not.Nullable();
         }
     }
 }

@@ -15,8 +15,8 @@ namespace WebServer.App_Data.Models
             CriteriaRatings = new List<CourseCriteriaRating>();
         }
 
-        public CourseComment(User user, string commentText, Course course, CourseInSemester courseInSemester) :
-            base(user, commentText)
+        public CourseComment(string commentText, Course course, CourseInSemester courseInSemester) :
+            base(commentText)
         {
             Course = course;
             CourseInSemester = courseInSemester;

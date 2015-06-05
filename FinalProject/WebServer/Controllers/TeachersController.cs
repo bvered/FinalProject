@@ -80,7 +80,7 @@ namespace WebServer.Controllers
                     foreach(var rating in comment.Ratings) {
                         ratings.Add(Convert.ToInt32(rating));
                     }
-                    teacher.addTeacherCommnet(new TeacherComment(null, comment.Comment, teacher, ratings));
+                    teacher.addTeacherCommnet(new TeacherComment(comment.Comment, teacher, ratings));
                 }
                 session.Save(teacher);
 

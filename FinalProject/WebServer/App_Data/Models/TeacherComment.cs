@@ -16,15 +16,15 @@ namespace WebServer.App_Data.Models
             CriteriaRatings = teachersDefaultCriterias();
         }
 
-        public TeacherComment(User user, string commentText, Teacher teacher) :
-            base(user, commentText)
+        public TeacherComment(string commentText, Teacher teacher) :
+            base(commentText)
         {
             Teacher = teacher;
             CriteriaRatings = teachersDefaultCriterias();
         }
 
-        public TeacherComment(User user, string commentText, Teacher teacher, List<int> ratings) :
-            base(user, commentText)
+        public TeacherComment( string commentText, Teacher teacher, List<int> ratings) :
+            base(commentText)
         {
             Teacher = teacher;
             CriteriaRatings = teachersDefaultCriterias();

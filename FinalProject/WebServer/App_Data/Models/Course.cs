@@ -25,12 +25,18 @@ namespace WebServer.App_Data.Models
         public IList<CourseInSemester> CourseInSemesters { get; set; }
         [DataMember]
         public IList<CourseComment> CourseComments { get; set; }
+        [DataMember]
+        public IList<Syllabus> Syllabuses { get; set; }
+        [DataMember]
+        public IList<GradesDestribution> GradesDestributions { get; set; }
 
         public Course()
         {
             Teachers = new List<Teacher>();
             CourseInSemesters = new List<CourseInSemester>();
             CourseComments = new List<CourseComment>();
+            Syllabuses = new List<Syllabus>();
+            GradesDestributions = new List<GradesDestribution>();
         }
 
         public Course(University university, int courseId, string name, Faculty faculy)
@@ -58,6 +64,16 @@ namespace WebServer.App_Data.Models
         public void AddCourseComment(CourseComment comment)
         {
             CourseComments.Add(comment);
+        }
+
+        public void AddSyllabus(Syllabus newSyllabus)
+        {
+            Syllabuses.Add(newSyllabus);
+        }
+
+        public void AddGradesDestribustion(GradesDestribution newGrades)
+        {
+            GradesDestributions.Add(newGrades);
         }
     }
 }

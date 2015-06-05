@@ -10,8 +10,6 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public Guid Id { get; set; }
         [DataMember]
-        public User User { get; set; }
-        [DataMember]
         public DateTime DateTime { get; set; }
         [DataMember]
         public IList<Vote> Votes { get; set; }
@@ -28,10 +26,9 @@ namespace WebServer.App_Data.Models
             Votes = new List<Vote>();
         }
 
-        public Comment(User user, string commentText)
+        public Comment(string commentText)
         {
             Id = new Guid();
-            User = user;
             DateTime = DateTime.Now;
             Votes= new List<Vote>();
             Reports = 0;
