@@ -138,7 +138,21 @@ function showTeachersData(arrayResult) {
             var j = 0;
             for (i in data) {
                 if (data[i].Name == arrayResult[j]) {
+                    
+                    
+                    var a = $('<a />');
+                    a.attr('href', "/HomePage/HomePage.html?search=Teachers&SearchText=" + data[i].Name);
+                    a.text(data[i].Name);
+             
+                   // $('body').append(a);
 
+                    var teacherData = $('<p />');
+                    teacherData.addClass("lecturerDara");
+                    teacherData.append(a);
+
+                    $('body').append(teacherData);
+
+                    /*
                     var newButton = document.createElement('input');
                     newButton.type = 'button';
                     newButton.value = data[i].Name;
@@ -148,7 +162,7 @@ function showTeachersData(arrayResult) {
                         window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + newButton.value;
                     }
                     document.body.appendChild(newButton);
-
+                    */
                     for (k in data[i].Universities) {
                         var University = document.createTextNode(data[i].Universities[k].Name + ', '); //אוניברסיטה
                         document.body.appendChild(University);
