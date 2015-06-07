@@ -1,6 +1,4 @@
-﻿/// לאחר שמציגים תוצאות, להוסיף בתחתית העמוד :
-//לא מוצא את המרצה שאתה מחפש , לחץ כאן להוספה
-$(document).ready(function () { ShowResults() });
+﻿$(document).ready(function () { ShowResults() });
 
 function ShowResults() {
 
@@ -157,7 +155,10 @@ function showTeachersData(arrayResult) {
 
                     //the teacher name
                     var a = $('<a />');
-                    a.attr('href', "/HomePage/HomePage.html?search=Teachers&SearchText=" + data[i].Name);
+                    ///////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
+                    a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=" + data[i].Id);
+                  //  a.attr('href', "/HomePage/HomePage.html?search=Teachers&SearchText=" + data[i].Id); 
+              //    
                     a.text(data[i].Name);
                     teacherData.append(a);
 
@@ -224,7 +225,9 @@ function showCoursesData(arrayResult) {
 
                         //the course name
                         var a = $('<a />');
-                        a.attr('href', "/HomePage/HomePage.html?search=Courses&SearchText=" + data[i].Name);
+                        /////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
+                        a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=" + data[i].Id);
+                       // a.attr('href', "/HomePage/HomePage.html?search=Courses&SearchText=" + data[i].Name);
                         a.text(data[i].Name);
                         courseData.append(a);
 
