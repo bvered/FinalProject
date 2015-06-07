@@ -2,11 +2,13 @@
 var uri2 = '/api/Teachers/AddComment';
 var uri3 = '/api/Teachers/GetTeachers';
 var uri4 = '/api/Teachers/GetTeacher';
+var uri5 = 'api/Teachers/GetCommentById';
 
 var teacher;
 var allCriterias;
 var allTeachers;
 var teacherInfoList;
+var numberOfCommentsLoaded;
 
 var TeacherInfoDiv = document.getElementById("TeacherInfoDiv");
 var newCommentDiv = document.getElementById("NewCommentDiv");
@@ -159,7 +161,8 @@ function showTeacherCommentsByTeacher() {
     teacherCommentsDiv.appendChild(document.createElement('br'));
 
     var allComments = teacher.TeacherComments;
-    for (comment in allComments) {
+    numberOfCommentsLoaded = allComments.length;
+    for (comment in numberOfCommentsLoaded) {
         printComment(allComments[comment], comment);
     }
 }
@@ -170,20 +173,47 @@ function printComment(comment, itr) {
     commentBox.id = "TeacherCommet" + itr;
     teacherCommentsDiv.appendChild(commentBox);
     for (rating in comment.CriteriaRatings) {
-        //var ratingString = comment.CriteriaRatings[rating].Criteria.DisplayName;
-        //var ratingNumber = comment.CriteriaRatings[rating].Rating;
+        var succeed = false;
+        var loadedComment;
+        loadComment(comment.CriteriaRatings[rating].Id, loadedComment, succeed);
+        if (succeed) {
+            var ratingString = loadedComment.Criteria.DisplayName;
+            var ratingNumber = loadedComment.Rating;
 
-        //var labelForRatingString = document.createElement("Label");
-        //labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
-        //labelForRatingString.innerHTML = ratingString;
+            var labelForRatingString = document.createElement("Label");
+            labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
+            labelForRatingString.innerHTML = ratingString;
 
-        //var labelForRatingNumber = document.createElement("Label");
-        //labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-        //labelForRatingNumber.innerHTML = ratingString;
+            var labelForRatingNumber = document.createElement("Label");
+            labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
+            labelForRatingNumber.innerHTML = ratingString;
 
-        //teacherCommentsDiv.appendChild(labelForRatingString);
-        //teacherCommentsDiv.appendChild(labelForRatingNumber);
+            teacherCommentsDiv.appendChild(labelForRatingString);
+            teacherCommentsDiv.appendChild(labelForRatingNumber);
+        }
     }
+}
+
+function loadComment(commentId, loadedComment, succeed) {
+    succeed = false;
+
+    var request = $.ajax({
+        type: "GET",
+        url: uri5 + "/" + commentId,
+        contentType: "application/json",
+        success: function (data) {
+            if (data.length == 1) {
+                loadedComment = data;
+                succeed = true;
+            } else {
+                succeed == false;
+            }
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
 }
 
 function showCommentOptions() {
@@ -211,7 +241,7 @@ function showCommentOptions() {
         teacherCommentsDiv.appendChild(document.createElement("BR"));
     }
     var sendButton = document.createElement("BUTTON");
-    sendButton.innerHTML = "Add Comment";
+    sendButton.innerHTML = "Add";
     sendButton.onclick = addComment;
     teacherCommentsDiv.appendChild(sendButton);
 }
@@ -229,7 +259,7 @@ function addComment() {
         ratings.push(document.getElementById("criteriaRating" + criteria).value);
     }
     var comment = {
-        Id: teacher.$id,
+        Id: teacher.Id,
         Ratings: ratings,
         Comment: document.getElementById("TeacherNewCommetBox").value,
     };
@@ -238,13 +268,29 @@ function addComment() {
         data: JSON.stringify(comment),
         url: uri2,
         contentType: "application/json",
-        success: function () {
-            newCommentDiv.fadeOut("slow");
-            newCommentDiv.display = none;
+        success: function (data) {
+            alert("New comment added!");
+            numberOfCommentsLoaded = numberOfCommentsLoaded + 1;
+            printComment(data, numberOfCommentsLoaded)
         },
         fail: function (jqXhr, textStatus) {
             alert("Request failed: " + textStatus);
         },
         async: false
     });
+    removingAllContentOfDiv(newCommentDiv);
+}
+
+function insertAddCommentButton() {
+    removingAllContentOfDiv(teacherCommentsDiv);
+    var addButton = document.createElement("BUTTON");
+    sendButton.innerHTML = "Comment";
+    sendButton.onclick = addComment;
+    teacherCommentsDiv.appendChild(sendButton);
+}
+
+function removingAllContentOfDiv(div) {
+    while (div.hasChildNodes()) {
+        node.removeChild(div.lastChild);
+    }
 }

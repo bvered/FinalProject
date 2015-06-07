@@ -25,9 +25,10 @@ namespace WebServer.Controllers
         public IHttpActionResult GetTeacher([FromUri]string id)
         {
             using (var session = DBHelper.OpenSession()) {
-                var teacher =  session.QueryOver<Teacher>()
-                .Where(t => t.Name == id)
-                .List();
+
+                Guid teacherGuid;
+                var didSucceedParsingTeacherGuid = Guid.TryParse(id, out teacherGuid);
+                var teacher = didSucceedParsingTeacherGuid ? session.Load<Teacher>(teacherGuid) : null;
                 if (teacher == null) {
                     return NotFound();
                 }
@@ -41,6 +42,21 @@ namespace WebServer.Controllers
         public IList<string> GetAllTeachersNames() {
             using (var session = DBHelper.OpenSession()) {
                 return session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetCommentById")]
+        public IHttpActionResult GetCommentById([FromUri]string commentId) {
+            using (var session = DBHelper.OpenSession()) {
+                Guid teacherCommentGuid;
+                var didSuccedParsingTeacherCommentGuid = Guid.TryParse(commentId, out teacherCommentGuid);
+                var teacher = session.Load<TeacherComment>(teacherCommentGuid);
+                if (teacher == null) {
+                    return NotFound();
+                }
+                
+                return Ok(teacher);
             }
         }
 
@@ -72,8 +88,9 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                var teacher = session.QueryOver<Teacher>().Where(x => x.Id.ToString() == comment.Id).SingleOrDefault();
-
+                Guid teacherGuid;
+                var didTeacherGuidParseSucceed = Guid.TryParse(comment.Id, out teacherGuid);
+                var teacher = didTeacherGuidParseSucceed ? session.Load<Teacher>(teacherGuid) : null;
                 if (teacher != null)
                 {
                     List<int> ratings = new List<int>();
