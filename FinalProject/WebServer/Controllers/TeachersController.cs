@@ -38,6 +38,26 @@ namespace WebServer.Controllers
         }
 
         [HttpGet]
+        [ActionName("GetTeacherId")]
+        public IEnumerable<string> GetTeacherId(string name)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                //Teacher teacher;
+                IList<Teacher> teachersList = session.QueryOver<Teacher>().List();
+                foreach(Teacher teacher in teachersList)
+                {
+                    if(teacher.Name == name)
+                    {
+                   ////     return teacher.Id; 
+                        //לא סגורה על מה צריך להחזיר פה :(
+                    }
+                }
+            }
+            return null;
+        }
+        
+        [HttpGet]
         [ActionName("GetTeachers")]
         public IList<string> GetAllTeachersNames() {
             using (var session = DBHelper.OpenSession()) {

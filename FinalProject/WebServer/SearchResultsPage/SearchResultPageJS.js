@@ -52,9 +52,19 @@ function getTeacherData(query_string) {
             var textError = document.createTextNode('No matches found');
             $('body').append(textError);
         }
-     //   if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-     //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + arrayResult[0].Id;
-       // }
+
+      /*  if(arrayResult.length == 1)
+        {
+            uri = '/api/Teachers/GetTeacher'+ arrayResult[0];
+            $.getJSON(uri)
+            .done(function (data) {
+                document.write(data.Id);
+            });
+        }*/
+            //   if (arrayResult.length == 1) { 
+            //  // גיללל המערך של התוצאות מכיל כרגע רק שמות, לא יישות של מרצה.. צריך להביא מהשרת את הגויד לפי שם המרצה
+            //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + arrayResult[0];
+            // }
         else {
             showTeachersData(arrayResult);
         }
@@ -76,8 +86,10 @@ function getCourseData(query_string) {
             var textError = document.createTextNode('No matches found');
             $('body').append(textError);
         }
-            /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-                  window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + arrayResult[0].Id;
+            /* if (arrayResult.length == 1) {
+
+            // גיללל המערך של התוצאות מכיל כרגע רק שמות, לא יישות של קורס.. צריך להביא מהשרת את הגויד לפי שם הקורס
+                  window.location = '/AddCourseComment/AddCourseComment.html?search=Courses&SearchText=' + arrayResult[0];
 
              }*/
         else {
@@ -99,10 +111,9 @@ function getAllData(query_string) {
                 coursesArrayResult.push(data[i]);
             }
         }
-        if (coursesArrayResult.length == 1) {///////// להעביר לעמוד של הצגת קורס של גיל!!!!
-            window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + coursesArrayResult[0].Id;
-
-          //  window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
+        if (coursesArrayResult.length == 1) {
+            // גיללל המערך של התוצאות מכיל כרגע רק שמות, לא יישות של קורס.. צריך להביא מהשרת את הגויד לפי שם הקורס
+         //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + coursesArrayResult[0];
         }
         else if (coursesArrayResult.length > 1) {
             showCoursesData(coursesArrayResult);
@@ -117,9 +128,8 @@ function getAllData(query_string) {
                     }
                 }
                 if (teachersArrayResult.length == 1) { //אין תוצאות קורסים, ויש תוצאה אחת למרצים
-                    ///////להעביר לעמוד הצגת תוצאות מרצים של גילללללללל!!!
-                    window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + teachersArrayResult[0].Id;
-                 //   window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
+                    // גיללל המערך של התוצאות מכיל כרגע רק שמות, לא יישות של מרצה.. צריך להביא מהשרת את הגויד לפי שם המרצה
+                 //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + teachersArrayResult[0];
                 }
                 else if (teachersArrayResult.length == 0) { // אין תוצאות קורסים ואין תוצאות מרצים.
                     var textError = document.createTextNode('No matches found');
@@ -197,6 +207,12 @@ function showTeachersData(arrayResult) {
 
                     $('body').append(teacherData);
 
+                    //remove the option that we have already use, because if we will have copies of the same name we want another data.
+                    var i = data.indexOf(data[i]);
+                    if (i != -1) {
+                        data.splice(i, 1);
+                    }
+                    
                 }
             }
             }
@@ -250,6 +266,12 @@ function showCoursesData(arrayResult) {
                         courseData.append(University);
 
                         $('body').append(courseData);
+
+                        //remove the option that we have already use, because if we will have copies of the same name we want another data.
+                        var i = data.indexOf(data[i]);
+                        if (i != -1) {
+                            data.splice(i, 1);
+                        }
                     }
                 }
             }
