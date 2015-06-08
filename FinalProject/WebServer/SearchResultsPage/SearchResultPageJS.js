@@ -53,7 +53,7 @@ function getTeacherData(query_string) {
             $('body').append(textError);
         }
      //   if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-           // window.location = '/AddTeacberComment/AddTeacherComment.html?Teacher=' + arrayResult[0];
+     //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + arrayResult[0].Id;
        // }
         else {
             showTeachersData(arrayResult);
@@ -77,7 +77,8 @@ function getCourseData(query_string) {
             $('body').append(textError);
         }
             /* if (arrayResult.length == 1) { /////במקרה ויש תוצאה אחת צריך לבצע הפניה לדף של גיל
-                 window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + arrayResult[0];
+                  window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + arrayResult[0].Id;
+
              }*/
         else {
             showCoursesData(arrayResult);
@@ -99,7 +100,9 @@ function getAllData(query_string) {
             }
         }
         if (coursesArrayResult.length == 1) {///////// להעביר לעמוד של הצגת קורס של גיל!!!!
-            window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
+            window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + coursesArrayResult[0].Id;
+
+          //  window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + coursesArrayResult[0];
         }
         else if (coursesArrayResult.length > 1) {
             showCoursesData(coursesArrayResult);
@@ -115,7 +118,8 @@ function getAllData(query_string) {
                 }
                 if (teachersArrayResult.length == 1) { //אין תוצאות קורסים, ויש תוצאה אחת למרצים
                     ///////להעביר לעמוד הצגת תוצאות מרצים של גילללללללל!!!
-                    window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
+                    window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + teachersArrayResult[0].Id;
+                 //   window.location = '/HomePage/HomePage.html?search=Teachers&SearchText=' + teachersArrayResult[0];
                 }
                 else if (teachersArrayResult.length == 0) { // אין תוצאות קורסים ואין תוצאות מרצים.
                     var textError = document.createTextNode('No matches found');
