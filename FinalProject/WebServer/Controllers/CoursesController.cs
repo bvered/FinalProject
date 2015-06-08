@@ -18,14 +18,12 @@ namespace WebServer.Controllers
             }
         }
 
-        public IHttpActionResult GetCourse(Guid id)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                var course = session.Get<Course>(id);
-
-                if (course == null)
-                {
+        public IHttpActionResult GetCourse([FromUri]string id) {
+            using (var session = DBHelper.OpenSession()) {
+                Guid coureGuid;
+                var didSucceedParsingGuid = Guid.TryParse(id, out coureGuid);
+                var course = session.Get<Course>(didSucceedParsingGuid);
+                if (course == null) {
                     return NotFound();
                 }
 
@@ -45,32 +43,93 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddCourse")]
-        public void AddCourse([FromBody]CreateCourseCommand createCommand)
-        {
+        public void AddCourse([FromBody]CreateCourseCommand createCommand) {
             using (var session = DBHelper.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
+            using (var transaction = session.BeginTransaction()) {
                 var university = session.QueryOver<University>().Where(x => x.Name == createCommand.UniversityName).SingleOrDefault();
                 var teacher = session.QueryOver<Teacher>().Where(x => x.Name == createCommand.TeacherName).SingleOrDefault();
-
-                var course = new Course
-                {
+                var course = new Course {
                     Name = createCommand.Name,
                     University = university,
                     Teachers = new []{teacher}
                 };
-
                 session.Save(course);
-
                 transaction.Commit();
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetCriterias")]
+        public IList<string> GetAllCriterias()
+        {
+            return CourseComment.CriteriaList();
+        }
+
+        [HttpPost]
+        [ActionName("AddComment")]
+        public void AddComment([FromBody]CreateCourseComment comment)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction()) {
+                Guid semesterGuid;
+                var didSemesterGuidParseSucceed = Guid.TryParse(comment.SemseterId, out semesterGuid);
+                var semester = didSemesterGuidParseSucceed ? session.Load<CourseInSemester>(semesterGuid) : null;
+                Guid courseGuid;
+                var didCourseGuidParseSucceed = Guid.TryParse(comment.Id, out courseGuid);
+                var course = didCourseGuidParseSucceed ? session.Load<Course>(courseGuid) : null;
+                if (course != null) {
+                    List<int> ratings = new List<int>();
+                    foreach (var rating in comment.Ratings) {
+                        ratings.Add(Convert.ToInt32(rating));
+                    }
+                    course.AddCourseComment(new CourseComment(comment.Comment, course, semester, ratings));
+                }
+                session.Save(course);
+                transaction.Commit();
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetCommentById")]
+        public IHttpActionResult GetCommentById([FromUri]string commentId) {
+            using (var session = DBHelper.OpenSession()) {
+                Guid courseCommentGuid;
+                var didSuccedParsingCourseCommentGuid = Guid.TryParse(commentId, out courseCommentGuid);
+                var comment = didSuccedParsingCourseCommentGuid ? session.Load<CourseComment>(courseCommentGuid) : null;
+                if (comment == null) {
+                    return NotFound();
+                }
+
+                return Ok(comment);
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetAllSemesters")]
+        public IHttpActionResult GetAllSemesters()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var comment = session.QueryOver<CourseInSemester>().List();
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+                return Ok(comment);
             }
         }
     }
 
-    public class CreateCourseCommand
-    {
+    public class CreateCourseCommand {
         public string Name { get; set; }
         public string UniversityName { get; set; }
         public string TeacherName { get; set; }
+    }
+
+    public class CreateCourseComment {
+        public string Id { get; set; }
+        public List<string> Ratings { get; set; }
+        public string Comment { get; set; }
+        public string SemseterId { get; set; }
     }
 }

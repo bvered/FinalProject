@@ -100,6 +100,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddCourseComment\AddCourseComment.html" />
+    <Content Include="AddCourseComment\AddCourseComment.js" />
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
     <Content Include="AddFile\AddFile.html" />

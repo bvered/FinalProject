@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add Comment</title>
+    <title>Course</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -9,18 +9,12 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="loadView()">
+    <div id="CourseInfoDiv"></div>
+    <div id="NewCourseCommentDiv"></div>
+    <div id="CommentsDiv"></div>
 
-    <div id="newCommentForm" class="form-group">
-        <label id="CourseId">Course Id: </label>
-        <br />
-            <button onclick=" checkAndAdd()">Submit</button><br />
-    </div>
-
-    <div id="TeacherInfoDiv"></div>
-    <a id="HomePage" hidden="true" href="/HomePage/HomePage.html">Go back to home page</a><br />
-
-    <script src="AddCourseComment.js"></script>
+    <script src="AddTeacherComment.js"></script>
 
 </body>
 </html>

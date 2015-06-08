@@ -51,12 +51,12 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession()) {
                 Guid teacherCommentGuid;
                 var didSuccedParsingTeacherCommentGuid = Guid.TryParse(commentId, out teacherCommentGuid);
-                var teacher = session.Load<TeacherComment>(teacherCommentGuid);
-                if (teacher == null) {
+                var comment = session.Load<TeacherComment>(teacherCommentGuid);
+                if (comment == null) {
                     return NotFound();
                 }
-                
-                return Ok(teacher);
+
+                return Ok(comment);
             }
         }
 
@@ -74,25 +74,20 @@ namespace WebServer.Controllers
                     Name = createCommand.Name,
                     Universities = new[] {university},
                 };
-
                 session.Save(teacher);
-
                 transaction.Commit();
             }
         }
 
         [HttpPost]
         [ActionName("AddComment")]
-        public void AddComment([FromBody]CreateTeacherComment comment)
-        {
+        public void AddComment([FromBody]CreateTeacherComment comment) {
             using (var session = DBHelper.OpenSession())
-            using (var transaction = session.BeginTransaction())
-            {
+            using (var transaction = session.BeginTransaction()) {
                 Guid teacherGuid;
                 var didTeacherGuidParseSucceed = Guid.TryParse(comment.Id, out teacherGuid);
                 var teacher = didTeacherGuidParseSucceed ? session.Load<Teacher>(teacherGuid) : null;
-                if (teacher != null)
-                {
+                if (teacher != null) {
                     List<int> ratings = new List<int>();
                     foreach(var rating in comment.Ratings) {
                         ratings.Add(Convert.ToInt32(rating));
@@ -100,28 +95,27 @@ namespace WebServer.Controllers
                     teacher.addTeacherCommnet(new TeacherComment(comment.Comment, teacher, ratings));
                 }
                 session.Save(teacher);
-
                 transaction.Commit();
             }
         }
 
         [HttpGet]
         [ActionName("GetCriterias")]
-        public IList<string> GetAllCriterias()
-        {
-            return TeacherComment.criteriaList();
+        public IHttpActionResult GetAllCriterias() {
+            var criterias = TeacherComment.CriteriaList();
+            if (criterias == null)
+                return NotFound();
+            else
+                return Ok(criterias);
         }
-
     }
 
-    public class CreateTeacherCommand
-    {
+    public class CreateTeacherCommand {
         public string Name { get; set; }
         public string UniversityName { get; set; }
     }
 
-    public class CreateTeacherComment
-    {
+    public class CreateTeacherComment {
         public string Id { get; set; }
         public List<string> Ratings { get; set; }
         public string Comment { get; set; }

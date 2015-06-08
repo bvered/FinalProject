@@ -23,7 +23,7 @@ namespace WebServer.App_Data.Models
             CriteriaRatings = teachersDefaultCriterias();
         }
 
-        public TeacherComment( string commentText, Teacher teacher, List<int> ratings) :
+        public TeacherComment(string commentText, Teacher teacher, List<int> ratings) :
             base(commentText)
         {
             Teacher = teacher;
@@ -31,12 +31,9 @@ namespace WebServer.App_Data.Models
             populateRatings(ratings);
         }
 
-        static internal List<TeacherCriteriaRating> teachersDefaultCriterias()
-        {
+        static internal List<TeacherCriteriaRating> teachersDefaultCriterias() {
             List<TeacherCriteriaRating> criterias = new List<TeacherCriteriaRating>();
-
-            foreach(string criteriaDisplayName in criteriaList())
-            {
+            foreach(string criteriaDisplayName in CriteriaList()) {
                 TeacherCriteriaRating rating = new TeacherCriteriaRating(criteriaDisplayName, 0);
                 criterias.Add(rating);
             }
@@ -44,25 +41,18 @@ namespace WebServer.App_Data.Models
             return criterias;
         }
 
-        static internal List<string> criteriaList()
-        {
-            List<string> criterias = new List<string>
-            {
+        static internal List<string> CriteriaList() {
+            return new List<string> {
                 "Student- teacher relationship",
                 "Teaching ability",
                 "Teachers knowlegde level",
                 "The teacher Encouregment for self learning",
                 "The teacher interest level"
             };
-
-
-            return criterias;
         }
 
-        private void populateRatings(List<int> ratings)
-        {
-            for (int i = 0; i < CriteriaRatings.Count; i++)
-            {
+        private void populateRatings(List<int> ratings) {
+            for (int i = 0; i < CriteriaRatings.Count; i++) {
                 CriteriaRatings[i].Rating = ratings[i];
             }
         }
