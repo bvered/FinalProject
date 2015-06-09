@@ -144,7 +144,7 @@ function getAllData(query_string) {
 }
 
 function showTeachersData(arrayResult) {
-    var uri = '/api/Teachers/GetAllTeachers';
+    var uri = '/api/Teachers/GetAllSearchedTeachers';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
     $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');

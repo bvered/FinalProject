@@ -12,11 +12,29 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetAllTeachers")]
-        public IEnumerable<Teacher> GetAllTeachers()
+        public IList<Teacher> GetAllTeachers()
         {
             using (var session = DBHelper.OpenSession())
             {
-                return session.QueryOver<Teacher>().List();
+                IList<Teacher> teachers = session.QueryOver<Teacher>().List();
+                return teachers;
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetAllSearchedTeachers")]
+        public IList<resultTeacher> GetAllSearchedTeachers()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                IList<Teacher> teachers = session.QueryOver<Teacher>().List();
+                IList<resultTeacher> result = new List<resultTeacher>();
+                foreach (var teacher in teachers)
+                {
+                   result.Add(new resultTeacher(teacher.Name, teacher.Universities[0].Name));
+                }
+
+                return result;
             }
         }
 
@@ -127,6 +145,18 @@ namespace WebServer.Controllers
                 return NotFound();
             else
                 return Ok(criterias);
+        }
+    }
+
+    public class resultTeacher
+    {
+        public string Name { get; set; }
+        public string UniversityName { get; set; }
+
+        public resultTeacher(string name, string university)
+        {
+            Name = name;
+            UniversityName = university;
         }
     }
 
