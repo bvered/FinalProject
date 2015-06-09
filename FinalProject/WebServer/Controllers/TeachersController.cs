@@ -57,7 +57,7 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetTeacherId")]
-        public IEnumerable<string> GetTeacherId(string name)
+        public string GetTeacherId(string name)
         {
             using (var session = DBHelper.OpenSession())
             {
@@ -67,7 +67,7 @@ namespace WebServer.Controllers
                 {
                     if(teacher.Name == name)
                     {
-                   ////     return teacher.Id; 
+                        return teacher.Id.ToString(); 
                         //לא סגורה על מה צריך להחזיר פה :(
                     }
                 }

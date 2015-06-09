@@ -148,7 +148,7 @@ function showTeachersData(arrayResult) {
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
     $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
-
+    
     $.getJSON(uri)
         .done(function (data) {
             for (j in arrayResult) {
