@@ -64,12 +64,8 @@ function loadCourse() {
         url: uri4 + "/" + id,
         contentType: "application/json",
         success: function (data) {
-            if (data.length == 1) {
-                teacher = data[0];
-                succeed = true;
-            } else {
-                succeed == false;
-            }
+            teacher = data;
+            succeed = true;
         },
         fail: function (data) {
             succeed = false;
@@ -160,12 +156,8 @@ function loadComment(commentId, loadedComment, succeed) {
         url: uri5 + "/" + commentId,
         contentType: "application/json",
         success: function (data) {
-            if (data.length == 1) {
-                loadedComment = data;
-                succeed = true;
-            } else {
-                succeed == false;
-            }
+            loadedComment = data;
+            succeed = true;
         },
         fail: function (data) {
             succeed = false;

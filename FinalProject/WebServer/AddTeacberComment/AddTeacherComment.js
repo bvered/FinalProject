@@ -2,7 +2,6 @@
 var uri2 = '/api/Teachers/AddComment';
 var uri3 = '/api/Teachers/GetTeachers';
 var uri4 = '/api/Teachers/GetTeacher';
-var uri5 = 'api/Teachers/GetCommentById';
 
 var teacher;
 var allCriterias;
@@ -43,12 +42,8 @@ function loadCommentsCriteras() {
         url: uri,
         contentType: "application/json",
         success: function (data) {
-            if (data.length > 0) {
                 allCriterias = data;
                 succeed = true;
-            } else {
-                succeed == false;
-            }
         },
         fail: function (data) {
             succeed = false;
@@ -67,12 +62,8 @@ function loadTeacher() {
         url: uri4 + "/" + id,
         contentType: "application/json",
         success: function (data) {
-            if (data.length == 1) {
-                teacher = data[0];
-                succeed = true;
-            } else {
-                succeed == false;
-            }
+            teacher = data;
+            succeed = true;
         },
         fail: function (data) {
             succeed = false;
@@ -162,7 +153,7 @@ function showTeacherCommentsByTeacher() {
 
     var allComments = teacher.TeacherComments;
     numberOfCommentsLoaded = allComments.length;
-    for (comment in numberOfCommentsLoaded) {
+    for (comment = 0; comment < numberOfCommentsLoaded; comment++) {
         printComment(allComments[comment], comment);
     }
 }
@@ -172,48 +163,23 @@ function printComment(comment, itr) {
     commentBox.placeholder = comment.CommentText;
     commentBox.id = "TeacherCommet" + itr;
     teacherCommentsDiv.appendChild(commentBox);
+    teacherCommentsDiv.appendChild(document.createElement('br'));
     for (rating in comment.CriteriaRatings) {
-        var succeed = false;
-        var loadedComment;
-        loadComment(comment.CriteriaRatings[rating].Id, loadedComment, succeed);
-        if (succeed) {
-            var ratingString = loadedComment.Criteria.DisplayName;
-            var ratingNumber = loadedComment.Rating;
+        var loadedComment = comment.CriteriaRatings[rating];
 
             var labelForRatingString = document.createElement("Label");
             labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
-            labelForRatingString.innerHTML = ratingString;
+            labelForRatingString.innerHTML = loadedComment.Criteria.DisplayName;
 
             var labelForRatingNumber = document.createElement("Label");
             labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-            labelForRatingNumber.innerHTML = ratingString;
+            labelForRatingNumber.innerHTML = loadedComment.Rating;
 
             teacherCommentsDiv.appendChild(labelForRatingString);
+            teacherCommentsDiv.appendChild(document.createElement('br'));
             teacherCommentsDiv.appendChild(labelForRatingNumber);
-        }
+            teacherCommentsDiv.appendChild(document.createElement('br'));
     }
-}
-
-function loadComment(commentId, loadedComment, succeed) {
-    succeed = false;
-
-    var request = $.ajax({
-        type: "GET",
-        url: uri5 + "/" + commentId,
-        contentType: "application/json",
-        success: function (data) {
-            if (data.length == 1) {
-                loadedComment = data;
-                succeed = true;
-            } else {
-                succeed == false;
-            }
-        },
-        fail: function (data) {
-            succeed = false;
-        },
-        async: false
-    });
 }
 
 function showCommentOptions() {
@@ -244,6 +210,7 @@ function showCommentOptions() {
     sendButton.innerHTML = "Add";
     sendButton.onclick = addComment;
     teacherCommentsDiv.appendChild(sendButton);
+    teacherCommentsDiv.appendChild(document.createElement("BR"));
 }
 
 function showLoadingTeacherFailed() {

@@ -25,15 +25,20 @@ namespace WebServer.Controllers
         public IHttpActionResult GetTeacher([FromUri]string id)
         {
             using (var session = DBHelper.OpenSession()) {
-
+                var ts = session.QueryOver<Teacher>().List();
                 Guid teacherGuid;
                 var didSucceedParsingTeacherGuid = Guid.TryParse(id, out teacherGuid);
-                var teacher = didSucceedParsingTeacherGuid ? session.Load<Teacher>(teacherGuid) : null;
-                if (teacher == null) {
+                Teacher teacher;
+                try { 
+                    teacher = session.Load<Teacher>(teacherGuid);
+                }
+                catch (Exception e)
+                {
                     return NotFound();
                 }
-                
-                return Ok(teacher);
+
+                if (teacher != null) { return Ok(teacher); }
+                else { return NotFound(); }
             }
         }
 
@@ -81,7 +86,10 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddComment")]
-        public void AddComment([FromBody]CreateTeacherComment comment) {
+        public IHttpActionResult AddComment([FromBody]CreateTeacherComment comment)
+        {
+            TeacherComment newComment = null;
+            bool succeed = false;
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction()) {
                 Guid teacherGuid;
@@ -92,11 +100,21 @@ namespace WebServer.Controllers
                     foreach(var rating in comment.Ratings) {
                         ratings.Add(Convert.ToInt32(rating));
                     }
-                    teacher.addTeacherCommnet(new TeacherComment(comment.Comment, teacher, ratings));
+                    try
+                    {
+                        newComment = new TeacherComment(comment.Comment, teacher, ratings);
+                        teacher.addTeacherCommnet(newComment);
+                        succeed = true;
+                    }
+                    catch
+                    {
+                        succeed = false;
+                    }
                 }
                 session.Save(teacher);
                 transaction.Commit();
             }
+            if(succeed) { return Ok(newComment); } else { return NotFound();  }
         }
 
         [HttpGet]

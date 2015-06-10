@@ -6,8 +6,11 @@ namespace WebServer.App_Data.Models
     [DataContract(IsReference = true)]
     public class TeacherCriteriaRating : IPersistent
     {
+        [DataMember]
         public Guid Id { get; set; }
+        [DataMember]
         public int Rating { get; set; }
+        [DataMember]
         public TeacherCriteria Criteria { get; set; }
 
         public TeacherCriteriaRating()

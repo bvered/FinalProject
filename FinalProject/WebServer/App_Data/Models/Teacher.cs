@@ -29,7 +29,6 @@ namespace WebServer.App_Data.Models
 
         public Teacher(string name)
         {
-            Id = new Guid();
             Name = name;
             Universities = new List<University>();
             Courses = new List<Course>();

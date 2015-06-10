@@ -28,7 +28,6 @@ namespace WebServer.App_Data.Models
 
         public Comment(string commentText)
         {
-            Id = new Guid();
             DateTime = DateTime.Now;
             Votes= new List<Vote>();
             Reports = 0;
