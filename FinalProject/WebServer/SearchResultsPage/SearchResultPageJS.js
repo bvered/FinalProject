@@ -182,10 +182,10 @@ function showTeachersData(arrayResult) {
                     //adding the universities
                     for (k in data[i].Universities) {
                         if (k == data[i].Universities.length - 1) {
-                            var University = document.createTextNode(data[i].Universities[k].Name + '.');
+                            var University = document.createTextNode(data[i].Universities[k] + '.');
                         }
                         else {
-                            var University = document.createTextNode(data[i].Universities[k].Name + ', ');
+                            var University = document.createTextNode(data[i].Universities[k] + ', ');
                         }
                         teacherData.append(University);
                     }
@@ -197,10 +197,10 @@ function showTeachersData(arrayResult) {
                     //adding the courses
                     for (l in data[i].Courses) {
                         if (k == data[i].Courses.length - 1) {
-                            var Course = document.createTextNode(data[i].Courses[l].Name + '.');
+                            var Course = document.createTextNode(data[i].Courses[l] + '.');
                         }
                         else {
-                            var Course = document.createTextNode(data[i].Courses[l].Name + ', ');
+                            var Course = document.createTextNode(data[i].Courses[l] + ', ');
                         }
                         teacherData.append(Course);
                     }

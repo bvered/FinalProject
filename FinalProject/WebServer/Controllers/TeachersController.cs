@@ -31,7 +31,17 @@ namespace WebServer.Controllers
                 IList<resultTeacher> result = new List<resultTeacher>();
                 foreach (var teacher in teachers)
                 {
-                   result.Add(new resultTeacher(teacher.Name, teacher.Universities[0].Name));
+                    List<string> universities = new List<string>();
+                    List<string> courses = new List<string>();
+                    foreach (var university in teacher.Universities)
+                    {
+                        universities.Add(university.Name);
+                    }
+                    foreach (var course in teacher.Courses)
+                    {
+                        courses.Add(course.Name);
+                    }
+                    result.Add(new resultTeacher(teacher.Id, teacher.Name, universities, courses));
                 }
 
                 return result;
@@ -168,13 +178,17 @@ namespace WebServer.Controllers
 
     public class resultTeacher
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
-        public string UniversityName { get; set; }
+        public List<string> Universities { get; set; }
+        public List<string> Courses { get; set; }
 
-        public resultTeacher(string name, string university)
+        public resultTeacher(Guid id, string name, List<string> universities, List<string> courses)
         {
+            Id = id;
             Name = name;
-            UniversityName = university;
+            Universities = universities;
+            Courses = courses;
         }
     }
 
