@@ -12,11 +12,29 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetAllTeachers")]
-        public IEnumerable<Teacher> GetAllTeachers()
+        public IList<Teacher> GetAllTeachers()
         {
             using (var session = DBHelper.OpenSession())
             {
-                return session.QueryOver<Teacher>().List();
+                IList<Teacher> teachers = session.QueryOver<Teacher>().List();
+                return teachers;
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetAllSearchedTeachers")]
+        public IList<resultTeacher> GetAllSearchedTeachers()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                IList<Teacher> teachers = session.QueryOver<Teacher>().List();
+                IList<resultTeacher> result = new List<resultTeacher>();
+                foreach (var teacher in teachers)
+                {
+                   result.Add(new resultTeacher(teacher.Name, teacher.Universities[0].Name));
+                }
+
+                return result;
             }
         }
 
@@ -42,6 +60,26 @@ namespace WebServer.Controllers
             }
         }
 
+        [HttpGet]
+        [ActionName("GetTeacherId")]
+        public string GetTeacherId(string name)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                //Teacher teacher;
+                IList<Teacher> teachersList = session.QueryOver<Teacher>().List();
+                foreach(Teacher teacher in teachersList)
+                {
+                    if(teacher.Name == name)
+                    {
+                        return teacher.Id.ToString(); 
+                        //לא סגורה על מה צריך להחזיר פה :(
+                    }
+                }
+            }
+            return null;
+        }
+        
         [HttpGet]
         [ActionName("GetTeachers")]
         public IList<string> GetAllTeachersNames() {
@@ -125,6 +163,18 @@ namespace WebServer.Controllers
                 return NotFound();
             else
                 return Ok(criterias);
+        }
+    }
+
+    public class resultTeacher
+    {
+        public string Name { get; set; }
+        public string UniversityName { get; set; }
+
+        public resultTeacher(string name, string university)
+        {
+            Name = name;
+            UniversityName = university;
         }
     }
 

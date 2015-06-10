@@ -105,8 +105,8 @@
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
     <Content Include="AddFile\AddFile.html" />
-    <Content Include="AddTeacberComment\AddTeacherComment.js" />
-    <Content Include="AddTeacberComment\AddTeacherComment.html" />
+    <Content Include="AddTeacherComment\AddTeacherComment.js" />
+    <Content Include="AddTeacherComment\AddTeacherComment.html" />
     <Content Include="AddTeacher\AddTeacher.html" />
     <Content Include="AddTeacher\AddTeacher.js" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.css" />
