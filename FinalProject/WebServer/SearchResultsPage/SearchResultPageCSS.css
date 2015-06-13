@@ -5,7 +5,7 @@ footer
 {
     font-size: 20;
     background: #D0D0D0;
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom: 0;
     height: 50px;

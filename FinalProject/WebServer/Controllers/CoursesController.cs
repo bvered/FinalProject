@@ -10,13 +10,48 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetAllCourses")]
-        public IEnumerable<Course> GetAllCourses()
+        public IList<Course> GetAllCourses()
         {
             using (var session = DBHelper.OpenSession())
             {
                 return session.QueryOver<Course>().List();
             }
         }
+
+
+        [HttpGet]
+        [ActionName("GetAllSearchedCourses")]
+        public IList<resultCourse> GetAllSearchedCourses()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                IList<Course> courses = session.QueryOver<Course>().List();
+                IList<resultCourse> result = new List<resultCourse>();
+                foreach (var course in courses)
+                {
+                    result.Add(new resultCourse(course.Id, course.Name, course.University.Name, course.Faculty.Name));
+                }
+
+                return result;
+            }
+        }
+
+        public class resultCourse
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public string University { get; set; }
+            public string Faculty { get; set; }
+
+            public resultCourse(Guid id, string name, string university, string faculty)
+            {
+                Id = id;
+                Name = name;
+                University = university;
+                Faculty = faculty;
+            }
+        }
+
 
         public IHttpActionResult GetCourse([FromUri]string id) {
             using (var session = DBHelper.OpenSession()) {
