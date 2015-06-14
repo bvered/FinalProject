@@ -115,12 +115,12 @@ function getAllData(query_string) {
 
             if (coursesArrayResult.length == 1 && teachersArrayResult.length == 0) { //we found only one match of course
                //גיל
-                   window.location = '/AddCourseComment/AddCourseComment.html?search=Courses&SearchText=' + coursesArrayResult[0].Id;
+                   window.location = '/AddCourseComment/AddCourseComment.html?id=' + coursesArrayResult[0].Id;
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 1)
-            { //we found only one match of course
+            { //we found only one match of teacher
                 //גיל
-                   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=' + teachersArrayResult[0].Id;
+                   window.location = '/AddTeacherComment/AddTeacherComment.html?id=' + teachersArrayResult[0].Id;
             }
             else if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
                 filterByParameter(coursesArrayResult, teachersArrayResult);
@@ -138,7 +138,7 @@ function getAllData(query_string) {
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
             {// we didnt found any match
                 var textError = document.createTextNode('No matches found');
-                $('body').append(textError);
+                $('content').append(textError);
             }
         });       
     });
@@ -214,8 +214,10 @@ function showTeachersData(arrayResult) {
                     //the teacher name
                     var a = $('<a />');
                     ///////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
-                    a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=" + arrayResult[i].Id);
- 
+                  //  a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=" + arrayResult[i].Id);
+                    a.attr('href', "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id);
+
+
                     a.text(arrayResult[i].Name);
                     teacherData.append(a);
 
@@ -276,7 +278,8 @@ function showCoursesData(arrayResult) {
         //the course name
         var a = $('<a />');
         /////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
-        a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=" + arrayResult[i].Id);
+        //a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=" + arrayResult[i].Id);
+        a.attr('href', "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id);
         a.text(arrayResult[i].Name);
         courseData.append(a);
 
