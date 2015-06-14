@@ -25,8 +25,8 @@ function loadView() {
         showLoadingCourseFailed();
         return;
     }
-    didSucceedLoadingTeacher = loadCourse();
-    if (didSucceedLoadingTeacher == true) {
+    didSucceedLoadingCourse = loadCourse();
+    if (didSucceedLoadingCourse == true) {
         printCourseInfo();
     } else {
         showLoadingCourseFailed();
@@ -64,7 +64,7 @@ function loadCourse() {
         url: uri4 + "/" + id,
         contentType: "application/json",
         success: function (data) {
-            teacher = data;
+            course = data;
             succeed = true;
         },
         fail: function (data) {
@@ -82,9 +82,9 @@ function printCourseInfo() {
 }
 
 function printCourseProperties() {
-    var teacherNameLabel = document.createElement("Label");
+    var courseNameLabel = document.createElement("Label");
     courseNameLabel.id = "propertyLabelCourseName";
-    courseNameLabel.innerHTML = "Course name: " + teacher.Name;
+    courseNameLabel.innerHTML = "Course name: " + course.Name;
     CourseInfoDiv.appendChild(courseNameLabel);
     CourseInfoDiv.appendChild(document.createElement('br'));
 
@@ -124,7 +124,7 @@ function showCourseComments() {
 function printComment(comment, itr) {
     var commentBox = document.createElement("textarea");
     commentBox.placeholder = comment.CommentText;
-    commentBox.id = "TeacherCommet" + itr;
+    commentBox.id = "CourseCommet" + itr;
     CommentsDiv.appendChild(commentBox);
     for (rating in comment.CriteriaRatings) {
         var succeed = false;
@@ -211,7 +211,7 @@ function addComment() {
     var comment = {
         Id: course.Id,
         Ratings: ratings,
-        Comment: document.getElementById("TeacherNewCommetBox").value,
+        Comment: document.getElementById("CourseNewCommetBox").value,
         SemseterId: document.getElementById("semsterChosen").value,
     };
     var request = $.ajax({
@@ -233,11 +233,11 @@ function addComment() {
 }
 
 function insertAddCommentButton() {
-    removingAllContentOfDiv(teacherCommentsDiv);
+    removingAllContentOfDiv(CommentsDiv);
     var addButton = document.createElement("BUTTON");
     sendButton.innerHTML = "Comment";
     sendButton.onclick = addComment;
-    teacherCommentsDiv.appendChild(sendButton);
+    CommentsDiv.appendChild(sendButton);
 }
 
 function removingAllContentOfDiv(div) {

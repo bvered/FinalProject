@@ -55,11 +55,15 @@ namespace WebServer.Controllers
 
         public IHttpActionResult GetCourse([FromUri]string id) {
             using (var session = DBHelper.OpenSession()) {
-                Guid coureGuid;
-                var didSucceedParsingGuid = Guid.TryParse(id, out coureGuid);
-                var course = session.Get<Course>(didSucceedParsingGuid);
-                if (course == null) {
-                    return NotFound();
+                Guid courseGuid;
+                var didSucceedParsingGuid = Guid.TryParse(id, out courseGuid);
+                Course course = null;
+                if (didSucceedParsingGuid)
+                {
+                    course = session.Get<Course>(courseGuid);
+                    if (course == null) {
+                        return NotFound();
+                    }
                 }
 
                 return Ok(course);
