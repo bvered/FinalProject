@@ -6,8 +6,11 @@ namespace WebServer.App_Data.Models
     [DataContract(IsReference = true)]
     public class CourseComment : Comment
     {
+        [DataMember]
         public Course Course { get; set; }
+        [DataMember]
         public CourseInSemester CourseInSemester { get; set; }
+        [DataMember]
         public IList<CourseCriteriaRating> CriteriaRatings { get; set; }
 
         public CourseComment()

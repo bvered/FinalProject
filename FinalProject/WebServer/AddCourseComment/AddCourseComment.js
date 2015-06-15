@@ -2,8 +2,7 @@
 var uri2 = '/api/Courses/AddComment';
 var uri3 = '/api/Courses/GetTeachers';
 var uri4 = '/api/Courses/GetCourse';
-var uri5 = 'api/Courses/GetCommentById';
-var uri6 = 'api/Courses/GetAllSemesters';
+var uri5 = 'api/Courses/GetAllSemesters';
 
 var course;
 var allCriterias;
@@ -115,8 +114,7 @@ function showCourseComments() {
     CommentsDiv.appendChild(document.createElement('br'));
 
     var allComments = course.CourseComments;
-    numberOfCommentsLoaded = allComments.length;
-    for (comment in numberOfCommentsLoaded) {
+    for (comment in allComments) {
         printComment(allComments[comment], comment);
     }
 }
@@ -126,11 +124,9 @@ function printComment(comment, itr) {
     commentBox.placeholder = comment.CommentText;
     commentBox.id = "CourseCommet" + itr;
     CommentsDiv.appendChild(commentBox);
+    CommentsDiv.appendChild(document.createElement('br'));
     for (rating in comment.CriteriaRatings) {
-        var succeed = false;
-        var loadedComment;
-        loadComment(comment.CriteriaRatings[rating].Id, loadedComment, succeed);
-        if (succeed) {
+        var loadedComment = comment.CriteriaRatings[rating];
             var ratingString = loadedComment.Criteria.DisplayName;
             var ratingNumber = loadedComment.Rating;
 
@@ -140,30 +136,13 @@ function printComment(comment, itr) {
 
             var labelForRatingNumber = document.createElement("Label");
             labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-            labelForRatingNumber.innerHTML = ratingString;
+            labelForRatingNumber.innerHTML = ratingNumber;
 
             CommentsDiv.appendChild(labelForRatingString);
+            CommentsDiv.appendChild(document.createElement('br'));
             CommentsDiv.appendChild(labelForRatingNumber);
-        }
+            CommentsDiv.appendChild(document.createElement('br'));
     }
-}
-
-function loadComment(commentId, loadedComment, succeed) {
-    succeed = false;
-
-    var request = $.ajax({
-        type: "GET",
-        url: uri5 + "/" + commentId,
-        contentType: "application/json",
-        success: function (data) {
-            loadedComment = data;
-            succeed = true;
-        },
-        fail: function (data) {
-            succeed = false;
-        },
-        async: false
-    });
 }
 
 function showCommentOptions() {
@@ -190,6 +169,13 @@ function showCommentOptions() {
 
         NewCourseCommentDiv.appendChild(document.createElement("BR"));
     }
+    var courseSemesters = document.createElement("SELECT");
+    for (semester in course.CourseInSemesters) {
+        var semesterOption = document.createElement("option");
+        option.text = course.CourseInSemesters[semester].Year + " " + course.CourseInSemesters[semester].Semester;
+        option.value = course.CourseInSemesters[semester].Id
+        courseSemesters.add(option);
+    }
     var sendButton = document.createElement("BUTTON");
     sendButton.innerHTML = "Add";
     sendButton.onclick = addComment;
@@ -208,11 +194,17 @@ function addComment() {
     for (criteria in allCriterias) {
         ratings.push(document.getElementById("criteriaRating" + criteria).value);
     }
+    var semester;
+    if (document.getElementById("courseSemesters") == null) {
+        semester = "";
+    } else {
+        prodValue = document.getElementById("courseSemesters").value;
+    }
     var comment = {
         Id: course.Id,
         Ratings: ratings,
         Comment: document.getElementById("CourseNewCommetBox").value,
-        SemseterId: document.getElementById("semsterChosen").value,
+        SemseterId: semester,
     };
     var request = $.ajax({
         type: "POST",
@@ -221,8 +213,7 @@ function addComment() {
         contentType: "application/json",
         success: function (data) {
             alert("New comment added!");
-            numberOfCommentsLoaded = numberOfCommentsLoaded + 1;
-            printComment(data, numberOfCommentsLoaded)
+            location.reload();
         },
         fail: function (jqXhr, textStatus) {
             alert("Request failed: " + textStatus);

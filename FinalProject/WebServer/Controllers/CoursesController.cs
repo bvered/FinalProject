@@ -106,8 +106,9 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddComment")]
-        public void AddComment([FromBody]CreateCourseComment comment)
+        public IHttpActionResult AddComment([FromBody]CreateCourseComment comment)
         {
+            CourseComment newComment = null;
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction()) {
                 Guid semesterGuid;
@@ -121,11 +122,13 @@ namespace WebServer.Controllers
                     foreach (var rating in comment.Ratings) {
                         ratings.Add(Convert.ToInt32(rating));
                     }
-                    course.AddCourseComment(new CourseComment(comment.Comment, course, semester, ratings));
+                    newComment = new CourseComment(comment.Comment, course, semester, ratings);
+                    course.AddCourseComment(newComment);
                 }
                 session.Save(course);
                 transaction.Commit();
             }
+            if (newComment == null) { return NotFound(); } else { return Ok(newComment); }
         }
 
         [HttpGet]

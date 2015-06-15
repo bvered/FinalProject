@@ -6,10 +6,15 @@ namespace WebServer.App_Data.Models
     [DataContract(IsReference = true)]
     public class CourseInSemester : IPersistent
     {
+        [DataMember]
         public Guid Id { get; set; }
+        [DataMember]
         public Semester Semester { get; set; }
+        [DataMember]
         public int Year { get; set; }
+        [DataMember]
         public string Syllabus { get; set; }
+        [DataMember]
         public byte[] GradesDistribution { get; set; }
 
         public CourseInSemester()
