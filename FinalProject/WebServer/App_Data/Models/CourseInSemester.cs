@@ -1,24 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.App_Data.Models
 {
     [DataContract(IsReference = true)]
     public class CourseInSemester : IPersistent
     {
-        [DataMember]
         public Guid Id { get; set; }
-        [DataMember]
+
+        public Course Course { get; set; }
+
+        public Teacher Teacher { get; set; }
+
         public Semester Semester { get; set; }
+
         [DataMember]
         public int Year { get; set; }
+
         [DataMember]
-        public string Syllabus { get; set; }
+        public IList<CourseComment> CourseComments { get; set; }
         [DataMember]
-        public byte[] GradesDistribution { get; set; }
+        public Syllabus Syllabus { get; set; }
+        [DataMember]
+        public GradesDestribution GradesDestribution { get; set; }
 
         public CourseInSemester()
         {
+            CourseComments = new List<CourseComment>();
         }
 
         public CourseInSemester(Semester semester, int year)
@@ -28,14 +38,5 @@ namespace WebServer.App_Data.Models
             Year = year;
         }
 
-        public void AddSyllabus(string syllabus)
-        {
-            Syllabus = syllabus;
-        }
-
-        public void AddGrades(byte[] grades)
-        {
-            GradesDistribution = grades;
-        }
     }
 }

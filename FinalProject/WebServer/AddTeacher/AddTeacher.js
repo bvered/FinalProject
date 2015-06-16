@@ -1,6 +1,5 @@
 ﻿
 var uri = '/api/Courses/GetCourses';
-var uri2 = '/api/Universities/GetUniversities';
 var uri3 = '/api/Teachers/GetTeachers';
 
 var allCourses;
@@ -13,15 +12,6 @@ $.getJSON(uri).done(function(data) {
     });
 });
 
-var allUniversites;
-$.getJSON(uri2).done(function(data) {
-    allUniversites = data;
-
-    console.log(allUniversites);
-    $("#UniversityName").autocomplete({
-        source: allUniversites
-    });
-});
 
 var allTeachers;
 $.getJSON(uri3).done(function(data) {
@@ -30,27 +20,16 @@ $.getJSON(uri3).done(function(data) {
 });
 
 function checkAndAdd() {
-    if ((allUniversites.indexOf($("#UniversityName").val()) < 0)) { //if the university doesn't exists
-        inputError("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-        hideAllLabels();
-    } else if (allTeachers.indexOf($("#TeacherName").val()) >= 0) { //if the teacher already exists
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
+    if (allTeachers.indexOf($("#TeacherName").val()) >= 0) { //if the teacher already exists
         $("#TeacherExists")[0].hidden = false;
         $("#TeachersLink")[0].hidden = false;
         $("#TeachersLink")[0].href = "#"+ $("#TeacherName").val();
     } else { //if we can add the new teacher
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
         hideAllLabels();
-        addTeacher($("#TeacherName").val(), $("#UniversityName").val());
+        addTeacher($("#TeacherName").val());
     }
 };
 
-function checkUniveristy() {
-    if (allUniversites.indexOf($("#UniversityName").val()) >= 0)
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-    else
-        inputError("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-};
 
 function inputSuccesss(divId, inputId, inputStatusId, labelId) {
     $(divId).removeClass("has-error").addClass("has-success");
@@ -66,13 +45,12 @@ function inputError(divId, inputId, inputStatusId, labelId) {
     $(labelId)[0].hidden = false;
 };
 
-function addTeacher(teacherName, universityName) {
+function addTeacher(teacherName) {
     var uri4 = '/api/Teachers/AddTeacher';
 
     $(function() {
         var teacher = {
-            Name: teacherName,
-            UniversityName: universityName
+            Name: teacherName
         };
 
         var request = $.ajax({

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.App_Data.Models
 {
@@ -10,8 +12,6 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public Guid Id { get; set; }
         [DataMember]
-        public University University { get; set; }
-        [DataMember]
         public int CourseId { get; set; }
         [DataMember]
         public string Name { get; set; }
@@ -19,61 +19,39 @@ namespace WebServer.App_Data.Models
         public int Score { get; set; }
         [DataMember]
         public Faculty Faculty { get; set; }
-        [DataMember]
-        public IList<Teacher> Teachers { get; set; }
+
+        public bool IsMandatory { get; set; }
+
+        public AcademicDegree AcademicDegree { get; set; }
+
+        public IntendedYear IntendedYear { get; set; }
+
         [DataMember]
         public IList<CourseInSemester> CourseInSemesters { get; set; }
-        [DataMember]
-        public IList<CourseComment> CourseComments { get; set; }
-        [DataMember]
-        public IList<Syllabus> Syllabuses { get; set; }
-        [DataMember]
-        public IList<GradesDestribution> GradesDestributions { get; set; }
 
         public Course()
         {
-            Teachers = new List<Teacher>();
             CourseInSemesters = new List<CourseInSemester>();
-            CourseComments = new List<CourseComment>();
-            Syllabuses = new List<Syllabus>();
-            GradesDestributions = new List<GradesDestribution>();
         }
 
-        public Course(University university, int courseId, string name, Faculty faculy)
+        public Course(int courseId, string name, Faculty faculy)
         {
             Id= new Guid();
-            University = university;
             CourseId = courseId;
             Name = name;
             Faculty = faculy;
-            Teachers = new List<Teacher>();
             CourseInSemesters = new List<CourseInSemester>();
-            CourseComments = new List<CourseComment>();
+
         }
 
-        public void AddTeacherToCourse(Teacher teacher)
+        public List<Teacher> GetTeachers()
         {
-            Teachers.Add(teacher);
+            return CourseInSemesters.Select(x => x.Teacher).Distinct().ToList();
         }
 
         public void AddCourseInSemester(CourseInSemester semester)
         {
             CourseInSemesters.Add(semester);
-        }
-
-        public void AddCourseComment(CourseComment comment)
-        {
-            CourseComments.Add(comment);
-        }
-
-        public void AddSyllabus(Syllabus newSyllabus)
-        {
-            Syllabuses.Add(newSyllabus);
-        }
-
-        public void AddGradesDestribustion(GradesDestribution newGrades)
-        {
-            GradesDestributions.Add(newGrades);
         }
     }
 }

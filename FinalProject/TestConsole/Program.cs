@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate;
-using NHibernate.Criterion;
-
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
+using WebServer.App_Data.Models.Enums;
 
 namespace TestConsole
 {
@@ -15,62 +14,40 @@ namespace TestConsole
             var sessionFactory = NHibernateConfig.CreateSessionFactory(true);
             ISession session = sessionFactory.OpenSession();
 
-            CreateObjects(session);
 
-            Guid universityId = Guid.NewGuid();
+            CreateInitData(session);
 
             getBestTeachers(session);
 
-            University universityWithId = session.Get<University>(universityId);
-
-            getReportedComments(session);
             session.Flush();
             session.Close();
+
+            Console.WriteLine("Finished Creating DB!");
+            Console.ReadKey();
         }
 
-        private static void CreateObjects(ISession session)
+        private static void CreateInitData(ISession session)
         {
-            University newUniversity = new University("Tel-aviv_yafo");
-            session.Save(newUniversity);
+            var computersFaculty = new Faculty {Name = "מדעי המחשב"};
 
-            Faculty newFaculty = new Faculty("Computer science", newUniversity);
-            session.Save(newFaculty);
+            var faculties = new[]
+            {
+                computersFaculty,
+                new Faculty {Name = "ניהול וכלכלה"},
+                new Faculty {Name = "חברה ופוליטיקה"},
+                new Faculty {Name = "מדעי ההתנהגות"},
+                new Faculty {Name = "מדעי הסיעוד"},
+                new Faculty {Name = "יעוץ ופיתוח אירגוני"},
+                new Faculty {Name = "מנהל עסקים"},
+                new Faculty {Name = "פסיכולוגיה"},
+            };
 
-            newUniversity.Faculties.Add(newFaculty);
+            foreach (var faculty in faculties)
+            {
+                session.Save(faculty);
+            }
 
-            Course newCourse = new Course(newUniversity, 123456, "Math", newFaculty);
-            session.Save(newCourse);
-
-            Course newCourse2 = new Course(newUniversity, 1111, "Algebra", newFaculty);
-            session.Save(newCourse2);
-
-            Teacher newTeacher = createTeacher("Romina",newCourse, newUniversity);
-            newTeacher.addUniversity(new University("Ben Gurion"));
-            newTeacher.addCourse(newCourse2);
-            newTeacher.addTeacherCommnet(new TeacherComment( "Great teacher!!", newTeacher));
-            newTeacher.addTeacherCommnet(new TeacherComment( "This teacher Sucks!!", newTeacher));
-            newTeacher.addTeacherCommnet(new TeacherComment( "Oh my godsshshshhs his the worst!!!\n", newTeacher));
-
-            Teacher newTeacher2 = createTeacher("Amir", newCourse, newUniversity);
-            newTeacher.addTeacherCommnet(new TeacherComment( "wow!!", newTeacher2));
-
-            session.Save(newTeacher);
-            session.Save(newTeacher2);
-
-        }
-
-        private static Teacher createTeacher(string teacherName,Course newCourse, University newUniversity)
-        {
-            Teacher newTeacher = new Teacher(teacherName);
-            newTeacher.addCourse(newCourse);
-            newTeacher.addUniversity(newUniversity);
-
-            return newTeacher;
-        }
-
-        private void addTeacherCritiries()
-        {
-            List<TeacherCriteria> teacherCritias = new List<TeacherCriteria>
+            var teacherCritias = new[]
             {
                 new TeacherCriteria("Student- teacher relationship"),
                 new TeacherCriteria("Teaching ability"),
@@ -78,11 +55,13 @@ namespace TestConsole
                 new TeacherCriteria("The teacher Encouregment for self learning"),
                 new TeacherCriteria("The teacher interest level")
             };
-        }
 
-        private void addCourseCritiries()
-        {
-            List<CourseCriteria> courseCritias = new List<CourseCriteria>
+            foreach (var teacherCriteria in teacherCritias)
+            {
+                session.Save(teacherCriteria);
+            }
+
+            var courseCritias = new[]
             {
                 new CourseCriteria("Material ease"),
                 new CourseCriteria("Time investment for home-work"),
@@ -93,12 +72,110 @@ namespace TestConsole
                 new CourseCriteria("Does the attendance is mandatory"),
                 new CourseCriteria("Does the test has open material/reference Pages")
             };
-        }
 
-        private static void getReportedComments(ISession session)
-        {
-            IList<CourseComment> courseCommentWithMoreThen5Reports = session.QueryOver<CourseComment>()
-                                                                            .Where(x => x.Reports > 5).List();
+            foreach (var teacherCriteria1 in courseCritias)
+            {
+                session.Save(teacherCriteria1);
+            }
+
+            var romina = new Teacher
+            {
+                Name = "רומינה זיגדון",
+                TeacherComments =
+                {
+                    new TeacherComment
+                    {
+                        CommentText = "ממש עוזרת ללמוד",
+                        DateTime = DateTime.Now,
+                        Votes = new[] {new Vote(true)}
+                    }
+                }
+
+            };
+            var teachers = new[]
+            {
+                romina,
+                new Teacher {Name = "אמיר קירש"},
+                new Teacher {Name = "יוסי בצלאל"},
+                new Teacher {Name = "צבי מלמד"},
+            };
+
+            foreach (var teacher in teachers)
+            {
+                session.Save(teacher);
+            }
+
+
+            var logic = new Course
+            {
+                Name = "לוגיקה",
+                AcademicDegree = AcademicDegree.Bachelor,
+                Faculty = computersFaculty,
+                IntendedYear = IntendedYear.First,
+                IsMandatory = true,
+            };
+
+            var courses = new[]
+            {
+                logic,
+                new Course
+                {
+                    Name = "אלגוריתמים",
+                    AcademicDegree = AcademicDegree.Bachelor,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.Second,
+                    IsMandatory = true
+                },
+                new Course
+                {
+                    Name = "תורת הגרפים",
+                    AcademicDegree = AcademicDegree.Bachelor,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.Any,
+                    IsMandatory = false
+                },
+                new Course
+                {
+                    Name = "עוד לוגיקה",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.First,
+                    IsMandatory = true
+                },
+            };
+
+            var courseComment = new CourseComment
+            {
+                CommentText = "קורס ממש מעניין",
+                DateTime = DateTime.Now,
+                Votes = {new Vote(true)}
+            };
+
+            foreach (var courseCriteria in courseCritias)
+            {
+                courseComment.CriteriaRatings.Add(new CourseCriteriaRating
+                {
+                    Criteria = courseCriteria,
+                    Rating = 5
+                });
+            }
+
+            logic.CourseInSemesters.Add(new CourseInSemester
+            {
+                Semester = Semester.A,
+                Teacher = romina,
+                Course = logic,
+                Year = 2012,
+                CourseComments =
+                {
+                    courseComment
+                }
+            });
+
+            foreach (var course in courses)
+            {
+                session.Save(course);
+            }
         }
 
         private static void getBestTeachers(ISession session)
@@ -106,27 +183,10 @@ namespace TestConsole
             IList<Teacher> bestTeachers = session.QueryOver<Teacher>().OrderBy(x => x.Score).Asc.Take(10).List();
         }
 
-        private static void getAllUniversities(ISession session)
-        {
-            IList<University> allUniversities = session.QueryOver<University>().List();
-        }
-
-        private static void getAllCoursesPerUniversity(ISession session, University university)
-        {
-            IList<Course> allCourses = session.QueryOver<Course>().Where(x => x.University == university).List();
-        }
-
-        private static void getAllTeacherPerUniversity(ISession session, University university)
-        {
-            IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Universities.Contains(university)).List();
-        }
-
         private static void getAllTeacherPerCourse(ISession session, Course course)
         {
-            IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Courses.Contains(course)).List();
+//TODO
+            //    IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Courses.Contains(course)).List();
         }
-
-
-
     }
 }

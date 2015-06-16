@@ -1,4 +1,4 @@
-﻿namespace WebServer.App_Data.Models
+﻿namespace WebServer.App_Data.Models.Enums
 {
     public enum Semester
     {

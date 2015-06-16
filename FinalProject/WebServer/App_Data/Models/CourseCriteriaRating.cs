@@ -12,14 +12,5 @@ namespace WebServer.App_Data.Models
         public int Rating { get; set; }
         [DataMember]
         public CourseCriteria Criteria { get; set; }
-
-        public CourseCriteriaRating() {
-            Criteria = new CourseCriteria();
-        }
-
-        public CourseCriteriaRating(string i_DisplayName, int i_Rating) {
-            Criteria = new CourseCriteria(i_DisplayName);
-            Rating = i_Rating;
-        }
     }
 }

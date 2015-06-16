@@ -10,18 +10,15 @@ namespace WebServer.App_Data.Models
         public Guid Id { get; set; }
         [DataMember]
         public string Name { get; set; }
-        [DataMember]
-        public University University { get; set; }
 
         public Faculty()
         {
         }
 
-        public Faculty(string name, University university)
+        public Faculty(string name)
         {
             Id = new Guid();
             Name = name;
-            University = university;
         }
     }
 }

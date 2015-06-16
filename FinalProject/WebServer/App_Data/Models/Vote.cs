@@ -11,18 +11,15 @@ namespace WebServer.App_Data.Models
         public Guid Id { get; set; }
         [DataMember]
         public bool Liked { get; set; }
-        [DataMember]
-        public Comment Comment { get; set; }
 
         public Vote()
         {
         }
 
-        public Vote(bool liked, Comment comment)
+        public Vote(bool liked)
         {
             Id = new Guid();
             Liked = liked;
-            Comment = comment;
         }
     }
 }

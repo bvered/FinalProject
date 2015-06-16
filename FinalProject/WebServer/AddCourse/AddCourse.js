@@ -1,6 +1,5 @@
 ﻿
 var uri = '/api/Courses/GetCourses';
-var uri2 = '/api/Universities/GetUniversities';
 var uri3 = '/api/Teachers/GetTeachers';
 
 var allCourses;
@@ -10,16 +9,6 @@ $.getJSON(uri).done(function (data) {
     console.log(allCourses);
     $("#CourseName").autocomplete({
         source: allCourses
-    });
-});
-
-var allUniversites;
-$.getJSON(uri2).done(function (data) {
-    allUniversites = data;
-
-    console.log(allUniversites);
-    $("#UniversityName").autocomplete({
-        source: allUniversites
     });
 });
 
@@ -34,30 +23,18 @@ $.getJSON(uri3).done(function (data) {
 });
 
 function checkAndAdd() {
-    if ((allUniversites.indexOf($("#UniversityName").val()) < 0)) { //if the university doesn't exists
-        inputError("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-        hideAllLabels();
-    } else if ((allTeachers.indexOf($("#teacherName").val()) < 0)) { //if the teacher doesn't exists
+     if ((allTeachers.indexOf($("#teacherName").val()) < 0)) { //if the teacher doesn't exists
          inputError("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
          hideAllLabels();
     } else if (allCourses.indexOf($("#CourseName").val()) >= 0) { //if the course already exists
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
         $("#CourseExists")[0].hidden = false;
         $("#CourseLink")[0].hidden = false;
         $("#CourseLink")[0].href = "#" + $("#CourseName").val();
     } else { //if we can add the new course
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
         inputSuccesss("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
         hideAllLabels();
-        addCourse($("#CourseName").val(), $("#UniversityName").val(), $("#teacherName").val());
+        addCourse($("#CourseName").val(), $("#teacherName").val());
     }
-};
-
-function checkUniveristy() {
-    if (allUniversites.indexOf($("#UniversityName").val()) >= 0)
-        inputSuccesss("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
-    else
-        inputError("#universityWrap", "#UniversityInput", "input2Status", "#universityError");
 };
 
 function checkTeacher() {
@@ -81,13 +58,12 @@ function inputError(divId, inputId, inputStatusId, labelId) {
     $(labelId)[0].hidden = false;
 };
 
-function addCourse(CourseName, universityName, teacherName) {
+function addCourse(CourseName, teacherName) {
     var uri4 = '/api/Courses/AddCourse';
 
     $(function () {
         var course = {
             Name: CourseName,
-            UniversityName: universityName,
             TeacherName: teacherName
     };
 

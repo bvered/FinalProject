@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.App_Data.Models
 {

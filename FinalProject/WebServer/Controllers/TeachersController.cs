@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
-using NHibernate;
+using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 
@@ -23,25 +24,21 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetAllSearchedTeachers")]
-        public IList<resultTeacher> GetAllSearchedTeachers()
+        public IList<ResultTeacher> GetAllSearchedTeachers()
         {
             using (var session = DBHelper.OpenSession())
             {
                 IList<Teacher> teachers = session.QueryOver<Teacher>().List();
-                IList<resultTeacher> result = new List<resultTeacher>();
+                IList<ResultTeacher> result = new List<ResultTeacher>();
+
                 foreach (var teacher in teachers)
                 {
-                    List<string> universities = new List<string>();
-                    List<string> courses = new List<string>();
-                    foreach (var university in teacher.Universities)
-                    {
-                        universities.Add(university.Name);
-                    }
-                    foreach (var course in teacher.Courses)
-                    {
-                        courses.Add(course.Name);
-                    }
-                    result.Add(new resultTeacher(teacher.Id, teacher.Name, universities, courses));
+                    IList<string> courses = session.Query<CourseInSemester>()
+                        .Where(x => x.Teacher.Id == teacher.Id)
+                        .Select(x => x.Course.Name).Distinct()
+                        .ToList();
+
+                    result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses));
                 }
 
                 return result;
@@ -52,21 +49,22 @@ namespace WebServer.Controllers
         [ActionName("GetTeacher")]
         public IHttpActionResult GetTeacher([FromUri]string id)
         {
-            using (var session = DBHelper.OpenSession()) {
-                var ts = session.QueryOver<Teacher>().List();
+            using (var session = DBHelper.OpenSession())
+            {
                 Guid teacherGuid;
-                var didSucceedParsingTeacherGuid = Guid.TryParse(id, out teacherGuid);
-                Teacher teacher;
-                try { 
-                    teacher = session.Load<Teacher>(teacherGuid);
-                }
-                catch (Exception e)
+                if (!Guid.TryParse(id, out teacherGuid))
                 {
                     return NotFound();
                 }
 
-                if (teacher != null) { return Ok(teacher); }
-                else { return NotFound(); }
+                var teacher = session.Get<Teacher>(teacherGuid);
+
+                if (teacher == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(teacher);
             }
         }
 
@@ -120,12 +118,9 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                var university = session.QueryOver<University>().Where(x => x.Name == createCommand.UniversityName).SingleOrDefault();
-
                 var teacher = new Teacher
                 {
                     Name = createCommand.Name,
-                    Universities = new[] {university},
                 };
                 session.Save(teacher);
                 transaction.Commit();
@@ -134,72 +129,77 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddComment")]
-        public IHttpActionResult AddComment([FromBody]CreateTeacherComment comment)
+        public IHttpActionResult AddComment([FromBody] CreateTeacherComment comment)
         {
-            TeacherComment newComment = null;
-            bool succeed = false;
             using (var session = DBHelper.OpenSession())
-            using (var transaction = session.BeginTransaction()) {
+            using (var transaction = session.BeginTransaction())
+            {
                 Guid teacherGuid;
                 var didTeacherGuidParseSucceed = Guid.TryParse(comment.Id, out teacherGuid);
                 var teacher = didTeacherGuidParseSucceed ? session.Load<Teacher>(teacherGuid) : null;
-                if (teacher != null) {
-                    List<int> ratings = new List<int>();
-                    foreach(var rating in comment.Ratings) {
-                        ratings.Add(Convert.ToInt32(rating));
-                    }
-                    try
-                    {
-                        newComment = new TeacherComment(comment.Comment, teacher, ratings);
-                        teacher.addTeacherCommnet(newComment);
-                        succeed = true;
-                    }
-                    catch
-                    {
-                        succeed = false;
-                    }
+
+                if (teacher == null)
+                {
+                    return NotFound();
                 }
+
+                var teacherCriterias = session.QueryOver<TeacherCriteria>().List();
+
+                var newComment = new TeacherComment
+                {
+                    CommentText = comment.Comment,
+                    DateTime = DateTime.Now,
+                };
+
+                for (int index = 0; index < teacherCriterias.Count; index++)
+                {
+                    newComment.CriteriaRatings.Add(new TeacherCriteriaRating
+                    {
+                        Criteria = teacherCriterias[index],
+                        Rating = comment.Ratings[index]
+                    });
+                }
+
+                teacher.TeacherComments.Add(newComment);
+
                 session.Save(teacher);
                 transaction.Commit();
+         
+                return Ok(newComment);
             }
-            if(succeed) { return Ok(newComment); } else { return NotFound();  }
         }
 
         [HttpGet]
         [ActionName("GetCriterias")]
         public IHttpActionResult GetAllCriterias() {
-            var criterias = TeacherComment.CriteriaList();
-            if (criterias == null)
-                return NotFound();
-            else
-                return Ok(criterias);
+            using (var session = DBHelper.OpenSession())
+            {
+                return Ok(session.Query<TeacherCriteria>().Select(x => x.DisplayName).ToList());
+            }
         }
     }
 
-    public class resultTeacher
+    public class ResultTeacher
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<string> Universities { get; set; }
-        public List<string> Courses { get; set; }
+        public IList<string> Courses { get; set; }
 
-        public resultTeacher(Guid id, string name, List<string> universities, List<string> courses)
+        public ResultTeacher(Guid id, string name, IList<string> courses)
         {
             Id = id;
             Name = name;
-            Universities = universities;
             Courses = courses;
         }
     }
 
     public class CreateTeacherCommand {
         public string Name { get; set; }
-        public string UniversityName { get; set; }
     }
 
     public class CreateTeacherComment {
         public string Id { get; set; }
-        public List<string> Ratings { get; set; }
+        public List<int> Ratings { get; set; }
         public string Comment { get; set; }
     }
 }

@@ -147,6 +147,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Data\MappingOverride\UserMappingOverride.cs" />
+    <Compile Include="App_Data\Models\Enums\AcademicDegree.cs" />
     <Compile Include="App_Data\Models\Comment.cs" />
     <Compile Include="App_Data\Models\Course.cs" />
     <Compile Include="App_Data\Models\CourseComment.cs" />
@@ -154,14 +155,14 @@
     <Compile Include="App_Data\Models\CourseCriteriaRating.cs" />
     <Compile Include="App_Data\Models\CourseInSemester.cs" />
     <Compile Include="App_Data\Models\Faculty.cs" />
+    <Compile Include="App_Data\Models\Enums\IntendedYear.cs" />
     <Compile Include="App_Data\Models\IPersistent.cs" />
     <Compile Include="App_Data\Models\UplodedFile.cs" />
-    <Compile Include="App_Data\Models\Semester.cs" />
+    <Compile Include="App_Data\Models\Enums\Semester.cs" />
     <Compile Include="App_Data\Models\Teacher.cs" />
     <Compile Include="App_Data\Models\TeacherComment.cs" />
     <Compile Include="App_Data\Models\TeacherCriteria.cs" />
     <Compile Include="App_Data\Models\TeacherCriteriaRating.cs" />
-    <Compile Include="App_Data\Models\University.cs" />
     <Compile Include="App_Data\Models\Vote.cs" />
     <Compile Include="App_Data\NHibernateConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -170,7 +171,6 @@
     <Compile Include="App_Data\DBHelper.cs" />
     <Compile Include="Controllers\SmartSearchController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
-    <Compile Include="Controllers\UniversitiesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -9,7 +9,6 @@ namespace WebServer.App_Data.MappingOverride
         public void Override(AutoMapping<Vote> mapping)
         {
             mapping.Map(x => x.Liked).Not.Nullable();
-            mapping.References(x => x.Comment).Not.Nullable();
         }
     }
 
@@ -18,15 +17,6 @@ namespace WebServer.App_Data.MappingOverride
         public void Override(AutoMapping<Course> mapping)
         {
             mapping.Map(x => x.Name).Not.Nullable();
-            mapping.References(x => x.University).Not.Nullable();
-        }
-    }
-
-    public class CourseCommentMappingOverride : IAutoMappingOverride<CourseComment>
-    {
-        public void Override(AutoMapping<CourseComment> mapping)
-        {
-            mapping.References(x => x.Course).Not.Nullable();
         }
     }
 
@@ -43,29 +33,12 @@ namespace WebServer.App_Data.MappingOverride
         public void Override(AutoMapping<Faculty> mapping)
         {
             mapping.Map(x => x.Name).Not.Nullable();
-            mapping.References(x => x.University).Not.Nullable();
         }
     }
 
     public class TeacherMappingOverride : IAutoMappingOverride<Teacher>
     {
         public void Override(AutoMapping<Teacher> mapping)
-        {
-            mapping.Map(x => x.Name).Not.Nullable();
-        }
-    }
-
-    public class TeacherCommentMappingOverride : IAutoMappingOverride<TeacherComment>
-    {
-        public void Override(AutoMapping<TeacherComment> mapping)
-        {
-            mapping.References(x => x.Teacher).Not.Nullable();
-        }
-    }
-
-    public class UniversityMappingOverride : IAutoMappingOverride<University>
-    {
-        public void Override(AutoMapping<University> mapping)
         {
             mapping.Map(x => x.Name).Not.Nullable();
         }

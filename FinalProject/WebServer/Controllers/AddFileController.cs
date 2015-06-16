@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.Controllers
 {
@@ -48,7 +49,7 @@ namespace WebServer.Controllers
                 {
                     var course = session.Load<Course>(courseId);
 
-                    course.AddSyllabus(syllabus);
+                  //  course.AddSyllabus(syllabus);
                     session.Save(syllabus);
                     session.Save(course);
 

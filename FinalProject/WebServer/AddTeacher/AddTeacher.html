@@ -16,14 +16,6 @@
         <input class="form-control" type="text" id="TeacherName" placeholder="Enter Full Name">
     </div>
 
-    <div class="form-group has-error has-feedback" id="universityWrap">
-        <label class="control-label">University Name</label>
-        <input class="form-control" type="text" id="UniversityName" placeholder="Enter University Name" onkeyup="checkUniveristy()" />
-        <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true" id="UniversityInput"></span>
-        <span id="input2Status" class="sr-only">(error)</span>
-    </div>
-<br/><label hidden="true" id="universityError">This univeristy doesn't exits on our data-base. Please add it! </label><br />
-
 
     <button onclick=" checkAndAdd()">Submit</button><br />
 
@@ -35,6 +27,6 @@
 <a id="HomePage" hidden="true" href="/HomePage/HomePage.html">Go back to home page</a><br />
 
 <script src="AddTeacher.js"></script>
-
+    <!--TODO : add room, phone, email -->
 </body>
 </html>

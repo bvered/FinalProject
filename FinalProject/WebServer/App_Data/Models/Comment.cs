@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace WebServer.App_Data.Models
 {
     [DataContract(IsReference = true)]  
-    public class Comment : IPersistent
+    public abstract class Comment : IPersistent
     {
         [DataMember]
         public Guid Id { get; set; }
@@ -13,10 +13,7 @@ namespace WebServer.App_Data.Models
         public DateTime DateTime { get; set; }
         [DataMember]
         public IList<Vote> Votes { get; set; }
-        [DataMember]
-        public int Reports { get; set; }
-        [DataMember]
-        public int Rating { get; set; }
+
         [DataMember]
         public string CommentText { get; set; }
 
@@ -30,8 +27,6 @@ namespace WebServer.App_Data.Models
         {
             DateTime = DateTime.Now;
             Votes= new List<Vote>();
-            Reports = 0;
-            Rating = 0;
             CommentText = commentText;
         }
 
