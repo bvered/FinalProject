@@ -7,6 +7,8 @@ function ShowResults() {
 
     var query_string = new Object();
     getQuertyString(query_string);
+    
+    createSearchText(query_string)
 
     if (query_string["search"] === "All") {
         getAllData(query_string);
@@ -18,8 +20,24 @@ function ShowResults() {
     }
 }
 
+function createSearchText(query_string) {
+    var searchText = query_string["SearchText"];
+    var res = searchText.split("+");
+    var searchTextToReturn = new String();
+    for (i in res) {
+        searchTextToReturn = searchTextToReturn + res[i];
+        
+        if (res.length -1 != i) {
+            searchTextToReturn = searchTextToReturn + ' ';
+        }
+    }
+
+    query_string["SearchText"] = searchTextToReturn;
+}
+
 function getQuertyString(query_string) {
     var query = window.location.search.substring(1);
+    query = decodeURI(query);
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split("=");
@@ -208,15 +226,12 @@ function showTeachersData(arrayResult) {
                     img.src = 'teacherImg.jpg';
                     teacherData.append(img);
 
-                    //new line
-                //    teacherData.append(newLine);
+                   // new line
+                    teacherData.append(newLine);
 
                     //the teacher name
                     var a = $('<a />');
-                    ///////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
-                  //  a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=" + arrayResult[i].Id);
                     a.attr('href', "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id);
-
 
                     a.text(arrayResult[i].Name);
                     teacherData.append(a);
@@ -224,25 +239,16 @@ function showTeachersData(arrayResult) {
                     //new line
                     teacherData.append(newLine);
 
-                    //adding the universities
-                    for (k in arrayResult[i].Universities) {
-                        if (k == arrayResult[i].Universities.length - 1) {
-                            var University = document.createTextNode(arrayResult[i].Universities[k] + '.');
-                        }
-                        else {
-                            var University = document.createTextNode(arrayResult[i].Universities[k] + ', ');
-                        }
-                        teacherData.append(University);
-                    }
+                    var Score = document.createTextNode(arrayResult[i].Score);
+                    teacherData.append(Score);
 
                     //new line
                     teacherData.append(newLine);
 
-                    //////////////לא מצליחה להציג את הקורסים למרות שבטסט הוספתי 2 קורסים למרצה
                     //adding the courses
                     for (l in arrayResult[i].Courses) {
-                        if (k == arrayResult[i].Courses.length - 1) {
-                            var Course = document.createTextNode(arrayResult[i].Courses[l] + '.');
+                        if (l == arrayResult[i].Courses.length - 1) {
+                            var Course = document.createTextNode('.' + arrayResult[i].Courses[l]);
                         }
                         else {
                             var Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
@@ -277,11 +283,15 @@ function showCoursesData(arrayResult) {
 
         //the course name
         var a = $('<a />');
-        /////גיללל תשנה כאן איך שאתה רוצה לקרוא למשתנה שמעביר את הGUID
-        //a.attr('href', "/AddTeacherComment/AddTeacherComment.html?search=Courses&SearchText=" + arrayResult[i].Id);
         a.attr('href', "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id);
         a.text(arrayResult[i].Name);
         courseData.append(a);
+
+        //new line
+        courseData.append(newLine);
+
+        var Score = document.createTextNode(arrayResult[i].Score);
+        courseData.append(Score);
 
         //new line
         courseData.append(newLine);
@@ -292,10 +302,6 @@ function showCoursesData(arrayResult) {
 
         //new line
         courseData.append(newLine);
-
-        //adding the university
-        var University = document.createTextNode(arrayResult[i].University);
-        courseData.append(University);
 
         //   $('body').append(courseData);
         $("#content").append(courseData);

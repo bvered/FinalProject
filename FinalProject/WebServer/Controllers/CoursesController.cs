@@ -18,7 +18,7 @@ namespace WebServer.Controllers
             {
                 return
                     session.Query<Course>()
-                        .Select(x => new ResultCourse(x.Id, x.Name, x.Faculty.Name))
+                        .Select(x => new ResultCourse(x.Id, x.Name, x.Faculty.Name, x.Score))
                         .ToList();
             }
         }
@@ -28,12 +28,14 @@ namespace WebServer.Controllers
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Faculty { get; set; }
+            public int Score { get; set; }
 
-            public ResultCourse(Guid id, string name, string faculty)
+            public ResultCourse(Guid id, string name, string faculty, int score)
             {
                 Id = id;
                 Name = name;
                 Faculty = faculty;
+                Score = score;
             }
         }
 

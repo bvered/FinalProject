@@ -38,7 +38,7 @@ namespace WebServer.Controllers
                         .Select(x => x.Course.Name).Distinct()
                         .ToList();
 
-                    result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses));
+                    result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
                 }
 
                 return result;
@@ -68,26 +68,6 @@ namespace WebServer.Controllers
             }
         }
 
-        [HttpGet]
-        [ActionName("GetTeacherId")]
-        public string GetTeacherId(string name)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                //Teacher teacher;
-                IList<Teacher> teachersList = session.QueryOver<Teacher>().List();
-                foreach(Teacher teacher in teachersList)
-                {
-                    if(teacher.Name == name)
-                    {
-                        return teacher.Id.ToString(); 
-                        //לא סגורה על מה צריך להחזיר פה :(
-                    }
-                }
-            }
-            return null;
-        }
-        
         [HttpGet]
         [ActionName("GetTeachers")]
         public IList<string> GetAllTeachersNames() {
@@ -184,12 +164,14 @@ namespace WebServer.Controllers
         public Guid Id { get; set; }
         public string Name { get; set; }
         public IList<string> Courses { get; set; }
+        public int Score { get; set; }
 
-        public ResultTeacher(Guid id, string name, IList<string> courses)
+        public ResultTeacher(Guid id, string name, IList<string> courses, int score)
         {
             Id = id;
             Name = name;
             Courses = courses;
+            Score = score;
         }
     }
 
