@@ -22,7 +22,34 @@ namespace WebServer.Controllers
             }
         }
 
+
         [HttpGet]
+        [ActionName("GetAllSearchedTeachers")]
+        public IList<ResultTeacher> GetAllSearchedTeachers([FromUri]string teacherName)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                IList<Teacher> teachers = session.QueryOver<Teacher>().List();  // get all the teachers
+                IList<ResultTeacher> result = new List<ResultTeacher>();
+
+                foreach (var teacher in teachers)
+                {
+                    if (teacherName == teacher.Name || (teacher.Name).IndexOf(teacherName) >= 0 || ((teacher.Name).ToLower()).IndexOf(teacherName) >= 0 || ((teacher.Name).ToLower()).IndexOf(teacherName.ToLower()) >= 0)
+                    {
+                        IList<string> courses = session.Query<CourseInSemester>()
+                            .Where(x => x.Teacher.Id == teacher.Id)
+                            .Select(x => x.Course.Name).Distinct()
+                            .ToList();
+
+                        result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
+                    }
+                }
+
+                return result;
+            }
+        }
+
+    /*    [HttpGet]
         [ActionName("GetAllSearchedTeachers")]
         public IList<ResultTeacher> GetAllSearchedTeachers()
         {
@@ -44,7 +71,7 @@ namespace WebServer.Controllers
                 return result;
             }
         }
-
+        */
         [HttpGet]
         [ActionName("GetTeacher")]
         public IHttpActionResult GetTeacher([FromUri]string id)

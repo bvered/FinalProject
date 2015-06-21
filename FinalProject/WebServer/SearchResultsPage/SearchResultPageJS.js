@@ -55,6 +55,44 @@ function getQuertyString(query_string) {
     }
 }
 
+//need to fix this func so it will get answer from the comtroller
+//right now the json gets 404 not found 
+function getTeacherData(query_string) {
+    $("#filter")[0].hidden = true;
+    var dataToSearch = query_string["SearchText"];
+    var uri = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
+   
+    var request = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json; charset=UTF-8",
+        success: function (data) {
+            if (data.length == 0) {
+                $("#NoMatches")[0].hidden = false;
+            }
+            else {
+                showTeachersData(data);
+            }
+            succeed = true;
+        },
+        fail: function (data) {
+         //   succeed = false;
+        },
+       // async: false
+    });
+
+    //var arrayResult = [];
+    /*$.getJSON(uri)
+    .done(function (data) {
+        if (data.length == 0) {
+        }
+        else {
+            showTeachersData(arrayResult);
+        }
+    });*/
+    
+}
+/*
 function getTeacherData(query_string) {
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Teachers/GetAllSearchedTeachers';
@@ -67,8 +105,7 @@ function getTeacherData(query_string) {
             }
         }
         if (arrayResult.length == 0) {
-            var textError = document.createTextNode('No matches found');
-            $('body').append(textError);
+            $("#NoMatches")[0].hidden = false;
         }
 
          //      if (arrayResult.length == 1) { 
@@ -80,8 +117,10 @@ function getTeacherData(query_string) {
         }
     });
 }
+*/
 
 function getCourseData(query_string) {
+    $("#filter")[0].hidden = true;
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses';
     var arrayResult = [];
@@ -93,15 +132,8 @@ function getCourseData(query_string) {
             }
         }
         if (arrayResult.length == 0) {
-            var textError = document.createTextNode('No matches found');
-            $('body').append(textError);
+            $("#NoMatches")[0].hidden = false;
         }
-            /* if (arrayResult.length == 1) {
-
-            // גיללל המערך של התוצאות מכיל כרגע רק שמות, לא יישות של קורס.. צריך להביא מהשרת את הגויד לפי שם הקורס
-                  window.location = '/AddCourseComment/AddCourseComment.html?search=Courses&SearchText=' + arrayResult[0].Id;
-
-             }*/
         else {
             showCoursesData(arrayResult);
         }
@@ -131,56 +163,40 @@ function getAllData(query_string) {
                 }
             }
 
-            if (coursesArrayResult.length == 1 && teachersArrayResult.length == 0) { //we found only one match of course
-               //גיל
-                   window.location = '/AddCourseComment/AddCourseComment.html?id=' + coursesArrayResult[0].Id;
-            }
-            else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 1)
-            { //we found only one match of teacher
-                //גיל
-                   window.location = '/AddTeacherComment/AddTeacherComment.html?id=' + teachersArrayResult[0].Id;
-            }
-            else if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
-                filterByParameter(coursesArrayResult, teachersArrayResult);
+           if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
+               $("#filter")[0].hidden = false;
+               filterByParameter(coursesArrayResult, teachersArrayResult);
                 showCoursesData(coursesArrayResult);
                 showTeachersData(teachersArrayResult);
             }
-            else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 1){ // we found several matches in teachers
+            else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
+                $("#filter")[0].hidden = false;
                 filterByParameter(coursesArrayResult, teachersArrayResult);
                 showTeachersData(teachersArrayResult);                
             }
-            else if(coursesArrayResult.length > 1 && teachersArrayResult.length == 0){ // we found several matches in courses
+            else if(coursesArrayResult.length > 0 && teachersArrayResult.length == 0){ // we found several matches in courses
+                $("#filter")[0].hidden = false;
                 filterByParameter(coursesArrayResult, teachersArrayResult);
                 showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
             {// we didnt found any match
-                var textError = document.createTextNode('No matches found');
-                $('content').append(textError);
+                $("#filter")[0].hidden = true;
+                $("#NoMatches")[0].hidden = false;
+                
             }
         });       
     });
 }
 
 function filterByParameter(coursesArrayResult, teachersArrayResult) {
-    var teachersFilterBtn = document.createElement("BUTTON");
-    var teacherText = document.createTextNode("filter by teachers");       // Create a text node
-    teachersFilterBtn.appendChild(teacherText);
-    teachersFilterBtn.onclick = function () { filterByTeachers(teachersArrayResult); };
 
-    var coursesFilterBtn = document.createElement("BUTTON");
-    var courseText = document.createTextNode("filter by courses");       // Create a text node
-    coursesFilterBtn.appendChild(courseText);
-    coursesFilterBtn.onclick = function () { filterByCourses(coursesArrayResult); };
+    $("#TeachresFilter").onclick = function () { filterByTeachers(teachersArrayResult); };
 
-    var noFilter = document.createElement("BUTTON");
-    var noFilterText = document.createTextNode("show all results");       // Create a text node
-    noFilter.appendChild(noFilterText);
-    noFilter.onclick = function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); };
+    $("#CoursesFilter").onclick = function () { filterByCourses(coursesArrayResult); };
 
-    $("#filter").append(teachersFilterBtn);
-    $("#filter").append(coursesFilterBtn);
-    $("#filter").append(noFilter);
+    $("#NoFilter").onclick = function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); };
+
 }
 
 function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {

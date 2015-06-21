@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-
+<html lang="he">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 <head>
+    
     <link href ="SearchResultPageCSS.css" rel ="stylesheet" type ="text/css" />
     <title>Search Result</title>
 </head>
@@ -17,8 +18,15 @@
         </form>
     <div id="title"><label hidden="true" id="searchTitle">the results... </label><br /></div>
     <br />
-    <div id="filter"></div>
+    <div id="filter">
+        <!--on click will be in the js -->
+        <button id ="TeachresFilter" >filter by teachers</button>
+        <button id ="CoursesFilter" >filter by courses</button>
+        <button id ="NoFilter" >show akk results</button>
+    </div>
     <div id="content"></div>
+
+    <label id="NoMatches" hidden="true" dir="rtl">!NO MATCHES FOUND</label>
 
     <footer>
         <a href="#" id="resultAdd"></a> 
