@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="rtl">
 <head>
     <title>Rate My</title>
     <meta name="viewport" content="user-scalable=yes, width=device-width" />
@@ -11,35 +11,33 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </head>
 <body style="text-align:center;">
-    <!--<div id="myrate_hype_container" style="margin:auto;position:relative;width:1240px;height:800px;overflow:hidden;" aria-live="polite">
-        <script type="text/javascript" charset="utf-8" src="HomePage/MyRate/MyRate/MyRate.hyperesources/myrate_hype_generated_script.js?99053"></script>
-    </div>-->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <h1> Rate My School</h1>
-    <div class="row">
-        <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
+    <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
+        <div class="row">
+
             <input type="hidden" name="search" id="search" value="All" />
             <div class="col-lg-6" style="padding-right: 0px;">
                 <div class=" input-group">
                     <input id="tags" type="text" name="SearchText" class="form-control" placeholder="Search for Teachers / Courses..." />
-                    <span class="input-group-btn" >
-                        <input  type="submit" class="btn btn-default" value="Go"  />
+                    <span class="input-group-btn">
+                        <!--<input type="submit" class="btn btn-default" value="Go" />-->
                     </span>
                 </div>
             </div>
             <div class="col-lg-6" style="width: 90px; padding-right: 0px; padding-left: 0px;">
                 <button class=" btn btn-default dropdown-toggle" style="float: left;" type="submit" value="All" id="dropDownRes1" data-toggle="dropdown" aria-expanded="true">
-                    All <span class="caret"></span>
+                    הכל <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">All</a> </li>
+                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">הכל </a> </li>
                     <li class="divider"></li>
-                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">Teachers</a> </li>
-                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">Courses</a> </li>
+                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">מרצים</a> </li>
+                    <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">קורסים</a> </li>
                 </ul>
             </div>
-            <div class="col-lg-6" style="width: 90px; padding-right: 0px;padding-left: 0px;">
+            <div class="col-lg-6" style="width: 90px; padding-right: 0px; padding-left: 0px;">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="dropDownRes2">
                     + <span class="caret"></span>
                 </button>
@@ -48,8 +46,52 @@
                     <li> <a href="../AddCourse/AddCourse.html">Add Courses</a></li>
                 </ul>
             </div>
-        </form>
-    </div>
+        </div>
+        <div>
+            <div class="input-group-btn">
+                <input type="submit" class="btn btn-default" value="חפש!" style="margin-left: 15px;" />
+                <input type="button" class="btn btn-default" id="advancedSearch" value="חיפוש קורסים מתקדם" />
+            </div>
+        </div>
+
+        <div id="advancedSearchDiv">
+            <div>
+                <label> מסגרת</label>
+                <button style="margin-left: 15px;"> תואר ראשון</button>
+                <button style="margin-left: 15px;"> תואר שני</button>
+            </div>
+            <div>
+                <label> שנה</label>
+                <button style="margin-left: 15px;"> א' </button>
+                <button style="margin-left: 15px;"> ב' </button>
+                <button style="margin-left: 15px;"> ג' </button>
+                <button style="margin-left: 15px;"> ד' </button>
+            </div>
+            <div>
+                <label> קורס</label>
+                <button style="margin-left: 15px;"> חובה</button>
+                <button style="margin-left: 15px;"> בחירה</button>
+            </div>
+            <div>
+                <label> פקולטה</label>
+                <div class="col-lg-6">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" id="dropDownRes2">
+                        הכל <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li> ניהול וכלכלה</li>
+                        <li> חברה ופוליטיקה</li>
+                        <li>מדעי ההתנהגות</li>
+                        <li> מדעי הסיעוד </li>
+                        <li> יעוץ ופיתוח אירגוני</li>
+                        <li> מנהל עסקים </li>
+                        <li> פסיכולוגיה  </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+
 
     <script src="HomePage.js"></script>
 </body>

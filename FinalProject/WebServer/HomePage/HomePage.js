@@ -27,3 +27,9 @@ function change1(choose) {
     $("#search").attr('value', sellText);
     SmartSearch();
 }
+
+$(document).ready(function () {
+    $('#advancedSearch').on('click', function (event) {
+        $('#advancedSearchDiv').toggle('show');
+    });
+});
