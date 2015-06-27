@@ -31,3 +31,9 @@ body
     margin-right: auto;
     position: relative;
 }
+
+#SmartSearch {
+visibility: hidden;
+display: none;
+
+}

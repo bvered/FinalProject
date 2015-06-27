@@ -23,7 +23,7 @@ namespace WebServer.Controllers
         }
 
 
-        [HttpGet]
+   /*     [HttpGet]
         [ActionName("GetAllSearchedTeachers")]
         public IList<ResultTeacher> GetAllSearchedTeachers([FromUri]string teacherName)
         {
@@ -48,8 +48,9 @@ namespace WebServer.Controllers
                 return result;
             }
         }
-
-    /*    [HttpGet]
+        */
+        
+        [HttpGet]
         [ActionName("GetAllSearchedTeachers")]
         public IList<ResultTeacher> GetAllSearchedTeachers()
         {
@@ -71,7 +72,7 @@ namespace WebServer.Controllers
                 return result;
             }
         }
-        */
+        
         [HttpGet]
         [ActionName("GetTeacher")]
         public IHttpActionResult GetTeacher([FromUri]string id)

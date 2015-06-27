@@ -3,27 +3,75 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <meta name="viewport" content="user-scalable=yes, width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
 <head>
-    
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i">
     <link href ="SearchResultPageCSS.css" rel ="stylesheet" type ="text/css" />
     <title>Search Result</title>
 </head>
 
-<body>
-
+<body dir="rtl">
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <form action="/HomePage/HomePage.html" method="GET">
 
 <script src="SearchResultPageJS.js"></script>
 
         </form>
-    <div id="title"><label hidden="true" id="searchTitle">the results... </label><br /></div>
+    <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
     <br />
     <div id="filter">
         <!--on click will be in the js -->
-        <button id ="TeachresFilter" >filter by teachers</button>
+        <button id ="TeachresFilter" >סנן לפי מרצים</button>
         <button id ="CoursesFilter" >filter by courses</button>
-        <button id ="NoFilter" >show akk results</button>
+        <button id ="NoFilter" >show all results</button>
     </div>
+
+    <br />
+    <div id="SmartSearch" >
+
+  <div class="btn-group" role="group">
+      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Year" id="dropDownRes1" data-toggle="dropdown" aria-expanded="true">
+          שנה <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">א</a> </li>
+          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">ב</a> </li>
+          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">ג</a> </li>
+      </ul>
+  </div>
+
+        <div class="btn-group" role="group">
+      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Frame" id="dropDownRes2" data-toggle="dropdown" aria-expanded="true">
+          מסגרת <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li role="presentation" onclick="change2(this)"> <a role="menuitem" tabindex="-1">חובה</a> </li>
+          <li role="presentation" onclick="change2(this)"> <a role="menuitem" tabindex="-1">בחירה</a> </li>
+      </ul>
+  </div>
+
+        <div class="btn-group" role="group">
+      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Faculty" id="dropDownRes3" data-toggle="dropdown" aria-expanded="true">
+          פקולטה <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מדעי המחשב</a> </li>
+          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מדעי ההתנהגות</a> </li>
+          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מערכות מידע</a> </li>
+          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">כלכלה</a> </li>
+          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">סיעוד</a> </li>
+      </ul>
+  </div>
+
+        <button type="button" class="btn btn-default" onclick="smartSearch()">חפש</button>
+
+        </div><br />
+
+
     <div id="content"></div>
 
     <label id="NoMatches" hidden="true" dir="rtl">!NO MATCHES FOUND</label>

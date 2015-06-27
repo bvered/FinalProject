@@ -16,10 +16,39 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                return
-                    session.Query<Course>()
-                        .Select(x => new ResultCourse(x.Id, x.Name, x.Faculty.Name, x.Score))
-                        .ToList();
+
+
+                IList<Course> courses = session.QueryOver<Course>().List();
+                IList<ResultCourse> result = new List<ResultCourse>();
+
+                foreach (var course in courses)
+                {
+                    string year = course.IntendedYear.ToString();
+                    string returnYear = "";
+                    switch (year)
+                    {
+                        case "Any":
+                            returnYear = "כל שנה";
+                            break;
+                        case "First":
+                            returnYear = "שנה ראשונה";
+                            break;
+                        case "Second":
+                            returnYear = "שנה שניה";
+                            break;
+                        case "Third":
+                            returnYear = "שנה שלישית";
+                            break;
+                        case "Forth":
+                            returnYear = "שנה רביעית";
+                            break;
+                    }
+
+              
+                    result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.Name, course.Score, course.IsMandatory, returnYear));
+                }
+
+                return result;
             }
         }
 
@@ -29,13 +58,18 @@ namespace WebServer.Controllers
             public string Name { get; set; }
             public string Faculty { get; set; }
             public int Score { get; set; }
+            public bool IsMandatory { get; set; }
+            public string Year { get; set; }
 
-            public ResultCourse(Guid id, string name, string faculty, int score)
+
+            public ResultCourse(Guid id, string name, string faculty, int score, bool isMandatory, string year)
             {
                 Id = id;
                 Name = name;
                 Faculty = faculty;
                 Score = score;
+                IsMandatory = isMandatory;
+                Year = year;
             }
         }
 

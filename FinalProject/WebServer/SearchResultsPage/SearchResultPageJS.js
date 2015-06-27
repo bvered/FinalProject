@@ -59,8 +59,9 @@ function getQuertyString(query_string) {
 //right now the json gets 404 not found 
 function getTeacherData(query_string) {
     $("#filter")[0].hidden = true;
+    $("#filter").css({ "display": "none" });
     var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
+    var uri = '/api/Teachers/GetAllSearchedTeachers/';//+ dataToSearch;
    
     var request = $.ajax({
         type: "GET",
@@ -121,6 +122,7 @@ function getTeacherData(query_string) {
 
 function getCourseData(query_string) {
     $("#filter")[0].hidden = true;
+    $("#filter").css({"display": "none" });
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses';
     var arrayResult = [];
@@ -162,12 +164,13 @@ function getAllData(query_string) {
                     teachersArrayResult.push(data[i]);
                 }
             }
+            $("#filter").css({ "display": "block" });
 
            if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
                $("#filter")[0].hidden = false;
                filterByParameter(coursesArrayResult, teachersArrayResult);
-                showCoursesData(coursesArrayResult);
-                showTeachersData(teachersArrayResult);
+               showTeachersData(teachersArrayResult);
+               showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
                 $("#filter")[0].hidden = false;
@@ -191,31 +194,46 @@ function getAllData(query_string) {
 
 function filterByParameter(coursesArrayResult, teachersArrayResult) {
 
-    $("#TeachresFilter").onclick = function () { filterByTeachers(teachersArrayResult); };
+    $("#TeachresFilter").click(function () { filterByTeachers(teachersArrayResult); });
 
-    $("#CoursesFilter").onclick = function () { filterByCourses(coursesArrayResult); };
+    $("#CoursesFilter").click(function () { filterByCourses(coursesArrayResult); });
 
-    $("#NoFilter").onclick = function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); };
+    $("#NoFilter").click(function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); });
 
 }
 
 function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
     //clear all the results
     clearResults();
-    showTeachersData(teachersArrayResult);
-    showCoursesData(coursesArrayResult);
+    $("#TeachresFilter").prop("disabled", false);
+    $("#CoursesFilter").prop("disabled", false);
+    $("#NoFilter").prop("disabled", true);
+    if (teachersArrayResult.length != 0) {
+        showTeachersData(teachersArrayResult);
+    }
+    if (coursesArrayResult.length != 0) {
+        showCoursesData(coursesArrayResult);
+    }
 }
 
 function filterByTeachers(arrayResult) {
     //clear all the results
     clearResults();
+    $("#TeachresFilter").prop("disabled", true);
+    $("#CoursesFilter").prop("disabled", false);
+    $("#NoFilter").prop("disabled", false);
     showTeachersData(arrayResult);
 }
 
 function filterByCourses(arrayResult) {
     //clear all the results
     clearResults();
-    showCoursesData(arrayResult);
+    $("#TeachresFilter").prop("disabled", false);
+    $("#CoursesFilter").prop("disabled", true);
+    $("#NoFilter").prop("disabled", false);
+    if (arrayResult.length != 0) {
+        showCoursesData(arrayResult);
+    }
 }
 
 function clearResults() {
@@ -231,6 +249,7 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
     $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
     $("#searchTitle")[0].hidden = false;
+    $("#SmartSearch").css({ "visibility": "hidden", "display": "none" });
 
     for (i in arrayResult) {
                     var teacherData = $('<p />');
@@ -283,7 +302,7 @@ function showCoursesData(arrayResult) {
     $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
     $("#resultAdd").text('Cant find the requested course? CLICK HERE to add');
     $("#searchTitle")[0].hidden = false;
-
+    $("#SmartSearch").css({ "visibility": "visible", "display": "block" });
     for (i in arrayResult) {
         var courseData = $('<p />');
         courseData.addClass("lecturerData");
@@ -312,7 +331,30 @@ function showCoursesData(arrayResult) {
         //new line
         courseData.append(newLine);
 
-        //adding the faculties
+        //is mandatory
+        var isMandatory = arrayResult[i].IsMandatory;
+        var mandatory;
+        if (isMandatory == false) {
+            mandatory = document.createTextNode('קורס בחירה');
+            courseData.append(mandatory);
+        }
+        else {
+            mandatory = document.createTextNode('קורס חובה');
+            courseData.append(mandatory);
+        }
+
+        //new line
+        courseData.append(newLine);
+
+        //the course year
+        var year = document.createTextNode(arrayResult[i].Year);
+        courseData.append(year.data);
+
+        //new line
+        courseData.append(newLine);
+
+
+        //adding the faculty
         var Faculty = document.createTextNode(arrayResult[i].Faculty);
         courseData.append(Faculty);
 
@@ -322,4 +364,26 @@ function showCoursesData(arrayResult) {
         //   $('body').append(courseData);
         $("#content").append(courseData);
     }
+}
+
+function change1(choose) {
+    var sellText = $(choose).text().trim();
+    $("#dropDownRes1").html(sellText + '<span class=\caret\"></span>');
+    $("#dropDownRes1").attr('value', sellText);
+}
+
+function change2(choose) {
+    var sellText = $(choose).text().trim();
+    $("#dropDownRes2").html(sellText + '<span class=\caret\"></span>');
+    $("#dropDownRes2").attr('value', sellText);
+}
+
+function change3(choose) {
+    var sellText = $(choose).text().trim();
+    $("#dropDownRes3").html(sellText + '<span class=\caret\"></span>');
+    $("#dropDownRes3").attr('value', sellText);
+}
+
+function smartSearch() {
+    
 }
