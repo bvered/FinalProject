@@ -1,4 +1,5 @@
 ﻿function SmartSearch() {
+    
     var uri;
     if (($("#dropDownRes1")[0]).value.trim() == "Courses") {
         uri = '/api/Courses/GetCourses';
@@ -31,5 +32,9 @@ function change1(choose) {
 $(document).ready(function () {
     $('#advancedSearch').on('click', function (event) {
         $('#advancedSearchDiv').toggle('show');
+    });
+
+    $("#advanced-search-btn").click(function () {
+        $(".advanced-filter").toggle("slow");
     });
 });

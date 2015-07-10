@@ -1,0 +1,192 @@
+﻿html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+* {
+    direction: rtl;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+
+    list-style-type: none;
+}
+
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0.9;
+    background: url('../Images/site_background.jpeg');
+    background-repeat: no-repeat;
+    background-position-y: -300px;
+}
+
+header .logo {
+    background: url('../Images/ratemyschool.jpg');
+    width: 275px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.content {
+    width: 100%;
+}
+
+.search-input {
+    width: 420px;
+    height: 50px;
+    border: 0;
+    border-radius: 9px;
+    outline: none;
+    font-size: 18px;
+    font-family: Arial;
+    text-indent: 10px;
+    padding-right: 5px;
+}
+
+.search-module {
+    width: 419px;
+    margin: 200px auto 0 auto;
+    position: relative;
+}
+
+    .search-module .search-input {
+        display: inline-block;
+    }
+
+    .search-module .search-params {
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: -1px;
+    }
+
+        .search-module .search-params button {
+            height: 52px;
+            border-radius: 10px;
+            border-bottom-right-radius: 0px;
+            border-top-right-radius: 0px;
+        }
+
+
+.search-button {
+    background: transparent;
+    border: 0;
+    outline: none;
+    position: absolute;
+      top: -1px;
+  left: 60px;
+}
+
+    .search-button img {
+        background-color: white;
+        width: 26px;
+        height: 50px;
+    }
+
+.advanced-filter {
+    width: 600px;
+    height: 116px;
+    margin: 50px auto 0 auto;
+
+    display: none;
+}
+
+    .advanced-filter .filter-box {
+        float: left;
+        width: 140px;
+ 
+        border-radius: 10px;
+        background-color: white;
+
+        margin: 5px;
+    }
+
+        .advanced-filter .filter-box ul {
+            margin: 0px;
+        }
+
+            .advanced-filter .filter-box ul li {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+        .advanced-filter .filter-box .filter-title {
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            background: #4683B7;
+            width: 100%;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+
+            text-align: center;
+        }
+
+
+.advanced-filter-link {
+    width: 100%;
+
+    text-align: center;
+
+    margin-top: 10px;
+}
+
+    .advanced-filter-link button {
+        border: 0;
+
+        font-size: 13px;
+        font-weight: bold;
+
+        outline: none;
+    }
+
+label {
+    font-weight: normal !important;
+}
+
+footer {
+    width: 100%;
+    height: 50px;
+
+    text-align: center;
+
+     position: relative;
+     top: 100px;
+}
+
+   
+
+footer ul li {
+    display: inline-block;
+    background-color: rgba(255,255,255,0.5);
+
+    width: 130px;
+    height: 50px;
+
+    border: 2px solid white;
+    border-radius: 5px;
+
+    text-align: center;
+
+    line-height: 50px;
+
+    margin: 10px;
+
+
+}
+
+    footer ul li a {
+        color: #0d3e66;
+
+        font-weight: bold;
+    }
+
+        footer ul li a:hover {
+            text-decoration: none;
+        }

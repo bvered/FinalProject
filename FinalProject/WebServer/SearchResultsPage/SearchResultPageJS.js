@@ -10,12 +10,12 @@ function ShowResults() {
     
     createSearchText(query_string)
 
-    if (query_string["search"] === "All") {
+    if (query_string["search"] === "הכל") {
         getAllData(query_string);
     }
-    else if (query_string["search"] === "Courses") {
+    else if (query_string["search"] === "קורסים") {
         getCourseData(query_string, arrayResult);
-    } else if (query_string["search"] === "Teachers") {
+    } else if (query_string["search"] === "מרצים") {
         getTeacherData(query_string);
     }
 }

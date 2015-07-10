@@ -120,8 +120,10 @@
     <Content Include="Global.asax" />
     <Content Include="HomePage\Home.html" />
     <Content Include="HomePage\HomePage.css" />
-    <Content Include="HomePage\HomePage.html" />
+    <Content Include="HomePage\HomePageOld.html" />
     <Content Include="HomePage\HomePage.js" />
+    <Content Include="HomePage\HomePage.html" />
+    <Content Include="HomePage\style.css" />
     <Content Include="HtmlPage1.html" />
     <Content Include="HtmlPage2.html" />
     <Content Include="Images\academit.jpg" />
