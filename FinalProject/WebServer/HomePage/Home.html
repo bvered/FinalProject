@@ -2,74 +2,108 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="rtl">
     <head>
         <title>Rate My School</title>
+        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <style>
-            #rootDiv {
-                position: absolute;
-                left: 50%;
-                margin-left: -40%;
-                width: 80%;
-            }
-
-            #headersDiv {
-                display: inline-block;
-                width: 100%;
-                height: auto;
-            }
-
             #siteImage {
                 float: left;
                 padding-left: 20%;
             }
 
             #schoolImage {
-                position: static;
                 float: right;
                 padding-right: 20%;
             }
 
-            #linksDiv {
-                width: 100%;
-                height: auto;
+            #headersDiv {
+                display: block;
+                height: 80px;
             }
 
-            #linksDiv ul {
-                position: absolute;
-                margin-left: -20%;
-                width: 80%;
-                left: 50%;
-                padding: 8px 0px;
-                margin: 0px;
-                background-color: aquamarine;
+            body {
+                margin: 0;
+                padding: 0;
             }
 
-            #linksDiv li {
-                display: inline;
-                padding: 10px 20px;
-                float: left;
+            .nav {
+                height: 50px;
+                margin-left: 20%;
+                margin-right: 20%;
             }
 
-            #linksDiv a {
+            .nav ul {
+                list-style: none;
+                background-color: #444;
+                text-align: center;
+                padding: 0;
+                margin-bottom: 0;
+                margin-top: 0;
+            }
+
+            .nav li {
+                font-family: 'Oswald', sans-serif;
+                font-size: 1.2em;
+                line-height: 40px;
+                height: 40px;
+                border-bottom: 1px solid #888;
+                padding-bottom: 0;
+                padding-top: 0;
+                padding-right: 15px;
+                padding-left: 15px;
+                width: 200px;
+                border-bottom: none;
+                height: 50px;
+                line-height: 50px;
+                font-size: 1.4em;
+                display: inline-block;
+                margin-right: -4px;
+            }
+
+            .nav a {
                 text-decoration: none;
-                color: aliceblue;
-                padding: 8px 8px 8px 8px;
+                color: #fff;
+                display: block;
+                transition: .3s background-color;
+            }
+
+            .nav a:hover { background-color: #005f5f; }
+
+            .nav a.active {
+                background-color: #fff;
+                color: #444;
+                cursor: default;
             }
 
             #ContentDiv {
-                display: inline-block;
+                position: absolute;
+                top: 130px;
+                height: 400px;
+                left: 20%;
+                right: 20%;
                 background-image: url('../Images/background.jpg');
-                background-size: 100%;
-                background-position: 0;
+                background-size: cover;
+                background-position: top center;
                 background-repeat: no-repeat;
             }
+
+            #advancedSearchDiv {
+                display: none
+            }
+
+            #SearchText {
+                display: block
+            }
+
         </style>
     </head>
     <body>
-        <div id="rootDiv">
+        <header>
+
             <div id="headersDiv">
                 <img id="siteImage" src="../Images/ratemyschool.jpg" alt=""/>
                 <img id="schoolImage" src="../Images/academit.jpg" alt=""/>
             </div>
-            <div id="linksDiv">
+            <div class="nav">
                 <ul>
                     <li>
                         <a href="#">אודות האקדמית</a>
@@ -82,9 +116,23 @@
                     </li>
                 </ul>
             </div>
-            <div id="ContentDiv">
-
+        </header>
+        <div id="ContentDiv">
+            <input id="SearchText" type="text"/>
+            <div id="advancedSearchDiv">
+                <input type="text"/>
+                <input type="text"/>
+                <input type="text"/>
+                <input type="text"/>
             </div>
+            <input type="button" id="advancedSearch" value="חיפוש קורסים מתקדם" />
         </div>
     </body>
+    <script>
+        $(document).ready(function() {
+            $('#advancedSearch').on('click', function(event) {
+                $('#advancedSearchDiv').toggle('show');
+            });
+        });
+    </script>
 </html>
