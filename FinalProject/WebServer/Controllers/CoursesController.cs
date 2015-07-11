@@ -5,6 +5,7 @@ using System.Web.Http;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.Controllers
 {
@@ -16,8 +17,6 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-
-
                 IList<Course> courses = session.QueryOver<Course>().List();
                 IList<ResultCourse> result = new List<ResultCourse>();
 
@@ -45,7 +44,7 @@ namespace WebServer.Controllers
                     }
 
               
-                    result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.Name, course.Score, course.IsMandatory, returnYear));
+                    result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.ToString(), course.Score, course.IsMandatory, returnYear));
                 }
 
                 return result;
@@ -72,7 +71,6 @@ namespace WebServer.Controllers
                 Year = year;
             }
         }
-
 
         public IHttpActionResult GetCourse([FromUri] string id)
         {
@@ -113,15 +111,19 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                //TODO: Fill all fields
                 var course = new Course
                 {
                     Name = createCommand.Name,
+                    Faculty =  createCommand.Faculty,
+                    IsMandatory = createCommand.IsMandatory,
+                    AcademicDegree = createCommand.AcademicDegree,
+                    IntendedYear = createCommand.IntendedYear,
                 };
 
                 course.AddCourseInSemester(new CourseInSemester
                 {
-                    Course = course
+                    Course = course,
+                    Teacher = session.Query<Teacher>().SingleOrDefault(x => x.Name == createCommand.TeacherName),
                 });
                 session.Save(course);
                 transaction.Commit();
@@ -222,6 +224,10 @@ namespace WebServer.Controllers
     {
         public string Name { get; set; }
         public string TeacherName { get; set; }
+        public Faculty Faculty { get; set; }
+        public bool IsMandatory { get; set; }
+        public AcademicDegree AcademicDegree { get; set; }
+        public IntendedYear IntendedYear { get; set; }
     }
 
     public class CreateCourseComment

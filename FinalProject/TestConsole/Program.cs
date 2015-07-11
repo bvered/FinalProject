@@ -28,25 +28,7 @@ namespace TestConsole
 
         private static void CreateInitData(ISession session)
         {
-            var computersFaculty = new Faculty {Name = "מדעי המחשב"};
-
-            var faculties = new[]
-            {
-                computersFaculty,
-                new Faculty {Name = "ניהול וכלכלה"},
-                new Faculty {Name = "חברה ופוליטיקה"},
-                new Faculty {Name = "מדעי ההתנהגות"},
-                new Faculty {Name = "מדעי הסיעוד"},
-                new Faculty {Name = "יעוץ ופיתוח אירגוני"},
-                new Faculty {Name = "מנהל עסקים"},
-                new Faculty {Name = "פסיכולוגיה"},
-            };
-
-            foreach (var faculty in faculties)
-            {
-                session.Save(faculty);
-            }
-
+            const Faculty computersFaculty = Faculty.ComputerScience;
             var teacherCritias = new[]
             {
                 new TeacherCriteria("Student- teacher relationship"),

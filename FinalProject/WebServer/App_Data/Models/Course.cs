@@ -17,8 +17,6 @@ namespace WebServer.App_Data.Models
         public bool IsMandatory { get; set; }
         public AcademicDegree AcademicDegree { get; set; }
         public IntendedYear IntendedYear { get; set; }
-        
-        
         public IList<CourseInSemester> CourseInSemesters { get; set; }
 
         public Course()

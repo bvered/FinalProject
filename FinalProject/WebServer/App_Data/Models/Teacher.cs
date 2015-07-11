@@ -14,6 +14,12 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Score { get; set; }
         [DataMember]
+        public int Room { get; set; }
+        [DataMember]
+        public string Cellphone { get; set; }
+        [DataMember]
+        public string Email { get; set; }
+        [DataMember]
         public IList<TeacherComment> TeacherComments { get; set; }
 
         public Teacher()
@@ -21,9 +27,12 @@ namespace WebServer.App_Data.Models
             TeacherComments = new List<TeacherComment>();
         }
 
-        public Teacher(string name)
+        public Teacher(string name, int room,string phone, string email)
         {
             Name = name;
+            Room = room;
+            Cellphone = phone;
+            Email = email;
             TeacherComments = new List<TeacherComment>();
         }
 

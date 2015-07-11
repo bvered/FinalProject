@@ -28,14 +28,6 @@ namespace WebServer.App_Data.MappingOverride
         }
     }
 
-    public class FacultyMappingOverride : IAutoMappingOverride<Faculty>
-    {
-        public void Override(AutoMapping<Faculty> mapping)
-        {
-            mapping.Map(x => x.Name).Not.Nullable();
-        }
-    }
-
     public class TeacherMappingOverride : IAutoMappingOverride<Teacher>
     {
         public void Override(AutoMapping<Teacher> mapping)

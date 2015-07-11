@@ -27,7 +27,7 @@ ul {
 }
 
 header .logo {
-    background: url('../Images/ratemyschool.jpg');
+    background: url('../Images/ratemyschool.png');
     width: 275px;
     height: 80px;
     margin: 0 auto;
@@ -164,7 +164,7 @@ footer {
 
 footer ul li {
     display: inline-block;
-    background-color: rgba(255,255,255,0.5);
+    background-color: rgba(255,255,255,0.85);
 
     width: 130px;
     height: 50px;

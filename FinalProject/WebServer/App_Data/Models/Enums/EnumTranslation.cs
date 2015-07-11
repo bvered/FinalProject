@@ -18,7 +18,7 @@ namespace WebServer.App_Data.Models.Enums
             AcademicDegrees = new Dictionary<AcademicDegree, string>
             {
                 {AcademicDegree.Bachelor, "תואר ראשון"},
-                {AcademicDegree.Bachelor, "תואר שני"}
+                {AcademicDegree.Master, "תואר שני"}
             };
 
             Semesters = new Dictionary<Semester, string>
@@ -27,10 +27,24 @@ namespace WebServer.App_Data.Models.Enums
                 {Semester.B, "ב"},
                 {Semester.Summer, "קיץ"},
             };
+
+            Faculties = new Dictionary<Faculty, string>
+            {
+                {Faculty.ComputerScience, "מדעי המחשב"},
+                {Faculty.BehavioralSciences, "מדעי ההתנהגות"},
+                {Faculty.InformationSystems, "מערכות מידע"},
+                {Faculty.Nursing, "סיעוד"},
+                {Faculty.ManagementEconomics, "ניהול וכלכלה"},
+                {Faculty.SocietyPolitics, "חברה ופוליטיקה"},
+                {Faculty.ConsultingOrganizationalDevelopment, "ייעוץ ופיתוח ארגוני"},
+                {Faculty.BusinessAdministration, "מנהל עסקים"},
+                {Faculty.Psychology, "פסיכולוגיה"},
+            };
         }
 
         public static Dictionary<IntendedYear, string> IntendedYears { get; private set; }
         public static Dictionary<AcademicDegree, string> AcademicDegrees { get; private set; }
         public static Dictionary<Semester, string> Semesters { get; private set; }
+        public static Dictionary<Faculty, string> Faculties { get; private set; }
     }
 }

@@ -45,12 +45,15 @@ function inputError(divId, inputId, inputStatusId, labelId) {
     $(labelId)[0].hidden = false;
 };
 
-function addTeacher(teacherName) {
+function addTeacher(teacherName, teacherRoom, teacherPhone, teacherEmail) {
     var uri4 = '/api/Teachers/AddTeacher';
 
     $(function() {
         var teacher = {
-            Name: teacherName
+            Name: teacherName,
+            Room: teacherRoom,
+            Cellphone: teacherPhone,
+            Email: teacherEmail,
         };
 
         var request = $.ajax({

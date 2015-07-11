@@ -118,14 +118,11 @@
     <Content Include="bootstrap-3.3.4-dist\js\bootstrap.min.js" />
     <Content Include="bootstrap-3.3.4-dist\js\npm.js" />
     <Content Include="Global.asax" />
-    <Content Include="HomePage\Home.html" />
-    <Content Include="HomePage\HomePage.css" />
-    <Content Include="HomePage\HomePageOld.html" />
+    <Content Include="old\Home.html" />
+    <Content Include="old\HomePageOld.html" />
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\style.css" />
-    <Content Include="HtmlPage1.html" />
-    <Content Include="HtmlPage2.html" />
     <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
     <Content Include="Images\ratemyschool.jpg" />
@@ -145,7 +142,6 @@
     <Compile Include="App_Data\Models\CourseCriteria.cs" />
     <Compile Include="App_Data\Models\CourseCriteriaRating.cs" />
     <Compile Include="App_Data\Models\CourseInSemester.cs" />
-    <Compile Include="App_Data\Models\Faculty.cs" />
     <Compile Include="App_Data\Models\Enums\IntendedYear.cs" />
     <Compile Include="App_Data\Models\IPersistent.cs" />
     <Compile Include="App_Data\Models\UplodedFile.cs" />
@@ -163,6 +159,7 @@
     <Compile Include="App_Data\Models\Enums\EnumTranslation.cs" />
     <Compile Include="Controllers\SmartSearchController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
+    <Compile Include="App_Data\Models\Enums\Faculty.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

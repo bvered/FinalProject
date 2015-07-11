@@ -129,6 +129,9 @@ namespace WebServer.Controllers
                 var teacher = new Teacher
                 {
                     Name = createCommand.Name,
+                    Room = createCommand.Room,
+                    Cellphone = createCommand.Cellphone,
+                    Email = createCommand.Email,
                 };
                 session.Save(teacher);
                 transaction.Commit();
@@ -205,6 +208,9 @@ namespace WebServer.Controllers
 
     public class CreateTeacherCommand {
         public string Name { get; set; }
+        public int Room { get; set; }
+        public string Cellphone { get; set; }
+        public string Email { get; set; }
     }
 
     public class CreateTeacherComment {

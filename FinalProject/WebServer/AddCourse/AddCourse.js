@@ -58,13 +58,17 @@ function inputError(divId, inputId, inputStatusId, labelId) {
     $(labelId)[0].hidden = false;
 };
 
-function addCourse(CourseName, teacherName) {
+function addCourse(CourseName, teacherName, faculty, mandatory, academicDegree, intendedYear) {
     var uri4 = '/api/Courses/AddCourse';
 
     $(function () {
         var course = {
             Name: CourseName,
-            TeacherName: teacherName
+            TeacherName: teacherName,
+            Faculty: faculty,
+            Ismandatory: mandatory,
+            AcademicDegree: academicDegree,
+            IntendedYear: intendedYear,
     };
 
         var request = $.ajax({

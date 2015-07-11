@@ -52,12 +52,14 @@ namespace WebServer.Controllers
                     query = query.Where(x => x.Name.ToLower().Contains(filter.SearchText.ToLower()));
                 }
 
-                Guid facultyId;
-                if (!string.IsNullOrWhiteSpace(filter.FacultyId) && Guid.TryParse(filter.FacultyId, out facultyId))
+                int facultyValue;
+                if (!string.IsNullOrWhiteSpace(filter.Faculty) && 
+                    int.TryParse(filter.Faculty, out facultyValue) &&
+                    Enum.IsDefined(typeof (Faculty), facultyValue))
                 {
-                    searchPreferences.SearchedFaculties[facultyId] += 1;
-
-                    query = query.Where(x => x.Faculty.Id == facultyId);
+                    var faculty = (Faculty)facultyValue;
+                    searchPreferences.SearchedFaculties[faculty] += 1;
+                    query = query.Where(x => x.Faculty == faculty);
                 }
 
                 int intendedYearValue;
@@ -102,9 +104,9 @@ namespace WebServer.Controllers
         {
             double result = 0;
 
-            if (searchPreferences.SearchedFaculties.ContainsKey(course.Faculty.Id))
+            if (searchPreferences.SearchedFaculties.ContainsKey(course.Faculty))
             {
-                result += searchPreferences.SearchedFaculties[course.Faculty.Id];
+                result += searchPreferences.SearchedFaculties[course.Faculty];
             }
 
             if (searchPreferences.SearchedAcademicDegrees.ContainsKey(course.AcademicDegree))
@@ -132,7 +134,7 @@ namespace WebServer.Controllers
                 Id = arg.Id,
                 Name = arg.Name,
                 CourseId = arg.CourseId,
-                FacultyName = arg.Faculty.Name,
+                FacultyName = arg.Faculty.ToString(),
                 AcademicDegree = EnumTranslation.AcademicDegrees[arg.AcademicDegree],
                 IntendedYear = EnumTranslation.IntendedYears[arg.IntendedYear],
                 IsMandatory = arg.IsMandatory,
@@ -142,7 +144,7 @@ namespace WebServer.Controllers
 
         public class SearchPreferences
         {
-            public Dictionary<Guid, double> SearchedFaculties { get; set; }
+            public Dictionary<Faculty, double> SearchedFaculties { get; set; }
             public Dictionary<AcademicDegree, double> SearchedAcademicDegrees { get; set; }
             public Dictionary<IntendedYear, double> SearchedIntendedYears { get; set; }
             public Dictionary<bool, double> SearchedIsMandatory { get; set; }
@@ -163,7 +165,7 @@ namespace WebServer.Controllers
         public class CourseSearchFilter
         {
             public string SearchText { get; set; }
-            public string FacultyId { get; set; }
+            public string Faculty { get; set; }
             public string IsMandatory { get; set; }
             public string AcademicDegree { get; set; }
             public string IntendedYear { get; set; }
