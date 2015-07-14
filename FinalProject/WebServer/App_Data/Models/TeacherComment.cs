@@ -13,5 +13,16 @@ namespace WebServer.App_Data.Models
         {
             CriteriaRatings = new List<TeacherCriteriaRating>();
         }
+
+        public int GetCriteriaRatingSummed()
+        {
+            int sum = 0;
+            foreach (TeacherCriteriaRating rating in CriteriaRatings)
+            {
+                sum = rating.Rating;
+            }
+
+            return sum;
+        }
     }
 }

@@ -13,9 +13,10 @@ namespace WebServer.App_Data.Models
         public DateTime DateTime { get; set; }
         [DataMember]
         public IList<Vote> Votes { get; set; }
-
         [DataMember]
         public string CommentText { get; set; }
+        [DataMember]
+        public int TotalNumberOfLikes { get; set; }
 
         public Comment()
         {
@@ -33,6 +34,7 @@ namespace WebServer.App_Data.Models
         public void AddVote(Vote vote)
         {
             Votes.Add(vote);
+            TotalNumberOfLikes += vote.Liked ? 1 : -1;
         }
 
 

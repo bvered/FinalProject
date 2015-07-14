@@ -153,6 +153,7 @@
     <Compile Include="App_Data\Models\Vote.cs" />
     <Compile Include="App_Data\NHibernateConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\AddFileController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />

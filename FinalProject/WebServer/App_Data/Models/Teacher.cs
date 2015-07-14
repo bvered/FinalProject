@@ -14,6 +14,10 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Score { get; set; }
         [DataMember]
+        private int AmountOfRating { get; set; }
+        [DataMember]
+        private int SumOfRating { get; set; }
+        [DataMember]
         public int Room { get; set; }
         [DataMember]
         public string Cellphone { get; set; }
@@ -39,6 +43,9 @@ namespace WebServer.App_Data.Models
         public void addTeacherCommnet(TeacherComment tComment)
         {
             TeacherComments.Add(tComment);
+            AmountOfRating++;
+            SumOfRating += tComment.GetCriteriaRatingSummed();
+            Score = SumOfRating / AmountOfRating;
         }
     }
 }
