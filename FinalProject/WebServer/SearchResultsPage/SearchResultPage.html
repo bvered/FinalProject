@@ -23,18 +23,20 @@
         </form>
     <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
     <br />
-    <div id="filter">
-        <!--on click will be in the js -->
-        <button id ="TeachresFilter" >סנן לפי מרצים</button>
-        <button id ="CoursesFilter" >filter by courses</button>
-        <button id ="NoFilter" >show all results</button>
+
+    <div id="filter" hidden="true">
+        <select id="DropdownFilter" onchange="filterByParameter();">
+        <option value="All">הכל</option>
+        <option value="Teachers">מרצים</option>
+        <option value="Courses">קורסים</option>
+        </select>
     </div>
 
     <br />
    
     <div id="content"></div>
 
-    <label id="NoMatches" hidden="true" dir="rtl">!NO MATCHES FOUND</label>
+    <label id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!</label>
 
     <footer>
         <a href="#" id="resultAdd"></a> 

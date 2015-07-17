@@ -1,5 +1,8 @@
 ﻿$(document).ready(function () { ShowResults() });
 
+var coursesArrayResult = [];
+var teachersArrayResult = [];
+
 function ShowResults() {
 
     var arrayResult = [];
@@ -143,8 +146,6 @@ function getCourseData(query_string) {
 }
 
 function getAllData(query_string) {
-    var coursesArrayResult = [];
-    var teachersArrayResult = [];
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses';
     var arrayResult = [];
@@ -167,24 +168,21 @@ function getAllData(query_string) {
             $("#filter").css({ "display": "block" });
 
            if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
-               $("#filter")[0].hidden = false;
-               filterByParameter(coursesArrayResult, teachersArrayResult);
+               $("#filter").show();
                showTeachersData(teachersArrayResult);
                showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
-                $("#filter")[0].hidden = false;
-                filterByParameter(coursesArrayResult, teachersArrayResult);
+                $("#filter").show();
                 showTeachersData(teachersArrayResult);                
             }
             else if(coursesArrayResult.length > 0 && teachersArrayResult.length == 0){ // we found several matches in courses
-                $("#filter")[0].hidden = false;
-                filterByParameter(coursesArrayResult, teachersArrayResult);
+                $("#filter").show();
                 showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
             {// we didnt found any match
-                $("#filter")[0].hidden = true;
+                $("#filter").hide();
                 $("#NoMatches")[0].hidden = false;
                 
             }
@@ -192,22 +190,20 @@ function getAllData(query_string) {
     });
 }
 
-function filterByParameter(coursesArrayResult, teachersArrayResult) {
-
-    $("#TeachresFilter").click(function () { filterByTeachers(teachersArrayResult); });
-
-    $("#CoursesFilter").click(function () { filterByCourses(coursesArrayResult); });
-
-    $("#NoFilter").click(function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); });
-
+function filterByParameter() {
+    var filterBy = document.getElementById("DropdownFilter").value;
+    if (filterBy == "All") {
+        showAllWithoutFilter(coursesArrayResult, teachersArrayResult);
+    } else if (filterBy == "Teachers") {
+        filterByTeachers(teachersArrayResult);
+    } else if (filterBy == "Courses") {
+        filterByCourses(coursesArrayResult);
+    }
 }
 
 function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", false);
-    $("#CoursesFilter").prop("disabled", false);
-    $("#NoFilter").prop("disabled", true);
     if (teachersArrayResult.length != 0) {
         showTeachersData(teachersArrayResult);
     }
@@ -219,18 +215,12 @@ function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
 function filterByTeachers(arrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", true);
-    $("#CoursesFilter").prop("disabled", false);
-    $("#NoFilter").prop("disabled", false);
     showTeachersData(arrayResult);
 }
 
 function filterByCourses(arrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", false);
-    $("#CoursesFilter").prop("disabled", true);
-    $("#NoFilter").prop("disabled", false);
     if (arrayResult.length != 0) {
         showCoursesData(arrayResult);
     }
@@ -288,9 +278,7 @@ function showTeachersData(arrayResult) {
                             var Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
                         }
                         teacherData.append(Course);
-                    }
-
-        //  $('body').append(teacherData);    
+                    } 
                     $("#content").append(teacherData);
                 }
 }
@@ -304,7 +292,7 @@ function showCoursesData(arrayResult) {
 
     for (i in arrayResult) {
         var courseData = $('<p />');
-        courseData.addClass("lecturerData");
+        courseData.addClass("courseData");
 
         //adding course image
         var img = new Image();
@@ -360,7 +348,6 @@ function showCoursesData(arrayResult) {
         //new line
         courseData.append(newLine);
 
-        //   $('body').append(courseData);
         $("#content").append(courseData);
     }
 }
