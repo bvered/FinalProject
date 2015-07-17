@@ -249,7 +249,6 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
     $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
     $("#searchTitle")[0].hidden = false;
-    $("#SmartSearch").css({ "visibility": "hidden", "display": "none" });
 
     for (i in arrayResult) {
                     var teacherData = $('<p />');
@@ -302,7 +301,7 @@ function showCoursesData(arrayResult) {
     $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
     $("#resultAdd").text('Cant find the requested course? CLICK HERE to add');
     $("#searchTitle")[0].hidden = false;
-    $("#SmartSearch").css({ "visibility": "visible", "display": "block" });
+
     for (i in arrayResult) {
         var courseData = $('<p />');
         courseData.addClass("lecturerData");
@@ -364,26 +363,4 @@ function showCoursesData(arrayResult) {
         //   $('body').append(courseData);
         $("#content").append(courseData);
     }
-}
-
-function change1(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes1").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes1").attr('value', sellText);
-}
-
-function change2(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes2").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes2").attr('value', sellText);
-}
-
-function change3(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes3").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes3").attr('value', sellText);
-}
-
-function smartSearch() {
-    
 }
