@@ -104,11 +104,13 @@
     <Content Include="AddCourseComment\AddCourseComment.js" />
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
+    <Content Include="AddCourse\style.css" />
     <Content Include="AddFile\AddFile.html" />
     <Content Include="AddTeacherComment\AddTeacherComment.js" />
     <Content Include="AddTeacherComment\AddTeacherComment.html" />
     <Content Include="AddTeacher\AddTeacher.html" />
     <Content Include="AddTeacher\AddTeacher.js" />
+    <Content Include="AddTeacher\style.css" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.css" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap-theme.min.css" />
     <Content Include="bootstrap-3.3.4-dist\css\bootstrap.css" />
