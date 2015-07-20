@@ -1,4 +1,11 @@
-﻿$(document).ready(function () { ShowResults() });
+﻿$(document).ready(function ()
+{
+    $('body').scroll(function () {
+        $('#content').animate({ top: $(this).scrollTop() });
+    });
+    ShowResults();
+
+});
 
 var coursesArrayResult = [];
 var teachersArrayResult = [];
@@ -237,37 +244,40 @@ function showTeachersData(arrayResult) {
     var uri = '/api/Teachers/GetAllSearchedTeachers';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
-    $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
+    $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
     for (i in arrayResult) {
-                    var teacherData = $('<p />');
-                    teacherData.addClass("lecturerData");
+        var teacherData = document.createElement('div');
+        //courseData.id = 'teacherData';
+        teacherData.className = 'teacherData';
+                    
 
                     //adding teacher image
                     var img = new Image();
                     img.id = 'Img';
                     img.src = 'teacherImg.jpg';
-                    teacherData.append(img);
+                    teacherData.appendChild(img);
 
                    // new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     //the teacher name
-                    var a = $('<a />');
-                    a.attr('href', "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id);
-
-                    a.text(arrayResult[i].Name);
-                    teacherData.append(a);
+                    var a = document.createElement('a');
+                    var linkText = document.createTextNode(arrayResult[i].Name);
+                    a.title = arrayResult[i].Name;
+                    a.href = "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id;
+                    a.appendChild(linkText);
+                    teacherData.appendChild(a);
 
                     //new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     var Score = document.createTextNode(arrayResult[i].Score);
-                    teacherData.append(Score);
+                    teacherData.appendChild(Score);
 
                     //new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     //adding the courses
                     for (l in arrayResult[i].Courses) {
@@ -277,77 +287,85 @@ function showTeachersData(arrayResult) {
                         else {
                             var Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
                         }
-                        teacherData.append(Course);
+                        teacherData.appendChild(Course);
                     } 
                     $("#content").append(teacherData);
-                }
+                    $("#content").append(newLine);
+    }
 }
+
+
 
 function showCoursesData(arrayResult) {
     var uri = '/api/Courses/GetAllSearchedCourses';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
-    $("#resultAdd").text('Cant find the requested course? CLICK HERE to add');
+    $("#resultAdd").text('לא מצאת את הקורס המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
     for (i in arrayResult) {
-        var courseData = $('<p />');
-        courseData.addClass("courseData");
+        var courseData = document.createElement('div');
+        //courseData.id = 'courseData';
+        courseData.className = 'courseData';
 
         //adding course image
         var img = new Image();
         img.id = 'Img';
         img.src = 'courseImg.jpg';
-        courseData.append(img);
+        courseData.appendChild(img);
 
         //new line
-        courseData.append(newLine);
-
+        courseData.appendChild(document.createElement("br"));
         //the course name
-        var a = $('<a />');
-        a.attr('href', "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id);
-        a.text(arrayResult[i].Name);
-        courseData.append(a);
+        var a = document.createElement('a');
+        var linkText = document.createTextNode(arrayResult[i].Name);
+        a.title = arrayResult[i].Name;
+        a.href = "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id;
+        a.appendChild(linkText);
+        courseData.appendChild(a);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode(arrayResult[i].Score);
-        courseData.append(Score);
+        courseData.appendChild(Score);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         //is mandatory
         var isMandatory = arrayResult[i].IsMandatory;
         var mandatory;
         if (isMandatory == false) {
             mandatory = document.createTextNode('קורס בחירה');
-            courseData.append(mandatory);
+            courseData.appendChild(mandatory);
         }
         else {
             mandatory = document.createTextNode('קורס חובה');
-            courseData.append(mandatory);
+            courseData.appendChild(mandatory);
         }
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         //the course year
         var year = document.createTextNode(arrayResult[i].Year);
-        courseData.append(year.data);
+        courseData.appendChild(year);
 
         //new line
-        courseData.append(newLine);
+       courseData.appendChild(document.createElement("br"));
 
 
         //adding the faculty
         var Faculty = document.createTextNode(arrayResult[i].Faculty);
-        courseData.append(Faculty);
+        courseData.appendChild(Faculty);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         $("#content").append(courseData);
+        $("#content").append(newLine);
     }
+
+
 }
