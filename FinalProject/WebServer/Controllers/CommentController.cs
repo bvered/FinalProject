@@ -13,6 +13,8 @@ namespace WebServer.Controllers
 {
     public class CommentController : ApiController
     {
+        [HttpPost]
+        [ActionName("AddVote")]
         public IHttpActionResult Vote([FromBody] VoteCommand vote)
         {
             using (var session = DBHelper.OpenSession())

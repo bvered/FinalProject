@@ -74,6 +74,34 @@ function loadCourse() {
     return succeed;
 }
 
+function addVote(voteValueLabel, id, like) {
+    succeed = false;
+    var vote = {
+        commentId: id,
+        liked: like,
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(comment),
+        url: uri5,
+        contentType: "application/json",
+        success: function (data) {
+            voted = 1;
+            if (like == false) {
+                voted = -1;
+            }
+            voteValueLabel.innerHTML = parseInt(voteValueLabel.innerHTML) + voted;
+
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("נכשל: " + textStatus);
+        },
+        async: false
+    });
+    return succeed;
+}
+
+
 function printCourseInfo() {
     printCourseProperties();
     showCommentOptions();
@@ -83,39 +111,52 @@ function printCourseInfo() {
 function printCourseProperties() {
     var courseNameLabel = document.createElement("Label");
     courseNameLabel.id = "propertyLabelCourseName";
-    courseNameLabel.innerHTML = "Course name: " + course.Name;
+    courseNameLabel.innerHTML = "שם קורס: " + course.Name;
     CourseInfoDiv.appendChild(courseNameLabel);
     CourseInfoDiv.appendChild(document.createElement('br'));
 
     var courseScoreLabel = document.createElement("Label");
     courseScoreLabel.id = "propertyLabelCourseScore";
-    courseScoreLabel.innerHTML = "Course average score: " + course.Score;
+    courseScoreLabel.innerHTML = "ממוצע דירוגים: " + course.Score;
     CourseInfoDiv.appendChild(courseScoreLabel);
     CourseInfoDiv.appendChild(document.createElement('br'));
-}
 
-function showCourseUniversity() {
-    var universityLabel = document.createElement("Label");
-    universityLabel.id = "universityLabel";
-    universityLabel.innerHTML = "University: ";
-    CourseInfoDiv.appendChild(universityLabel);
-    var universityLink = document.createElement("a");
-    universityLink.href = '/University/University.html/' + course.University.Id;
-    universityLink.innerHTML = course.University.Name;
-    CourseInfoDiv.appendChild(universityLink);
+    var courseFacultyLabel = document.createElement("Label");
+    courseFacultyLabel.id = "propertyLabelCourseScore";
+    courseFacultyLabel.innerHTML = "פקולטה: " + course.Faculty;
+    CourseInfoDiv.appendChild(courseFacultyLabel);
+    CourseInfoDiv.appendChild(document.createElement('br'));
+
+    var courseMandtoryLabel = document.createElement("Label");
+    courseMandtoryLabel.id = "propertyLabelCourseScore";
+    courseMandtoryLabel.innerHTML = "חובה: " + course.IsMandatory;
+    CourseInfoDiv.appendChild(courseMandtoryLabel);
+    CourseInfoDiv.appendChild(document.createElement('br'));
+
+    var courseAcademicDegreeLabel = document.createElement("Label");
+    courseAcademicDegreeLabel.id = "propertyLabelCourseScore";
+    courseAcademicDegreeLabel.innerHTML = "תואר: " + course.AcademicDegree;
+    CourseInfoDiv.appendChild(courseAcademicDegreeLabel);
+    CourseInfoDiv.appendChild(document.createElement('br'));
+
+    var courseIntendedYearLabel = document.createElement("Label");
+    courseIntendedYearLabel.id = "propertyLabelCourseScore";
+    courseIntendedYearLabel.innerHTML = "שנה: " + course.IntendedYear;
+    CourseInfoDiv.appendChild(courseIntendedYearLabel);
     CourseInfoDiv.appendChild(document.createElement('br'));
 }
 
 function showCourseComments() {
     var commentsLabel = document.createElement("Label");
     commentsLabel.id = "commentsLabel";
-    commentsLabel.innerHTML = "Comments";
+    commentsLabel.innerHTML = "תגובות";
     CommentsDiv.appendChild(commentsLabel);
     CommentsDiv.appendChild(document.createElement('br'));
 
-    var allComments = course.CourseComments;
-    for (comment in allComments) {
-        printComment(allComments[comment], comment);
+    for (courseSemester in course.CourseInSemesters) {
+        for (comment in course.CourseInSemesters[courseSemester].CourseComments) {
+            printComment(course.CourseInSemesters[courseSemester].CourseComments[comment], comment);
+        }
     }
 }
 
@@ -125,6 +166,27 @@ function printComment(comment, itr) {
     commentBox.id = "CourseCommet" + itr;
     CommentsDiv.appendChild(commentBox);
     CommentsDiv.appendChild(document.createElement('br'));
+
+    var numberOfVotes = document.createElement("Label");
+    numberOfVotes.id = "CommentNumber" + itr + "Votes";
+    numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
+    var voteUpButton = document.createElement("Button");
+    voteUpButton.id = "CommentNumber" + itr + "VoteUp";
+    voteUpButton.value = comment.id;
+    var voteUpFunctionString = function () { addVote(numberOfVotes, comment.id, true); };
+    voteUpButton.onclick = voteUpFunctionString;
+    voteUpButton.innerHTML = "Like";
+    var voteDownButton = document.createElement("Button");
+    voteDownButton.id = "CommentNumber" + itr + "VoteDown";
+    voteDownButton.value = comment.id;
+    var voteDownFunctionString = function () { addVote(numberOfVotes, comment.id, false); };
+    voteDownButton.onclick = voteDownFunctionString;
+    voteDownButton.innerHTML = "Dislike";
+    CommentsDiv.appendChild(voteDownButton);
+    CommentsDiv.appendChild(numberOfVotes);
+    CommentsDiv.appendChild(voteUpButton);
+    CommentsDiv.appendChild(document.createElement('br'));
+
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
             var ratingString = loadedComment.Criteria.DisplayName;
@@ -146,8 +208,17 @@ function printComment(comment, itr) {
 }
 
 function showCommentOptions() {
+    removingAllContentOfDiv(NewCourseCommentDiv);
+    var addNewCommentButton = document.createElement("Button");
+    addNewCommentButton.innerHTML = "הוסף תגובה חדשה";
+    addNewCommentButton.onclick = revealAddCommentViewToUser;
+    NewCourseCommentDiv.appendChild(addNewCommentButton);
+    NewCourseCommentDiv.appendChild(document.createElement("BR"));}
+
+function revealAddCommentViewToUser() {
+    removingAllContentOfDiv(NewCourseCommentDiv);
     var commentBox = document.createElement("textarea");
-    commentBox.placeholder = "Add new comment..";
+    commentBox.placeholder = "תגובה חדשה..";
     commentBox.id = "CourseNewCommetBox";
     NewCourseCommentDiv.appendChild(commentBox);
     NewCourseCommentDiv.appendChild(document.createElement('br'));
@@ -170,12 +241,14 @@ function showCommentOptions() {
         NewCourseCommentDiv.appendChild(document.createElement("BR"));
     }
     var courseSemesters = document.createElement("SELECT");
+    courseSemesters.id = "courseSemesters";
     for (semester in course.CourseInSemesters) {
         var semesterOption = document.createElement("option");
-        option.text = course.CourseInSemesters[semester].Year + " " + course.CourseInSemesters[semester].Semester;
-        option.value = course.CourseInSemesters[semester].Id
-        courseSemesters.add(option);
+        semesterOption.text = course.CourseInSemesters[semester].Year + " " + course.CourseInSemesters[semester].Semester;
+        semesterOption.value = course.CourseInSemesters[semester].Id
+        courseSemesters.add(semesterOption);
     }
+    NewCourseCommentDiv.appendChild(courseSemesters);
     var sendButton = document.createElement("BUTTON");
     sendButton.innerHTML = "Add";
     sendButton.onclick = addComment;
@@ -185,7 +258,7 @@ function showCommentOptions() {
 function showLoadingCourseFailed() {
     var failedSearchLabel = document.createElement("Label");
     failedSearchLabel.id = "failedSearchLabel";
-    failedSearchLabel.innerHTML = "Failed to find user, re-directing to homepage";
+    failedSearchLabel.innerHTML = "קורס לא נמצא, הנך מועבר לעמוד הראשי.";
     CourseInfoDiv.appendChild(failedSearchLabel);
 }
 
@@ -198,7 +271,7 @@ function addComment() {
     if (document.getElementById("courseSemesters") == null) {
         semester = "";
     } else {
-        prodValue = document.getElementById("courseSemesters").value;
+        semester = document.getElementById("courseSemesters").value;
     }
     var comment = {
         Id: course.Id,
@@ -212,7 +285,7 @@ function addComment() {
         url: uri2,
         contentType: "application/json",
         success: function (data) {
-            alert("New comment added!");
+            alert("תגובך הוספה בהצלחה!");
             location.reload();
         },
         fail: function (jqXhr, textStatus) {
@@ -220,19 +293,10 @@ function addComment() {
         },
         async: false
     });
-    removingAllContentOfDiv(newCommentDiv);
-}
-
-function insertAddCommentButton() {
-    removingAllContentOfDiv(CommentsDiv);
-    var addButton = document.createElement("BUTTON");
-    sendButton.innerHTML = "Comment";
-    sendButton.onclick = addComment;
-    CommentsDiv.appendChild(sendButton);
 }
 
 function removingAllContentOfDiv(div) {
     while (div.hasChildNodes()) {
-        node.removeChild(div.lastChild);
+        div.removeChild(div.lastChild);
     }
 }

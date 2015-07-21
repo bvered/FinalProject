@@ -78,7 +78,7 @@ function addVote(voteValueLabel ,id, like) {
         liked: like,
     };
     var request = $.ajax({
-        type: "GET",
+        type: "POST",
         data: JSON.stringify(comment),
         url: uri5,
         contentType: "application/json",
@@ -92,18 +92,6 @@ function addVote(voteValueLabel ,id, like) {
         },
         fail: function (jqXhr, textStatus) {
             alert("נכשל: " + textStatus);
-        },
-        async: false
-    });
-    var request = $.ajax({
-        type: "GET",
-        url: uri5 + "/" + id,
-        contentType: "application/json",
-        success: function (data) {
-            succeed = true;
-        },
-        fail: function (data) {
-            succeed = false;
         },
         async: false
     });
@@ -174,12 +162,12 @@ function printComment(comment, itr) {
     var voteUpButton = document.createElement("Button");
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
     voteUpButton.value = comment.id;
-    voteUpButton.onclick = addVote(numberOfVotes, voteUpButton.value, true);
+    voteUpButton.onclick = function () { addVote(numberOfVotes, comment.id, true); };
     voteUpButton.innerHTML = "Like";
     var voteDownButton = document.createElement("Button");
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
     voteDownButton.value = comment.id;
-    voteDownButton.onclick = addVote(numberOfVotes, voteDownButton.value, false);
+    voteDownButton.onclick = function () { addVote(numberOfVotes, comment.id, false); };
     voteDownButton.innerHTML = "Dislike";
     teacherCommentsDiv.appendChild(voteDownButton);
     teacherCommentsDiv.appendChild(numberOfVotes);
@@ -268,9 +256,7 @@ function addComment() {
         contentType: "application/json",
         success: function (data) {
             alert("תגובתך הוספה בהצלחה");
-            numberOfCommentsLoaded = numberOfCommentsLoaded + 1;
-            printComment(data, numberOfCommentsLoaded);
-            showCommentOptions();
+            location.reload();
         },
         fail: function (jqXhr, textStatus) {
             alert("נכשל: " + textStatus);

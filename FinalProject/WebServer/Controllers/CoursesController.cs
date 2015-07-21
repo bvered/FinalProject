@@ -149,25 +149,17 @@ namespace WebServer.Controllers
             {
                 Guid semesterGuid;
                 var didSemesterGuidParseSucceed = Guid.TryParse(comment.SemseterId, out semesterGuid);
-
                 var courseInSemester = didSemesterGuidParseSucceed ? session.Load<CourseInSemester>(semesterGuid) : null;
-
-                if (courseInSemester == null)
-                {
+                if (courseInSemester == null) {
                     return NotFound();
                 }
-
                 var courseCriterias = session.QueryOver<CourseCriteria>().List();
-
                 var ratings = new List<CourseCriteriaRating>();
-
-                var newComment = new CourseComment
-                {
+                var newComment = new CourseComment {
                     CommentText = comment.Comment,
                     CriteriaRatings = ratings,
                     DateTime = DateTime.Now
                 };
-
                 for (int index = 0; index < comment.Ratings.Count; index++)
                 {
                     newComment.CriteriaRatings.Add(new CourseCriteriaRating
