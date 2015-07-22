@@ -80,8 +80,10 @@ function getTeacherData(query_string) {
         success: function (data) {
             if (data.length == 0) {
                 $("#NoMatches")[0].hidden = false;
+                $("#footer").hide();
             }
             else {
+                $("#footer").show();
                 showTeachersData(data);
             }
             succeed = true;
@@ -145,8 +147,10 @@ function getCourseData(query_string) {
         }
         if (arrayResult.length == 0) {
             $("#NoMatches")[0].hidden = false;
+            $("#footer").hide();
         }
         else {
+            $("#footer").show();
             showCoursesData(arrayResult);
         }
     });
@@ -176,21 +180,25 @@ function getAllData(query_string) {
 
            if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
                $("#filter").show();
+               $("#footer").show();
                showTeachersData(teachersArrayResult);
                showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
                 $("#filter").show();
+                $("#footer").show();
                 showTeachersData(teachersArrayResult);                
             }
             else if(coursesArrayResult.length > 0 && teachersArrayResult.length == 0){ // we found several matches in courses
                 $("#filter").show();
+                $("#footer").show();
                 showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
             {// we didnt found any match
                 $("#filter").hide();
                 $("#NoMatches")[0].hidden = false;
+                $("#footer").hide();
                 
             }
         });       
@@ -273,14 +281,17 @@ function showTeachersData(arrayResult) {
                     //new line
                     teacherData.appendChild(document.createElement("br"));
 
-                    var Score = document.createTextNode(arrayResult[i].Score);
+                    var Score = document.createTextNode('ניקוד: '+arrayResult[i].Score);
                     teacherData.appendChild(Score);
 
                     //new line
                     teacherData.appendChild(document.createElement("br"));
 
                     //adding the courses
+                    var Teach = document.createTextNode('קורסים: ');
+                    teacherData.appendChild(Teach);
                     for (l in arrayResult[i].Courses) {
+                        
                         if (l == arrayResult[i].Courses.length - 1) {
                             var Course = document.createTextNode('.' + arrayResult[i].Courses[l]);
                         }
@@ -327,7 +338,7 @@ function showCoursesData(arrayResult) {
         //new line
         courseData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode(arrayResult[i].Score);
+        var Score = document.createTextNode('ניקוד: '+arrayResult[i].Score);
         courseData.appendChild(Score);
 
         //new line
@@ -337,11 +348,11 @@ function showCoursesData(arrayResult) {
         var isMandatory = arrayResult[i].IsMandatory;
         var mandatory;
         if (isMandatory == false) {
-            mandatory = document.createTextNode('קורס בחירה');
+            mandatory = document.createTextNode('מסגרת: קורס בחירה');
             courseData.appendChild(mandatory);
         }
         else {
-            mandatory = document.createTextNode('קורס חובה');
+            mandatory = document.createTextNode('מסגרת: קורס חובה');
             courseData.appendChild(mandatory);
         }
 
@@ -349,7 +360,7 @@ function showCoursesData(arrayResult) {
         courseData.appendChild(document.createElement("br"));
 
         //the course year
-        var year = document.createTextNode(arrayResult[i].Year);
+        var year = document.createTextNode('שנה: '+arrayResult[i].Year);
         courseData.appendChild(year);
 
         //new line
@@ -357,7 +368,7 @@ function showCoursesData(arrayResult) {
 
 
         //adding the faculty
-        var Faculty = document.createTextNode(arrayResult[i].Faculty);
+        var Faculty = document.createTextNode('פקולטה: '+arrayResult[i].Faculty);
         courseData.appendChild(Faculty);
 
         //new line

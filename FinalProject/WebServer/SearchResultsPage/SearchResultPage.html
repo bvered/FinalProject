@@ -27,6 +27,7 @@
 
     <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
     <br />
+        
 
     <div id="filter" hidden="true">
         <select id="DropdownFilter" onchange="filterByParameter();">
@@ -35,14 +36,13 @@
         <option value="Courses">קורסים</option>
         </select>
     </div>
-
+          <div id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!<br /><a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a></div>
     <br />
    
     <div id="content"></div>
 
-    <label id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!</label>
     </div>
-    <footer>
+    <footer id="footer" hidden="true">
         <a href="#" id="resultAdd"></a> 
     </footer>
 </body>
