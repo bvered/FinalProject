@@ -22,8 +22,6 @@ $.getJSON(uri3).done(function(data) {
 function checkAndAdd() {
     if (allTeachers.indexOf($("#TeacherName").val()) >= 0) { //if the teacher already exists
         $("#TeacherExists")[0].hidden = false;
-        $("#TeachersLink")[0].hidden = false;
-        $("#TeachersLink")[0].href = "#"+ $("#TeacherName").val();
     } else { //if we can add the new teacher
         hideAllLabels();
         addTeacher($("#TeacherName").val());
@@ -76,5 +74,4 @@ function addTeacher(teacherName, teacherRoom, teacherPhone, teacherEmail) {
 
 function hideAllLabels() {
     $("#TeacherExists")[0].hidden = true;
-    $("#TeachersLink")[0].hidden = true;
 }

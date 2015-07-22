@@ -1,4 +1,14 @@
-﻿$(document).ready(function () { ShowResults() });
+﻿$(document).ready(function ()
+{
+    $('body').scroll(function () {
+        $('#content').animate({ top: $(this).scrollTop() });
+    });
+    ShowResults();
+
+});
+
+var coursesArrayResult = [];
+var teachersArrayResult = [];
 
 function ShowResults() {
 
@@ -143,8 +153,6 @@ function getCourseData(query_string) {
 }
 
 function getAllData(query_string) {
-    var coursesArrayResult = [];
-    var teachersArrayResult = [];
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses';
     var arrayResult = [];
@@ -167,24 +175,21 @@ function getAllData(query_string) {
             $("#filter").css({ "display": "block" });
 
            if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
-               $("#filter")[0].hidden = false;
-               filterByParameter(coursesArrayResult, teachersArrayResult);
+               $("#filter").show();
                showTeachersData(teachersArrayResult);
                showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
-                $("#filter")[0].hidden = false;
-                filterByParameter(coursesArrayResult, teachersArrayResult);
+                $("#filter").show();
                 showTeachersData(teachersArrayResult);                
             }
             else if(coursesArrayResult.length > 0 && teachersArrayResult.length == 0){ // we found several matches in courses
-                $("#filter")[0].hidden = false;
-                filterByParameter(coursesArrayResult, teachersArrayResult);
+                $("#filter").show();
                 showCoursesData(coursesArrayResult);
             }
             else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
             {// we didnt found any match
-                $("#filter")[0].hidden = true;
+                $("#filter").hide();
                 $("#NoMatches")[0].hidden = false;
                 
             }
@@ -192,22 +197,20 @@ function getAllData(query_string) {
     });
 }
 
-function filterByParameter(coursesArrayResult, teachersArrayResult) {
-
-    $("#TeachresFilter").click(function () { filterByTeachers(teachersArrayResult); });
-
-    $("#CoursesFilter").click(function () { filterByCourses(coursesArrayResult); });
-
-    $("#NoFilter").click(function () { showAllWithoutFilter(coursesArrayResult, teachersArrayResult); });
-
+function filterByParameter() {
+    var filterBy = document.getElementById("DropdownFilter").value;
+    if (filterBy == "All") {
+        showAllWithoutFilter(coursesArrayResult, teachersArrayResult);
+    } else if (filterBy == "Teachers") {
+        filterByTeachers(teachersArrayResult);
+    } else if (filterBy == "Courses") {
+        filterByCourses(coursesArrayResult);
+    }
 }
 
 function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", false);
-    $("#CoursesFilter").prop("disabled", false);
-    $("#NoFilter").prop("disabled", true);
     if (teachersArrayResult.length != 0) {
         showTeachersData(teachersArrayResult);
     }
@@ -219,18 +222,12 @@ function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
 function filterByTeachers(arrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", true);
-    $("#CoursesFilter").prop("disabled", false);
-    $("#NoFilter").prop("disabled", false);
     showTeachersData(arrayResult);
 }
 
 function filterByCourses(arrayResult) {
     //clear all the results
     clearResults();
-    $("#TeachresFilter").prop("disabled", false);
-    $("#CoursesFilter").prop("disabled", true);
-    $("#NoFilter").prop("disabled", false);
     if (arrayResult.length != 0) {
         showCoursesData(arrayResult);
     }
@@ -247,38 +244,40 @@ function showTeachersData(arrayResult) {
     var uri = '/api/Teachers/GetAllSearchedTeachers';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html"); 
-    $("#resultAdd").text('Cant find the requested teacher? CLICK HERE to add');
+    $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
-    $("#SmartSearch").css({ "visibility": "hidden", "display": "none" });
 
     for (i in arrayResult) {
-                    var teacherData = $('<p />');
-                    teacherData.addClass("lecturerData");
+        var teacherData = document.createElement('div');
+        //courseData.id = 'teacherData';
+        teacherData.className = 'teacherData';
+                    
 
                     //adding teacher image
                     var img = new Image();
                     img.id = 'Img';
                     img.src = 'teacherImg.jpg';
-                    teacherData.append(img);
+                    teacherData.appendChild(img);
 
                    // new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     //the teacher name
-                    var a = $('<a />');
-                    a.attr('href', "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id);
-
-                    a.text(arrayResult[i].Name);
-                    teacherData.append(a);
+                    var a = document.createElement('a');
+                    var linkText = document.createTextNode(arrayResult[i].Name);
+                    a.title = arrayResult[i].Name;
+                    a.href = "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id;
+                    a.appendChild(linkText);
+                    teacherData.appendChild(a);
 
                     //new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     var Score = document.createTextNode(arrayResult[i].Score);
-                    teacherData.append(Score);
+                    teacherData.appendChild(Score);
 
                     //new line
-                    teacherData.append(newLine);
+                    teacherData.appendChild(document.createElement("br"));
 
                     //adding the courses
                     for (l in arrayResult[i].Courses) {
@@ -288,102 +287,85 @@ function showTeachersData(arrayResult) {
                         else {
                             var Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
                         }
-                        teacherData.append(Course);
-                    }
-
-        //  $('body').append(teacherData);    
+                        teacherData.appendChild(Course);
+                    } 
                     $("#content").append(teacherData);
-                }
+                    $("#content").append(newLine);
+    }
 }
+
+
 
 function showCoursesData(arrayResult) {
     var uri = '/api/Courses/GetAllSearchedCourses';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
-    $("#resultAdd").text('Cant find the requested course? CLICK HERE to add');
+    $("#resultAdd").text('לא מצאת את הקורס המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
-    $("#SmartSearch").css({ "visibility": "visible", "display": "block" });
+
     for (i in arrayResult) {
-        var courseData = $('<p />');
-        courseData.addClass("lecturerData");
+        var courseData = document.createElement('div');
+        //courseData.id = 'courseData';
+        courseData.className = 'courseData';
 
         //adding course image
         var img = new Image();
         img.id = 'Img';
         img.src = 'courseImg.jpg';
-        courseData.append(img);
+        courseData.appendChild(img);
 
         //new line
-        courseData.append(newLine);
-
+        courseData.appendChild(document.createElement("br"));
         //the course name
-        var a = $('<a />');
-        a.attr('href', "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id);
-        a.text(arrayResult[i].Name);
-        courseData.append(a);
+        var a = document.createElement('a');
+        var linkText = document.createTextNode(arrayResult[i].Name);
+        a.title = arrayResult[i].Name;
+        a.href = "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id;
+        a.appendChild(linkText);
+        courseData.appendChild(a);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode(arrayResult[i].Score);
-        courseData.append(Score);
+        courseData.appendChild(Score);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         //is mandatory
         var isMandatory = arrayResult[i].IsMandatory;
         var mandatory;
         if (isMandatory == false) {
             mandatory = document.createTextNode('קורס בחירה');
-            courseData.append(mandatory);
+            courseData.appendChild(mandatory);
         }
         else {
             mandatory = document.createTextNode('קורס חובה');
-            courseData.append(mandatory);
+            courseData.appendChild(mandatory);
         }
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
         //the course year
         var year = document.createTextNode(arrayResult[i].Year);
-        courseData.append(year.data);
+        courseData.appendChild(year);
 
         //new line
-        courseData.append(newLine);
+       courseData.appendChild(document.createElement("br"));
 
 
         //adding the faculty
         var Faculty = document.createTextNode(arrayResult[i].Faculty);
-        courseData.append(Faculty);
+        courseData.appendChild(Faculty);
 
         //new line
-        courseData.append(newLine);
+        courseData.appendChild(document.createElement("br"));
 
-        //   $('body').append(courseData);
         $("#content").append(courseData);
+        $("#content").append(newLine);
     }
-}
 
-function change1(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes1").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes1").attr('value', sellText);
-}
 
-function change2(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes2").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes2").attr('value', sellText);
-}
-
-function change3(choose) {
-    var sellText = $(choose).text().trim();
-    $("#dropDownRes3").html(sellText + '<span class=\caret\"></span>');
-    $("#dropDownRes3").attr('value', sellText);
-}
-
-function smartSearch() {
-    
 }

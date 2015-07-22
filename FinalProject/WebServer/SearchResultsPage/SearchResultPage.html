@@ -16,66 +16,32 @@
 
 <body dir="rtl">
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <form action="/HomePage/HomePage.html" method="GET">
+
+     <div class="background">
+        <header>
+            <div class="logo"></div>
+        </header>
 
 <script src="SearchResultPageJS.js"></script>
 
-        </form>
+
     <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
     <br />
-    <div id="filter">
-        <!--on click will be in the js -->
-        <button id ="TeachresFilter" >סנן לפי מרצים</button>
-        <button id ="CoursesFilter" >filter by courses</button>
-        <button id ="NoFilter" >show all results</button>
+
+    <div id="filter" hidden="true">
+        <select id="DropdownFilter" onchange="filterByParameter();">
+        <option value="All">הכל</option>
+        <option value="Teachers">מרצים</option>
+        <option value="Courses">קורסים</option>
+        </select>
     </div>
 
     <br />
-    <div id="SmartSearch" >
-
-  <div class="btn-group" role="group">
-      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Year" id="dropDownRes1" data-toggle="dropdown" aria-expanded="true">
-          שנה <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">א</a> </li>
-          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">ב</a> </li>
-          <li role="presentation" onclick="change1(this)"> <a role="menuitem" tabindex="-1">ג</a> </li>
-      </ul>
-  </div>
-
-        <div class="btn-group" role="group">
-      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Frame" id="dropDownRes2" data-toggle="dropdown" aria-expanded="true">
-          מסגרת <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-          <li role="presentation" onclick="change2(this)"> <a role="menuitem" tabindex="-1">חובה</a> </li>
-          <li role="presentation" onclick="change2(this)"> <a role="menuitem" tabindex="-1">בחירה</a> </li>
-      </ul>
-  </div>
-
-        <div class="btn-group" role="group">
-      <button class=" btn btn-default dropdown-toggle" style="float: none;" type="submit" value="Faculty" id="dropDownRes3" data-toggle="dropdown" aria-expanded="true">
-          פקולטה <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" role="menu">
-          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מדעי המחשב</a> </li>
-          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מדעי ההתנהגות</a> </li>
-          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">מערכות מידע</a> </li>
-          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">כלכלה</a> </li>
-          <li role="presentation" onclick="change3(this)"> <a role="menuitem" tabindex="-1">סיעוד</a> </li>
-      </ul>
-  </div>
-
-        <button type="button" class="btn btn-default" onclick="smartSearch()">חפש</button>
-
-        </div><br />
-
-
+   
     <div id="content"></div>
 
-    <label id="NoMatches" hidden="true" dir="rtl">!NO MATCHES FOUND</label>
-
+    <label id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!</label>
+    </div>
     <footer>
         <a href="#" id="resultAdd"></a> 
     </footer>
