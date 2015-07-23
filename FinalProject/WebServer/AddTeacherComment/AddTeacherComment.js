@@ -79,7 +79,7 @@ function addVote(voteValueLabel ,id, like) {
     };
     var request = $.ajax({
         type: "POST",
-        data: JSON.stringify(comment),
+        data: JSON.stringify(vote),
         url: uri5,
         contentType: "application/json",
         success: function (data) {

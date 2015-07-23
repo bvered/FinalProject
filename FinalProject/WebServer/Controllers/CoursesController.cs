@@ -11,7 +11,7 @@ namespace WebServer.Controllers
 {
     public class CoursesController : ApiController
     {
-        [HttpGet]
+      /*  [HttpGet]
         [ActionName("GetAllSearchedCourses")]
         public IList<ResultCourse> GetAllSearchedCourses()
         {
@@ -47,6 +47,49 @@ namespace WebServer.Controllers
                     result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.ToString(), course.Score, course.IsMandatory, returnYear));
                 }
 
+                return result;
+            }
+        }*/
+
+
+        [HttpGet]
+        [ActionName("GetAllSearchedCourses")]
+        public IList<ResultCourse> GetAllSearchedCourses([FromUri]string id)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                IList<Course> courses = session.QueryOver<Course>().List();
+                IList<ResultCourse> result = new List<ResultCourse>();
+
+                foreach (var course in courses)
+                {
+                    if (id == course.Name || (course.Name).IndexOf(id) >= 0 || ((course.Name).ToLower()).IndexOf(id) >= 0 || ((course.Name).ToLower()).IndexOf(id.ToLower()) >= 0)
+                    {
+                        string year = course.IntendedYear.ToString();
+                        string returnYear = "";
+                        switch (year)
+                        {
+                            case "Any":
+                                returnYear = "כל שנה";
+                                break;
+                            case "First":
+                                returnYear = "שנה ראשונה";
+                                break;
+                            case "Second":
+                                returnYear = "שנה שניה";
+                                break;
+                            case "Third":
+                                returnYear = "שנה שלישית";
+                                break;
+                            case "Forth":
+                                returnYear = "שנה רביעית";
+                                break;
+                        }
+
+
+                        result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.ToString(), course.Score, course.IsMandatory, returnYear));
+                    }
+                }
                 return result;
             }
         }

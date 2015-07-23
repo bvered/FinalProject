@@ -71,12 +71,12 @@ function getTeacherData(query_string) {
     $("#filter")[0].hidden = true;
     $("#filter").css({ "display": "none" });
     var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Teachers/GetAllSearchedTeachers/';//+ dataToSearch;
+    var uri = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
    
     var request = $.ajax({
         type: "GET",
         url: uri,
-        contentType: "application/json; charset=UTF-8",
+        contentType: "application/json",//; charset=UTF-8",
         success: function (data) {
             if (data.length == 0) {
                 $("#NoMatches")[0].hidden = false;
@@ -93,115 +93,88 @@ function getTeacherData(query_string) {
         },
        // async: false
     });
-
-    //var arrayResult = [];
-    /*$.getJSON(uri)
-    .done(function (data) {
-        if (data.length == 0) {
-        }
-        else {
-            showTeachersData(arrayResult);
-        }
-    });*/
-    
 }
-/*
-function getTeacherData(query_string) {
-    var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Teachers/GetAllSearchedTeachers';
-    var arrayResult = [];
-    $.getJSON(uri)
-    .done(function (data) {
-        for (i in data) {
-            if (dataToSearch == data[i].Name || data[i].Name.indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
-                arrayResult.push(data[i]);
-            }
-        }
-        if (arrayResult.length == 0) {
-            $("#NoMatches")[0].hidden = false;
-        }
 
-         //      if (arrayResult.length == 1) { 
-          //גיל .. תשנה איך שאתה רוצה שיקראו למשתנה GUID
-            //   window.location = '/AddTeacherComment/AddTeacherComment.html?search=Teachers&SearchText=' + arrayResult[0].Id;
-         //    }
-        else {
-            showTeachersData(arrayResult);
-        }
-    });
-}
-*/
 
 function getCourseData(query_string) {
     $("#filter")[0].hidden = true;
     $("#filter").css({"display": "none" });
     var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Courses/GetAllSearchedCourses';
-    var arrayResult = [];
-    $.getJSON(uri)
-    .done(function (data) {
-        for (i in data) {
-            if (dataToSearch == data[i].Name || data[i].Name.indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
-                arrayResult.push(data[i]);
+    var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch;
+
+    var request = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",//; charset=UTF-8",
+        success: function (data) {
+            if (data.length == 0) {
+                $("#NoMatches")[0].hidden = false;
+                $("#footer").hide();
             }
-        }
-        if (arrayResult.length == 0) {
-            $("#NoMatches")[0].hidden = false;
-            $("#footer").hide();
-        }
-        else {
-            $("#footer").show();
-            showCoursesData(arrayResult);
-        }
+            else {
+                $("#footer").show();
+                showCoursesData(data);
+            }
+            succeed = true;
+        },
+        fail: function (data) {
+            //   succeed = false;
+        },
+        // async: false
     });
 }
 
 function getAllData(query_string) {
     var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Courses/GetAllSearchedCourses';
-    var arrayResult = [];
-    $.getJSON(uri)
-    .done(function (data) {
-        for (i in data) { //search for courses
-            if (dataToSearch == data[i].Name || data[i].Name.indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
-                coursesArrayResult.push(data[i]);
-            }
-        }
+    var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch ;
 
-        uri = '/api/Teachers/GetAllSearchedTeachers';
-        $.getJSON(uri)
-        .done(function (data) {
-            for (i in data) { //search for teachers
-                if (dataToSearch == data[i].Name || data[i].Name.indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch) >= 0 || (data[i].Name.toLowerCase()).indexOf(dataToSearch.toLowerCase()) >= 0) {
-                    teachersArrayResult.push(data[i]);
-                }
-            }
-            $("#filter").css({ "display": "block" });
-
-           if(coursesArrayResult.length > 0 && teachersArrayResult.length > 0){ //we found matches in corses and teachers
-               $("#filter").show();
-               $("#footer").show();
-               showTeachersData(teachersArrayResult);
-               showCoursesData(coursesArrayResult);
-            }
-            else if(coursesArrayResult.length == 0 && teachersArrayResult.length > 0){ // we found several matches in teachers
-                $("#filter").show();
-                $("#footer").show();
-                showTeachersData(teachersArrayResult);                
-            }
-            else if(coursesArrayResult.length > 0 && teachersArrayResult.length == 0){ // we found several matches in courses
-                $("#filter").show();
-                $("#footer").show();
-                showCoursesData(coursesArrayResult);
-            }
-            else if(coursesArrayResult.length == 0 && teachersArrayResult.length == 0)
-            {// we didnt found any match
-                $("#filter").hide();
-                $("#NoMatches")[0].hidden = false;
-                $("#footer").hide();
-                
-            }
-        });       
+    var request = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",//; charset=UTF-8",
+        success: function (coursesArrayResultNew) {
+            coursesArrayResult = coursesArrayResultNew;
+            var uri2 = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
+            var request2 = $.ajax({
+                type: "GET",
+                url: uri2,
+                contentType: "application/json",//; charset=UTF-8",
+                success: function (teachersArrayResultNew) {
+                    teachersArrayResult = teachersArrayResultNew;
+                    if (coursesArrayResult.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
+                        $("#filter").show();
+                        $("#footer").show();
+                        showTeachersData(teachersArrayResult);
+                        showCoursesData(coursesArrayResult);
+                    }
+                    else if (coursesArrayResult.length == 0 && teachersArrayResult.length > 0) { // we found several matches in teachers
+                        $("#filter").show();
+                        $("#footer").show();
+                        showTeachersData(teachersArrayResult);
+                    }
+                    else if (coursesArrayResult.length > 0 && teachersArrayResult.length == 0) { // we found several matches in courses
+                        $("#filter").show();
+                        $("#footer").show();
+                        showCoursesData(coursesArrayResult);
+                    }
+                    else if (coursesArrayResult.length == 0 && teachersArrayResult.length == 0) {// we didnt found any match
+                        $("#filter").hide();
+                        $("#NoMatches")[0].hidden = false;
+                        $("#footer").hide();
+                    }
+                    succeed = true;
+                },
+                fail: function (data) {
+                    //   succeed = false;
+                },
+                // async: false
+            });
+            succeed = true;
+        },
+        fail: function (coursesArrayResult) {
+            //   succeed = false;
+        },
+        // async: false
     });
 }
 
