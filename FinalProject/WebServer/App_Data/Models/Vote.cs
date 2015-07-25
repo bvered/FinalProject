@@ -14,11 +14,11 @@ namespace WebServer.App_Data.Models
 
         public Vote()
         {
+
         }
 
         public Vote(bool liked)
         {
-            Id = new Guid();
             Liked = liked;
         }
     }

@@ -42,7 +42,7 @@ namespace WebServer.App_Data.Models
 
         public void addTeacherCommnet(TeacherComment tComment)
         {
-            TeacherComments.Add(tComment);
+            TeacherComments.Insert(0, tComment);
             AmountOfRating++;
             SumOfRating += tComment.GetCriteriaRatingSummed();
             Score = SumOfRating / AmountOfRating;

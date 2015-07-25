@@ -161,18 +161,15 @@ namespace WebServer.Controllers
                     CommentText = comment.Comment,
                     DateTime = DateTime.Now,
                 };
-
-                for (int index = 0; index < teacherCriterias.Count; index++)
+                var criteriasDisplayName = TeacherComment.GetTeacherCommentCriterias();
+                for (int index = 0; index < criteriasDisplayName.Count; index++)
                 {
-                    newComment.CriteriaRatings.Add(new TeacherCriteriaRating
-                    {
-                        Criteria = teacherCriterias[index],
-                        Rating = comment.Ratings[index]
-                    });
+                    newComment.CriteriaRatings.Add(new TeacherCriteriaRating(criteriasDisplayName[index], comment.Ratings[index]));
                 }
 
-                teacher.TeacherComments.Add(newComment);
-
+                teacher.addTeacherCommnet(newComment);
+                
+                session.Save(newComment);
                 session.Save(teacher);
                 transaction.Commit();
          
@@ -185,7 +182,37 @@ namespace WebServer.Controllers
         public IHttpActionResult GetAllCriterias() {
             using (var session = DBHelper.OpenSession())
             {
-                return Ok(session.Query<TeacherCriteria>().Select(x => x.DisplayName).ToList());
+                return Ok(TeacherComment.GetTeacherCommentCriterias());
+            }
+        }
+
+        [HttpPost]
+        [ActionName("AddVote")]
+        public IHttpActionResult Vote([FromBody] VoteCommand vote)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                Guid commentId;
+
+                if (!Guid.TryParse(vote.commentId, out commentId))
+                {
+                    return NotFound();
+                }
+
+                var comment = session.Get<TeacherComment>(commentId);
+
+                if (comment != null)
+                {
+                    Vote v = new Vote(vote.Liked);
+                    session.Save(v);
+                    comment.AddVote(v);
+                    session.Save(comment);
+                    transaction.Commit();
+                    return Ok(comment.TotalNumberOfLikes);
+                }
+
+                return NotFound();
             }
         }
     }
@@ -217,5 +244,11 @@ namespace WebServer.Controllers
         public string Id { get; set; }
         public List<int> Ratings { get; set; }
         public string Comment { get; set; }
+    }
+
+    public class VoteCommand
+    {
+        public string commentId { get; set; }
+        public bool Liked { get; set; }
     }
 }

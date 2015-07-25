@@ -1,7 +1,7 @@
 ﻿var uri = '/api/Teachers/GetCriterias';
 var uri2 = '/api/Teachers/AddComment';
 var uri4 = '/api/Teachers/GetTeacher';
-var uri5 = '/api/Comment/Vote';
+var uri5 = '/api/Teachers/AddVote';
 
 var teacher;
 var allCriterias;
@@ -79,15 +79,11 @@ function addVote(voteValueLabel ,id, like) {
     };
     var request = $.ajax({
         type: "POST",
-        data: JSON.stringify(comment),
+        data: JSON.stringify(vote),
         url: uri5,
         contentType: "application/json",
         success: function (data) {
-            voted = 1;
-            if (like == false) {
-                voted = -1;
-            }
-            voteValueLabel.innerHTML = parseInt(voteValueLabel.innerHTML) + voted;
+            voteValueLabel.innerHTML = "אהבו: " + data;
 
         },
         fail: function (jqXhr, textStatus) {
@@ -101,7 +97,7 @@ function addVote(voteValueLabel ,id, like) {
 function printInformationOfTeacher() {
     showTeacherInfoToUser();
     showCommentOptions();
-    showTeacherCommentsByTeacher();
+    showTeacherCommentsByTeacher(false);
 }
 
 function showTeacherInfoToUser() {
@@ -136,7 +132,8 @@ function showTeacherInfoToUser() {
     TeacherInfoDiv.appendChild(document.createElement('br'));
 }
 
-function showTeacherCommentsByTeacher() {
+function showTeacherCommentsByTeacher(sortByNew) {
+    removingAllContentOfDiv(teacherCommentsDiv);
     var commentsLabel = document.createElement("Label");
     commentsLabel.id = "commentsLabel";
     commentsLabel.innerHTML = "Comments";
@@ -144,6 +141,11 @@ function showTeacherCommentsByTeacher() {
     teacherCommentsDiv.appendChild(document.createElement('br'));
 
     var allComments = teacher.TeacherComments;
+    if(!sortByNew) {
+        allComments = allComments.sort(function (a, b) {
+            return b.TotalNumberOfLikes - a.TotalNumberOfLikes
+        });
+    }
     numberOfCommentsLoaded = allComments.length;
     for (comment = 0; comment < numberOfCommentsLoaded; comment++) {
         printComment(allComments[comment], comment);
@@ -151,28 +153,31 @@ function showTeacherCommentsByTeacher() {
 }
 
 function printComment(comment, itr) {
+    var commentViewDiv = document.createElement("div");
+    commentViewDiv.id = "commentViewDiv" + itr;
+    teacherCommentsDiv.appendChild(commentViewDiv);
     var commentBox = document.createElement("textarea");
     commentBox.placeholder = comment.CommentText;
     commentBox.id = "TeacherCommet" + itr;
-    teacherCommentsDiv.appendChild(commentBox);
+    commentViewDiv.appendChild(commentBox);
 
     var numberOfVotes = document.createElement("Label");
     numberOfVotes.id = "CommentNumber" + itr + "Votes";
     numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
     var voteUpButton = document.createElement("Button");
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
-    voteUpButton.value = comment.id;
-    voteUpButton.onclick = function () { addVote(numberOfVotes, comment.id, true); };
+    voteUpButton.value = comment.Id;
+    voteUpButton.onclick = function () { addVote(numberOfVotes, comment.Id, true); };
     voteUpButton.innerHTML = "Like";
     var voteDownButton = document.createElement("Button");
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
-    voteDownButton.value = comment.id;
-    voteDownButton.onclick = function () { addVote(numberOfVotes, comment.id, false); };
+    voteDownButton.value = comment.Id;
+    voteDownButton.onclick = function () { addVote(numberOfVotes, comment.Id, false); };
     voteDownButton.innerHTML = "Dislike";
-    teacherCommentsDiv.appendChild(voteDownButton);
-    teacherCommentsDiv.appendChild(numberOfVotes);
-    teacherCommentsDiv.appendChild(voteUpButton);
-    teacherCommentsDiv.appendChild(document.createElement('br'));
+    commentViewDiv.appendChild(voteDownButton);
+    commentViewDiv.appendChild(numberOfVotes);
+    commentViewDiv.appendChild(voteUpButton);
+    commentViewDiv.appendChild(document.createElement('br'));
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
@@ -185,9 +190,9 @@ function printComment(comment, itr) {
             labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
             labelForRatingNumber.innerHTML = loadedComment.Rating;
 
-            teacherCommentsDiv.appendChild(labelForRatingString);
-            teacherCommentsDiv.appendChild(labelForRatingNumber);
-            teacherCommentsDiv.appendChild(document.createElement('br'));
+            commentViewDiv.appendChild(labelForRatingString);
+            commentViewDiv.appendChild(labelForRatingNumber);
+            commentViewDiv.appendChild(document.createElement('br'));
     }
 }
 

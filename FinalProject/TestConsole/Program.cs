@@ -31,11 +31,11 @@ namespace TestConsole
             const Faculty computersFaculty = Faculty.ComputerScience;
             var teacherCritias = new[]
             {
-                new TeacherCriteria("Student- teacher relationship"),
-                new TeacherCriteria("Teaching ability"),
-                new TeacherCriteria("Teachers knowlegde level"),
-                new TeacherCriteria("The teacher Encouregment for self learning"),
-                new TeacherCriteria("The teacher interest level")
+                new TeacherCriteria("יחס לסטודנטים"),
+                new TeacherCriteria("רמת הוראה"),
+                new TeacherCriteria("ידע בקורס"),
+                new TeacherCriteria("דרקונים"),
+                new TeacherCriteria("התעניינות מרצה בקורס")
             };
 
             foreach (var teacherCriteria in teacherCritias)
@@ -63,17 +63,23 @@ namespace TestConsole
             var romina = new Teacher
             {
                 Name = "רומינה זיגדון",
-                TeacherComments =
-                {
-                    new TeacherComment
-                    {
-                        CommentText = "ממש עוזרת ללמוד",
-                        DateTime = DateTime.Now,
-                        Votes = new[] {new Vote(true)}
-                    }
-                }
-
+                Cellphone = "05x-xxxxxxx",
+                Email = "xxx@xxx.xxx",
+                Room = 232,
             };
+            TeacherComment rominaComment = new TeacherComment
+            {
+                CommentText = "ממש עוזרת ללמוד",
+                DateTime = DateTime.Now,
+            };
+            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[0].DisplayName, 5));
+            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[1].DisplayName, 4));
+            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[2].DisplayName, 3));
+            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[3].DisplayName, 2));
+            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[4].DisplayName, 1));
+            rominaComment.AddVote(new Vote(true));
+            romina.addTeacherCommnet(rominaComment);
+            
             var teachers = new[]
             {
                 romina,

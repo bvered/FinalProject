@@ -24,5 +24,16 @@ namespace WebServer.App_Data.Models
 
             return sum;
         }
+
+        public static List<string> GetTeacherCommentCriterias() {
+            return new List<string>
+            {
+                "יחס לסטודנטים",
+                "רמת הוראה",
+                "ידע בקורס",
+                "דרקונים",
+                "התעניינות מרצה בקורס",
+            };
+        }
     }
 }
