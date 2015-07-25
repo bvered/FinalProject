@@ -1,87 +1,171 @@
 <!DOCTYPE html>
 <html lang="he">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <meta name="viewport" content="user-scalable=yes, width=device-width" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-    
+
     <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script src="https://raw.github.com/andris9/jStorage/master/jstorage.js"></script>
-
+    <script src="https://rawgit.com/andris9/jStorage/master/jstorage.js"></script>
+    
+    <script src="SearchResultPageJS.js"></script>
     <head>
-    <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i">
-    <link href ="SearchResultPageCSS.css" rel ="stylesheet" type ="text/css" />
-    <title>Search Result</title>
-</head>
+        <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i">
+        <link href="SearchResultPageCSS.css" rel="stylesheet" type="text/css" />
+        <title>Search Result</title>
+    </head>
 
-<body dir="rtl">
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <body dir="rtl">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
-     <div class="background">
-        <header>
-            <div class="logo"></div>
-        </header>
-
-<script src="SearchResultPageJS.js"></script>
-
-
-    <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
-    <br />
-        
-    <div id="filter" hidden="true">
-        <select id="DropdownFilter" onchange="filterByParameter();">
-        <option value="All">הכל</option>
-        <option value="Teachers">מרצים</option>
-        <option value="Courses">קורסים</option>
-        </select>
-    </div>
-
-    <div id="smartSearch" hidden="true">
-        <select id="Degree">
-        <option value="first">תואר ראשון</option>
-        <option value="second">תואר שני</option>
-        </select>
-
-        <select id="Year">
-        <option value="A">א</option>
-        <option value="B">ב</option>
-        <option value="A">ג</option>
-        <option value="B">ד</option>
-        </select>
-        
-        <select id="Faculty">
-        <option value="ComputerSciences">מדעי המחשב</option>
-        <option value="Behavior">מדעי ההתנהגות</option>
-        <option value="InformationSystems">מערכות מידע</option>
-        <option value="Nursing">סיעוד</option>
-        <option value="ManagementAndEconomics">ניהול וכלכלה</option>
-        <option value="PoliticsAndSociety">חברה ופוליטיקה</option>
-        <option value="ConsultingAndOrganizationalDevelopment">ייעוץ ופיתוח ארגוני</option>
-        <option value="BusinessAdministration">מנהל עסקים</option>
-        <option value="Psychology">פסיכולוגיה</option>
-        </select>
-
-        <select id="IsMandatory">
-        <option value="Selection">בחירה</option>
-        <option value="Compulsory">חובה</option>
-        </select>
-
-        <button id="Search">חפש</button>
-    </div>
-
-          <div id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!<br /><a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a></div>
-    <br />
-   
-    <div id="content"></div>
-
-    </div>
-    <footer id="footer" hidden="true">
-        <a href="#" id="resultAdd"></a> 
-    </footer>
-</body>
+        <div class="background">
+            <header>
+                <div class="logo"></div>
+            </header>
+            <div class="advanced-filter">
+                <div class="filter-box">
+                    <span class="filter-title">סנן לפי</span>                    
+                    <ul id="DropdownFilter">
+                        <li>
+                            <input id="type[0]" name="type" value="All" type="radio" />
+                            <label for="type[0]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="type[1]" name="type" value="Teachers" type="radio" />
+                            <label for="type[1]">מרצים</label>
+                        </li>
+                        <li >                           
+                            <input id="type[2]" name="type" value="Courses" type="radio" />
+                            <label for="type[2]">קורסים</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-box">
+                    <span class="filter-title">מסגרת</span>
+                    <ul>
+                        <li>
+                            <input id="degree[All]" name="degree" value="" type="radio" />
+                            <label for="degree[All]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="degree[0]" name="degree" value="0" type="radio" />
+                            <label for="degree[0]">תואר ראשון</label>
+                        </li>
+                        <li>
+                            <input id="degree[1]" name="degree" value="1" type="radio" />
+                            <label for="degree[1]">תואר שני</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-box">
+                    <span class="filter-title">שנה</span>
+                    <ul>
+                        <li>
+                            <input id="year[All]" name="year" value="" type="radio" />
+                            <label for="year[All]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="year[0]" name="year" value="0" type="radio" />
+                            <label for="year[0]">מתאים לכל שנה</label>
+                        </li>
+                        <li>
+                            <input id="year[1]" name="year" value="1" type="radio" />
+                            <label for="year[1]">א</label>
+                        </li>
+                        <li>
+                            <input id="year[2]" name="year" value="2" type="radio" />
+                            <label for="year[2]">ב</label>
+                        </li>
+                        <li>
+                            <input id="year[3]" name="year" value="3" type="radio" />
+                            <label for="year[3]">ג</label>
+                        </li>
+                        <li>
+                            <input id="year[4]" name="year" value="4" type="radio" />
+                            <label for="year[4]">ד</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-box">
+                    <span class="filter-title">פקולטה</span>
+                    <ul>
+                        <li>
+                            <input id="faculty[All]" name="faculty" value="" type="radio" />
+                            <label for="faculty[All]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="faculty[0]" name="faculty" value="0" type="radio" />
+                            <label for="faculty[0]">מדעי המחשב</label>
+                        </li>
+                        <li>
+                            <input id="faculty[1]" name="faculty" value="1" type="radio" />
+                            <label for="faculty[1]">מדעי ההתנהגות</label>
+                        </li>
+                        <li>
+                            <input id="faculty[2]" name="faculty" value="2" type="radio" />
+                            <label for="faculty[2]">מערכות מידע</label>
+                        </li>
+                        <li>
+                            <input id="faculty[3]" name="faculty" value="3" type="radio" />
+                            <label for="faculty[3]">סיעוד</label>
+                        </li>
+                        <li>
+                            <input id="faculty[4]" name="faculty" value="4" type="radio" />
+                            <label for="faculty[4]">ניהול וכלכלה</label>
+                        </li>
+                        <li>
+                            <input id="faculty[5]" name="faculty" value="5" type="radio" />
+                            <label for="faculty[5]">חברה ופוליטיקה </label>
+                        </li>
+                        <li>
+                            <input id="faculty[6]" name="faculty" value="6" type="radio" />
+                            <label for="faculty[6]">ייעוץ ופיתוח ארגוני</label>
+                        </li>
+                        <li>
+                            <input id="faculty[7]" name="faculty" value="7" type="radio" />
+                            <label for="faculty[7]">מנהל עסקים </label>
+                        </li>
+                        <li>
+                            <input id="faculty[8]" name="faculty" value="8" type="radio" />
+                            <label for="faculty[8]">פסיכולוגיה</label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="filter-box">
+                    <span class="filter-title">קורס</span>
+                    <ul>
+                        <li>
+                            <input id="mandatory[0]" name="mandatory" value="" type="radio" />
+                            <label for="mandatory[0]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="mandatory[1]" name="mandatory" value="true" type="radio" />
+                            <label for="mandatory[1]">בחירה</label>
+                        </li>
+                        <li>
+                            <input id="mandatory[2]" name="mandatory" value="false" type="radio" />
+                            <label for="mandatory[2]">חובה</label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="results">
+                <div id="title">
+                    <label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br />
+                </div>
+                <div id="content">
+                </div>
+            </div>
+            <div id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!<br />
+                <a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a></div>
+        </div>
+        <footer id="footer" hidden="true">
+            <a href="#" id="resultAdd"></a>
+        </footer>
+    </body>
 </html>

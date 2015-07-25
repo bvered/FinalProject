@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using NHibernate.Dialect.Function;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -20,18 +17,12 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                IList<string> coursesNameList = session.QueryOver<Course>().Select(x => x.Name).List<string>();
-                IList<string> teachersNameList = session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
-                IList<string> resultList = new List<string>();
+                var coursesNameList = session.QueryOver<Course>().Select(x => x.Name).List<string>();
+                var teachersNameList = session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
 
-                foreach (var name in coursesNameList)
-                {
-                    resultList.Add(name);
-                }
-                foreach (var name in teachersNameList)
-                {
-                    resultList.Add(name);
-                }
+                var resultList = coursesNameList.ToList();
+
+                resultList.AddRange(teachersNameList);
 
                 return resultList;
             }
@@ -102,7 +93,7 @@ namespace WebServer.Controllers
                 return Ok(new CourseSearchResult
                 {
                     AllResults = courseResults,
-                    Preferences = searchPreferences
+                    SearchPreferences = searchPreferences
                 });
             }
         }
@@ -199,7 +190,7 @@ namespace WebServer.Controllers
         public class CourseSearchResult
         {
             public IList<CourseResult> AllResults { get; set; }
-            public SearchPreferences Preferences { get; set; }
+            public SearchPreferences SearchPreferences { get; set; }
         }
     }
 }

@@ -1,14 +1,9 @@
-﻿
-body 
-{
-	text-align: center;
-	margin: 0 auto;
-
+﻿body {
+    text-align: center;
+    margin: 0 auto;
 }
 
-a {
-    color: #1F72AC;
-}
+a { color: #1F72AC; }
 
 #content {
     height: 400px;
@@ -22,29 +17,29 @@ header .logo {
     margin: 0 auto;
 }
 
-.courseData ,.teacherData{
+.courseData, .teacherData {
     display: inline-block;
     background-color: #a1e1ed;
     width: 230px;
     height: 200px;
     border: 2px solid white;
     border-radius: 15px;
-    border-color:#5ab5ce;
+    border-color: #5ab5ce;
     text-align: center;
     
-    font-family:'Arial Unicode MS';
+    font-family: 'Arial Unicode MS';
 
     margin: 20px;
-    padding : 10px;
-
+    padding: 10px;
 }
-div.courseData:hover , div.teacherData:hover{
+
+div.courseData:hover, div.teacherData:hover {
     width: 230px;
     height: 200px;
     text-shadow: 0 0 5px #423D39;
-    color:#197759;
+    color: #197759;
     background-color: #77ffd4;
-    border-color:#a5e5b5;
+    border-color: #a5e5b5;
 }
 
 #DropdownFilter {
@@ -53,24 +48,23 @@ div.courseData:hover , div.teacherData:hover{
     font-size: 15px;
 }
 
-footer
-{
+footer {
     font-size: 15px;
     background: #e5fff6;
-    opacity:0.9;
+    opacity: 0.9;
     position: fixed;
     left: 0;
     bottom: 0;
     height: 50px;
     width: 100%;
-    overflow:hidden;
+    overflow: hidden;
     text-align: center;
 }
 
 .background {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 120%;
     opacity: 0.9;
     background: url('../Images/site_background.jpeg');
     background-repeat: no-repeat;
@@ -89,12 +83,71 @@ footer
 }
 
 #NoMatches {
-     width: 275px;
+    width: 275px;
     height: 80px;
     color: white;
     font-size: 25px;
     text-shadow: 0 0 10px black;
-      font-family:'Arial Unicode MS';
-    margin:  0 auto;
+    font-family: 'Arial Unicode MS';
+    margin: 0 auto;
+}
 
+ul {
+    margin: 0;
+    padding: 0;
+
+    list-style-type: none;
+}
+
+.advanced-filter {
+    float: right;
+    margin: 0 auto 0 auto;
+
+    /*display: none;*/
+}
+
+.advanced-filter .filter-box {
+    width: 140px;
+ 
+    border-radius: 10px;
+    background-color: white;
+
+    margin: 5px;
+}
+
+.advanced-filter .filter-box ul { margin: 0px; }
+
+.advanced-filter .filter-box ul li {
+    text-align: right;
+    padding-right: 10px;
+}
+
+.advanced-filter .filter-box .filter-title {
+    font-weight: bold;
+    color: white;
+    display: inline-block;
+    background: #4683B7;
+    width: 100%;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+
+    text-align: center;
+}
+
+
+.advanced-filter-link {
+    width: 100%;
+
+    text-align: center;
+
+    margin-top: 10px;
+}
+
+.advanced-filter-link button {
+    border: 0;
+
+    font-size: 13px;
+    font-weight: bold;
+
+    outline: none;
 }
