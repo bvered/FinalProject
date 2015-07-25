@@ -28,7 +28,6 @@
     <div id="title"><label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br /></div>
     <br />
         
-
     <div id="filter" hidden="true">
         <select id="DropdownFilter" onchange="filterByParameter();">
         <option value="All">הכל</option>
@@ -36,6 +35,40 @@
         <option value="Courses">קורסים</option>
         </select>
     </div>
+
+    <div id="smartSearch" hidden="true">
+        <select id="Degree">
+        <option value="first">תואר ראשון</option>
+        <option value="second">תואר שני</option>
+        </select>
+
+        <select id="Year">
+        <option value="A">א</option>
+        <option value="B">ב</option>
+        <option value="A">ג</option>
+        <option value="B">ד</option>
+        </select>
+        
+        <select id="Faculty">
+        <option value="ComputerSciences">מדעי המחשב</option>
+        <option value="Behavior">מדעי ההתנהגות</option>
+        <option value="InformationSystems">מערכות מידע</option>
+        <option value="Nursing">סיעוד</option>
+        <option value="ManagementAndEconomics">ניהול וכלכלה</option>
+        <option value="PoliticsAndSociety">חברה ופוליטיקה</option>
+        <option value="ConsultingAndOrganizationalDevelopment">ייעוץ ופיתוח ארגוני</option>
+        <option value="BusinessAdministration">מנהל עסקים</option>
+        <option value="Psychology">פסיכולוגיה</option>
+        </select>
+
+        <select id="IsMandatory">
+        <option value="Selection">בחירה</option>
+        <option value="Compulsory">חובה</option>
+        </select>
+
+        <button id="Search">חפש</button>
+    </div>
+
           <div id="NoMatches" hidden="true" dir="rtl">לא נמצאו תוצאות!<br /><a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a></div>
     <br />
    

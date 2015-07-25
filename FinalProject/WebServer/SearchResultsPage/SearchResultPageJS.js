@@ -98,7 +98,7 @@ function getTeacherData(query_string) {
 
 function getCourseData(query_string) {
     $("#filter")[0].hidden = true;
-    $("#filter").css({"display": "none" });
+    $("#filter").css({ "display": "none" });
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch;
 
@@ -110,9 +110,12 @@ function getCourseData(query_string) {
             if (data.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
+                
             }
             else {
                 $("#footer").show();
+                $("#smartSearch").show();
+                $("#Search").click(function () { SmartSearch(data); });
                 showCoursesData(data);
             }
             succeed = true;
@@ -124,6 +127,14 @@ function getCourseData(query_string) {
     });
 }
 
+function SmartSearch(data) {
+
+    var degree = $("#Degree").val();
+    var year = $("#Year").val();
+    var faculty = $("#Faculty").val();
+    var isMandatory = $("#IsMandatory").val();
+        
+}
 function getAllData(query_string) {
     var dataToSearch = query_string["SearchText"];
     var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch ;
