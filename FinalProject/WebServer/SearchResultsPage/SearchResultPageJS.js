@@ -10,21 +10,50 @@ var coursesArrayResult = [];
 var teachersArrayResult = [];
 
 function ShowResults() {
-
-    var arrayResult = [];
-    var isTeacher;
-
     var query_string = new Object();
     getQuertyString(query_string);
-
     createSearchText(query_string);
 
-    if (query_string["search"] === "הכל") {
-        getAllData(query_string);
-    } else if (query_string["search"] === "קורסים") {
-        getCourseData(query_string, arrayResult);
-    } else if (query_string["search"] === "מרצים") {
-        getTeacherData(query_string);
+    initFilterValues(query_string);
+
+    if (query_string["search"] === "All") {
+        getAllData();
+    } else if (query_string["search"] === "Courses") {
+        getCourseData();
+    } else if (query_string["search"] === "Teachers") {
+        getTeacherData();
+    }
+}
+
+function initFilterValues(query_string) {
+    var typeSelect = $('input:radio[name=type]');
+    if (typeSelect.is(':checked') === false) {
+        var valueString = '[value=' + query_string["search"] + ']';
+        typeSelect.filter(valueString).prop('checked', true);
+    }
+
+    var DegreeSelect = $('input:radio[name=degree]');
+    if (DegreeSelect.is(':checked') === false) {
+         valueString = '[value=' + query_string["degree"] + ']';
+        DegreeSelect.filter(valueString).prop('checked', true);
+    }
+
+    var FacultySelect = $('input:radio[name=faculty]');
+    if (FacultySelect.is(':checked') === false) {
+         valueString = '[value=' + query_string["faculty"] + ']';
+        FacultySelect.filter(valueString).prop('checked', true);
+    }
+
+    var MandatorySelect = $('input:radio[name=mandatory]');
+    if (MandatorySelect.is(':checked') === false) {
+        valueString = '[value=' + query_string["mandatory"] + ']';
+        MandatorySelect.filter(valueString).prop('checked', true);
+    }
+
+    var YearSelect = $('input:radio[name=year]');
+    if (YearSelect.is(':checked') === false) {
+        valueString = '[value=' + query_string["year"] + ']';
+        YearSelect.filter(valueString).prop('checked', true);
     }
 }
 
@@ -41,6 +70,7 @@ function createSearchText(query_string) {
     }
 
     query_string["SearchText"] = searchTextToReturn;
+    $("#searchText").attr('value', query_string["SearchText"]);
 }
 
 function getQuertyString(query_string) {
@@ -63,15 +93,13 @@ function getQuertyString(query_string) {
     }
 }
 
-//need to fix this func so it will get answer from the comtroller
-//right now the json gets 404 not found 
-function getTeacherData(query_string) {
-    var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
+function getTeacherData() {
+    var uri = '/api/Teachers/GetAllSearchedTeachers';
 
     var request = $.ajax({
-        type: "GET",
+        type: "POST",
         url: uri,
+        data: JSON.stringify($('#searchText').attr('value')),
         contentType: "application/json", //; charset=UTF-8",
         success: function(data) {
             if (data.length == 0) {
@@ -90,15 +118,15 @@ function getTeacherData(query_string) {
     });
 }
 
-function getCourseData(query_string) {
+function getCourseData() {
     var uri = '/api/SmartSearch/GetCourseByFilter';
 
     var searchCourse = {
-        SearchText: query_string["SearchText"],
-        Faculty: query_string["faculty"],
-        IsMandatory: query_string["mandatory"],
-        AcademicDegree: query_string["degree"],
-        IntendedYear: query_string["year"],
+        SearchText: $('#searchText').attr('value'),
+        Faculty: $('input[name=faculty]:checked').val(),
+        IsMandatory: $('input[name=mandatory]:checked').val(),
+        AcademicDegree: $('input[name=degree]:checked').val(),
+        IntendedYear: $('input[name=year]:checked').val(),
         SearchPreferences: $.jStorage.get("SearchPreferences")
     };
 
@@ -126,16 +154,16 @@ function getCourseData(query_string) {
     });
 }
 
-function getAllData(query_string) {
-    var dataToSearch = query_string["SearchText"];
+function getAllData() {
+    var searchText = $('#searchText').attr('value');
     var uri = '/api/SmartSearch/GetCourseByFilter';
 
     var searchCourse = {
-        SearchText: query_string["SearchText"],
-        Faculty: query_string["faculty"],
-        IsMandatory: query_string["mandatory"],
-        AcademicDegree: query_string["degree"],
-        IntendedYear: query_string["year"],
+        SearchText: searchText,
+        Faculty: $('input[name=faculty]:checked').val(),
+        IsMandatory: $('input[name=mandatory]:checked').val(),
+        AcademicDegree: $('input[name=degree]:checked').val(),
+        IntendedYear: $('input[name=year]:checked').val(),
         SearchPreferences: $.jStorage.get("SearchPreferences")
     };
     var request = $.ajax({
@@ -144,14 +172,15 @@ function getAllData(query_string) {
         data: JSON.stringify(searchCourse),
         contentType: "application/json", //; charset=UTF-8",
         success: function (coursesArrayResult) {
-            $.jStorage.set("SearchPreferences", data.SearchPreferences);
-            var uri2 = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
+            $.jStorage.set("SearchPreferences", coursesArrayResult.SearchPreferences);
+            var uri2 = '/api/Teachers/GetAllSearchedTeachers';
             var request2 = $.ajax({
-                type: "GET",
+                type: "POST",
                 url: uri2,
+                data: JSON.stringify(searchText),
                 contentType: "application/json", //; charset=UTF-8",
                 success: function(teachersArrayResult) {
-                    if (coursesArrayResult.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
+                    if (coursesArrayResult.AllResults.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
                         $("#footer").show();
                         showTeachersData(teachersArrayResult);
                         showCoursesData(coursesArrayResult.AllResults);
@@ -181,39 +210,16 @@ function getAllData(query_string) {
     });
 }
 
-function filterByParameter() {
-    var filterBy = document.getElementById("DropdownFilter").value;
-    if (filterBy == "All") {
-        showAllWithoutFilter(coursesArrayResult, teachersArrayResult);
-    } else if (filterBy == "Teachers") {
-        filterByTeachers(teachersArrayResult);
-    } else if (filterBy == "Courses") {
-        filterByCourses(coursesArrayResult);
-    }
-}
-
-function showAllWithoutFilter(coursesArrayResult, teachersArrayResult) {
-    //clear all the results
+function ChangeResults() {
     clearResults();
-    if (teachersArrayResult.length != 0) {
-        showTeachersData(teachersArrayResult);
-    }
-    if (coursesArrayResult.length != 0) {
-        showCoursesData(coursesArrayResult);
-    }
-}
 
-function filterByTeachers(arrayResult) {
-    //clear all the results
-    clearResults();
-    showTeachersData(arrayResult);
-}
-
-function filterByCourses(arrayResult) {
-    //clear all the results
-    clearResults();
-    if (arrayResult.length != 0) {
-        showCoursesData(arrayResult);
+    var filterType = $('input[name=type]:checked').val();
+    if (filterType == "All") {
+        getAllData();
+    } else if (filterType == "Teachers") {
+        getTeacherData();
+    } else if (filterType == "Courses") {
+        getCourseData();
     }
 }
 
@@ -225,13 +231,14 @@ function clearResults() {
 }
 
 function showTeachersData(arrayResult) {
-    var uri = '/api/Teachers/GetAllSearchedTeachers';
     var newLine = '<br>';
     $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html");
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    for (i in arrayResult) {
+    $("#page").attr("value", arrayResult.length / 5 + 1);
+
+    for ( i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
         //courseData.id = 'teacherData';
         teacherData.className = 'teacherData';
@@ -242,9 +249,6 @@ function showTeachersData(arrayResult) {
         img.id = 'Img';
         img.src = 'teacherImg.jpg';
         teacherData.appendChild(img);
-
-        // new line
-        teacherData.appendChild(document.createElement("br"));
 
         //the teacher name
         var a = document.createElement('a');
@@ -298,8 +302,6 @@ function showCoursesData(arrayResult) {
         img.src = 'courseImg.jpg';
         courseData.appendChild(img);
 
-        //new line
-        courseData.appendChild(document.createElement("br"));
         //the course name
         var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);

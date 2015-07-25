@@ -6,8 +6,8 @@
 a { color: #1F72AC; }
 
 #content {
-    height: 400px;
-    overflow: auto;
+    height: 800px;
+    /*overflow: auto;*/
 }
 
 header .logo {
@@ -21,7 +21,7 @@ header .logo {
     display: inline-block;
     background-color: #a1e1ed;
     width: 230px;
-    height: 200px;
+    height: initial;
     border: 2px solid white;
     border-radius: 15px;
     border-color: #5ab5ce;
@@ -29,23 +29,17 @@ header .logo {
     
     font-family: 'Arial Unicode MS';
 
-    margin: 20px;
+    margin: 5px;
     padding: 10px;
 }
 
 div.courseData:hover, div.teacherData:hover {
     width: 230px;
-    height: 200px;
+    height: initial;
     text-shadow: 0 0 5px #423D39;
     color: #197759;
     background-color: #77ffd4;
     border-color: #a5e5b5;
-}
-
-#DropdownFilter {
-
-    border-radius: 5px;
-    font-size: 15px;
 }
 
 footer {

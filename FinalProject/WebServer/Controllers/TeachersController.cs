@@ -22,10 +22,10 @@ namespace WebServer.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("GetAllSearchedTeachers")]
-        public IList<ResultTeacher> GetAllSearchedTeachers([FromUri]string id)
-       {
+        public IList<ResultTeacher> GetAllSearchedTeachers([FromBody]string id)
+        {
             using (var session = DBHelper.OpenSession())
             {
                 IList<Teacher> teachers = session.QueryOver<Teacher>().List();  // get all the teachers
@@ -56,16 +56,12 @@ namespace WebServer.Controllers
             {
                 Guid teacherGuid;
                 if (!Guid.TryParse(id, out teacherGuid))
-                {
                     return NotFound();
-                }
 
                 var teacher = session.Get<Teacher>(teacherGuid);
 
                 if (teacher == null)
-                {
                     return NotFound();
-                }
 
                 return Ok(teacher);
             }
@@ -86,9 +82,8 @@ namespace WebServer.Controllers
                 Guid teacherCommentGuid;
                 var didSuccedParsingTeacherCommentGuid = Guid.TryParse(commentId, out teacherCommentGuid);
                 var comment = session.Load<TeacherComment>(teacherCommentGuid);
-                if (comment == null) {
+                if (comment == null)
                     return NotFound();
-                }
 
                 return Ok(comment);
             }
