@@ -22,7 +22,7 @@ namespace WebServer.Controllers
 
                 foreach (var course in courses)
                 {
-                    string year = course.IntendedYear.ToString();
+                    string year = course.Year.ToString();
                     string returnYear = "";
                     switch (year)
                     {

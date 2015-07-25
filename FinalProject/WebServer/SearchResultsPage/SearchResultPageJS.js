@@ -17,8 +17,8 @@ function ShowResults() {
 
     var query_string = new Object();
     getQuertyString(query_string);
-    
-    createSearchText(query_string)
+
+    createSearchText(query_string);
 
     if (query_string["search"] === "הכל") {
         getAllData(query_string);
@@ -95,28 +95,32 @@ function getTeacherData(query_string) {
     });
 }
 
-
 function getCourseData(query_string) {
     $("#filter")[0].hidden = true;
-    $("#filter").css({ "display": "none" });
-    var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch;
+    $("#filter").css({"display": "none" });
+    var uri = '/api/SmartSearch/GetCourseByFilter';
 
+    var searchCourse = {
+        SearchText: query_string["SearchText"],
+        Faculty: query_string["faculty"],
+        IsMandatory: query_string["mandatory"],
+        AcademicDegree: query_string["degree"],
+        IntendedYear: query_string["year"],
+    };
     var request = $.ajax({
-        type: "GET",
+        type: "POST",
         url: uri,
+        data: JSON.stringify(searchCourse),
         contentType: "application/json",//; charset=UTF-8",
+
         success: function (data) {
             if (data.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
-                
             }
             else {
                 $("#footer").show();
-                $("#smartSearch").show();
-                $("#Search").click(function () { SmartSearch(data); });
-                showCoursesData(data);
+                showCoursesData(data.AllResults);
             }
             succeed = true;
         },
@@ -127,36 +131,34 @@ function getCourseData(query_string) {
     });
 }
 
-function SmartSearch(data) {
-
-    var degree = $("#Degree").val();
-    var year = $("#Year").val();
-    var faculty = $("#Faculty").val();
-    var isMandatory = $("#IsMandatory").val();
-        
-}
 function getAllData(query_string) {
     var dataToSearch = query_string["SearchText"];
-    var uri = '/api/Courses/GetAllSearchedCourses/' + dataToSearch ;
+    var uri = '/api/SmartSearch/GetCourseByFilter';
 
+    var searchCourse = {
+        SearchText: query_string["SearchText"],
+        Faculty: query_string["faculty"],
+        IsMandatory: query_string["mandatory"],
+        AcademicDegree: query_string["degree"],
+        IntendedYear: query_string["year"],
+    };
     var request = $.ajax({
-        type: "GET",
+        type: "POST",
         url: uri,
+        data: JSON.stringify(searchCourse),
         contentType: "application/json",//; charset=UTF-8",
-        success: function (coursesArrayResultNew) {
-            coursesArrayResult = coursesArrayResultNew;
+        success: function (coursesArrayResult) {
             var uri2 = '/api/Teachers/GetAllSearchedTeachers/' + dataToSearch;
             var request2 = $.ajax({
                 type: "GET",
                 url: uri2,
                 contentType: "application/json",//; charset=UTF-8",
-                success: function (teachersArrayResultNew) {
-                    teachersArrayResult = teachersArrayResultNew;
+                success: function (teachersArrayResult) {
                     if (coursesArrayResult.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
                         $("#filter").show();
                         $("#footer").show();
                         showTeachersData(teachersArrayResult);
-                        showCoursesData(coursesArrayResult);
+                        showCoursesData(coursesArrayResult.AllResults);
                     }
                     else if (coursesArrayResult.length == 0 && teachersArrayResult.length > 0) { // we found several matches in teachers
                         $("#filter").show();
@@ -166,7 +168,7 @@ function getAllData(query_string) {
                     else if (coursesArrayResult.length > 0 && teachersArrayResult.length == 0) { // we found several matches in courses
                         $("#filter").show();
                         $("#footer").show();
-                        showCoursesData(coursesArrayResult);
+                        showCoursesData(coursesArrayResult.AllResults);
                     }
                     else if (coursesArrayResult.length == 0 && teachersArrayResult.length == 0) {// we didnt found any match
                         $("#filter").hide();
@@ -288,8 +290,6 @@ function showTeachersData(arrayResult) {
                     $("#content").append(newLine);
     }
 }
-
-
 
 function showCoursesData(arrayResult) {
     var uri = '/api/Courses/GetAllSearchedCourses';

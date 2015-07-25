@@ -120,14 +120,13 @@
     <Content Include="bootstrap-3.3.4-dist\js\bootstrap.min.js" />
     <Content Include="bootstrap-3.3.4-dist\js\npm.js" />
     <Content Include="Global.asax" />
-    <Content Include="old\Home.html" />
-    <Content Include="old\HomePageOld.html" />
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\style.css" />
     <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
     <Content Include="Images\ratemyschool.jpg" />
+    <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />
     <Content Include="SearchResultsPage\SearchResultPageCSS.css" />
     <Content Include="SearchResultsPage\SearchResultPage.html" />

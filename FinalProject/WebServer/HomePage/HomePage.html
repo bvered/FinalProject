@@ -25,13 +25,13 @@
         </footer>
         <section class="content">
             <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
-                <input type="hidden" name="search" id="search" value="All" />
+                <input type="hidden" name="search" id="search" value="הכל" />
                 <div class="search-module">
                     <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" />
                     <div class="search-params">
-                        <button class="btn btn-primary dropdown-toggle" type="submit" value="All" id="dropDownRes1" data-toggle="dropdown" aria-expanded="false">הכל<span class="caret&quot;"></span></button>
+                        <button class="btn btn-primary dropdown-toggle" type="submit" value="הכל" id="dropDownRes1" data-toggle="dropdown" aria-expanded="false">הכל<span class="caret&quot;"></span></button>
                         <ul class="dropdown-menu" role="menu">
-                            <li role="presentation" onclick="change1(this)"><a role="menuitem" tabindex="-1">הכל </a></li>
+                            <li role="presentation" onclick="change1(this)"><a role="menuitem" tabindex="-1">הכל</a></li>
                             <li class="divider"></li>
                             <li role="presentation" onclick="change1(this)"><a role="menuitem" tabindex="-1">מרצים</a> </li>
                             <li role="presentation" onclick="change1(this)"><a role="menuitem" tabindex="-1">קורסים</a> </li>
@@ -49,11 +49,15 @@
                         <span class="filter-title">מסגרת</span>
                         <ul>
                             <li>
-                                <input id="degree[0]" name="degree[0]" value="0" type="radio" />
+                                <input id="degree[All]" name="degree" value="" type="radio" />
+                                <label for="degree[All]">הכל</label>
+                            </li>
+                            <li>
+                                <input id="degree[0]" name="degree" value="0" type="radio" />
                                 <label for="degree[0]">תואר ראשון</label>
                             </li>
                             <li>
-                                <input id="degree[1]" name="degree[0]" value="1" type="radio" />
+                                <input id="degree[1]" name="degree" value="1" type="radio" />
                                 <label for="degree[1]">תואר שני</label>
                             </li>
                         </ul>
@@ -62,60 +66,72 @@
                         <span class="filter-title">שנה</span>
                         <ul>
                             <li>
-                                <input id="year[0]" name="year[0]" value="0" type="radio" />
-                                <label for="year[0]">א</label>
+                                <input id="year[All]" name="year" value="" type="radio" />
+                                <label for="year[All]">הכל</label>
                             </li>
                             <li>
-                                <input id="year[1]" name="year[0]" value="1" type="radio" />
-                                <label for="year[1]">ב</label>
+                                <input id="year[0]" name="year" value="0" type="radio" />
+                                <label for="year[0]">מתאים לכל שנה</label>
                             </li>
                             <li>
-                                <input id="year[2]" name="year[0]" value="2" type="radio" />
-                                <label for="year[2]">ג</label>
+                                <input id="year[1]" name="year" value="1" type="radio" />
+                                <label for="year[1]">א</label>
                             </li>
                             <li>
-                                <input id="year[3]" name="year[0]" value="3" type="radio" />
-                                <label for="year[3]">ד</label>
+                                <input id="year[2]" name="year" value="2" type="radio" />
+                                <label for="year[2]">ב</label>
+                            </li>
+                            <li>
+                                <input id="year[3]" name="year" value="3" type="radio" />
+                                <label for="year[3]">ג</label>
+                            </li>
+                            <li>
+                                <input id="year[4]" name="year" value="4" type="radio" />
+                                <label for="year[4]">ד</label>
                             </li>
                         </ul>
                     </div>
                     <div class="filter-box">
                         <span class="filter-title">פקולטה</span>
                         <ul>
+                           <li>
+                                <input id="faculty[All]" name="faculty" value="" type="radio" />
+                                <label for="faculty[All]">הכל</label>
+                            </li> 
                             <li>
-                                <input id="faculty[0]" name="faculty[0]" value="0" type="radio" />
+                                <input id="faculty[0]" name="faculty" value="0" type="radio" />
                                 <label for="faculty[0]">מדעי המחשב</label>
                             </li>
                             <li>
-                                <input id="faculty[1]" name="faculty[0]" value="1" type="radio" />
+                                <input id="faculty[1]" name="faculty" value="1" type="radio" />
                                 <label for="faculty[1]">מדעי ההתנהגות</label>
                             </li>
                             <li>
-                                <input id="faculty[2]" name="faculty[0]" value="2" type="radio" />
+                                <input id="faculty[2]" name="faculty" value="2" type="radio" />
                                 <label for="faculty[2]">מערכות מידע</label>
                             </li>
                             <li>
-                                <input id="faculty[3]" name="faculty[0]" value="3" type="radio" />
+                                <input id="faculty[3]" name="faculty" value="3" type="radio" />
                                 <label for="faculty[3]">סיעוד</label>
                             </li>
                             <li>
-                                <input id="faculty[4]" name="faculty[0]" value="4" type="radio" />
+                                <input id="faculty[4]" name="faculty" value="4" type="radio" />
                                 <label for="faculty[4]">ניהול וכלכלה</label>
                             </li>
                             <li>
-                                <input id="faculty[5]" name="faculty[0]" value="5" type="radio" />
+                                <input id="faculty[5]" name="faculty" value="5" type="radio" />
                                 <label for="faculty[5]">חברה ופוליטיקה </label>
                             </li>
                             <li>
-                                <input id="faculty[6]" name="faculty[0]" value="6" type="radio" />
+                                <input id="faculty[6]" name="faculty" value="6" type="radio" />
                                 <label for="faculty[6]">ייעוץ ופיתוח ארגוני</label>
                             </li>
                             <li>
-                                <input id="faculty[7]" name="faculty[0]" value="7" type="radio" />
+                                <input id="faculty[7]" name="faculty" value="7" type="radio" />
                                 <label for="faculty[7]">מנהל עסקים </label>
                             </li>
                             <li>
-                                <input id="faculty[8]" name="faculty[0]" value="8" type="radio" />
+                                <input id="faculty[8]" name="faculty" value="8" type="radio" />
                                 <label for="faculty[8]"> פסיכולוגיה</label>
                             </li>
                         </ul>
@@ -124,12 +140,16 @@
                         <span class="filter-title">קורס</span>
                         <ul>
                             <li>
-                                <input  id="course[0]" name="course[0]" value="0" type="radio" />
-                                <label for="course[0]">בחירה</label>
+                                <input  id="mandatory[0]" name="mandatory" value="" type="radio" />
+                                <label for="mandatory[0]">הכל</label>
                             </li>
                             <li>
-                                <input  id="course[1]" name="course[0]" value="1" type="radio" />
-                                <label for="course[1]">חובה</label>
+                                <input  id="mandatory[1]" name="mandatory" value="true" type="radio" />
+                                <label for="mandatory[1]">בחירה</label>
+                            </li>
+                            <li>
+                                <input  id="mandatory[2]" name="mandatory" value="false" type="radio" />
+                                <label for="mandatory[2]">חובה</label>
                             </li>
                         </ul>
                     </div>
