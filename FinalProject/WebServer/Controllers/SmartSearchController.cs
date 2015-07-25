@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using NHibernate.Dialect.Function;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -20,24 +17,18 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                IList<string> coursesNameList = session.QueryOver<Course>().Select(x => x.Name).List<string>();
-                IList<string> teachersNameList = session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
-                IList<string> resultList = new List<string>();
+                var coursesNameList = session.QueryOver<Course>().Select(x => x.Name).List<string>();
+                var teachersNameList = session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
 
-                foreach (var name in coursesNameList)
-                {
-                    resultList.Add(name);
-                }
-                foreach (var name in teachersNameList)
-                {
-                    resultList.Add(name);
-                }
+                var resultList = coursesNameList.ToList();
+
+                resultList.AddRange(teachersNameList);
 
                 return resultList;
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("GetCourseByFilter")]
         public IHttpActionResult GetCourseByFilter([FromBody] CourseSearchFilter filter)
         {
@@ -58,6 +49,8 @@ namespace WebServer.Controllers
                     Enum.IsDefined(typeof (Faculty), facultyValue))
                 {
                     var faculty = (Faculty)facultyValue;
+
+                    SetEmptyValue(searchPreferences.SearchedFaculties, faculty);
                     searchPreferences.SearchedFaculties[faculty] += 1;
                     query = query.Where(x => x.Faculty == faculty);
                 }
@@ -68,6 +61,8 @@ namespace WebServer.Controllers
                     Enum.IsDefined(typeof (IntendedYear), intendedYearValue))
                 {
                     var intendedYear = (IntendedYear) intendedYearValue;
+
+                    SetEmptyValue(searchPreferences.SearchedIntendedYears, intendedYear);
                     searchPreferences.SearchedIntendedYears[intendedYear] += 1;
                     query = query.Where(x => x.IntendedYear == intendedYear);
                 }
@@ -76,6 +71,7 @@ namespace WebServer.Controllers
                 if (!string.IsNullOrWhiteSpace(filter.IsMandatory) &&
                     bool.TryParse(filter.IsMandatory, out isMandatoryValue))
                 {
+                    SetEmptyValue(searchPreferences.SearchedIsMandatory, isMandatoryValue);
                     searchPreferences.SearchedIsMandatory[isMandatoryValue] += 1;
                     query = query.Where(x => x.IsMandatory == isMandatoryValue);
                 }
@@ -86,23 +82,33 @@ namespace WebServer.Controllers
                     Enum.IsDefined(typeof (AcademicDegree), academicDegreeValue))
                 {
                     var academicDegree = (AcademicDegree) academicDegreeValue;
+
+                    SetEmptyValue(searchPreferences.SearchedAcademicDegrees, academicDegree);
                     searchPreferences.SearchedAcademicDegrees[academicDegree] += 1;
                     query = query.Where(x => x.AcademicDegree == academicDegree);
                 }
 
-                query = query.OrderByDescending(x => GetUsageValue(x, searchPreferences));
+                var courseResults = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).Select(ConvertToResult).ToList();
 
                 return Ok(new CourseSearchResult
                 {
-                    AllResults = query.Select(ConvertToResult).ToList(),
-                    Preferences = searchPreferences
+                    AllResults = courseResults,
+                    SearchPreferences = searchPreferences
                 });
             }
         }
 
-        private double GetUsageValue(Course course, SearchPreferences searchPreferences)
+        private static void SetEmptyValue<T>(Dictionary<T, int> dictionary, T key)
         {
-            double result = 0;
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, 0);
+            }
+        }
+
+        private int GetUsageValue(Course course, SearchPreferences searchPreferences)
+        {
+            int result = 0;
 
             if (searchPreferences.SearchedFaculties.ContainsKey(course.Faculty))
             {
@@ -134,9 +140,9 @@ namespace WebServer.Controllers
                 Id = arg.Id,
                 Name = arg.Name,
                 CourseId = arg.CourseId,
-                FacultyName = arg.Faculty.ToString(),
+                Faculty = EnumTranslation.Faculties[arg.Faculty],
                 AcademicDegree = EnumTranslation.AcademicDegrees[arg.AcademicDegree],
-                IntendedYear = EnumTranslation.IntendedYears[arg.IntendedYear],
+                Year = EnumTranslation.IntendedYears[arg.IntendedYear],
                 IsMandatory = arg.IsMandatory,
                 Score = arg.Score,
             };
@@ -144,10 +150,18 @@ namespace WebServer.Controllers
 
         public class SearchPreferences
         {
-            public Dictionary<Faculty, double> SearchedFaculties { get; set; }
-            public Dictionary<AcademicDegree, double> SearchedAcademicDegrees { get; set; }
-            public Dictionary<IntendedYear, double> SearchedIntendedYears { get; set; }
-            public Dictionary<bool, double> SearchedIsMandatory { get; set; }
+            public SearchPreferences()
+            {
+                SearchedFaculties = new Dictionary<Faculty, int>();
+                SearchedAcademicDegrees = new Dictionary<AcademicDegree, int>();
+                SearchedIntendedYears = new Dictionary<IntendedYear, int>();
+                SearchedIsMandatory = new Dictionary<bool, int>();
+            }
+
+            public Dictionary<Faculty, int> SearchedFaculties { get; set; }
+            public Dictionary<AcademicDegree, int> SearchedAcademicDegrees { get; set; }
+            public Dictionary<IntendedYear, int> SearchedIntendedYears { get; set; }
+            public Dictionary<bool, int> SearchedIsMandatory { get; set; }
         }
 
         public class CourseResult
@@ -156,10 +170,10 @@ namespace WebServer.Controllers
             public int CourseId { get; set; }
             public string Name { get; set; }
             public int Score { get; set; }
-            public string FacultyName { get; set; }
+            public string Faculty { get; set; }
             public bool IsMandatory { get; set; }
             public string AcademicDegree { get; set; }
-            public string IntendedYear { get; set; }
+            public string Year { get; set; }
         }
 
         public class CourseSearchFilter
@@ -176,7 +190,7 @@ namespace WebServer.Controllers
         public class CourseSearchResult
         {
             public IList<CourseResult> AllResults { get; set; }
-            public SearchPreferences Preferences { get; set; }
+            public SearchPreferences SearchPreferences { get; set; }
         }
     }
 }
