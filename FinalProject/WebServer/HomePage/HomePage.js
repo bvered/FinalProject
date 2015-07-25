@@ -23,9 +23,10 @@ $(document).load(SmartSearch());
 
 function change1(choose) {
     var sellText = $(choose).text().trim();
+
     $("#dropDownRes1").html(sellText + '<span class=\caret\"></span>');
     $("#dropDownRes1").attr('value', sellText);
-    $("#search").attr('value', sellText);
+    $("#search").attr('value', $(choose).attr('value'));
     SmartSearch();
 }
 
