@@ -156,8 +156,8 @@ function printComment(comment, itr) {
     var commentViewDiv = document.createElement("div");
     commentViewDiv.id = "commentViewDiv" + itr;
     teacherCommentsDiv.appendChild(commentViewDiv);
-    var commentBox = document.createElement("textarea");
-    commentBox.placeholder = comment.CommentText;
+    var commentBox = document.createElement("Label");
+    commentBox.innerHTML = comment.CommentText;
     commentBox.id = "TeacherCommet" + itr;
     commentViewDiv.appendChild(commentBox);
 

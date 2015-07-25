@@ -18,6 +18,10 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Score { get; set; }
         [DataMember]
+        private int AmountOfRating { get; set; }
+        [DataMember]
+        private int SumOfRating { get; set; }
+        [DataMember]
         public Faculty Faculty { get; set; }
         [DataMember]
         public bool IsMandatory { get; set; }
@@ -51,6 +55,14 @@ namespace WebServer.App_Data.Models
         public void AddCourseInSemester(CourseInSemester semester)
         {
             CourseInSemesters.Add(semester);
+        }
+
+        public void addCourseCommnet(CourseInSemester semester,CourseComment cComment)
+        {
+            semester.CourseComments.Insert(0, cComment);
+            AmountOfRating++;
+            SumOfRating += cComment.GetCriteriaRatingSummed();
+            Score = SumOfRating / AmountOfRating;
         }
     }
 }

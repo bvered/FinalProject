@@ -179,7 +179,7 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                return session.Query<CourseCriteria>().Select(x => x.DisplayName).ToList();
+                return CourseComment.GetCourseCommentCriterias();
             }
         }
 
@@ -196,25 +196,20 @@ namespace WebServer.Controllers
                 if (courseInSemester == null) {
                     return NotFound();
                 }
-                var courseCriterias = session.QueryOver<CourseCriteria>().List();
+                var courseCriterias = CourseComment.GetCourseCommentCriterias();
                 var ratings = new List<CourseCriteriaRating>();
                 var newComment = new CourseComment {
                     CommentText = comment.Comment,
                     CriteriaRatings = ratings,
                     DateTime = DateTime.Now
                 };
-                for (int index = 0; index < comment.Ratings.Count; index++)
+                for (int index = 0; index < courseCriterias.Count; index++)
                 {
-                    newComment.CriteriaRatings.Add(new CourseCriteriaRating
-                    {
-                        Criteria = courseCriterias[index],
-                        Rating = comment.Ratings[index]
-                    });
+                    newComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriterias[index], comment.Ratings[index]));
                 }
-
-                courseInSemester.CourseComments.Add(newComment);
+                session.Save(newComment);
+                courseInSemester.Course.addCourseCommnet(courseInSemester, newComment);
                 session.Save(courseInSemester);
-
                 transaction.Commit();
 
                 return Ok(newComment);
@@ -253,7 +248,34 @@ namespace WebServer.Controllers
                 return Ok(comment);
             }
         }
+
+        [HttpPost]
+        [ActionName("AddVote")]
+        public IHttpActionResult Vote([FromBody] VoteCommand vote)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                Guid commentId;
+                if (!Guid.TryParse(vote.commentId, out commentId)) {
+                    return NotFound();
+                }
+                var comment = session.Get<CourseComment>(commentId);
+                if (comment != null)
+                {
+                    Vote v = new Vote(vote.Liked);
+                    session.Save(v);
+                    comment.AddVote(v);
+                    session.Save(comment);
+                    transaction.Commit();
+                    return Ok(comment.TotalNumberOfLikes);
+                }
+
+                return NotFound();
+            }
+        }
     }
+    
 
     public class CreateCourseCommand
     {

@@ -2,7 +2,7 @@
 var uri2 = '/api/Courses/AddComment';
 var uri3 = '/api/Courses/GetTeachers';
 var uri4 = '/api/Courses/GetCourse';
-var uri5 = 'api/Courses/GetAllSemesters';
+var uri5 = '/api/Courses/AddVote';
 
 var course;
 var allCriterias;
@@ -82,15 +82,11 @@ function addVote(voteValueLabel, id, like) {
     };
     var request = $.ajax({
         type: "POST",
-        data: JSON.stringify(comment),
+        data: JSON.stringify(vote),
         url: uri5,
         contentType: "application/json",
         success: function (data) {
-            voted = 1;
-            if (like == false) {
-                voted = -1;
-            }
-            voteValueLabel.innerHTML = parseInt(voteValueLabel.innerHTML) + voted;
+            voteValueLabel.innerHTML = "אהבו: " + data;
 
         },
         fail: function (jqXhr, textStatus) {
@@ -146,7 +142,8 @@ function printCourseProperties() {
     CourseInfoDiv.appendChild(document.createElement('br'));
 }
 
-function showCourseComments() {
+function showCourseComments(sortByNew) {
+    removingAllContentOfDiv(CommentsDiv);
     var commentsLabel = document.createElement("Label");
     commentsLabel.id = "commentsLabel";
     commentsLabel.innerHTML = "תגובות";
@@ -154,38 +151,47 @@ function showCourseComments() {
     CommentsDiv.appendChild(document.createElement('br'));
 
     for (courseSemester in course.CourseInSemesters) {
-        for (comment in course.CourseInSemesters[courseSemester].CourseComments) {
+        var semesterComments = course.CourseInSemesters[courseSemester].CourseComments;
+        if (!sortByNew) {
+            semesterComments = semesterComments.sort(function (a, b) {
+                return b.TotalNumberOfLikes - a.TotalNumberOfLikes
+            });
+        }
+        for (comment in semesterComments) {
             printComment(course.CourseInSemesters[courseSemester].CourseComments[comment], comment);
         }
     }
 }
 
 function printComment(comment, itr) {
-    var commentBox = document.createElement("textarea");
-    commentBox.placeholder = comment.CommentText;
+    var commentViewDiv = document.createElement("div");
+    commentViewDiv.id = "commentViewDiv" + itr;
+    CommentsDiv.appendChild(commentViewDiv);
+    var commentBox = document.createElement("Label");
+    commentBox.innerHTML = comment.CommentText;
     commentBox.id = "CourseCommet" + itr;
-    CommentsDiv.appendChild(commentBox);
-    CommentsDiv.appendChild(document.createElement('br'));
+    commentViewDiv.appendChild(commentBox);
+    commentViewDiv.appendChild(document.createElement('br'));
 
     var numberOfVotes = document.createElement("Label");
     numberOfVotes.id = "CommentNumber" + itr + "Votes";
     numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
     var voteUpButton = document.createElement("Button");
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
-    voteUpButton.value = comment.id;
-    var voteUpFunctionString = function () { addVote(numberOfVotes, comment.id, true); };
+    voteUpButton.value = comment.Id;
+    var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
     voteUpButton.onclick = voteUpFunctionString;
     voteUpButton.innerHTML = "Like";
     var voteDownButton = document.createElement("Button");
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
-    voteDownButton.value = comment.id;
-    var voteDownFunctionString = function () { addVote(numberOfVotes, comment.id, false); };
+    voteDownButton.value = comment.Id;
+    var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
     voteDownButton.onclick = voteDownFunctionString;
     voteDownButton.innerHTML = "Dislike";
-    CommentsDiv.appendChild(voteDownButton);
-    CommentsDiv.appendChild(numberOfVotes);
-    CommentsDiv.appendChild(voteUpButton);
-    CommentsDiv.appendChild(document.createElement('br'));
+    commentViewDiv.appendChild(voteDownButton);
+    commentViewDiv.appendChild(numberOfVotes);
+    commentViewDiv.appendChild(voteUpButton);
+    commentViewDiv.appendChild(document.createElement('br'));
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
@@ -200,10 +206,10 @@ function printComment(comment, itr) {
             labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
             labelForRatingNumber.innerHTML = ratingNumber;
 
-            CommentsDiv.appendChild(labelForRatingString);
-            CommentsDiv.appendChild(document.createElement('br'));
-            CommentsDiv.appendChild(labelForRatingNumber);
-            CommentsDiv.appendChild(document.createElement('br'));
+            commentViewDiv.appendChild(labelForRatingString);
+            commentViewDiv.appendChild(document.createElement('br'));
+            commentViewDiv.appendChild(labelForRatingNumber);
+            commentViewDiv.appendChild(document.createElement('br'));
     }
 }
 

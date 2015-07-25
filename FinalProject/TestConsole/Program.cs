@@ -141,11 +141,7 @@ namespace TestConsole
 
             foreach (var courseCriteria in courseCritias)
             {
-                courseComment.CriteriaRatings.Add(new CourseCriteriaRating
-                {
-                    Criteria = courseCriteria,
-                    Rating = 5
-                });
+                courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria.DisplayName, 5));
             }
 
             logic.CourseInSemesters.Add(new CourseInSemester

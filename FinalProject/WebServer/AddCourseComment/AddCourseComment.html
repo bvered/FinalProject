@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html dir="rtl">
 <head>
     <title>Course</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
@@ -12,6 +12,18 @@
 <body onload="loadView()">
     <div id="CourseInfoDiv"></div>
     <div id="NewCourseCommentDiv"></div>
+    <div id="SortCommentDiv">
+        <label>מיין לפי</label>
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default">
+                <input type="radio" id="q156" name="quality[25]" value="1" checked onclick="showTeacherCommentsByTeacher(false)" /> דירוג
+            </label>
+            <label class="btn btn-default">
+                <input type="radio" id="q157" name="quality[25]" value="2" onclick="showTeacherCommentsByTeacher(true)" /> חדשות
+            </label>
+        </div>
+    </div>
+
     <div id="CommentsDiv"></div>
 
     <script src="AddCourseComment.js"></script>
