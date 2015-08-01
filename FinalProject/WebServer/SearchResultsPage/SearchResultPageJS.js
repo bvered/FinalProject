@@ -95,19 +95,23 @@ function getQuertyString(query_string) {
 
 function getTeacherData() {
     var uri = '/api/Teachers/GetAllSearchedTeachers';
-
+    var searchCourse = {
+        SearchText: $('#searchText').attr('value'),
+        counter: $('#page').attr('value') - 1,
+}
     var request = $.ajax({
         type: "POST",
         url: uri,
-        data: JSON.stringify($('#searchText').attr('value')),
+        data: JSON.stringify(searchCourse),
         contentType: "application/json", //; charset=UTF-8",
         success: function(data) {
-            if (data.length == 0) {
+            if (data.Results.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                createPaging(data.TotalCount);
                 $("#footer").show();
-                showTeachersData(data);
+                showTeachersData(data.Results);
             }
             succeed = true;
         },
@@ -182,6 +186,7 @@ function getAllData() {
                 success: function(teachersArrayResult) {
                     if (coursesArrayResult.AllResults.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
                         $("#footer").show();
+
                         showTeachersData(teachersArrayResult);
                         showCoursesData(coursesArrayResult.AllResults);
                     } else if (coursesArrayResult.AllResults.length == 0 && teachersArrayResult.length > 0) { // we found several matches in teachers
@@ -293,10 +298,8 @@ function showCoursesData(arrayResult) {
 
     for (i in arrayResult) {
         var courseData = document.createElement('div');
-        //courseData.id = 'courseData';
         courseData.className = 'courseData';
 
-        //adding course image
         var img = new Image();
         img.id = 'Img';
         img.src = 'courseImg.jpg';
@@ -310,16 +313,13 @@ function showCoursesData(arrayResult) {
         a.appendChild(linkText);
         courseData.appendChild(a);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
         courseData.appendChild(Score);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-        //is mandatory
         var isMandatory = arrayResult[i].IsMandatory;
         var mandatory;
         if (isMandatory == false) {
@@ -329,23 +329,16 @@ function showCoursesData(arrayResult) {
             mandatory = document.createTextNode('מסגרת: קורס חובה');
             courseData.appendChild(mandatory);
         }
-
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-        //the course year
         var year = document.createTextNode('שנה: ' + arrayResult[i].Year);
         courseData.appendChild(year);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-
-        //adding the faculty
         var faculty = document.createTextNode('פקולטה: ' + arrayResult[i].Faculty);
         courseData.appendChild(faculty);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
         $("#content").append(courseData);
@@ -353,4 +346,33 @@ function showCoursesData(arrayResult) {
     }
 
 
+}
+
+function createPaging(ResultsCounter) {
+    var PreviousPage = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = '#';
+    var innerSpan = document.createElement('span');
+    innerSpan.text = '&raquo';
+    $('#pages').appendChild(PreviousPage.appendChild(a.appendChild(innerSpan)));
+
+    for (var i = 0; i < ResultsCounter; i++) {
+        var newPage = document.createElement('li');
+        a = document.createElement('a');
+        a.href = '#';
+        innerSpan = document.createElement('span');
+        innerSpan.text = i;
+
+        if (i == 1) {
+            newPage.className = 'active';
+        }
+        $('#pages').appendChild(newPage.appendChild(a.appendChild(innerSpan)));
+    }
+
+    var NextPage = document.createElement('li');
+    a = document.createElement('a');
+    a.href = '#';
+    innerSpan = document.createElement('span');
+    innerSpan.text = '&laquo;';
+    $('#pages').appendChild(NextPage.appendChild(a.appendChild(innerSpan)));
 }

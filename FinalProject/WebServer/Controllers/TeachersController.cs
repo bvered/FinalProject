@@ -24,27 +24,31 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("GetAllSearchedTeachers")]
-        public IList<ResultTeacher> GetAllSearchedTeachers([FromBody]string id)
+        public AllResults GetAllSearchedTeachers([FromBody]SearchTeacher searchTeacher)
         {
             using (var session = DBHelper.OpenSession())
             {
-                IList<Teacher> teachers = session.QueryOver<Teacher>().List();  // get all the teachers
+                var teachers = session.Query<Teacher>().Where(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()))
+                    .Skip(searchTeacher.counter*5).Take(5).ToList();
+                var totalCount = session.Query<Teacher>().Count(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()));
+
                 IList<ResultTeacher> result = new List<ResultTeacher>();
 
                 foreach (var teacher in teachers)
                 {
-                    if (id == teacher.Name || (teacher.Name).IndexOf(id) >= 0 || ((teacher.Name).ToLower()).IndexOf(id) >= 0 || ((teacher.Name).ToLower()).IndexOf(id.ToLower()) >= 0)
-                    {
                         IList<string> courses = session.Query<CourseInSemester>()
                             .Where(x => x.Teacher.Id == teacher.Id)
                             .Select(x => x.Course.Name).Distinct()
                             .ToList();
 
                         result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
-                    }
                 }
 
-                return result;
+                return new AllResults
+                {
+                    TotalCount = totalCount,
+                    Results = result
+                };
             }
         }
   
@@ -187,6 +191,12 @@ namespace WebServer.Controllers
         }
     }
 
+    public class AllResults
+    {
+        public IList<ResultTeacher> Results { get; set; }
+        public int TotalCount { get; set; }
+    }
+
     public class ResultTeacher
     {
         public Guid Id { get; set; }
@@ -220,5 +230,11 @@ namespace WebServer.Controllers
     {
         public string commentId { get; set; }
         public bool Liked { get; set; }
+    }
+
+    public class SearchTeacher
+    {
+        public string Name { get; set; }
+        public int counter { get; set; }
     }
 }
