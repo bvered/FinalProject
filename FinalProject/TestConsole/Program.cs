@@ -29,6 +29,7 @@ namespace TestConsole
         private static void CreateInitData(ISession session)
         {
             const Faculty computersFaculty = Faculty.ComputerScience;
+            const Faculty socialityFaculty = Faculty.SocietyPolitics;
             var teacherCritias = new[]
             {
                 new TeacherCriteria("יחס לסטודנטים"),
@@ -86,6 +87,10 @@ namespace TestConsole
                 new Teacher {Name = "אמיר קירש"},
                 new Teacher {Name = "יוסי בצלאל"},
                 new Teacher {Name = "צבי מלמד"},
+                new Teacher {Name = "כרמי"},
+                new Teacher {Name ="הדר בינסקי"},
+                new Teacher {Name ="בוריס לוין"},
+                new Teacher {Name ="אלכס קומן"},
             };
 
             foreach (var teacher in teachers)
@@ -124,10 +129,26 @@ namespace TestConsole
                 },
                 new Course
                 {
-                    Name = "עוד לוגיקה",
+                    Name = "סיבוכיות ",
                     AcademicDegree = AcademicDegree.Master,
                     Faculty = computersFaculty,
                     IntendedYear = IntendedYear.First,
+                    IsMandatory = true
+                },
+                 new Course
+                {
+                    Name = "ביולוגיה",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = socialityFaculty,
+                    IntendedYear = IntendedYear.First,
+                    IsMandatory = true
+                },
+                new Course
+                {
+                    Name = "מדעים",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = socialityFaculty,
+                    IntendedYear = IntendedYear.Third,
                     IsMandatory = true
                 },
             };

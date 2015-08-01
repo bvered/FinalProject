@@ -122,15 +122,15 @@
     <Content Include="Global.asax" />
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
-    <Content Include="HomePage\style.css" />
+    <Content Include="HomePage\HomePage.css" />
     <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
     <Content Include="Images\ratemyschool.jpg" />
     <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />
-    <Content Include="SearchResultsPage\SearchResultPageCSS.css" />
+    <Content Include="SearchResultsPage\SearchResultPage.css" />
     <Content Include="SearchResultsPage\SearchResultPage.html" />
-    <Content Include="SearchResultsPage\SearchResultPageJS.js" />
+    <Content Include="SearchResultsPage\SearchResultPage.js" />
     <Content Include="SearchResultsPage\teacherImg.jpg" />
     <Content Include="Web.config" />
   </ItemGroup>

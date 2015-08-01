@@ -21,36 +21,6 @@ namespace WebServer.Controllers
                 return teachers;
             }
         }
-
-        [HttpPost]
-        [ActionName("GetAllSearchedTeachers")]
-        public AllResults GetAllSearchedTeachers([FromBody]SearchTeacher searchTeacher)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                var teachers = session.Query<Teacher>().Where(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()))
-                    .Skip(searchTeacher.counter*5).Take(5).ToList();
-                var totalCount = session.Query<Teacher>().Count(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()));
-
-                IList<ResultTeacher> result = new List<ResultTeacher>();
-
-                foreach (var teacher in teachers)
-                {
-                        IList<string> courses = session.Query<CourseInSemester>()
-                            .Where(x => x.Teacher.Id == teacher.Id)
-                            .Select(x => x.Course.Name).Distinct()
-                            .ToList();
-
-                        result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
-                }
-
-                return new AllResults
-                {
-                    TotalCount = totalCount,
-                    Results = result
-                };
-            }
-        }
   
         [HttpGet]
         [ActionName("GetTeacher")]
@@ -191,28 +161,6 @@ namespace WebServer.Controllers
         }
     }
 
-    public class AllResults
-    {
-        public IList<ResultTeacher> Results { get; set; }
-        public int TotalCount { get; set; }
-    }
-
-    public class ResultTeacher
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public IList<string> Courses { get; set; }
-        public int Score { get; set; }
-
-        public ResultTeacher(Guid id, string name, IList<string> courses, int score)
-        {
-            Id = id;
-            Name = name;
-            Courses = courses;
-            Score = score;
-        }
-    }
-
     public class CreateTeacherCommand {
         public string Name { get; set; }
         public int Room { get; set; }
@@ -230,11 +178,5 @@ namespace WebServer.Controllers
     {
         public string commentId { get; set; }
         public bool Liked { get; set; }
-    }
-
-    public class SearchTeacher
-    {
-        public string Name { get; set; }
-        public int counter { get; set; }
     }
 }

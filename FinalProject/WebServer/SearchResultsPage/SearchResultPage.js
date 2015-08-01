@@ -80,14 +80,11 @@ function getQuertyString(query_string) {
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split("=");
-        // If first entry with this name
         if (typeof query_string[pair[0]] === "undefined") {
             query_string[pair[0]] = pair[1];
-            // If second entry with this name
         } else if (typeof query_string[pair[0]] === "string") {
             var arr = [query_string[pair[0]], pair[1]];
             query_string[pair[0]] = arr;
-            // If third or later entry with this name
         } else {
             query_string[pair[0]].push(pair[1]);
         }
@@ -95,7 +92,7 @@ function getQuertyString(query_string) {
 }
 
 function getTeacherData() {
-    var uri = '/api/Teachers/GetAllSearchedTeachers';
+    var uri = '/api/SmartSearch/GetAllSearchedTeachers';
     var searchCourse = {
         Name: $('#searchText').attr('value'),
         counter: $('#page').attr('value') - 1,
@@ -104,7 +101,7 @@ function getTeacherData() {
         type: "POST",
         url: uri,
         data: JSON.stringify(searchCourse),
-        contentType: "application/json", //; charset=UTF-8",
+        contentType: "application/json", 
         success: function(data) {
             if (data.Results.length == 0) {
                 $("#NoMatches")[0].hidden = false;
@@ -133,14 +130,15 @@ function getCourseData() {
         IsMandatory: $('input[name=mandatory]:checked').val(),
         AcademicDegree: $('input[name=degree]:checked').val(),
         IntendedYear: $('input[name=year]:checked').val(),
-        SearchPreferences: $.jStorage.get("SearchPreferences")
+        SearchPreferences: $.jStorage.get("SearchPreferences"),
+        counter: $('#page').attr('value') - 1
     };
 
     var request = $.ajax({
         type: "POST",
         url: uri,
         data: JSON.stringify(searchCourse),
-        contentType: "application/json", //; charset=UTF-8",
+        contentType: "application/json",
 
         success: function (data) {
             $.jStorage.set("SearchPreferences", data.SearchPreferences);
@@ -149,6 +147,8 @@ function getCourseData() {
                 $("#footer").hide();
             } else {
                 $("#footer").show();
+                maxPages = Math.ceil(data.TotalCount / 5);
+                createPaging(maxPages);
                 showCoursesData(data.AllResults);
             }
             succeed = true;
@@ -179,7 +179,7 @@ function getAllData() {
         contentType: "application/json", //; charset=UTF-8",
         success: function (coursesArrayResult) {
             $.jStorage.set("SearchPreferences", coursesArrayResult.SearchPreferences);
-            var uri2 = '/api/Teachers/GetAllSearchedTeachers';
+            var uri2 = '/api/SmartSearch/GetAllSearchedTeachers';
             var request2 = $.ajax({
                 type: "POST",
                 url: uri2,
@@ -236,7 +236,7 @@ function clearResults() {
         myNode.removeChild(myNode.firstChild);
     }
 
-    var pages = $("#pages");
+    var pages = document.getElementById("pages");
     while (pages.firstChild) {
         pages.removeChild(pages.firstChild);
     }
@@ -248,21 +248,17 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    $("#page").attr("value", arrayResult.length / 5 + 1);
+    $("#page").attr("value", Math.round(arrayResult.length / 5));
 
     for ( i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
-        //courseData.id = 'teacherData';
         teacherData.className = 'teacherData';
 
-
-        //adding teacher image
         var img = new Image();
         img.id = 'Img';
         img.src = 'teacherImg.jpg';
         teacherData.appendChild(img);
 
-        //the teacher name
         var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
         a.title = arrayResult[i].Name;
@@ -270,16 +266,13 @@ function showTeachersData(arrayResult) {
         a.appendChild(linkText);
         teacherData.appendChild(a);
 
-        //new line
         teacherData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
         teacherData.appendChild(Score);
 
-        //new line
         teacherData.appendChild(document.createElement("br"));
 
-        //adding the courses
         var Teach = document.createTextNode('קורסים: ');
         teacherData.appendChild(Teach);
         for (l in arrayResult[i].Courses) {
@@ -312,7 +305,6 @@ function showCoursesData(arrayResult) {
         img.src = 'courseImg.jpg';
         courseData.appendChild(img);
 
-        //the course name
         var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
         a.title = arrayResult[i].Name;
@@ -356,7 +348,7 @@ function showCoursesData(arrayResult) {
 function createPaging(resultsCounter) {
     var previousPage = document.createElement('li');
     var a = document.createElement('a');
-    a.onclick = function () { changePage($('#page').attr('value') - 1); };
+    a.onclick = function () { changePage(parseInt($('#page').attr('value')) - 1); };
     var innerSpan = document.createElement('span');
     innerSpan.innerText = '»';
     a.appendChild(innerSpan);
@@ -366,12 +358,12 @@ function createPaging(resultsCounter) {
     for (var i = 0; i < resultsCounter; i++) {
         var newPage = document.createElement('li');
         a = document.createElement('a');
-        a.onclick = a.onclick = function () { changePage(i + 1); };
+        a.onclick = function () { changePage(parseInt(i)+1); };
         innerSpan = document.createElement('span');
         innerSpan.innerText = i+1;
 
         if (i == 0) {
-            newPage.className = 'active';
+            newPage.className ='active';
         }
         a.appendChild(innerSpan);
         newPage.appendChild(a);
@@ -380,7 +372,7 @@ function createPaging(resultsCounter) {
 
     var nextPage = document.createElement('li');
     a = document.createElement('a');
-    a.onclick = function () { changePage($('#page').attr('value') + 1); };
+    a.onclick = function () { changePage(parseInt($('#page').attr('value')) + 1); };
     innerSpan = document.createElement('span');
     innerSpan.innerText = '«';
 
@@ -396,6 +388,6 @@ function changePage(showPage) {
         $('#page').attr('value', maxPages);
     } else {
         $('#page').attr('value', showPage);
+        ChangeResults();
     }
-    ChangeResults();
 }

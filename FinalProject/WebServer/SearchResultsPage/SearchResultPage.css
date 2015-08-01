@@ -7,7 +7,6 @@ a { color: #1F72AC; }
 
 #content {
     height: 800px;
-    /*overflow: auto;*/
 }
 
 header .logo {
@@ -96,8 +95,6 @@ ul {
 .advanced-filter {
     float: right;
     margin: 0 auto 0 auto;
-
-    /*display: none;*/
 }
 
 .advanced-filter .filter-box {
