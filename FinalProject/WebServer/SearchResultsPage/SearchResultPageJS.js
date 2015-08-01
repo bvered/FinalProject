@@ -3,11 +3,11 @@
         $('#content').animate({ top: $(this).scrollTop() });
     });
     ShowResults();
-
 });
 
 var coursesArrayResult = [];
 var teachersArrayResult = [];
+var maxPages;
 
 function ShowResults() {
     var query_string = new Object();
@@ -15,6 +15,7 @@ function ShowResults() {
     createSearchText(query_string);
 
     initFilterValues(query_string);
+    $('#page').attr('value', 1);
 
     if (query_string["search"] === "All") {
         getAllData();
@@ -96,9 +97,9 @@ function getQuertyString(query_string) {
 function getTeacherData() {
     var uri = '/api/Teachers/GetAllSearchedTeachers';
     var searchCourse = {
-        SearchText: $('#searchText').attr('value'),
+        Name: $('#searchText').attr('value'),
         counter: $('#page').attr('value') - 1,
-}
+    };
     var request = $.ajax({
         type: "POST",
         url: uri,
@@ -109,7 +110,8 @@ function getTeacherData() {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
-                createPaging(data.TotalCount);
+                maxPages = Math.ceil(data.TotalCount / 5);
+                createPaging(maxPages);
                 $("#footer").show();
                 showTeachersData(data.Results);
             }
@@ -233,6 +235,11 @@ function clearResults() {
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
     }
+
+    var pages = $("#pages");
+    while (pages.firstChild) {
+        pages.removeChild(pages.firstChild);
+    }
 }
 
 function showTeachersData(arrayResult) {
@@ -344,35 +351,51 @@ function showCoursesData(arrayResult) {
         $("#content").append(courseData);
         $("#content").append(newLine);
     }
-
-
 }
 
-function createPaging(ResultsCounter) {
-    var PreviousPage = document.createElement('li');
+function createPaging(resultsCounter) {
+    var previousPage = document.createElement('li');
     var a = document.createElement('a');
-    a.href = '#';
+    a.onclick = function () { changePage($('#page').attr('value') - 1); };
     var innerSpan = document.createElement('span');
-    innerSpan.text = '&raquo';
-    $('#pages').appendChild(PreviousPage.appendChild(a.appendChild(innerSpan)));
-
-    for (var i = 0; i < ResultsCounter; i++) {
+    innerSpan.innerText = '»';
+    a.appendChild(innerSpan);
+    previousPage.appendChild(a);
+    $('#pages')[0].appendChild(previousPage);
+   
+    for (var i = 0; i < resultsCounter; i++) {
         var newPage = document.createElement('li');
         a = document.createElement('a');
-        a.href = '#';
+        a.onclick = a.onclick = function () { changePage(i + 1); };
         innerSpan = document.createElement('span');
-        innerSpan.text = i;
+        innerSpan.innerText = i+1;
 
-        if (i == 1) {
+        if (i == 0) {
             newPage.className = 'active';
         }
-        $('#pages').appendChild(newPage.appendChild(a.appendChild(innerSpan)));
+        a.appendChild(innerSpan);
+        newPage.appendChild(a);
+        $('#pages')[0].appendChild(newPage);
     }
 
-    var NextPage = document.createElement('li');
+    var nextPage = document.createElement('li');
     a = document.createElement('a');
-    a.href = '#';
+    a.onclick = function () { changePage($('#page').attr('value') + 1); };
     innerSpan = document.createElement('span');
-    innerSpan.text = '&laquo;';
-    $('#pages').appendChild(NextPage.appendChild(a.appendChild(innerSpan)));
+    innerSpan.innerText = '«';
+
+    a.appendChild(innerSpan);
+    nextPage.appendChild(a);
+    $('#pages')[0].appendChild(nextPage);
+}
+
+function changePage(showPage) {
+    if (showPage < 1) {
+        $('#page').attr('value', 1);
+    } else if (showPage > maxPages) {
+        $('#page').attr('value', maxPages);
+    } else {
+        $('#page').attr('value', showPage);
+    }
+    ChangeResults();
 }
