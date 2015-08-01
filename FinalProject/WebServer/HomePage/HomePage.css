@@ -28,8 +28,8 @@ ul {
 
 header .logo {
     background: url('../Images/ratemyschool.png');
-    width: 275px;
-    height: 80px;
+    width: 295px;
+    height: 100px;
     margin: 0 auto;
 }
 
@@ -51,7 +51,7 @@ header .logo {
 
 .search-module {
     width: 419px;
-    margin: 200px auto 0 auto;
+    margin: 110px auto 0 auto;
     position: relative;
 }
 
@@ -92,7 +92,7 @@ header .logo {
 .advanced-filter {
     width: 600px;
     height: 116px;
-    margin: 50px auto 0 auto;
+    margin: 25px auto 0 auto;
 
     display: none;
 }
@@ -157,7 +157,7 @@ footer {
     text-align: center;
 
      position: relative;
-     top: 100px;
+     top: 30px;
 }
 
    
