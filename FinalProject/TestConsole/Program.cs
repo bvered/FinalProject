@@ -30,36 +30,6 @@ namespace TestConsole
         {
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
-            var teacherCritias = new[]
-            {
-                new TeacherCriteria("יחס לסטודנטים"),
-                new TeacherCriteria("רמת הוראה"),
-                new TeacherCriteria("ידע בקורס"),
-                new TeacherCriteria("דרקונים"),
-                new TeacherCriteria("התעניינות מרצה בקורס")
-            };
-
-            foreach (var teacherCriteria in teacherCritias)
-            {
-                session.Save(teacherCriteria);
-            }
-
-            var courseCritias = new[]
-            {
-                new CourseCriteria("Material ease"),
-                new CourseCriteria("Time investment for home-work"),
-                new CourseCriteria("Number of home-work submissions"),
-                new CourseCriteria("Time investment for test learning"),
-                new CourseCriteria("Course usability"),
-                new CourseCriteria("Course grades average"),
-                new CourseCriteria("Does the attendance is mandatory"),
-                new CourseCriteria("Does the test has open material/reference Pages")
-            };
-
-            foreach (var teacherCriteria1 in courseCritias)
-            {
-                session.Save(teacherCriteria1);
-            }
 
             var romina = new Teacher
             {
@@ -73,11 +43,9 @@ namespace TestConsole
                 CommentText = "ממש עוזרת ללמוד",
                 DateTime = DateTime.Now,
             };
-            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[0].DisplayName, 5));
-            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[1].DisplayName, 4));
-            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[2].DisplayName, 3));
-            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[3].DisplayName, 2));
-            rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritias[4].DisplayName, 1));
+            foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias()) {
+                rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritiria, 5));
+            }
             rominaComment.AddVote(new Vote(true));
             romina.addTeacherCommnet(rominaComment);
             
@@ -160,9 +128,9 @@ namespace TestConsole
                 Votes = {new Vote(true)}
             };
 
-            foreach (var courseCriteria in courseCritias)
+            foreach (var courseCriteria in CourseComment.GetCourseCommentCriterias())
             {
-                courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria.DisplayName, 5));
+                courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria, 5));
             }
 
             logic.CourseInSemesters.Add(new CourseInSemester

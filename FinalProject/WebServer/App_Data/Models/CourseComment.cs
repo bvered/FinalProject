@@ -29,14 +29,12 @@ namespace WebServer.App_Data.Models
         {
             return new List<string>
             {
-                "Material ease",
-                "Time investment for home-work",
-                "Number of home-work submissions",
-                "Time investment for test learning",
-                "Course usability",
-                "Course grades average",
-                "Does the attendance is mandatory",
-                "Does the test has open material/reference Pages",
+                "קלות החומר",
+                "השקעה נדרשת בשיעורי בית",
+                "ממוצע ציונים",
+                "חשיבות אקדמית",
+                "חשיבות מקצועית",
+                "עניין בקורס",
             };
         }
     }
