@@ -11,6 +11,36 @@ namespace WebServer.Controllers
 {
     public class SmartSearchController : ApiController
     {
+        [HttpPost]
+        [ActionName("GetAllSearchedTeachers")]
+        public AllResults GetAllSearchedTeachers([FromBody]SearchTeacher searchTeacher)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var teachers = session.Query<Teacher>().Where(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()))
+                    .Skip(searchTeacher.counter * 5).Take(5).ToList();
+                var totalCount = session.Query<Teacher>().Count(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()));
+
+                IList<ResultTeacher> result = new List<ResultTeacher>();
+
+                foreach (var teacher in teachers)
+                {
+                    IList<string> courses = session.Query<CourseInSemester>()
+                        .Where(x => x.Teacher.Id == teacher.Id)
+                        .Select(x => x.Course.Name).Distinct()
+                        .ToList();
+
+                    result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
+                }
+
+                return new AllResults
+                {
+                    TotalCount = totalCount,
+                    Results = result
+                };
+            }
+        }
+        
         [HttpGet]
         [ActionName("GetAll")]
         public IList<string> GetAll()
@@ -88,13 +118,17 @@ namespace WebServer.Controllers
                     query = query.Where(x => x.AcademicDegree == academicDegree);
                 }
 
-                var courseResults = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).Select(ConvertToResult).ToList();
+                var courseResults = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).Select(ConvertToResult).Skip(filter.Counter * 5).Take(5).ToList();
+                var total = query.Count();
+
 
                 return Ok(new CourseSearchResult
                 {
                     AllResults = courseResults,
-                    SearchPreferences = searchPreferences
+                    SearchPreferences = searchPreferences,
+                    TotalCount = total,
                 });
+
             }
         }
 
@@ -185,12 +219,42 @@ namespace WebServer.Controllers
             public string IntendedYear { get; set; }
 
             public SearchPreferences SearchPreferences { get; set; }
+            public int Counter { get; set; }
         }
 
         public class CourseSearchResult
         {
             public IList<CourseResult> AllResults { get; set; }
             public SearchPreferences SearchPreferences { get; set; }
+            public int TotalCount { get; set; }
+        }
+
+        public class SearchTeacher
+        {
+            public string Name { get; set; }
+            public int counter { get; set; }
+        }
+
+        public class ResultTeacher
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public IList<string> Courses { get; set; }
+            public int Score { get; set; }
+
+            public ResultTeacher(Guid id, string name, IList<string> courses, int score)
+            {
+                Id = id;
+                Name = name;
+                Courses = courses;
+                Score = score;
+            }
+        }
+
+        public class AllResults
+        {
+            public IList<ResultTeacher> Results { get; set; }
+            public int TotalCount { get; set; }
         }
     }
 }

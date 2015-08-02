@@ -3,11 +3,11 @@
         $('#content').animate({ top: $(this).scrollTop() });
     });
     ShowResults();
-
 });
 
 var coursesArrayResult = [];
 var teachersArrayResult = [];
+var maxPages;
 
 function ShowResults() {
     var query_string = new Object();
@@ -15,6 +15,7 @@ function ShowResults() {
     createSearchText(query_string);
 
     initFilterValues(query_string);
+    $('#page').attr('value', 1);
 
     if (query_string["search"] === "All") {
         getAllData();
@@ -79,14 +80,11 @@ function getQuertyString(query_string) {
     var vars = query.split("&");
     for (var i = 0; i < vars.length; i++) {
         var pair = vars[i].split("=");
-        // If first entry with this name
         if (typeof query_string[pair[0]] === "undefined") {
             query_string[pair[0]] = pair[1];
-            // If second entry with this name
         } else if (typeof query_string[pair[0]] === "string") {
             var arr = [query_string[pair[0]], pair[1]];
             query_string[pair[0]] = arr;
-            // If third or later entry with this name
         } else {
             query_string[pair[0]].push(pair[1]);
         }
@@ -94,20 +92,25 @@ function getQuertyString(query_string) {
 }
 
 function getTeacherData() {
-    var uri = '/api/Teachers/GetAllSearchedTeachers';
-
+    var uri = '/api/SmartSearch/GetAllSearchedTeachers';
+    var searchCourse = {
+        Name: $('#searchText').attr('value'),
+        counter: $('#page').attr('value') - 1,
+    };
     var request = $.ajax({
         type: "POST",
         url: uri,
-        data: JSON.stringify($('#searchText').attr('value')),
-        contentType: "application/json", //; charset=UTF-8",
+        data: JSON.stringify(searchCourse),
+        contentType: "application/json", 
         success: function(data) {
-            if (data.length == 0) {
+            if (data.Results.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                maxPages = Math.ceil(data.TotalCount / 5);
+                createPaging(maxPages);
                 $("#footer").show();
-                showTeachersData(data);
+                showTeachersData(data.Results);
             }
             succeed = true;
         },
@@ -127,14 +130,15 @@ function getCourseData() {
         IsMandatory: $('input[name=mandatory]:checked').val(),
         AcademicDegree: $('input[name=degree]:checked').val(),
         IntendedYear: $('input[name=year]:checked').val(),
-        SearchPreferences: $.jStorage.get("SearchPreferences")
+        SearchPreferences: $.jStorage.get("SearchPreferences"),
+        counter: $('#page').attr('value') - 1
     };
 
     var request = $.ajax({
         type: "POST",
         url: uri,
         data: JSON.stringify(searchCourse),
-        contentType: "application/json", //; charset=UTF-8",
+        contentType: "application/json",
 
         success: function (data) {
             $.jStorage.set("SearchPreferences", data.SearchPreferences);
@@ -143,6 +147,8 @@ function getCourseData() {
                 $("#footer").hide();
             } else {
                 $("#footer").show();
+                maxPages = Math.ceil(data.TotalCount / 5);
+                createPaging(maxPages);
                 showCoursesData(data.AllResults);
             }
             succeed = true;
@@ -173,7 +179,7 @@ function getAllData() {
         contentType: "application/json", //; charset=UTF-8",
         success: function (coursesArrayResult) {
             $.jStorage.set("SearchPreferences", coursesArrayResult.SearchPreferences);
-            var uri2 = '/api/Teachers/GetAllSearchedTeachers';
+            var uri2 = '/api/SmartSearch/GetAllSearchedTeachers';
             var request2 = $.ajax({
                 type: "POST",
                 url: uri2,
@@ -182,6 +188,7 @@ function getAllData() {
                 success: function(teachersArrayResult) {
                     if (coursesArrayResult.AllResults.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
                         $("#footer").show();
+
                         showTeachersData(teachersArrayResult);
                         showCoursesData(coursesArrayResult.AllResults);
                     } else if (coursesArrayResult.AllResults.length == 0 && teachersArrayResult.length > 0) { // we found several matches in teachers
@@ -228,6 +235,11 @@ function clearResults() {
     while (myNode.firstChild) {
         myNode.removeChild(myNode.firstChild);
     }
+
+    var pages = document.getElementById("pages");
+    while (pages.firstChild) {
+        pages.removeChild(pages.firstChild);
+    }
 }
 
 function showTeachersData(arrayResult) {
@@ -236,21 +248,17 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    $("#page").attr("value", arrayResult.length / 5 + 1);
+    $("#page").attr("value", Math.round(arrayResult.length / 5));
 
     for ( i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
-        //courseData.id = 'teacherData';
         teacherData.className = 'teacherData';
 
-
-        //adding teacher image
         var img = new Image();
         img.id = 'Img';
         img.src = 'teacherImg.jpg';
         teacherData.appendChild(img);
 
-        //the teacher name
         var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
         a.title = arrayResult[i].Name;
@@ -258,16 +266,13 @@ function showTeachersData(arrayResult) {
         a.appendChild(linkText);
         teacherData.appendChild(a);
 
-        //new line
         teacherData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
         teacherData.appendChild(Score);
 
-        //new line
         teacherData.appendChild(document.createElement("br"));
 
-        //adding the courses
         var Teach = document.createTextNode('קורסים: ');
         teacherData.appendChild(Teach);
         for (l in arrayResult[i].Courses) {
@@ -293,16 +298,13 @@ function showCoursesData(arrayResult) {
 
     for (i in arrayResult) {
         var courseData = document.createElement('div');
-        //courseData.id = 'courseData';
         courseData.className = 'courseData';
 
-        //adding course image
         var img = new Image();
         img.id = 'Img';
         img.src = 'courseImg.jpg';
         courseData.appendChild(img);
 
-        //the course name
         var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
         a.title = arrayResult[i].Name;
@@ -310,16 +312,13 @@ function showCoursesData(arrayResult) {
         a.appendChild(linkText);
         courseData.appendChild(a);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
         var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
         courseData.appendChild(Score);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-        //is mandatory
         var isMandatory = arrayResult[i].IsMandatory;
         var mandatory;
         if (isMandatory == false) {
@@ -329,28 +328,66 @@ function showCoursesData(arrayResult) {
             mandatory = document.createTextNode('מסגרת: קורס חובה');
             courseData.appendChild(mandatory);
         }
-
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-        //the course year
         var year = document.createTextNode('שנה: ' + arrayResult[i].Year);
         courseData.appendChild(year);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
-
-        //adding the faculty
         var faculty = document.createTextNode('פקולטה: ' + arrayResult[i].Faculty);
         courseData.appendChild(faculty);
 
-        //new line
         courseData.appendChild(document.createElement("br"));
 
         $("#content").append(courseData);
         $("#content").append(newLine);
     }
+}
 
+function createPaging(resultsCounter) {
+    var previousPage = document.createElement('li');
+    var a = document.createElement('a');
+    a.onclick = function () { changePage(parseInt($('#page').attr('value')) - 1); };
+    var innerSpan = document.createElement('span');
+    innerSpan.innerText = '»';
+    a.appendChild(innerSpan);
+    previousPage.appendChild(a);
+    $('#pages')[0].appendChild(previousPage);
+   
+    for (var i = 0; i < resultsCounter; i++) {
+        var newPage = document.createElement('li');
+        a = document.createElement('a');
+        a.onclick = function () { changePage(parseInt(i)+1); };
+        innerSpan = document.createElement('span');
+        innerSpan.innerText = i+1;
 
+        if (i == 0) {
+            newPage.className ='active';
+        }
+        a.appendChild(innerSpan);
+        newPage.appendChild(a);
+        $('#pages')[0].appendChild(newPage);
+    }
+
+    var nextPage = document.createElement('li');
+    a = document.createElement('a');
+    a.onclick = function () { changePage(parseInt($('#page').attr('value')) + 1); };
+    innerSpan = document.createElement('span');
+    innerSpan.innerText = '«';
+
+    a.appendChild(innerSpan);
+    nextPage.appendChild(a);
+    $('#pages')[0].appendChild(nextPage);
+}
+
+function changePage(showPage) {
+    if (showPage < 1) {
+        $('#page').attr('value', 1);
+    } else if (showPage > maxPages) {
+        $('#page').attr('value', maxPages);
+    } else {
+        $('#page').attr('value', showPage);
+        ChangeResults();
+    }
 }

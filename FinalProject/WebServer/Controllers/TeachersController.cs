@@ -21,32 +21,6 @@ namespace WebServer.Controllers
                 return teachers;
             }
         }
-
-        [HttpPost]
-        [ActionName("GetAllSearchedTeachers")]
-        public IList<ResultTeacher> GetAllSearchedTeachers([FromBody]string id)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                IList<Teacher> teachers = session.QueryOver<Teacher>().List();  // get all the teachers
-                IList<ResultTeacher> result = new List<ResultTeacher>();
-
-                foreach (var teacher in teachers)
-                {
-                    if (id == teacher.Name || (teacher.Name).IndexOf(id) >= 0 || ((teacher.Name).ToLower()).IndexOf(id) >= 0 || ((teacher.Name).ToLower()).IndexOf(id.ToLower()) >= 0)
-                    {
-                        IList<string> courses = session.Query<CourseInSemester>()
-                            .Where(x => x.Teacher.Id == teacher.Id)
-                            .Select(x => x.Course.Name).Distinct()
-                            .ToList();
-
-                        result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
-                    }
-                }
-
-                return result;
-            }
-        }
   
         [HttpGet]
         [ActionName("GetTeacher")]
@@ -184,22 +158,6 @@ namespace WebServer.Controllers
 
                 return NotFound();
             }
-        }
-    }
-
-    public class ResultTeacher
-    {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public IList<string> Courses { get; set; }
-        public int Score { get; set; }
-
-        public ResultTeacher(Guid id, string name, IList<string> courses, int score)
-        {
-            Id = id;
-            Name = name;
-            Courses = courses;
-            Score = score;
         }
     }
 
