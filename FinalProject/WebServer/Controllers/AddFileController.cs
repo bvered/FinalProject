@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -15,57 +13,84 @@ namespace WebServer.Controllers
     {
         [HttpPost]
         [ActionName("AddSyllabus")]
-        public async Task<IHttpActionResult> AddSyllabus()
+        public IHttpActionResult AddSyllabus()
         {
-            if (!Request.Content.IsMimeMultipartContent())
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-
-            var provider = new MultipartMemoryStreamProvider();
-            await Request.Content.ReadAsMultipartAsync(provider);
-            foreach (var file in provider.Contents)
+            if (HttpContext.Current.Request.Files.AllKeys.Any())
             {
-                var filename = file.Headers.ContentDisposition.FileName.Trim('\"');
-                var buffer = await file.ReadAsByteArrayAsync();
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["UploadedFile"];
 
-                Guid courseId;
-                Semester result;
-                int year;
-
-                var hasCourseId = Guid.TryParse(Request.Headers.GetValues("courseId").First(), out courseId);
-                var hasSemster = Enum.TryParse(Request.Headers.GetValues("Semster").First(), out result);
-                var hasYear = int.TryParse(Request.Headers.GetValues("Year").First(), out year);
-
-
-                var syllabus = new Syllabus()
+                if (httpPostedFile != null)
                 {
-                    File = buffer,
-                    FileName = filename,
-                    Semster = result,
-                    Year = year
-                };
+                    byte[] buffer;
 
-                using (var session = DBHelper.OpenSession())
-                using (var transaction = session.BeginTransaction())
-                {
-                    var course = session.Load<Course>(courseId);
+                    using (var br = new BinaryReader(httpPostedFile.InputStream))
+                    {
+                        buffer = br.ReadBytes(httpPostedFile.ContentLength);
+                    }
 
-                  //  course.AddSyllabus(syllabus);
-                    session.Save(syllabus);
-                    session.Save(course);
+                    Guid courseId;
+                    Semester semster;
+                    int year;
 
-                    transaction.Commit();
+                    var hasCourseId = Guid.TryParse(HttpContext.Current.Request.Form["courseId"], out courseId);
+                    var hasSemster = Enum.TryParse(HttpContext.Current.Request.Form["semester"], out semster);
+                    var hasYear = int.TryParse(HttpContext.Current.Request.Form["year"], out year);
+
+                    if (!hasCourseId || !hasSemster || !hasYear)
+                    {
+                        return BadRequest();
+                    }
+
+                    using (var session = DBHelper.OpenSession())
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        var courseInSemester = session.QueryOver<CourseInSemester>()
+                            .Where(x => x.Course.Id == courseId &&
+                                        x.Semester == semster &&
+                                        x.Year == year)
+                            .SingleOrDefault();
+
+                        if (courseInSemester == null)
+                        {
+                            courseInSemester = new CourseInSemester
+                            {
+                                Course = session.Load<Course>(courseId),
+                                Semester = semster,
+                                Year = year
+                            };
+                        }
+
+                        var course = session.Load<Course>(courseId);
+
+                        courseInSemester.Syllabus = new Syllabus
+                        {
+                            File = buffer,
+                            FileName =
+                                string.Format("{0}_{1}_{2}{3}", course.Name, year, semster,
+                                    Path.GetExtension(httpPostedFile.FileName)),
+                            Semster = semster,
+                            Year = year
+                        };
+
+                        session.SaveOrUpdate(courseInSemester);
+
+                        transaction.Commit();
+                    }
                 }
+
+                return Ok();
             }
 
-            return Ok();
+            return BadRequest();
         }
-    }
 
-    public class CreateSyllabusFile
-    {
-        public Semester Semster { get; set; }
-        public int Year { get; set; }
-        public byte[] File { get; set; }
-        public String FileName { get; set; }
+        public class CreateSyllabusFile
+        {
+            public Semester Semster { get; set; }
+            public int Year { get; set; }
+            public byte[] File { get; set; }
+            public String FileName { get; set; }
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using NHibernate;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -12,35 +13,91 @@ namespace WebServer.Controllers
     public class SmartSearchController : ApiController
     {
         [HttpPost]
-        [ActionName("GetAllSearchedTeachers")]
-        public AllResults GetAllSearchedTeachers([FromBody]SearchTeacher searchTeacher)
+        [ActionName("GetAnyResults")]
+        public IHttpActionResult GetAny([FromBody] CourseSearchFilter filter)
         {
             using (var session = DBHelper.OpenSession())
             {
-                var teachers = session.Query<Teacher>().Where(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()))
-                    .Skip(searchTeacher.counter * 5).Take(5).ToList();
-                var totalCount = session.Query<Teacher>().Count(x => x.Name.ToLower().Contains(searchTeacher.Name.ToLower()));
+                var teachersQuery = GetTeachersQuery(session, filter.SearchText);
+                var coursesQuery = GetCoursesQuery(session, filter, filter.SearchPreferences);
 
-                IList<ResultTeacher> result = new List<ResultTeacher>();
+                var lowestResult = filter.Counter*5;
 
-                foreach (var teacher in teachers)
+                var teachersCount = teachersQuery.Count();
+
+                IQueryable<Course> courses = null;
+                IQueryable<Teacher> teachers = null;
+
+                if (teachersCount > lowestResult + 5)
                 {
-                    IList<string> courses = session.Query<CourseInSemester>()
-                        .Where(x => x.Teacher.Id == teacher.Id)
-                        .Select(x => x.Course.Name).Distinct()
-                        .ToList();
+                    teachers = teachersQuery.Skip(lowestResult).Take(5);
+                }
+                else if (teachersCount < lowestResult)
+                {
+                    var coursesToSkip = lowestResult - teachersCount;
+                    courses = coursesQuery.Skip(coursesToSkip).Take(5);
+                }
+                else
+                {
+                    var coursesToSkip = lowestResult - teachersCount;
 
-                    result.Add(new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score));
+                    var coursesCount = lowestResult + 5 - teachersCount;
+
+                    teachers = teachersQuery.Skip(lowestResult);
+
+                    courses = coursesQuery.Skip(coursesToSkip).Take(coursesCount);
                 }
 
-                return new AllResults
+                var anySearchResult = new AnySearchResult
+                {
+                    CourseResults = courses == null ? new List<CourseResult>() : courses.ToList().Select(ConvertToResult).ToList(),
+                    TeacherResults = teachers == null ? new List<ResultTeacher>() : teachers.ToList().Select(x => ConvertToResult(session, x)).ToList(),
+                    TotalCount = teachersCount + coursesQuery.Count(),
+                    SearchPreferences = filter.SearchPreferences
+                };
+
+                return Ok(anySearchResult);
+            }
+        }
+
+        [HttpPost]
+        [ActionName("GetAllSearchedTeachers")]
+        public TeacherSearchResults GetAllSearchedTeachers([FromBody] SearchTeacher searchTeacher)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var query = GetTeachersQuery(session, searchTeacher.Name.ToLower());
+
+                var totalCount = query.Count();
+
+                var teachers = query.Skip(searchTeacher.counter*5).Take(5).ToList();
+
+                var result = teachers.Select(teacher => ConvertToResult(session, teacher)).ToList();
+
+                return new TeacherSearchResults
                 {
                     TotalCount = totalCount,
                     Results = result
                 };
             }
         }
-        
+
+        private static IQueryable<Teacher> GetTeachersQuery(ISession session, string lower)
+        {
+            return session.Query<Teacher>().Where(x => x.Name.ToLower().Contains(lower));
+        }
+
+        private static ResultTeacher ConvertToResult(ISession session, Teacher teacher)
+        {
+            var courses = session.Query<CourseInSemester>()
+                .Where(x => x.Teacher.Id == teacher.Id)
+                .Select(x => x.Course.Name).Distinct()
+                .ToList();
+
+            var resultTeacher = new ResultTeacher(teacher.Id, teacher.Name, courses, teacher.Score);
+            return resultTeacher;
+        }
+
         [HttpGet]
         [ActionName("GetAll")]
         public IList<string> GetAll()
@@ -64,72 +121,82 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                var query = session.Query<Course>();
-
                 var searchPreferences = filter.SearchPreferences ?? new SearchPreferences();
 
-                if (!string.IsNullOrWhiteSpace(filter.SearchText))
-                {
-                    query = query.Where(x => x.Name.ToLower().Contains(filter.SearchText.ToLower()));
-                }
+                var query = GetCoursesQuery(session, filter, searchPreferences);
 
-                int facultyValue;
-                if (!string.IsNullOrWhiteSpace(filter.Faculty) && 
-                    int.TryParse(filter.Faculty, out facultyValue) &&
-                    Enum.IsDefined(typeof (Faculty), facultyValue))
-                {
-                    var faculty = (Faculty)facultyValue;
+                var orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences));
 
-                    SetEmptyValue(searchPreferences.SearchedFaculties, faculty);
-                    searchPreferences.SearchedFaculties[faculty] += 1;
-                    query = query.Where(x => x.Faculty == faculty);
-                }
-
-                int intendedYearValue;
-                if (!string.IsNullOrWhiteSpace(filter.IntendedYear) &&
-                    int.TryParse(filter.IntendedYear, out intendedYearValue) &&
-                    Enum.IsDefined(typeof (IntendedYear), intendedYearValue))
-                {
-                    var intendedYear = (IntendedYear) intendedYearValue;
-
-                    SetEmptyValue(searchPreferences.SearchedIntendedYears, intendedYear);
-                    searchPreferences.SearchedIntendedYears[intendedYear] += 1;
-                    query = query.Where(x => x.IntendedYear == intendedYear);
-                }
-
-                bool isMandatoryValue;
-                if (!string.IsNullOrWhiteSpace(filter.IsMandatory) &&
-                    bool.TryParse(filter.IsMandatory, out isMandatoryValue))
-                {
-                    SetEmptyValue(searchPreferences.SearchedIsMandatory, isMandatoryValue);
-                    searchPreferences.SearchedIsMandatory[isMandatoryValue] += 1;
-                    query = query.Where(x => x.IsMandatory == isMandatoryValue);
-                }
-
-                int academicDegreeValue;
-                if (!string.IsNullOrWhiteSpace(filter.AcademicDegree) &&
-                    int.TryParse(filter.AcademicDegree, out academicDegreeValue) &&
-                    Enum.IsDefined(typeof (AcademicDegree), academicDegreeValue))
-                {
-                    var academicDegree = (AcademicDegree) academicDegreeValue;
-
-                    SetEmptyValue(searchPreferences.SearchedAcademicDegrees, academicDegree);
-                    searchPreferences.SearchedAcademicDegrees[academicDegree] += 1;
-                    query = query.Where(x => x.AcademicDegree == academicDegree);
-                }
-
-                var courseResults = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).Select(ConvertToResult).Skip(filter.Counter * 5).Take(5).ToList();
                 var total = query.Count();
 
+                var courseResults = orderedCourses.Select(ConvertToResult).Skip(filter.Counter*5).Take(5).ToList();
 
-                return Ok(new CourseSearchResult
+                var courseSearchResult = new CourseSearchResult
                 {
                     AllResults = courseResults,
                     SearchPreferences = searchPreferences,
                     TotalCount = total,
-                });
+                };
 
+                return Ok(courseSearchResult);
             }
+        }
+
+        private static IQueryable<Course> GetCoursesQuery(ISession session, CourseSearchFilter filter,
+            SearchPreferences searchPreferences)
+        {
+            var query = session.Query<Course>();
+
+            if (!string.IsNullOrWhiteSpace(filter.SearchText))
+            {
+                query = query.Where(x => x.Name.ToLower().Contains(filter.SearchText.ToLower()));
+            }
+
+            int facultyValue;
+            if (!string.IsNullOrWhiteSpace(filter.Faculty) &&
+                int.TryParse(filter.Faculty, out facultyValue) &&
+                Enum.IsDefined(typeof (Faculty), facultyValue))
+            {
+                var faculty = (Faculty) facultyValue;
+
+                SetEmptyValue(searchPreferences.SearchedFaculties, faculty);
+                searchPreferences.SearchedFaculties[faculty] += 1;
+                query = query.Where(x => x.Faculty == faculty);
+            }
+
+            int intendedYearValue;
+            if (!string.IsNullOrWhiteSpace(filter.IntendedYear) &&
+                int.TryParse(filter.IntendedYear, out intendedYearValue) &&
+                Enum.IsDefined(typeof (IntendedYear), intendedYearValue))
+            {
+                var intendedYear = (IntendedYear) intendedYearValue;
+
+                SetEmptyValue(searchPreferences.SearchedIntendedYears, intendedYear);
+                searchPreferences.SearchedIntendedYears[intendedYear] += 1;
+                query = query.Where(x => x.IntendedYear == intendedYear);
+            }
+
+            bool isMandatoryValue;
+            if (!string.IsNullOrWhiteSpace(filter.IsMandatory) &&
+                bool.TryParse(filter.IsMandatory, out isMandatoryValue))
+            {
+                SetEmptyValue(searchPreferences.SearchedIsMandatory, isMandatoryValue);
+                searchPreferences.SearchedIsMandatory[isMandatoryValue] += 1;
+                query = query.Where(x => x.IsMandatory == isMandatoryValue);
+            }
+
+            int academicDegreeValue;
+            if (!string.IsNullOrWhiteSpace(filter.AcademicDegree) &&
+                int.TryParse(filter.AcademicDegree, out academicDegreeValue) &&
+                Enum.IsDefined(typeof (AcademicDegree), academicDegreeValue))
+            {
+                var academicDegree = (AcademicDegree) academicDegreeValue;
+
+                SetEmptyValue(searchPreferences.SearchedAcademicDegrees, academicDegree);
+                searchPreferences.SearchedAcademicDegrees[academicDegree] += 1;
+                query = query.Where(x => x.AcademicDegree == academicDegree);
+            }
+            return query;
         }
 
         private static void SetEmptyValue<T>(Dictionary<T, int> dictionary, T key)
@@ -251,13 +318,18 @@ namespace WebServer.Controllers
             }
         }
 
-        public class AllResults
+        public class TeacherSearchResults
         {
             public IList<ResultTeacher> Results { get; set; }
             public int TotalCount { get; set; }
         }
+
+        public class AnySearchResult
+        {
+            public IList<ResultTeacher> TeacherResults { get; set; }
+            public IList<CourseResult> CourseResults { get; set; }
+            public SearchPreferences SearchPreferences { get; set; }
+            public int TotalCount { get; set; }
+        }
     }
 }
-
-
-

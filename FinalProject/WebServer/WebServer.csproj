@@ -112,7 +112,6 @@
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
     <Content Include="AddCourse\style.css" />
-    <Content Include="AddFile\AddFile.html" />
     <Content Include="AddTeacherComment\AddTeacherComment.js" />
     <Content Include="AddTeacherComment\AddTeacherComment.html" />
     <Content Include="AddTeacher\AddTeacher.html" />
@@ -129,16 +128,19 @@
     <Content Include="Global.asax" />
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
-    <Content Include="HomePage\style.css" />
     <Content Include="HomePage\HomePage.css" />
     <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
+    <Content Include="JavaScripts\QueryString.js" />
     <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />
     <Content Include="SearchResultsPage\SearchResultPage.css" />
     <Content Include="SearchResultsPage\SearchResultPage.html" />
     <Content Include="SearchResultsPage\SearchResultPage.js" />
     <Content Include="SearchResultsPage\teacherImg.jpg" />
+    <Content Include="UploadSyllabus\UploadSyllabus.css" />
+    <Content Include="UploadSyllabus\UploadSyllabus.html" />
+    <Content Include="UploadSyllabus\UploadSyllabus.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

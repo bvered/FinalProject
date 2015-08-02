@@ -10,18 +10,18 @@ var teachersArrayResult = [];
 var maxPages;
 
 function ShowResults() {
-    var query_string = new Object();
-    getQuertyString(query_string);
-    createSearchText(query_string);
 
-    initFilterValues(query_string);
+    var queryString = getQuertyString();
+    createSearchText(queryString);
+
+    initFilterValues(queryString);
     $('#page').attr('value', 1);
 
-    if (query_string["search"] === "All") {
+    if (queryString["search"] === "All") {
         getAllData();
-    } else if (query_string["search"] === "Courses") {
+    } else if (queryString["search"] === "Courses") {
         getCourseData();
-    } else if (query_string["search"] === "Teachers") {
+    } else if (queryString["search"] === "Teachers") {
         getTeacherData();
     }
 }
@@ -35,13 +35,13 @@ function initFilterValues(query_string) {
 
     var DegreeSelect = $('input:radio[name=degree]');
     if (DegreeSelect.is(':checked') === false) {
-         valueString = '[value=' + query_string["degree"] + ']';
+        valueString = '[value=' + query_string["degree"] + ']';
         DegreeSelect.filter(valueString).prop('checked', true);
     }
 
     var FacultySelect = $('input:radio[name=faculty]');
     if (FacultySelect.is(':checked') === false) {
-         valueString = '[value=' + query_string["faculty"] + ']';
+        valueString = '[value=' + query_string["faculty"] + ']';
         FacultySelect.filter(valueString).prop('checked', true);
     }
 
@@ -72,23 +72,6 @@ function createSearchText(query_string) {
 
     query_string["SearchText"] = searchTextToReturn;
     $("#searchText").attr('value', query_string["SearchText"]);
-}
-
-function getQuertyString(query_string) {
-    var query = window.location.search.substring(1);
-    query = decodeURI(query);
-    var vars = query.split("&");
-    for (var i = 0; i < vars.length; i++) {
-        var pair = vars[i].split("=");
-        if (typeof query_string[pair[0]] === "undefined") {
-            query_string[pair[0]] = pair[1];
-        } else if (typeof query_string[pair[0]] === "string") {
-            var arr = [query_string[pair[0]], pair[1]];
-            query_string[pair[0]] = arr;
-        } else {
-            query_string[pair[0]].push(pair[1]);
-        }
-    }
 }
 
 function getTeacherData() {
@@ -161,61 +144,42 @@ function getCourseData() {
 }
 
 function getAllData() {
-    var searchText = $('#searchText').attr('value');
-    var uri = '/api/SmartSearch/GetCourseByFilter';
+    var uri = '/api/SmartSearch/GetAnyResults';
 
-    var searchCourse = {
-        SearchText: searchText,
+    var searchQuery = {
+        SearchText: $('#searchText').attr('value'),
         Faculty: $('input[name=faculty]:checked').val(),
         IsMandatory: $('input[name=mandatory]:checked').val(),
         AcademicDegree: $('input[name=degree]:checked').val(),
         IntendedYear: $('input[name=year]:checked').val(),
-        SearchPreferences: $.jStorage.get("SearchPreferences")
+        SearchPreferences: $.jStorage.get("SearchPreferences"),
+        counter: $('#page').attr('value') - 1
     };
     var request = $.ajax({
         type: "POST",
         url: uri,
-        data: JSON.stringify(searchCourse),
+        data: JSON.stringify(searchQuery),
         contentType: "application/json", //; charset=UTF-8",
-        success: function (coursesArrayResult) {
-            $.jStorage.set("SearchPreferences", coursesArrayResult.SearchPreferences);
-            var uri2 = '/api/SmartSearch/GetAllSearchedTeachers';
-            var request2 = $.ajax({
-                type: "POST",
-                url: uri2,
-                data: JSON.stringify(searchText),
-                contentType: "application/json", //; charset=UTF-8",
-                success: function(teachersArrayResult) {
-                    if (coursesArrayResult.AllResults.length > 0 && teachersArrayResult.length > 0) { //we found matches in corses and teachers
-                        $("#footer").show();
+        success: function (searchResult) {
+            $.jStorage.set("SearchPreferences", searchResult.SearchPreferences);
 
-                        showTeachersData(teachersArrayResult);
-                        showCoursesData(coursesArrayResult.AllResults);
-                    } else if (coursesArrayResult.AllResults.length == 0 && teachersArrayResult.length > 0) { // we found several matches in teachers
-                        $("#footer").show();
-                        showTeachersData(teachersArrayResult);
-                    } else if (coursesArrayResult.AllResults.length > 0 && teachersArrayResult.length == 0) { // we found several matches in courses
-                        $("#footer").show();
-                        showCoursesData(coursesArrayResult.AllResults);
-                    } else if (coursesArrayResult.AllResults.length == 0 && teachersArrayResult.length == 0) { // we didnt found any match
-                        $("#NoMatches")[0].hidden = false;
-                        $("#footer").hide();
-                    }
-                    succeed = true;
-                },
-                fail: function(data) {
-                    //   succeed = false;
-                },
-                // async: false
-            });
-            succeed = true;
+            if (searchResult.TotalCount == 0) { // we didnt found any match
+                $("#NoMatches")[0].hidden = false;
+                $("#footer").hide();
+            } else {
+                maxPages = Math.ceil(searchResult.TotalCount / 5);
+
+                createPaging(maxPages);
+                showTeachersData(searchResult.TeacherResults);
+                showCoursesData(searchResult.CourseResults);
+            }
         },
-        fail: function(coursesArrayResult) {
+        fail: function(data) {
             //   succeed = false;
         },
         // async: false
     });
-}
+};
 
 function ChangeResults() {
     clearResults();
