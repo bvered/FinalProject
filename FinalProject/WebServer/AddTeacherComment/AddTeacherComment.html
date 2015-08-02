@@ -1,34 +1,110 @@
 ﻿<!DOCTYPE html>
 <html dir="rtl">
 <head>
-    <title>Add Comment</title>
+    <title>Course</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="AddTeacherComment.js"></script>
+    <link href="css/StyleSheet.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
 </head>
 <body onload="loadView()">
-    <div id="TeacherInfoDiv"></div>
-    <div id="NewCommentDiv"></div>
-    <div id="SortCommentDiv">
-        <label>מיין לפי</label>
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-default">
-                    <input type="radio" id="q156" name="quality[25]" value="1" checked onclick="showTeacherCommentsByTeacher(false)" /> דירוג
-                </label>
-                <label class="btn btn-default">
-                    <input type="radio" id="q157" name="quality[25]" value="2" onclick="showTeacherCommentsByTeacher(true)" /> חדשות
-                </label>
-            </div>
+    <header>
+        <div class="logo">
+            <img src="../images/ratemyschool.png" />
+        </div>
+    </header>
+    <div class="main">
+        <div class="teacherInfo">
+            <table>
+                <tr>
+                    <td class="teacherKeyTdUp">שם המרצה:</td>
+                    <td id="teacherNameTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdInner">ממוצע דירוגים:</td>
+                    <td id="teacherAvgTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdInner">חדר:</td>
+                    <td id="teacherRoomTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdInner">טלפון:</td>
+                    <td id="teacherPhoneTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdDown">אימייל:</td>
+                    <td id="teacherEmailTD" style="padding-right:20px"></td>
+                </tr>
+                <tr id="showNewCommentButtonTR">
+                    <td colspan="2">
+                        <center>
+                            <input type="button" value="תגובה חדשה" class="addComment" onclick="showNewCommentAction()" />
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <form enctype="multipart/form-data">
-        <input name="file" type="file" />
-        <input type="button" value="Upload" />
-    </form>
-    <progress></progress>
-    <div id="CommentsDiv"></div>
-    <script src="AddTeacherComment.js"></script>
+    <div class="main">
+        <div class="newComment">
+            <table id="newCommentTable" style="display:none">
+                <tr>
+                    <td class="teacherKeyTdUp" style="width: 250px;">הוסף תגובה:</td>
+                    <td id="textAreaTD">
+                        <textarea id="teacherNewCommetBox" placeholder="תגובתך כאן"></textarea>
+                    </td>
+                </tr>
+                <tr id="criteriaTR" style="display:none">
+                    <td id="criteriaTextTD" class="teacherKeyTdInner" style="width: 250px;"></td>
+                    <td id="starRatingTD" style="direction:ltr;">
+                            <form id="starRating" style="text-align: center;">
+                                <div class="stars">
+                                    <input type="radio" name="star" class="star-1" id="star-1" />
+                                    <label class="star-1" for="star-1"></label>
+                                    <input type="radio" name="star" class="star-2" id="star-2" />
+                                    <label class="star-2" for="star-2"></label>
+                                    <input type="radio" name="star" class="star-3" id="star-3" />
+                                    <label class="star-3" for="star-3"></label>
+                                    <input type="radio" name="star" class="star-4" id="star-4" />
+                                    <label class="star-4" for="star-4"></label>
+                                    <input type="radio" name="star" class="star-5" id="star-5" />
+                                    <label class="star-5" for="star-5"></label>
+                                    <span></span>
+                                </div>
+                            </form>
+                    </td>
+                </tr>
+                <tr id="sendTR">
+                    <td colspan="2">
+                        <center>
+                           <input type="button" value="שלח" class="sendButton" onclick="addComment()" />
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="main">
+        <div id="allComments" class="allComments">
+            <table id="commentTable" style="display:none">
+                <tr>
+                    <td class="teacherKeyTdUp" style="width: 250px;">תגובה:</td>
+                    <td><textarea readonly style="border-radius: 5px; background-color: rgba(222, 220, 220, 0.60)"></textarea></td>
+                </tr>
+                <tr class="likesTR">
+                    <center>
+                        <td colspan="2"></td>
+                    </center>
+                </tr>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

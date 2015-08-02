@@ -145,7 +145,7 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
-    var likesCell = commentView.rows[commentView.rows.length - 1].cells[0];
+    var likesCell = commentView.rows[0].cells[1];
     likesCell.style.textAlign = "center";
     var numberOfVotes = document.createElement("Label");
     numberOfVotes.id = "CommentNumber" + itr + "Votes";
@@ -171,8 +171,8 @@ function printComment(comment, itr) {
         var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
         clonedCommentCriteriaTR.style.display = 'block';
         clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        clonedCommentCriteriaTR.children[1].innerHTML = loadedComment.Rating;
-        likesCell.parentNode.insertBefore(clonedCommentCriteriaTR, likesCell);
+        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
+        commentView.appendChild(clonedCommentCriteriaTR);
     }
     allComments.appendChild(commentView);
 }
@@ -196,7 +196,8 @@ function revealAddCommentViewToUser() {
         criteriaTextTD.innerHTML = allCriterias[ratingText];
         var starRatingTD = clonedCommentCriteriaTR.children[1];
         starRatingTD.id = "criteriaRating" + ratingText;
-        courseSemestersTR.parentNode.insertBefore(clonedCommentCriteriaTR, courseSemestersTR.nextSibling);
+        starRatingTD.children[0].id = "starRating" + ratingText;
+        newCommentTable.appendChild(clonedCommentCriteriaTR);
     }
     var courseSemesters = document.getElementById("courseSemesters");
     for (semester in course.CourseInSemesters) {
@@ -205,6 +206,9 @@ function revealAddCommentViewToUser() {
         semesterOption.value = course.CourseInSemesters[semester].Id
         courseSemesters.add(semesterOption);
     }
+    var sendTR = document.getElementById("sendTR");
+    sendTR.parentNode.removeChild(sendTR);
+    newCommentTable.appendChild(sendTR);
 }
 
 function showLoadingCourseFailed() {
@@ -264,4 +268,13 @@ function getSelectedRadioButtonValue(radioButtonForm) {
         }
     }
     return 0;
+}
+
+function setSelectedRadionButtonValue(radioButtonForm, value) {
+    for (radioButton in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
+            radioButtonForm.children[0].children[radioButton].checked = true;
+            return;
+        }
+    }
 }

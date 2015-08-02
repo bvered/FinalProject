@@ -10,10 +10,6 @@ var allTeachers;
 var teacherInfoList;
 var numberOfCommentsLoaded;
 
-var TeacherInfoDiv = document.getElementById("TeacherInfoDiv");
-var newCommentDiv = document.getElementById("NewCommentDiv");
-var teacherCommentsDiv = document.getElementById("CommentsDiv");
-
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -97,50 +93,67 @@ function addVote(voteValueLabel ,id, like) {
 
 function printInformationOfTeacher() {
     showTeacherInfoToUser();
-    showCommentOptions();
     showTeacherCommentsByTeacher(false);
 }
 
 function showTeacherInfoToUser() {
-    var teacherNameLabel = document.createElement("Label");
-    teacherNameLabel.id = "propertyLabelTeacherName";
-    teacherNameLabel.innerHTML = "שם: " + teacher.Name;
-    TeacherInfoDiv.appendChild(teacherNameLabel);
-    TeacherInfoDiv.appendChild(document.createElement('br'));
+    var teacherNameLabel = document.getElementById("teacherNameTD");
+    teacherNameLabel.innerHTML = teacher.Name;
 
-    var teacherScoreLabel = document.createElement("Label");
-    teacherScoreLabel.id = "propertyLabelTeacherScore";
-    teacherScoreLabel.innerHTML = "ציון ממוצע: " + teacher.Score;
-    TeacherInfoDiv.appendChild(teacherScoreLabel);
-    TeacherInfoDiv.appendChild(document.createElement('br'));
+    var teacherScoreLabel = document.getElementById("teacherAvgTD");
+    teacherScoreLabel.innerHTML = teacher.Score;
 
-    var teacherRoomLabel = document.createElement("Label");
-    teacherRoomLabel.id = "propertyLabelTeacherRoom";
-    teacherRoomLabel.innerHTML = "חדר: " + teacher.Room;
-    TeacherInfoDiv.appendChild(teacherRoomLabel);
-    TeacherInfoDiv.appendChild(document.createElement('br'));
+    var teacherRoomLabel = document.getElementById("teacherRoomTD");
+    teacherRoomLabel.innerHTML = teacher.Room;
 
-    var teacherCellphoneLabel = document.createElement("Label");
-    teacherCellphoneLabel.id = "propertyLabelTeacherCellphone";
-    teacherCellphoneLabel.innerHTML = "טלפון: " + teacher.Cellphone;
-    TeacherInfoDiv.appendChild(teacherCellphoneLabel);
-    TeacherInfoDiv.appendChild(document.createElement('br'));
+    var teacherCellphoneLabel = document.getElementById("teacherPhoneTD");
+    teacherCellphoneLabel.innerHTML = teacher.Cellphone;
 
-    var teacherEmailLabel = document.createElement("Label");
-    teacherEmailLabel.id = "propertyLabelTeacherEmail";
-    teacherEmailLabel.innerHTML = "מייל: " + teacher.Email;
-    TeacherInfoDiv.appendChild(teacherEmailLabel);
-    TeacherInfoDiv.appendChild(document.createElement('br'));
+    var teacherEmailLabel = document.getElementById("teacherEmailTD");
+    teacherEmailLabel.innerHTML = teacher.Email;
+}
+
+function showNewCommentAction() {
+    document.getElementById("newCommentTable").style.display = "block";
+    document.getElementById("showNewCommentButtonTR").style.display = "none";
+    revealAddCommentViewToUser();
+}
+
+function revealAddCommentViewToUser() {
+    var newCommentTable = document.getElementById("newCommentTable");
+    var newCommentCriteriaTR = document.getElementById("criteriaTR");
+    for (ratingText in allCriterias) {
+        var clonedCommentCriteriaTR = newCommentCriteriaTR.cloneNode(true);
+        clonedCommentCriteriaTR.id = "criteriaTR" + ratingText;
+        clonedCommentCriteriaTR.style.display = "block";
+        var criteriaTextTD = clonedCommentCriteriaTR.children[0];
+        criteriaTextTD.id = "criteriaText" + ratingText;
+        criteriaTextTD.innerHTML = allCriterias[ratingText];
+        var starRatingTD = clonedCommentCriteriaTR.children[1];
+        starRatingTD.id = "criteriaRating" + ratingText;
+        starRatingTD.children[0].id = "starRating" + ratingText;
+        newCommentTable.appendChild(clonedCommentCriteriaTR);
+    }
+    var sendTR = document.getElementById("sendTR");
+    sendTR.parentNode.removeChild(sendTR);
+    newCommentTable.appendChild(sendTR);
+}
+
+function showTeacherComments(sortByNew) {
+    for (courseSemester in course.CourseInSemesters) {
+        var semesterComments = course.CourseInSemesters[courseSemester].CourseComments;
+        if (!sortByNew) {
+            semesterComments = semesterComments.sort(function (a, b) {
+                return b.TotalNumberOfLikes - a.TotalNumberOfLikes
+            });
+        }
+        for (comment in semesterComments) {
+            printComment(course.CourseInSemesters[courseSemester].CourseComments[comment], comment);
+        }
+    }
 }
 
 function showTeacherCommentsByTeacher(sortByNew) {
-    removingAllContentOfDiv(teacherCommentsDiv);
-    var commentsLabel = document.createElement("Label");
-    commentsLabel.id = "commentsLabel";
-    commentsLabel.innerHTML = "Comments";
-    teacherCommentsDiv.appendChild(commentsLabel);
-    teacherCommentsDiv.appendChild(document.createElement('br'));
-
     var allComments = teacher.TeacherComments;
     if(!sortByNew) {
         allComments = allComments.sort(function (a, b) {
@@ -154,106 +167,64 @@ function showTeacherCommentsByTeacher(sortByNew) {
 }
 
 function printComment(comment, itr) {
-    var commentViewDiv = document.createElement("div");
-    commentViewDiv.id = "commentViewDiv" + itr;
-    teacherCommentsDiv.appendChild(commentViewDiv);
-    var commentBox = document.createElement("Label");
-    commentBox.innerHTML = comment.CommentText;
-    commentBox.id = "TeacherCommet" + itr;
-    commentViewDiv.appendChild(commentBox);
-
+    var allComments = document.getElementById("allComments");
+    var commentView = document.getElementById("commentTable").cloneNode(true);
+    commentView.style.display = 'block';
+    commentView.id = "commentView" + itr;
+    commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
+    var likesCell = commentView.rows[0].cells[1];
+    likesCell.style.textAlign = "center";
     var numberOfVotes = document.createElement("Label");
     numberOfVotes.id = "CommentNumber" + itr + "Votes";
     numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
     var voteUpButton = document.createElement("Button");
+    voteUpButton.className = "voteButton"
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
     voteUpButton.value = comment.Id;
-    voteUpButton.onclick = function () { addVote(numberOfVotes, comment.Id, true); };
-    voteUpButton.innerHTML = "Like";
+    var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
+    voteUpButton.onclick = voteUpFunctionString;
+    voteUpButton.innerHTML = "👍";
     var voteDownButton = document.createElement("Button");
+    voteDownButton.className = "voteButton";
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
     voteDownButton.value = comment.Id;
-    voteDownButton.onclick = function () { addVote(numberOfVotes, comment.Id, false); };
-    voteDownButton.innerHTML = "Dislike";
-    commentViewDiv.appendChild(voteDownButton);
-    commentViewDiv.appendChild(numberOfVotes);
-    commentViewDiv.appendChild(voteUpButton);
-    commentViewDiv.appendChild(document.createElement('br'));
+    var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
+    voteDownButton.onclick = voteDownFunctionString;
+    voteDownButton.innerHTML = "👎";
+    likesCell.appendChild(voteDownButton);
+    likesCell.appendChild(numberOfVotes);
+    likesCell.appendChild(voteUpButton);
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
-
-            var labelForRatingString = document.createElement("Label");
-            labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
-            labelForRatingString.innerHTML = loadedComment.Criteria.DisplayName + " ";
-
-            var labelForRatingNumber = document.createElement("Label");
-            labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-            labelForRatingNumber.innerHTML = loadedComment.Rating;
-
-            commentViewDiv.appendChild(labelForRatingString);
-            commentViewDiv.appendChild(labelForRatingNumber);
-            commentViewDiv.appendChild(document.createElement('br'));
+        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
+        clonedCommentCriteriaTR.style.display = 'block';
+        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
+        clonedCommentCriteriaTR.children[1].children[0].disabled = true;
+        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
+        commentView.appendChild(clonedCommentCriteriaTR);
     }
-}
-
-function showCommentOptions() {
-    removingAllContentOfDiv(newCommentDiv);
-    var addNewCommentButton = document.createElement("Button");
-    addNewCommentButton.innerHTML = "הוסף תגובה חדשה";
-    addNewCommentButton.onclick = revealAddCommentViewToUser;
-    newCommentDiv.appendChild(addNewCommentButton);
-    newCommentDiv.appendChild(document.createElement("BR"));
-}
-
-function revealAddCommentViewToUser() {
-    removingAllContentOfDiv(newCommentDiv);
-    var commentBox = document.createElement("textarea");
-    commentBox.placeholder = "דעתך כאן..";
-    commentBox.id = "TeacherNewCommetBox";
-    newCommentDiv.appendChild(commentBox);
-    newCommentDiv.appendChild(document.createElement('br'));
-    for (ratingText in allCriterias) {
-        var criteriaText = allCriterias[ratingText];
-        var labelInput = document.createElement("Label");
-        labelInput.id = "criteriaText" + ratingText;
-        labelInput.innerHTML = criteriaText;
-
-        var inputText = document.createElement("INPUT");
-        inputText.id = "criteriaRating" + ratingText;
-        inputText.name = "criteriaRating" + ratingText;
-        inputText.type = "number";
-        inputText.min = "0";
-        inputText.max = "5";
-
-        newCommentDiv.appendChild(labelInput);
-        newCommentDiv.appendChild(inputText);
-
-        newCommentDiv.appendChild(document.createElement("BR"));
-    }
-    var sendButton = document.createElement("BUTTON");
-    sendButton.innerHTML = "שלח";
-    sendButton.onclick = addComment;
-    newCommentDiv.appendChild(sendButton);
-    newCommentDiv.appendChild(document.createElement("BR"));
+    allComments.appendChild(commentView);
 }
 
 function showLoadingTeacherFailed() {
-    var failedSearchLabel = document.createElement("Label");
-    failedSearchLabel.id = "failedSearchLabel";
-    failedSearchLabel.innerHTML = "מרצה לא נמצא, הנך מועבר לעמוד הראשי.";
+    alert("מרצה לא נמצא, הנך מועבר לעמוד הראשי.");
     TeacherInfoDiv.appendChild(failedSearchLabel);
 }
 
 function addComment() {
+    if (document.getElementById("teacherNewCommetBox").value == "") {
+        alert("הכנס תגובה");
+        return;
+    }
     var ratings = [];
     for (criteria in allCriterias) {
-        ratings.push(document.getElementById("criteriaRating" + criteria).value);
+        ratings.push(getSelectedRadioButtonValue(document.getElementById("criteriaRating" + criteria).children[0]));
     }
     var comment = {
         Id: teacher.Id,
         Ratings: ratings,
-        Comment: document.getElementById("TeacherNewCommetBox").value,
+        Comment: document.getElementById("teacherNewCommetBox").value,
     };
     var request = $.ajax({
         type: "POST",
@@ -271,47 +242,26 @@ function addComment() {
     });
 }
 
-$(':button').click(function () {
-    var formData = new FormData($('form')[0]);
-    $.ajax({
-        url: uri6,
-        type: 'POST',
-        xhr: function () {  // Custom XMLHttpRequest
-            var myXhr = $.ajaxSettings.xhr();
-            if (myXhr.upload) { // Check if upload property exists
-                myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
-            }
-            return myXhr;
-        },
-        //Ajax events
-        beforeSend: beforeSendHandler,
-        success: completeFileUploadHandler,
-        error: failedFileUploadHandler,
-        // Form data
-        data: formData,
-        //Options to tell jQuery not to process data or worry about content-type.
-        cache: false,
-        contentType: false,
-        processData: false
-    });
-});
-
-function progressHandlingFunction(e) {
-    if (e.lengthComputable) {
-        $('progress').attr({ value: e.loaded, max: e.total });
-    }
-}
-
-function completeFileUploadHandler() {
-
-}
-
-function failedFileUploadHandler() {
-    alert("תגובתך הוספה בהצלחה");
-}
-
 function removingAllContentOfDiv(div) {
     while (div.hasChildNodes()) {
         div.removeChild(div.lastChild);
+    }
+}
+
+function getSelectedRadioButtonValue(radioButtonForm) {
+    for (star = 0; star < 5; star++) {
+        if (radioButtonForm[star].checked == true) {
+            return radioButtonForm[star].value;
+        }
+    }
+    return 0;
+}
+
+function setSelectedRadionButtonValue(radioButtonForm, value) {
+    for (radioButton in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
+            radioButtonForm.children[0].children[radioButton].checked = true;
+            return;
+        }
     }
 }
