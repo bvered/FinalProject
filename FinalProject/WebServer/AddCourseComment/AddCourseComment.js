@@ -3,12 +3,14 @@ var uri2 = '/api/Courses/AddComment';
 var uri3 = '/api/Courses/GetTeachers';
 var uri4 = '/api/Courses/GetCourse';
 var uri5 = '/api/Courses/AddVote';
+var uri6 = '/api/AddFile/AddSyllabus';
 
 var course;
 var allCriterias;
 var numberOfCommentsLoaded;
 
 var CourseInfoDiv = document.getElementById("CourseInfoDiv");
+var NewSyllabusDiv = document.getElementById("NewSyllabusDiv");
 var NewCourseCommentDiv = document.getElementById("NewCourseCommentDiv");
 var CommentsDiv = document.getElementById("CommentsDiv");
 
@@ -31,6 +33,7 @@ function loadView() {
         showLoadingCourseFailed();
     }
 }
+
 function loadCommentsCriteras() {
     succeed = false;
 
@@ -97,59 +100,32 @@ function addVote(voteValueLabel, id, like) {
     return succeed;
 }
 
-
 function printCourseInfo() {
     printCourseProperties();
-    showCommentOptions();
     showCourseComments();
 }
 
 function printCourseProperties() {
-    var courseNameLabel = document.createElement("Label");
-    courseNameLabel.id = "propertyLabelCourseName";
-    courseNameLabel.innerHTML = "שם קורס: " + course.Name;
-    CourseInfoDiv.appendChild(courseNameLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseNameTD = document.getElementById("courseNameTD");
+    courseNameTD.innerHTML = course.Name;
 
-    var courseScoreLabel = document.createElement("Label");
-    courseScoreLabel.id = "propertyLabelCourseScore";
-    courseScoreLabel.innerHTML = "ממוצע דירוגים: " + course.Score;
-    CourseInfoDiv.appendChild(courseScoreLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseAvgTD = document.getElementById("courseAvgTD");
+    courseAvgTD.innerHTML = course.Score;
 
-    var courseFacultyLabel = document.createElement("Label");
-    courseFacultyLabel.id = "propertyLabelCourseScore";
-    courseFacultyLabel.innerHTML = "פקולטה: " + course.Faculty;
-    CourseInfoDiv.appendChild(courseFacultyLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseFacultyTD = document.getElementById("courseFacultyTD");
+    courseFacultyTD.innerHTML = course.Faculty;
 
-    var courseMandtoryLabel = document.createElement("Label");
-    courseMandtoryLabel.id = "propertyLabelCourseScore";
-    courseMandtoryLabel.innerHTML = "חובה: " + course.IsMandatory;
-    CourseInfoDiv.appendChild(courseMandtoryLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseObligtoryTD = document.getElementById("courseObligtoryTD");
+    courseObligtoryTD.innerHTML = course.IsMandatory ? "כן" : "לא";
 
-    var courseAcademicDegreeLabel = document.createElement("Label");
-    courseAcademicDegreeLabel.id = "propertyLabelCourseScore";
-    courseAcademicDegreeLabel.innerHTML = "תואר: " + course.AcademicDegree;
-    CourseInfoDiv.appendChild(courseAcademicDegreeLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseOfDegreeTD = document.getElementById("courseOfDegreeTD");
+    courseOfDegreeTD.innerHTML = course.AcademicDegree;
 
-    var courseIntendedYearLabel = document.createElement("Label");
-    courseIntendedYearLabel.id = "propertyLabelCourseScore";
-    courseIntendedYearLabel.innerHTML = "שנה: " + course.IntendedYear;
-    CourseInfoDiv.appendChild(courseIntendedYearLabel);
-    CourseInfoDiv.appendChild(document.createElement('br'));
+    var courseYearTD = document.getElementById("courseYearTD");
+    courseYearTD.innerHTML = course.IntendedYear;
 }
 
 function showCourseComments(sortByNew) {
-    removingAllContentOfDiv(CommentsDiv);
-    var commentsLabel = document.createElement("Label");
-    commentsLabel.id = "commentsLabel";
-    commentsLabel.innerHTML = "תגובות";
-    CommentsDiv.appendChild(commentsLabel);
-    CommentsDiv.appendChild(document.createElement('br'));
-
     for (courseSemester in course.CourseInSemesters) {
         var semesterComments = course.CourseInSemesters[courseSemester].CourseComments;
         if (!sortByNew) {
@@ -164,15 +140,13 @@ function showCourseComments(sortByNew) {
 }
 
 function printComment(comment, itr) {
-    var commentViewDiv = document.createElement("div");
-    commentViewDiv.id = "commentViewDiv" + itr;
-    CommentsDiv.appendChild(commentViewDiv);
-    var commentBox = document.createElement("Label");
-    commentBox.innerHTML = comment.CommentText;
-    commentBox.id = "CourseCommet" + itr;
-    commentViewDiv.appendChild(commentBox);
-    commentViewDiv.appendChild(document.createElement('br'));
-
+    var allComments = document.getElementById("allComments");
+    var commentView = document.getElementById("commentTable").cloneNode(true);
+    commentView.style.display = 'block';
+    commentView.id = "commentView" + itr;
+    commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
+    var likesCell = commentView.rows[commentView.rows.length - 1].cells[0];
+    likesCell.style.textAlign = "center";
     var numberOfVotes = document.createElement("Label");
     numberOfVotes.id = "CommentNumber" + itr + "Votes";
     numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
@@ -181,84 +155,56 @@ function printComment(comment, itr) {
     voteUpButton.value = comment.Id;
     var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
     voteUpButton.onclick = voteUpFunctionString;
-    voteUpButton.innerHTML = "Like";
+    voteUpButton.innerHTML = "👍";
     var voteDownButton = document.createElement("Button");
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
     voteDownButton.value = comment.Id;
     var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
     voteDownButton.onclick = voteDownFunctionString;
-    voteDownButton.innerHTML = "Dislike";
-    commentViewDiv.appendChild(voteDownButton);
-    commentViewDiv.appendChild(numberOfVotes);
-    commentViewDiv.appendChild(voteUpButton);
-    commentViewDiv.appendChild(document.createElement('br'));
+    voteDownButton.innerHTML = "👎";
+    likesCell.appendChild(voteDownButton);
+    likesCell.appendChild(numberOfVotes);
+    likesCell.appendChild(voteUpButton);
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
-            var ratingString = loadedComment.Criteria.DisplayName;
-            var ratingNumber = loadedComment.Rating;
-
-            var labelForRatingString = document.createElement("Label");
-            labelForRatingString.id = "CommentNumber" + itr + "RatingString" + rating;
-            labelForRatingString.innerHTML = ratingString;
-
-            var labelForRatingNumber = document.createElement("Label");
-            labelForRatingNumber.id = "CommentNumber" + itr + "RatingNumber" + rating;
-            labelForRatingNumber.innerHTML = ratingNumber;
-
-            commentViewDiv.appendChild(labelForRatingString);
-            commentViewDiv.appendChild(document.createElement('br'));
-            commentViewDiv.appendChild(labelForRatingNumber);
-            commentViewDiv.appendChild(document.createElement('br'));
+        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
+        clonedCommentCriteriaTR.style.display = 'block';
+        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
+        clonedCommentCriteriaTR.children[1].innerHTML = loadedComment.Rating;
+        likesCell.parentNode.insertBefore(clonedCommentCriteriaTR, likesCell);
     }
+    allComments.appendChild(commentView);
 }
 
-function showCommentOptions() {
-    removingAllContentOfDiv(NewCourseCommentDiv);
-    var addNewCommentButton = document.createElement("Button");
-    addNewCommentButton.innerHTML = "הוסף תגובה חדשה";
-    addNewCommentButton.onclick = revealAddCommentViewToUser;
-    NewCourseCommentDiv.appendChild(addNewCommentButton);
-    NewCourseCommentDiv.appendChild(document.createElement("BR"));}
+function showNewCommentAction() {
+    document.getElementById("newCommentTable").style.display = "block";
+    document.getElementById("showNewCommentButtonTR").style.display = "none";
+    revealAddCommentViewToUser();
+}
 
 function revealAddCommentViewToUser() {
-    removingAllContentOfDiv(NewCourseCommentDiv);
-    var commentBox = document.createElement("textarea");
-    commentBox.placeholder = "תגובה חדשה..";
-    commentBox.id = "CourseNewCommetBox";
-    NewCourseCommentDiv.appendChild(commentBox);
-    NewCourseCommentDiv.appendChild(document.createElement('br'));
+    var newCommentTable = document.getElementById("newCommentTable");
+    var newCommentCriteriaTR = document.getElementById("criteriaTR");
+    var courseSemestersTR = document.getElementById("courseSemestersTR");
     for (ratingText in allCriterias) {
-        var criteriaText = allCriterias[ratingText];
-        var labelInput = document.createElement("Label");
-        labelInput.id = "criteriaText" + ratingText;
-        labelInput.innerHTML = criteriaText;
-
-        var inputText = document.createElement("INPUT");
-        inputText.id = "criteriaRating" + ratingText;
-        inputText.name = "criteriaRating" + ratingText;
-        inputText.type = "number";
-        inputText.min = "0";
-        inputText.max = "5";
-
-        NewCourseCommentDiv.appendChild(labelInput);
-        NewCourseCommentDiv.appendChild(inputText);
-
-        NewCourseCommentDiv.appendChild(document.createElement("BR"));
+        var clonedCommentCriteriaTR = newCommentCriteriaTR.cloneNode(true);
+        clonedCommentCriteriaTR.id = "criteriaTR" + ratingText;
+        clonedCommentCriteriaTR.style.display = "block";
+        var criteriaTextTD = clonedCommentCriteriaTR.children[0];
+        criteriaTextTD.id = "criteriaText" + ratingText;
+        criteriaTextTD.innerHTML = allCriterias[ratingText];
+        var starRatingTD = clonedCommentCriteriaTR.children[1];
+        starRatingTD.id = "criteriaRating" + ratingText;
+        courseSemestersTR.parentNode.insertBefore(clonedCommentCriteriaTR, courseSemestersTR.nextSibling);
     }
-    var courseSemesters = document.createElement("SELECT");
-    courseSemesters.id = "courseSemesters";
+    var courseSemesters = document.getElementById("courseSemesters");
     for (semester in course.CourseInSemesters) {
         var semesterOption = document.createElement("option");
         semesterOption.text = course.CourseInSemesters[semester].Year + " " + course.CourseInSemesters[semester].Semester;
         semesterOption.value = course.CourseInSemesters[semester].Id
         courseSemesters.add(semesterOption);
     }
-    NewCourseCommentDiv.appendChild(courseSemesters);
-    var sendButton = document.createElement("BUTTON");
-    sendButton.innerHTML = "Add";
-    sendButton.onclick = addComment;
-    NewCourseCommentDiv.appendChild(sendButton);
 }
 
 function showLoadingCourseFailed() {
@@ -269,9 +215,13 @@ function showLoadingCourseFailed() {
 }
 
 function addComment() {
+    if (document.getElementById("CourseNewCommetBox").value == "") {
+        alert("הכנס תגובה");
+        return;
+    }
     var ratings = [];
     for (criteria in allCriterias) {
-        ratings.push(document.getElementById("criteriaRating" + criteria).value);
+        ratings.push(getSelectedRadioButtonValue(document.getElementById("criteriaRating" + criteria).children[0]));
     }
     var semester;
     if (document.getElementById("courseSemesters") == null) {
@@ -305,4 +255,13 @@ function removingAllContentOfDiv(div) {
     while (div.hasChildNodes()) {
         div.removeChild(div.lastChild);
     }
+}
+
+function getSelectedRadioButtonValue(radioButtonForm) {
+    for (star = 0; star < 5; star ++) {
+        if (radioButtonForm[star].checked == true) {
+            return radioButtonForm[star].value;
+        }
+    }
+    return 0;
 }

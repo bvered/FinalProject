@@ -2,6 +2,7 @@
 var uri2 = '/api/Teachers/AddComment';
 var uri4 = '/api/Teachers/GetTeacher';
 var uri5 = '/api/Teachers/AddVote';
+var uri6 = '/api/AddFile/AddSyllabus';
 
 var teacher;
 var allCriterias;
@@ -268,6 +269,45 @@ function addComment() {
         },
         async: false
     });
+}
+
+$(':button').click(function () {
+    var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: uri6,
+        type: 'POST',
+        xhr: function () {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if (myXhr.upload) { // Check if upload property exists
+                myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // For handling the progress of the upload
+            }
+            return myXhr;
+        },
+        //Ajax events
+        beforeSend: beforeSendHandler,
+        success: completeFileUploadHandler,
+        error: failedFileUploadHandler,
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+});
+
+function progressHandlingFunction(e) {
+    if (e.lengthComputable) {
+        $('progress').attr({ value: e.loaded, max: e.total });
+    }
+}
+
+function completeFileUploadHandler() {
+
+}
+
+function failedFileUploadHandler() {
+    alert("תגובתך הוספה בהצלחה");
 }
 
 function removingAllContentOfDiv(div) {

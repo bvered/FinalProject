@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <title>Course</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="AddCourseComment.js"></script>
+    <link href="css/StyleSheet.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+</head>
+<body onload ="loadView()">
+    <header>
+        <div class="logo">
+            <img src="../images/ratemyschool.png" />
+        </div>
+    </header>
+    <div class="main">
+        <div class="courseInfo">
+            <table>
+                <tr>
+                    <td class="courseKeyTdUp">שם הקורס:</td>
+                    <td id="courseNameTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="courseKeyTdInner">ממוצע דירוגים:</td>
+                    <td id="courseAvgTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="courseKeyTdInner">פקולטה:</td>
+                    <td id="courseFacultyTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="courseKeyTdInner">קורס חובה:</td>
+                    <td id="courseObligtoryTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="courseKeyTdInner">מספר תואר:</td>
+                    <td id="courseOfDegreeTD" style="padding-right:20px"></td>
+                </tr>
+                <tr>
+                    <td class="courseKeyTdDown">שנה:</td>
+                    <td id="courseYearTD" style="padding-right:20px"></td>
+                </tr>
+                <tr id="showNewCommentButtonTR">
+                    <td colspan="2">
+                        <center>
+                            <input type="button" value="תגובה חדשה" class="addComment" onclick="showNewCommentAction()" />
+                        </center>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="main">
+        <div class="newComment">
+            <table id="newCommentTable" style="display:none">
+                <tr>
+                    <td class="courseKeyTdUp" style="width: 250px;">הוסף תגובה:</td>
+                    <td>    
+                        <textarea id="CourseNewCommetBox" placeholder="תגובתך כאן"></textarea>
+                    </td>
+                </tr>
+                <tr id="criteriaTR" style="display:none">
+                    <td id="criteriaTextTD" class="courseKeyTdInner" style="width:250px"></td>
+                    <td id="starRatingTD" style="align-content:center; direction:ltr;">
+                        <form id="starRating">
+                            <div class="stars">
+                                <input type="radio" name="star" class="star-1" id="star-1" />
+                                <label class="star-1" for="star-1">1</label>
+                                <input type="radio" name="star" class="star-2" id="star-2" />
+                                <label class="star-2" for="star-2">2</label>
+                                <input type="radio" name="star" class="star-3" id="star-3" />
+                                <label class="star-3" for="star-3">3</label>
+                                <input type="radio" name="star" class="star-4" id="star-4" />
+                                <label class="star-4" for="star-4">4</label>
+                                <input type="radio" name="star" class="star-5" id="star-5" />
+                                <label class="star-5" for="star-5">5</label>
+                                <span></span>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                <tr id="courseSemestersTR">
+                    <td class="courseKeyTdInner">סמסטר</td>
+                    <td>
+                        <center>
+                            <select name="courseSemesters" id="courseSemesters"></select>
+                        </center>
+                    </td>
+                </tr>
+                <tr id="sendTR">
+                    <td class="courseKeyTdDown" style="width: 250px;height:50px;"></td>
+                    <td><center><input type="button" value="שלח" class="sendButton" onclick="addComment()" /></center></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="main">
+        <div id="allComments" class="allComments">
+            <table id="commentTable" style="display:none">
+                <tr>
+                    <td class="courseKeyTdUp" style="width: 250px;">תגובה:</td>
+                    <td><textarea readonly style="border-radius: 5px; background-color: rgba(222, 220, 220, 0.60)"></textarea></td>
+                </tr>
+                <tr class="likesTR">
+                    <td colspan="2"></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

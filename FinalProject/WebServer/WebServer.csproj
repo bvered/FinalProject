@@ -102,6 +102,13 @@
   <ItemGroup>
     <Content Include="AddCourseComment\AddCourseComment.html" />
     <Content Include="AddCourseComment\AddCourseComment.js" />
+    <Content Include="Images\academit.png" />
+    <Content Include="Images\ratemyschool.png" />
+    <Content Include="Images\site_background.jpeg" />
+    <Content Include="AddCourseComment\css\stars.png" />
+    <Content Include="AddCourseComment\css\style.css" />
+    <Content Include="AddCourseComment\css\StyleSheet.css" />
+    <Content Include="AddCourseComment\index.html" />
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
     <Content Include="AddCourse\style.css" />
@@ -123,9 +130,7 @@
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\style.css" />
-    <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
-    <Content Include="Images\ratemyschool.jpg" />
     <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />
     <Content Include="SearchResultsPage\SearchResultPageCSS.css" />

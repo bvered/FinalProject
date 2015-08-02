@@ -1,0 +1,123 @@
+﻿body {
+    background-image: url('../../Images/site_background.jpeg');
+    background-size: cover;
+}
+
+header {
+    /*position:fixed;*/
+    left: 0;
+    right: 0;
+}
+
+.logo {
+    width: 275px;
+    margin: 0 auto;
+}
+
+.main {
+    margin-top: 30px;
+}
+
+.courseInfo {
+}
+
+    .courseInfo table {
+        background-color: rgba(255, 255, 255, 0.90);
+        width: 500px;
+        height: 200px;
+        margin-right: 100px;
+        border-radius: 5px;
+        visibility :inherit
+    }
+    
+    .courseInfo table .addComment {
+        background-color: rgba(0, 50, 196, 0.60);
+        border-radius:5px;
+        width:100px;
+        height:30px;
+        color:white;
+        font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+        position:sticky;
+        left:0;
+}
+
+.courseKeyTdUp {
+    background-color: rgba(0, 50, 196, 0.44);
+    width: 150px;
+    padding-right: 20px;
+    border-radius: 5px 5px 0 0;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-weight: bold;
+}
+
+.courseKeyTdDown {
+    background-color: rgba(0, 50, 196, 0.44);
+    width: 150px;
+    padding-right: 20px;
+    border-radius: 0 0 5px 5px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-weight: bold;
+}
+
+.courseKeyTdInner {
+    background-color: rgba(0, 50, 196, 0.44);
+    width: 150px;
+    padding-right: 20px;
+    font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+    font-weight: bold;
+}
+
+.newComment {
+}
+
+    .newComment table {
+        background-color: rgba(255, 255, 255, 0.90);
+        margin-right: 100px;
+        border-radius: 5px;
+        width: 600px;
+    }
+
+textarea {
+    margin: 5px;
+    width: 340px;
+    height: 100px;
+    resize: none;
+}
+
+#courseSemesters {
+        background-color: rgba(57, 88, 57, 0.60);
+        border-radius:5px;
+        width:100px;
+        height:30px;
+        color:white;
+        font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+        position:sticky;
+        left:0;
+
+}
+
+.sendButton {
+        background-color: rgba(0, 50, 196, 0.60);
+        border-radius:5px;
+        width:70px;
+        height:30px;
+        color:white;
+        font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
+        position:sticky;
+        left:0;
+}
+
+.allComments {
+
+}
+
+    .allComments table {
+        background-color: rgba(255, 255, 255, 0.90);
+        margin-right: 100px;
+        border-radius: 5px;
+        width: 600px;
+    }
+
+.likesTR {
+    align-content:center;
+}
