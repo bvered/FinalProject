@@ -113,16 +113,16 @@ function printCourseProperties() {
     courseAvgTD.innerHTML = course.Score;
 
     var courseFacultyTD = document.getElementById("courseFacultyTD");
-    courseFacultyTD.innerHTML = course.Faculty;
+    courseFacultyTD.innerHTML = facultyNameByEnum(course.Faculty);
 
     var courseObligtoryTD = document.getElementById("courseObligtoryTD");
     courseObligtoryTD.innerHTML = course.IsMandatory ? "כן" : "לא";
 
     var courseOfDegreeTD = document.getElementById("courseOfDegreeTD");
-    courseOfDegreeTD.innerHTML = course.AcademicDegree;
+    courseOfDegreeTD.innerHTML = academicDegreeNameByEnum(course.AcademicDegree);
 
     var courseYearTD = document.getElementById("courseYearTD");
-    courseYearTD.innerHTML = course.IntendedYear;
+    courseYearTD.innerHTML = intendedYearNameByEnum(course.IntendedYear);
 }
 
 function showCourseComments(sortByNew) {
@@ -156,9 +156,11 @@ function printComment(comment, itr) {
     var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
     voteUpButton.onclick = voteUpFunctionString;
     voteUpButton.innerHTML = "👍";
+    voteUpButton.className = "voteButton";
     var voteDownButton = document.createElement("Button");
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
     voteDownButton.value = comment.Id;
+    voteDownButton.className = "voteButton";
     var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
     voteDownButton.onclick = voteDownFunctionString;
     voteDownButton.innerHTML = "👎";
@@ -202,7 +204,7 @@ function revealAddCommentViewToUser() {
     var courseSemesters = document.getElementById("courseSemesters");
     for (semester in course.CourseInSemesters) {
         var semesterOption = document.createElement("option");
-        semesterOption.text = course.CourseInSemesters[semester].Year + " " + course.CourseInSemesters[semester].Semester;
+        semesterOption.text = course.CourseInSemesters[semester].Year + " " + semesterNameByEnum(course.CourseInSemesters[semester].Semester);
         semesterOption.value = course.CourseInSemesters[semester].Id
         courseSemesters.add(semesterOption);
     }
@@ -268,5 +270,81 @@ function setSelectedRadionButtonValue(radioButtonForm, value) {
             radioButtonForm.children[0].children[radioButton].checked = true;
             return;
         }
+    }
+}
+
+function facultyNameByEnum(faculty) {
+    switch (faculty) {
+        case 0:
+            return "מדעי המחשב";
+            break;
+        case 1:
+            return "מדעי ההתנהגות";
+            break;
+        case 2:
+            return "מערכות מידע";
+            break;
+        case 3:
+            return "אחיות";
+            break;
+        case 4:
+            return "כלכלה וניהול";
+            break;
+        case 5:
+            return "פוליטיקה וממשל";
+            break;
+        case 6:
+            return "פיתוח ארגוני";
+            break;
+        case 7:
+            return "מנהל עסקים";
+            break;
+        case 8:
+            return "פסיכולוגיה";
+            break;
+        default:
+            return "";
+            break;
+    }
+}
+
+function academicDegreeNameByEnum(degree) {
+    switch (degree) {
+        case 0:
+            return "תואר ראשון";
+        case 1:
+            return "תואר שני";
+        default:
+            return "אין";
+    }
+}
+
+function intendedYearNameByEnum(year) {
+    switch (year) {
+        case 0:
+            return "הכל";
+        case 1:
+            return "שנה ראשונה";
+        case 2:
+            return "שנה שניה";
+        case 3:
+            return "שנה שלישית";
+        case 4:
+            return "שנה רביעית";
+        default:
+            "אין";
+    }
+}
+
+function semesterNameByEnum(semester) {
+    switch (semester) {
+        case 0:
+            return "א";
+        case 1:
+            return "ב";
+        case 2:
+            return "קיץ";
+        default:
+            "";
     }
 }

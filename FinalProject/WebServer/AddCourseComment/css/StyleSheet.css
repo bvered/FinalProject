@@ -54,6 +54,7 @@ header {
 .courseKeyTdDown {
     background-color: rgba(0, 50, 196, 0.44);
     width: 150px;
+    padding-top:5px;
     padding-right: 20px;
     border-radius: 0 0 5px 5px;
     font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
@@ -111,6 +112,8 @@ textarea {
 .voteButton {
     background-color:rgba(255, 255, 255, 0.00);
     border-radius: 5px;
+    border-width:1px;
+
 }
 
 .allComments {
