@@ -16,7 +16,7 @@
 <body onload="loadView()">
     <header>
         <div class="logo">
-            <img src="../images/ratemyschool.png" />
+            <img src="../images/ratemyschool.png" onclick="parent.location = '../HomePage/HomePage.html'" />
         </div>
     </header>
     <div class="main">
@@ -49,7 +49,7 @@
                 <tr id="showNewCommentButtonTR">
                     <td colspan="2">
                         <center>
-                            <input type="button" value="הוסף סילבוס\גליון ציונים" class="addComment" style="width:200px" />
+                            <input type="button" value="הוסף סילבוס\גליון ציונים" class="addComment" style="width:200px" onclick="parent.location = '../UploadSyllabus/UploadSyllabus.html'" />
                             <input type="button" value="הצג סילבוס\גליון ציונים" class="addComment" style="width:200px" />
                             <input type="button" value="תגובה חדשה" class="addComment" onclick="showNewCommentAction()" />  
                         </center>
@@ -70,21 +70,20 @@
                 <tr id="criteriaTR" style="display:none">
                     <td id="criteriaTextTD" class="courseKeyTdInner" style="width:250px"></td>
                     <td id="starRatingTD" style="align-content:center;direction:ltr; text-align:center;">
-                        <form id="starRating">
-                            <div class="stars">
-                                <input type="radio" name="star" class="star-1" id="star-1" />
-                                <label class="star-1" for="star-1"></label>
-                                <input type="radio" name="star" class="star-2" id="star-2" />
-                                <label class="star-2" for="star-2"></label>
-                                <input type="radio" name="star" class="star-3" id="star-3" />
-                                <label class="star-3" for="star-3"></label>
-                                <input type="radio" name="star" class="star-4" id="star-4" />
-                                <label class="star-4" for="star-4"></label>
-                                <input type="radio" name="star" class="star-5" id="star-5" />
-                                <label class="star-5" for="star-5"></label>
-                                <span></span>
-                            </div>
-                        </form>
+                        <div class="stars">
+                            <form id="starRating" style="text-align: center;">
+                                <input type="radio" name="star" class="star-1" id="star-1" checked value="1" />
+                                <label class="star-1" for="star-1">1</label>
+                                <input type="radio" name="star" class="star-2" id="star-2" value="2" />
+                                <label class="star-2" for="star-2">2</label>
+                                <input type="radio" name="star" class="star-3" id="star-3" value="3" />
+                                <label class="star-3" for="star-3">3</label>
+                                <input type="radio" name="star" class="star-4" id="star-4" value="4" />
+                                <label class="star-4" for="star-4">4</label>
+                                <input type="radio" name="star" class="star-5" id="star-5" value="5" />
+                                <label class="star-5" for="star-5">5</label>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 <tr id="courseSemestersTR">

@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -16,7 +17,7 @@
 <body onload="loadView()">
     <header>
         <div class="logo">
-            <img src="../images/ratemyschool.png" />
+            <img src="../images/ratemyschool.png" onclick="parent.location = '../HomePage/HomePage.html'" />
         </div>
     </header>
     <div class="main">
@@ -64,21 +65,20 @@
                 <tr id="criteriaTR" style="display:none">
                     <td id="criteriaTextTD" class="teacherKeyTdInner" style="width: 250px;"></td>
                     <td id="starRatingTD" style="direction:ltr;">
-                            <form id="starRating" style="text-align: center;">
-                                <div class="stars">
-                                    <input type="radio" name="star" class="star-1" id="star-1" />
-                                    <label class="star-1" for="star-1"></label>
-                                    <input type="radio" name="star" class="star-2" id="star-2" />
-                                    <label class="star-2" for="star-2"></label>
-                                    <input type="radio" name="star" class="star-3" id="star-3" />
-                                    <label class="star-3" for="star-3"></label>
-                                    <input type="radio" name="star" class="star-4" id="star-4" />
-                                    <label class="star-4" for="star-4"></label>
-                                    <input type="radio" name="star" class="star-5" id="star-5" />
-                                    <label class="star-5" for="star-5"></label>
-                                    <span></span>
-                                </div>
-                            </form>
+                        <div class="stars">
+                                <form id="starRating" style="text-align: center;">
+                                    <input type="radio" name="star" class="star-1" id="star-1" checked value="1" />
+                                    <label class="star-1" for="star-1">1</label>
+                                    <input type="radio" name="star" class="star-2" id="star-2" value="2" />
+                                    <label class="star-2" for="star-2">2</label>
+                                    <input type="radio" name="star" class="star-3" id="star-3" value="3" />
+                                    <label class="star-3" for="star-3">3</label>
+                                    <input type="radio" name="star" class="star-4" id="star-4" value="4" />
+                                    <label class="star-4" for="star-4">4</label>
+                                    <input type="radio" name="star" class="star-5" id="star-5" value="5" />
+                                    <label class="star-5" for="star-5">5</label>
+                                </form>
+                        </div>
                     </td>
                 </tr>
                 <tr id="sendTR">

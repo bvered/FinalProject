@@ -200,7 +200,6 @@ function printComment(comment, itr) {
         var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
         clonedCommentCriteriaTR.style.display = 'block';
         clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        clonedCommentCriteriaTR.children[1].children[0].disabled = true;
         setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
         commentView.appendChild(clonedCommentCriteriaTR);
     }
@@ -242,16 +241,10 @@ function addComment() {
     });
 }
 
-function removingAllContentOfDiv(div) {
-    while (div.hasChildNodes()) {
-        div.removeChild(div.lastChild);
-    }
-}
-
 function getSelectedRadioButtonValue(radioButtonForm) {
-    for (star = 0; star < 5; star++) {
-        if (radioButtonForm[star].checked == true) {
-            return radioButtonForm[star].value;
+    for (star in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[star].checked == true) {
+            return radioButtonForm.children[0].children[star].value;
         }
     }
     return 0;
