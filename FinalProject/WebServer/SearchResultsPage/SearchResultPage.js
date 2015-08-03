@@ -1,4 +1,5 @@
-﻿$(document).ready(function() {
+﻿
+$(document).ready(function() {
     $('body').scroll(function() {
         $('#content').animate({ top: $(this).scrollTop() });
     });
@@ -18,10 +19,13 @@ function ShowResults() {
     $('#page').attr('value', 1);
 
     if (queryString["search"] === "All") {
+        $('#FilterForCourses')[0].hidden = false;
         getAllData();
     } else if (queryString["search"] === "Courses") {
+        $('#FilterForCourses')[0].hidden = false;
         getCourseData();
     } else if (queryString["search"] === "Teachers") {
+        $('#FilterForCourses')[0].hidden = true;
         getTeacherData();
     }
 }
@@ -186,10 +190,13 @@ function ChangeResults() {
 
     var filterType = $('input[name=type]:checked').val();
     if (filterType == "All") {
+        $('#FilterForCourses')[0].hidden = false;
         getAllData();
     } else if (filterType == "Teachers") {
+        $('#FilterForCourses')[0].hidden = true;
         getTeacherData();
     } else if (filterType == "Courses") {
+        $('#FilterForCourses')[0].hidden = false;
         getCourseData();
     }
 }
@@ -223,16 +230,14 @@ function showTeachersData(arrayResult) {
         img.src = 'teacherImg.jpg';
         teacherData.appendChild(img);
 
-        var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
-        a.title = arrayResult[i].Name;
-        a.href = "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id;
-        a.appendChild(linkText);
-        teacherData.appendChild(a);
+        linkText.className = 'teacherName';
+        teacherData.onclick = function() { window.location = "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id; };
+        teacherData.appendChild(linkText);
 
         teacherData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
+        var Score = document.createTextNode('כמות דירוגים: ' + arrayResult[i].Score);
         teacherData.appendChild(Score);
 
         teacherData.appendChild(document.createElement("br"));
@@ -269,16 +274,14 @@ function showCoursesData(arrayResult) {
         img.src = 'courseImg.jpg';
         courseData.appendChild(img);
 
-        var a = document.createElement('a');
         var linkText = document.createTextNode(arrayResult[i].Name);
-        a.title = arrayResult[i].Name;
-        a.href = "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id;
-        a.appendChild(linkText);
-        courseData.appendChild(a);
+        linkText.className = 'teacherName';
+        courseData.onclick = function () { window.location = "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id; };
+        courseData.appendChild(linkText);
 
         courseData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('ניקוד: ' + arrayResult[i].Score);
+        var Score = document.createTextNode('כמות דירוגים: ' + arrayResult[i].Score);
         courseData.appendChild(Score);
 
         courseData.appendChild(document.createElement("br"));
@@ -311,37 +314,35 @@ function showCoursesData(arrayResult) {
 
 function createPaging(resultsCounter) {
     var previousPage = document.createElement('li');
-    var a = document.createElement('a');
-    a.onclick = function () { changePage(parseInt($('#page').attr('value')) - 1); };
+    previousPage.className = "pagebutton";
+    previousPage.onclick = function () { changePage(parseInt($('#page').attr('value')) - 1); };
     var innerSpan = document.createElement('span');
     innerSpan.innerText = '»';
-    a.appendChild(innerSpan);
-    previousPage.appendChild(a);
+
+    previousPage.appendChild(innerSpan);
     $('#pages')[0].appendChild(previousPage);
    
     for (var i = 0; i < resultsCounter; i++) {
         var newPage = document.createElement('li');
-        a = document.createElement('a');
-        a.onclick = function () { changePage(parseInt(i)+1); };
+        newPage.className = "pagebutton";
+        newPage.onclick = function () { changePage(parseInt(i) + 1); };
         innerSpan = document.createElement('span');
         innerSpan.innerText = i+1;
 
         if (i == 0) {
             newPage.className ='active';
         }
-        a.appendChild(innerSpan);
-        newPage.appendChild(a);
+        newPage.appendChild(innerSpan);
         $('#pages')[0].appendChild(newPage);
     }
 
     var nextPage = document.createElement('li');
-    a = document.createElement('a');
-    a.onclick = function () { changePage(parseInt($('#page').attr('value')) + 1); };
+    nextPage.className = "pagebutton";
+    nextPage.onclick = function () { changePage(parseInt($('#page').attr('value')) + 1); };
     innerSpan = document.createElement('span');
     innerSpan.innerText = '«';
 
-    a.appendChild(innerSpan);
-    nextPage.appendChild(a);
+    nextPage.appendChild(innerSpan);
     $('#pages')[0].appendChild(nextPage);
 }
 
@@ -354,4 +355,8 @@ function changePage(showPage) {
         $('#page').attr('value', showPage);
         ChangeResults();
     }
+}
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
 }

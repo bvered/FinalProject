@@ -38,3 +38,18 @@ $(document).ready(function () {
         $(".advanced-filter").toggle("slow");
     });
 });
+
+function homePage() {
+    window.location = "HomePage.html";
+}
+
+function sumbit(){
+    if (event.keyCode == 13) {
+        $("#sendButton").click();
+    }
+}
+
+function GoToSchool() {
+    window.location = "https://www.mta.ac.il/he-il/";
+}
+

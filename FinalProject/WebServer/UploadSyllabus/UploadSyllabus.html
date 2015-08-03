@@ -16,6 +16,9 @@
 </head>
 <body>
     <div class="background">
+        <header>
+            <div class="logo" onclick="homePage()"></div>
+        </header>
         <div class="size">
             <section class="add-new-syllabus">
                 <h1>הוספת סילבוס חדש</h1>
@@ -26,7 +29,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <input class="form-control" type="text" id="Year" placeholder="הכניסו שנה" />
+                            <input class="form-control" type="text" id="Year" placeholder="הכניסו שנה"/>
                         </td>
                     </tr>
                     <tr>
@@ -38,19 +41,19 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="semester[0]" name="semester[0]" value="0" type="radio" />
+                                        <input id="semester[0]" name="semester" value="0" type="radio"/>
                                         <label for="semester[0]">א</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="semester[1]" name="semester[0]" value="1" type="radio" />
+                                        <input id="semester[1]" name="semester" value="1" type="radio"/>
                                         <label for="semester[1]">ב</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="semester[2]" name="semester[0]" value="2" type="radio" />
+                                        <input id="semester[2]" name="semester" value="2" type="radio"/>
                                         <label for="semester[2]">קיץ</label>
                                     </td>
                                 </tr>
@@ -59,12 +62,12 @@
                     </tr>
                     <tr>
                         <td class="label">
-                            <label> העלה קובץ </br> <input id="fileUpload" type="file"  </br>/> </br></label>
+                            <label> העלה קובץ <input id="fileUpload" type="file"/></label>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input id="btnUploadFile" type="button" value="Upload File" />
+                            <input id="btnUploadFile" type="button" value="Upload File"/>
                         </td>
                     </tr>
 

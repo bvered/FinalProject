@@ -348,3 +348,7 @@ function semesterNameByEnum(semester) {
             "";
     }
 }
+
+function ChangePage() {
+    window.location = "../UploadSyllabus/UploadSyllabus.html?courseId=" + course.Id;
+}

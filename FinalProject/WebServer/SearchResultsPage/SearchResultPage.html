@@ -1,54 +1,55 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="he">
-    <head>
-        <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+<head>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 
-        <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
-        <script src="https://rawgit.com/andris9/jStorage/master/jstorage.js"></script>
-        <script src="../JavaScripts/QueryString.js"></script>
-        <script src="SearchResultPage.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/json2/20110223/json2.js"></script>
+    <script src="https://rawgit.com/andris9/jStorage/master/jstorage.js"></script>
+    <script src="../JavaScripts/QueryString.js"></script>
+    <script src="SearchResultPage.js"></script>
 
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-        <link href="SearchResultPage.css" rel="stylesheet" type="text/css" />
-        
-        <meta name="viewport" content="user-scalable=yes, width=device-width" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
+    <link href="SearchResultPage.css" rel="stylesheet" type="text/css" />
 
-        <title>Search Result</title>
-    </head>
+    <meta name="viewport" content="user-scalable=yes, width=device-width" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="content-type" content="text/html;charset=iso-8859-8-i" />
 
-    <body dir="rtl">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-        <input type="hidden" name="search" id="searchText" />
-        <input type="hidden" name="page" id="page" />
-        <div class="background">
-            <header>
-                <div class="logo"></div>
-            </header>
-            <div class="advanced-filter">
-                <div class="filter-box">
-                    <span class="filter-title">סנן לפי</span>
-                    <ul>
-                        <li>
-                            <input id="type[0]" name="type" value="All" type="radio" onclick=" ChangeResults() " />
-                            <label for="type[0]">הכל</label>
-                        </li>
-                        <li>
-                            <input id="type[1]" name="type" value="Teachers" type="radio" onclick=" ChangeResults() " />
-                            <label for="type[1]">מרצים</label>
-                        </li>
-                        <li>
-                            <input id="type[2]" name="type" value="Courses" type="radio" onclick=" ChangeResults() " />
-                            <label for="type[2]">קורסים</label>
-                        </li>
-                    </ul>
-                </div>
+    <title>Search Result</title>
+</head>
+
+<body dir="rtl">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <input type="hidden" name="search" id="searchText" />
+    <input type="hidden" name="page" id="page" />
+    <div class="background">
+        <header>
+            <div class="logo" onclick="homePage()"></div>
+        </header>
+        <div class="advanced-filter">
+            <div class="filter-box">
+                <span class="filter-title">סנן לפי</span>
+                <ul>
+                    <li>
+                        <input id="type[0]" name="type" value="All" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[0]">הכל</label>
+                    </li>
+                    <li>
+                        <input id="type[1]" name="type" value="Teachers" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[1]">מרצים</label>
+                    </li>
+                    <li>
+                        <input id="type[2]" name="type" value="Courses" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[2]">קורסים</label>
+                    </li>
+                </ul>
+            </div>
+            <div id="FilterForCourses">
                 <div class="filter-box">
                     <span class="filter-title">מסגרת</span>
                     <ul>
@@ -158,27 +159,27 @@
                     </ul>
                 </div>
             </div>
-            <div id="results">
-                <div id="title">
-                    <label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br />
-                </div>
-                <nav>
-                    <ul class="pagination" id="pages">
-                    </ul>
-                </nav>
-                <div id="content">
-                </div>
+        </div>
+        <div id="results">
+            <div id="title">
+                <label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br />
             </div>
-
-
-
-            <div id="NoMatches" hidden="true" dir="rtl">
-                לא נמצאו תוצאות!<br />
-                <a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a>
+            <nav>
+                <ul class="pagination" id="pages"></ul>
+            </nav>
+            <div id="content">
             </div>
         </div>
-        <footer id="footer" hidden="true">
-            <a href="#" id="resultAdd"></a>
-        </footer>
-    </body>
+
+
+
+        <div id="NoMatches" hidden="true" dir="rtl">
+            לא נמצאו תוצאות!<br />
+            <a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a>
+        </div>
+    </div>
+    <footer id="footer" hidden="true">
+        <a href="#" id="resultAdd"></a>
+    </footer>
+</body>
 </html>

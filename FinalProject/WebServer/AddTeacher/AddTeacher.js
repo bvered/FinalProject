@@ -1,17 +1,5 @@
 ﻿
-var uri = '/api/Courses/GetCourses';
 var uri3 = '/api/Teachers/GetTeachers';
-
-var allCourses;
-$.getJSON(uri).done(function(data) {
-    allCourses = data;
-
-    console.log(allCourses);
-    $("#CourseName").autocomplete({
-        source: allCourses
-    });
-});
-
 
 var allTeachers;
 $.getJSON(uri3).done(function(data) {
@@ -24,10 +12,9 @@ function checkAndAdd() {
         $("#TeacherExists")[0].hidden = false;
     } else { //if we can add the new teacher
         hideAllLabels();
-        addTeacher($("#TeacherName").val());
+        addTeacher($("#TeacherName").val(), $('#TeacherRoom').val(), $('#TeacherPhone').val(), $('#TeacherEmail').val());
     }
 };
-
 
 function inputSuccesss(divId, inputId, inputStatusId, labelId) {
     $(divId).removeClass("has-error").addClass("has-success");
@@ -74,4 +61,8 @@ function addTeacher(teacherName, teacherRoom, teacherPhone, teacherEmail) {
 
 function hideAllLabels() {
     $("#TeacherExists")[0].hidden = true;
+}
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
 }
