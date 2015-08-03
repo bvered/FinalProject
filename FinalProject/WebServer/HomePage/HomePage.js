@@ -18,6 +18,13 @@
         });
 };
 
+function BestCourses() {
+    window.location = "../SearchResultsPage/SearchResultPage.html?search=Courses&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+}
+
+function BestTeachers() {
+    window.location = "../SearchResultsPage/SearchResultPage.html?search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+}
 
 $(document).load(SmartSearch());
 

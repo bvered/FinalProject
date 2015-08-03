@@ -134,6 +134,7 @@
     <Content Include="HomePage\HomePage.css" />
     <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
+    <Content Include="JavaScripts\EngToHebConverter.js" />
     <Content Include="JavaScripts\QueryString.js" />
     <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />

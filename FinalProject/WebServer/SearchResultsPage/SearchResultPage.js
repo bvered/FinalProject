@@ -9,10 +9,12 @@ $(document).ready(function() {
 var coursesArrayResult = [];
 var teachersArrayResult = [];
 var maxPages;
+var queryString;
+
 
 function ShowResults() {
 
-    var queryString = getQuertyString();
+    queryString = getQuertyString();
     createSearchText(queryString);
 
     initFilterValues(queryString);
@@ -80,10 +82,14 @@ function createSearchText(query_string) {
 
 function getTeacherData() {
     var uri = '/api/SmartSearch/GetAllSearchedTeachers';
-    var searchCourse = {
+
+     var searchCourse = {
         Name: $('#searchText').attr('value'),
         counter: $('#page').attr('value') - 1,
     };
+    if (queryString["isTop"] === "true") {
+        searchCourse.isTop = true;
+    }
     var request = $.ajax({
         type: "POST",
         url: uri,
@@ -120,6 +126,9 @@ function getCourseData() {
         SearchPreferences: $.jStorage.get("SearchPreferences"),
         counter: $('#page').attr('value') - 1
     };
+    if (queryString["isTop"] === "true") {
+        searchCourse.isTop = true;
+    }
 
     var request = $.ajax({
         type: "POST",
