@@ -219,8 +219,6 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    $("#page").attr("value", Math.round(arrayResult.length / 5));
-
     for ( i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
         teacherData.className = 'teacherData';
@@ -232,7 +230,8 @@ function showTeachersData(arrayResult) {
 
         var linkText = document.createTextNode(arrayResult[i].Name);
         linkText.className = 'teacherName';
-        teacherData.onclick = function() { window.location = "/AddTeacherComment/AddTeacherComment.html?id=" + arrayResult[i].Id; };
+        teacherData.id = arrayResult[i].Id
+        teacherData.onclick = GoToTeacher;
         teacherData.appendChild(linkText);
 
         teacherData.appendChild(document.createElement("br"));
@@ -258,6 +257,10 @@ function showTeachersData(arrayResult) {
     }
 }
 
+function GoToTeacher() {
+    window.location = "/AddTeacherComment/AddTeacherComment.html?id=" + this.id;
+}
+
 function showCoursesData(arrayResult) {
     var uri = '/api/Courses/GetAllSearchedCourses';
     var newLine = '<br>';
@@ -276,7 +279,9 @@ function showCoursesData(arrayResult) {
 
         var linkText = document.createTextNode(arrayResult[i].Name);
         linkText.className = 'teacherName';
-        courseData.onclick = function () { window.location = "/AddCourseComment/AddCourseComment.html?id=" + arrayResult[i].Id; };
+        courseData.id = arrayResult[i].Id;
+        courseData.onclick = GoToCourse;
+      
         courseData.appendChild(linkText);
 
         courseData.appendChild(document.createElement("br"));
@@ -312,6 +317,10 @@ function showCoursesData(arrayResult) {
     }
 }
 
+function GoToCourse() {
+    window.location = "/AddCourseComment/AddCourseComment.html?id=" + this.id;
+}
+
 function createPaging(resultsCounter) {
     var previousPage = document.createElement('li');
     previousPage.className = "pagebutton";
@@ -325,11 +334,15 @@ function createPaging(resultsCounter) {
     for (var i = 0; i < resultsCounter; i++) {
         var newPage = document.createElement('li');
         newPage.className = "pagebutton";
-        newPage.onclick = function () { changePage(parseInt(i) + 1); };
+        newPage.id = i + 1;
+        
         innerSpan = document.createElement('span');
-        innerSpan.innerText = i+1;
+        innerSpan.innerText = i + 1;
 
-        if (i == 0) {
+        newPage.onclick = GoToPage;
+
+        var currentPage = $('#page').attr('value');
+        if ((i+1) == currentPage) {
             newPage.className ='active';
         }
         newPage.appendChild(innerSpan);
@@ -338,12 +351,17 @@ function createPaging(resultsCounter) {
 
     var nextPage = document.createElement('li');
     nextPage.className = "pagebutton";
+
     nextPage.onclick = function () { changePage(parseInt($('#page').attr('value')) + 1); };
     innerSpan = document.createElement('span');
     innerSpan.innerText = '«';
 
     nextPage.appendChild(innerSpan);
     $('#pages')[0].appendChild(nextPage);
+}
+
+function GoToPage() {
+    changePage(this.id);
 }
 
 function changePage(showPage) {
@@ -353,6 +371,8 @@ function changePage(showPage) {
         $('#page').attr('value', maxPages);
     } else {
         $('#page').attr('value', showPage);
+        $(".active").addClass('pagebutton').removeClass('active');
+        $('#' + showPage).removeClass('pagebutton').addClass('active');
         ChangeResults();
     }
 }
