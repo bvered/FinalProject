@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Web.Http;
 using NHibernate;
@@ -21,7 +22,7 @@ namespace WebServer.Controllers
                 var teachersQuery = GetTeachersQuery(session, filter.SearchText);
                 var coursesQuery = GetCoursesQuery(session, filter, filter.SearchPreferences);
 
-                var lowestResult = filter.Counter*5;
+                var lowestResult = filter.Counter * 5;
 
                 var teachersCount = teachersQuery.Count();
 
@@ -69,8 +70,12 @@ namespace WebServer.Controllers
                 var query = GetTeachersQuery(session, searchTeacher.Name.ToLower());
 
                 var totalCount = query.Count();
+                if (searchTeacher.isTop)
+                {
+                    query = query.OrderByDescending(x => x.Score);
+                }
 
-                var teachers = query.Skip(searchTeacher.counter*5).Take(5).ToList();
+                var teachers = query.Skip(searchTeacher.counter * 5).Take(5).ToList();
 
                 var result = teachers.Select(teacher => ConvertToResult(session, teacher)).ToList();
 
@@ -121,15 +126,24 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
+                 
                 var searchPreferences = filter.SearchPreferences ?? new SearchPreferences();
 
                 var query = GetCoursesQuery(session, filter, searchPreferences);
 
-                var orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences));
+                List<Course> orderedCourses;
+                if (filter.isTop)
+                {
+                    orderedCourses = query.OrderByDescending(x => x.Score).ToList();
+                }
+                else
+                {
+                    orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).ToList();
+                }
 
                 var total = query.Count();
 
-                var courseResults = orderedCourses.Select(ConvertToResult).Skip(filter.Counter*5).Take(5).ToList();
+                var courseResults = orderedCourses.Select(ConvertToResult).Skip(filter.Counter * 5).Take(5).ToList();
 
                 var courseSearchResult = new CourseSearchResult
                 {
@@ -155,9 +169,9 @@ namespace WebServer.Controllers
             int facultyValue;
             if (!string.IsNullOrWhiteSpace(filter.Faculty) &&
                 int.TryParse(filter.Faculty, out facultyValue) &&
-                Enum.IsDefined(typeof (Faculty), facultyValue))
+                Enum.IsDefined(typeof(Faculty), facultyValue))
             {
-                var faculty = (Faculty) facultyValue;
+                var faculty = (Faculty)facultyValue;
 
                 SetEmptyValue(searchPreferences.SearchedFaculties, faculty);
                 searchPreferences.SearchedFaculties[faculty] += 1;
@@ -167,9 +181,9 @@ namespace WebServer.Controllers
             int intendedYearValue;
             if (!string.IsNullOrWhiteSpace(filter.IntendedYear) &&
                 int.TryParse(filter.IntendedYear, out intendedYearValue) &&
-                Enum.IsDefined(typeof (IntendedYear), intendedYearValue))
+                Enum.IsDefined(typeof(IntendedYear), intendedYearValue))
             {
-                var intendedYear = (IntendedYear) intendedYearValue;
+                var intendedYear = (IntendedYear)intendedYearValue;
 
                 SetEmptyValue(searchPreferences.SearchedIntendedYears, intendedYear);
                 searchPreferences.SearchedIntendedYears[intendedYear] += 1;
@@ -188,9 +202,9 @@ namespace WebServer.Controllers
             int academicDegreeValue;
             if (!string.IsNullOrWhiteSpace(filter.AcademicDegree) &&
                 int.TryParse(filter.AcademicDegree, out academicDegreeValue) &&
-                Enum.IsDefined(typeof (AcademicDegree), academicDegreeValue))
+                Enum.IsDefined(typeof(AcademicDegree), academicDegreeValue))
             {
-                var academicDegree = (AcademicDegree) academicDegreeValue;
+                var academicDegree = (AcademicDegree)academicDegreeValue;
 
                 SetEmptyValue(searchPreferences.SearchedAcademicDegrees, academicDegree);
                 searchPreferences.SearchedAcademicDegrees[academicDegree] += 1;
@@ -287,6 +301,7 @@ namespace WebServer.Controllers
 
             public SearchPreferences SearchPreferences { get; set; }
             public int Counter { get; set; }
+            public bool isTop { get; set; }
         }
 
         public class CourseSearchResult
@@ -300,6 +315,7 @@ namespace WebServer.Controllers
         {
             public string Name { get; set; }
             public int counter { get; set; }
+            public bool isTop { get; set; }
         }
 
         public class ResultTeacher

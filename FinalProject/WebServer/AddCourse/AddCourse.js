@@ -93,3 +93,7 @@ function hideAllLabels() {
     $("#CourseExists")[0].hidden = true;
     $("#CourseLink")[0].hidden = true;
 }
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
+}

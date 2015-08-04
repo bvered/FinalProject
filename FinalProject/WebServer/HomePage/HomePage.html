@@ -12,22 +12,20 @@
 <body>
     <div class="background">
         <header>
-            <div class="logo"></div>
+            <div class="logo" onclick="homePage()"></div>
         </header>
         <footer>
             <ul>
-                <li><a href="https://www.mta.ac.il/he-il/">אודות האקדמית</a></li>
-                <li><a href="#">קורסים מומלצים</a></li>
-
-                <li><a href="#">מרצים מומלצים</a></li>
-
+                <li onclick="GoToSchool()">אודות האקדמית</li>
+                <li onclick="BestCourses()">קורסים ממולצים</li>
+                <li onclick="BestTeachers()">מרצים מומלצים</li>
             </ul>
         </footer>
         <section class="content">
             <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
                 <input type="hidden" name="search" id="search" value="All" />
                 <div class="search-module">
-                    <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" />
+                    <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" onkeydown="sumbit()" />
                     <div class="search-params">
                         <button class="btn btn-primary dropdown-toggle" type="submit" value="All" id="dropDownRes1" data-toggle="dropdown" aria-expanded="false">הכל<span class="caret&quot;"></span></button>
                         <ul class="dropdown-menu" role="menu">
@@ -37,7 +35,7 @@
                             <li role="presentation" onclick="change1(this)" value="Courses"><a role="menuitem" tabindex="-1">קורסים</a> </li>
                         </ul>
                     </div>
-                    <button class="search-button">
+                    <button class="search-button" id="sendButton">
                         <img src="../Images/search.svg" /></button>
                 </div>
 

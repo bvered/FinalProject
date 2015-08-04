@@ -7,7 +7,6 @@ $(document).ready(function () {
 
         var data = new FormData();
 
-        // Add the uploaded image content to the form data collection
         if (files.length == 1) {
             data.append("UploadedFile", files[0]);
         }
@@ -15,14 +14,13 @@ $(document).ready(function () {
         var quertyString = getQuertyString();
 
         var courseId = quertyString["courseId"];
-        var semster = quertyString["semester"];
-        var year = quertyString["year"];
+        var semester = $('input[name=semester]:checked').val();
+        var year = $('#Year').val();
 
         data.append("courseId", courseId);
-        data.append("semester", semster);
+        data.append("semester", semester);
         data.append("year", year);
 
-        // Make Ajax request with the contentType = false, and procesDate = false
         var ajaxRequest = $.ajax({
             type: "POST",
             url: "/api/AddFile/AddSyllabus",
@@ -36,3 +34,7 @@ $(document).ready(function () {
         });
     });
 });
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
+}

@@ -1,70 +1,73 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Add Course</title>
+    <title>Add Teacher</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="AddTeacher.css" />
 </head>
 <body>
     <div class="background">
-        <div class ="size" >
-        <section class="add-new-teacher">
-            <form action="#">
-                <h1>הוספת מרצה חדש</h1>
-                <table>
-                    <tr>
+        <header>
+            <div class="logo" onclick="homePage()"></div>
+        </header>
+        <div class="size">
+            <section class="add-new-teacher">
+                <form action="#">
+                    <h1>הוספת מרצה חדש</h1>
+                    <table>
+                        <tr>
 
-                        <td class="label"><label>שם המרצה</label></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-control" type="text" id="TeacherName" required></td>
+                            <td class="label"><label>שם המרצה</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס שם מרצה" id="TeacherName" required></td>
 
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
 
-                        <td class="label"><label>חדר המרצה</label></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-control" type="text" id="TeacherRoom" required></td>
+                            <td class="label"><label>חדר המרצה</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס מס' חדר של המרצה" id="TeacherRoom" required></td>
 
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
 
-                        <td class="label"><label>טלפון המרצה</label></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-control" type="text" id="TeacherPhone" required></td>
+                            <td class="label"><label>טלפון המרצה</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס טלפון של המרצה" id="TeacherPhone" required></td>
 
-                    </tr>
-                    <tr>
+                        </tr>
+                        <tr>
 
-                        <td class="label"><label>אימייל המרצה</label></td>
-                    </tr>
-                    <tr>
-                        <td><input class="form-control" type="text" id="TeacherEmail" required></td>
+                            <td class="label"><label>אימייל המרצה</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס אימייל של המרצה" id="TeacherEmail" required></td>
 
-                    </tr>
+                        </tr>
 
-                    <tr>
-                        <td align="center">
-                            <label class="error" id="TeacherExists" hidden="true">We already have this teacher!</label><br />
-                            <label class="error" hidden="true" id="addTeacherSuccessfuly">Thank you for adding the new teacher! </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="submit" align="center">
-                            <button onclick="checkAndAdd()" class="btn btn-danger">הוסף מרצה</button>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </section>
-     </div>
+                        <tr>
+                            <td align="center">
+                                <label class="error" id="TeacherExists" hidden="true">המרצה כבר קיים במערכת!</label><br/>
+                                <label class="error" hidden="true" id="addTeacherSuccessfuly">תודה על הוספת המרצה! </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="submit" align="center">
+                                <button onclick=" checkAndAdd() " class="btn btn-danger">הוסף מרצה</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </section>
+        </div>
     </div>
     <script src="AddTeacher.js"></script>
 </body>
