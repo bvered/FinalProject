@@ -36,18 +36,16 @@ namespace WebServer.App_Data.Models
 
         public Course()
         {
-            CourseInSemesters = new List<CourseInSemester>();
-            AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
+            setupCourse();
         }
 
         public Course(int courseId, string name, Faculty faculy)
         {
+            setupCourse();
             Id= new Guid();
             CourseId = courseId;
             Name = name;
             Faculty = faculy;
-            CourseInSemesters = new List<CourseInSemester>();
-            AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
         }
 
         public List<Teacher> GetTeachers()
@@ -70,6 +68,11 @@ namespace WebServer.App_Data.Models
             }
             Score = AverageCriteriaRatings.AverageRatingsList.Sum() / (CourseInSemesters.Count * CourseComment.GetCourseCommentCriterias().Count); ;
 
+        }
+
+        private void setupCourse() {
+            CourseInSemesters = new List<CourseInSemester>();
+            AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
         }
     }
 }

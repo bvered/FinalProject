@@ -27,18 +27,16 @@ namespace WebServer.App_Data.Models
 
         public Teacher()
         {
-            TeacherComments = new List<TeacherComment>();
-            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
+            setupTeacher();
         }
 
         public Teacher(string name, int room,string phone, string email)
         {
+            setupTeacher();
             Name = name;
             Room = room;
             Cellphone = phone;
             Email = email;
-            TeacherComments = new List<TeacherComment>();
-            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }
 
         public void addTeacherCommnet(TeacherComment tComment)
@@ -49,6 +47,11 @@ namespace WebServer.App_Data.Models
                 ratings.Add(tComment.CriteriaRatings[i].Rating);
             }
             Score = AverageCriteriaRatings.AverageRatingsList.Sum() / TeacherComments.Count; ;
+        }
+
+        public void setupTeacher() {
+            TeacherComments = new List<TeacherComment>();
+            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }
     }
 }

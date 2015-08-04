@@ -19,8 +19,12 @@ namespace WebServer.App_Data.Models
         public AverageRatings() { }
 
         public AverageRatings(int numberOfRatings) {
-            AverageRatingsList = new List<int>(numberOfRatings);
-            SumOfRatingsList = new List<int>(numberOfRatings);
+            AverageRatingsList = new List<int>();
+            SumOfRatingsList = new List<int>();
+            for (int i = 0; i < numberOfRatings; i++) {
+                AverageRatingsList.Add(0);
+                SumOfRatingsList.Add(0);
+            }
         }
 
         public void AddRatings(List<int> ratings) {

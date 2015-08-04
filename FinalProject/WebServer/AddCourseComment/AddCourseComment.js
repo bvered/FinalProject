@@ -83,14 +83,19 @@ function addVote(voteValueLabel, id, like) {
         commentId: id,
         liked: like,
     };
+    var didLikeBefore = $.jStorage.get(id);
+    if (didLikeBefore == true) {
+        alert("מותר לדרג פעם אחת");
+        return succeed;
+    }
     var request = $.ajax({
         type: "POST",
         data: JSON.stringify(vote),
         url: uri5,
         contentType: "application/json",
         success: function (data) {
-            voteValueLabel.innerHTML = "אהבו: " + data;
-
+            voteValueLabel.innerHTML = data;
+            $.jStorage.set(id, true);
         },
         fail: function (jqXhr, textStatus) {
             alert("נכשל: " + textStatus);
@@ -145,8 +150,7 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
-    var likesCell = commentView.rows[0].cells[1];
-    likesCell.style.textAlign = "center";
+    var likesCell = commentView.rows[1].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
     numberOfLikes.innerHTML = comment.TotalNumberOfLikes;
@@ -169,11 +173,11 @@ function printComment(comment, itr) {
     var voteDownFunctionString = function () { addVote(numberOfDislikes, comment.Id, false); };
     voteDownButton.onclick = voteDownFunctionString;
     voteDownButton.innerHTML = "👎";
-    likesCell.appendChild(numberOfDislikes);
-    likesCell.appendChild(voteDownButton);
-    likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfLikes);
     likesCell.appendChild(voteUpButton);
+    likesCell.appendChild(document.createElement("BR"));
+    likesCell.appendChild(numberOfDislikes);
+    likesCell.appendChild(voteDownButton);
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];

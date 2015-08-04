@@ -133,11 +133,11 @@ textarea {
 }
 
 .LikesLabel {
-    color: red;
+    color: green;
 }
 
 .DislikeLabel {
-    color: green;
+    color: red;
 }
 
 .sendTR td button {

@@ -22,14 +22,12 @@ namespace WebServer.App_Data.Models
 
         public Comment()
         {
-            DateTime = DateTime.Now;
-            Votes = new List<Vote>();
+            mutualCommentConst();
         }
 
         public Comment(string commentText)
         {
-            DateTime = DateTime.Now;
-            Votes= new List<Vote>();
+            mutualCommentConst();
             CommentText = commentText;
         }
 
@@ -43,6 +41,9 @@ namespace WebServer.App_Data.Models
             }
         }
 
-
+        private void mutualCommentConst() {
+            DateTime = DateTime.Now;
+            Votes = new List<Vote>();
+        }
     }
 }

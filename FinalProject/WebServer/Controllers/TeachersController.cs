@@ -151,7 +151,12 @@ namespace WebServer.Controllers
                     comment.AddVote(v);
                     session.Save(comment);
                     transaction.Commit();
-                    return Ok(comment.TotalNumberOfLikes);
+                    if (vote.Liked) {
+                        return Ok(comment.TotalNumberOfLikes);
+                    }
+                    else {
+                        return Ok(comment.TotalNumberOfDislikes);
+                    }
                 }
 
                 return NotFound();
