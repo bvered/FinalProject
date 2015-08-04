@@ -150,6 +150,8 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
+    var commentDate = commentView.rows[2].children[1];
+    commentDate.innerHTML = comment.DateTime.replace("T", " ");
     var likesCell = commentView.rows[1].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
