@@ -31,10 +31,13 @@ namespace WebServer.App_Data.Models
         public IntendedYear IntendedYear { get; set; }
         [DataMember]
         public IList<CourseInSemester> CourseInSemesters { get; set; }
+        [DataMember]
+        public AverageRatings AverageCriteriaRatings { get; set; }
 
         public Course()
         {
             CourseInSemesters = new List<CourseInSemester>();
+            AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
         }
 
         public Course(int courseId, string name, Faculty faculy)
@@ -44,7 +47,7 @@ namespace WebServer.App_Data.Models
             Name = name;
             Faculty = faculy;
             CourseInSemesters = new List<CourseInSemester>();
-
+            AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
         }
 
         public List<Teacher> GetTeachers()
@@ -60,9 +63,13 @@ namespace WebServer.App_Data.Models
         public void addCourseCommnet(CourseInSemester semester,CourseComment cComment)
         {
             semester.CourseComments.Insert(0, cComment);
-            AmountOfRating++;
-            SumOfRating += cComment.GetCriteriaRatingSummed();
-            Score = SumOfRating / AmountOfRating;
+            List<int> ratings = new List<int>();
+            for (int i = 0; i < cComment.CriteriaRatings.Count; i++)
+            {
+                ratings.Add(cComment.CriteriaRatings[i].Rating);
+            }
+            Score = AverageCriteriaRatings.AverageRatingsList.Sum() / (CourseInSemesters.Count * CourseComment.GetCourseCommentCriterias().Count); ;
+
         }
     }
 }

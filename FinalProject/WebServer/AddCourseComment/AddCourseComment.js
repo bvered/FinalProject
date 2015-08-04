@@ -147,13 +147,18 @@ function printComment(comment, itr) {
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
     var likesCell = commentView.rows[0].cells[1];
     likesCell.style.textAlign = "center";
-    var numberOfVotes = document.createElement("Label");
-    numberOfVotes.id = "CommentNumber" + itr + "Votes";
-    numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
+    var numberOfLikes = document.createElement("Label");
+    numberOfLikes.id = "CommentNumber" + itr + "Likes";
+    numberOfLikes.innerHTML = comment.TotalNumberOfLikes;
+    numberOfLikes.className = "LikesLabel";
+    var numberOfDislikes = document.createElement("Label");
+    numberOfDislikes.id = "CommentNumber" + itr + "Dislikes";
+    numberOfDislikes.innerHTML = comment.TotalNumberOfDislikes;
+    numberOfDislikes.className = "DislikeLabel";
     var voteUpButton = document.createElement("Button");
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
     voteUpButton.value = comment.Id;
-    var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
+    var voteUpFunctionString = function () { addVote(numberOfLikes, comment.Id, true); };
     voteUpButton.onclick = voteUpFunctionString;
     voteUpButton.innerHTML = "👍";
     voteUpButton.className = "voteButton";
@@ -161,11 +166,13 @@ function printComment(comment, itr) {
     voteDownButton.id = "CommentNumber" + itr + "VoteDown";
     voteDownButton.value = comment.Id;
     voteDownButton.className = "voteButton";
-    var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
+    var voteDownFunctionString = function () { addVote(numberOfDislikes, comment.Id, false); };
     voteDownButton.onclick = voteDownFunctionString;
     voteDownButton.innerHTML = "👎";
+    likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-    likesCell.appendChild(numberOfVotes);
+    likesCell.appendChild(document.createElement("BR"));
+    likesCell.appendChild(numberOfLikes);
     likesCell.appendChild(voteUpButton);
 
     for (rating in comment.CriteriaRatings) {

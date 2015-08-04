@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Linq;
 
 namespace WebServer.App_Data.Models
 {
@@ -14,10 +15,6 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Score { get; set; }
         [DataMember]
-        private int AmountOfRating { get; set; }
-        [DataMember]
-        private int SumOfRating { get; set; }
-        [DataMember]
         public int Room { get; set; }
         [DataMember]
         public string Cellphone { get; set; }
@@ -25,10 +22,13 @@ namespace WebServer.App_Data.Models
         public string Email { get; set; }
         [DataMember]
         public IList<TeacherComment> TeacherComments { get; set; }
+        [DataMember]
+        AverageRatings AverageCriteriaRatings { get; set; }
 
         public Teacher()
         {
             TeacherComments = new List<TeacherComment>();
+            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }
 
         public Teacher(string name, int room,string phone, string email)
@@ -38,14 +38,17 @@ namespace WebServer.App_Data.Models
             Cellphone = phone;
             Email = email;
             TeacherComments = new List<TeacherComment>();
+            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }
 
         public void addTeacherCommnet(TeacherComment tComment)
         {
             TeacherComments.Insert(0, tComment);
-            AmountOfRating++;
-            SumOfRating += tComment.GetCriteriaRatingSummed();
-            Score = SumOfRating / AmountOfRating;
+            List<int> ratings = new List<int>();
+            for (int i = 0; i < tComment.CriteriaRatings.Count; i++) {
+                ratings.Add(tComment.CriteriaRatings[i].Rating);
+            }
+            Score = AverageCriteriaRatings.AverageRatingsList.Sum() / TeacherComments.Count; ;
         }
     }
 }

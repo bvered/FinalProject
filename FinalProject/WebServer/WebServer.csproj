@@ -111,7 +111,6 @@
     <Content Include="AddCourseComment\css\stars.png" />
     <Content Include="AddCourseComment\css\style.css" />
     <Content Include="AddCourseComment\css\StyleSheet.css" />
-    <Content Include="AddCourseComment\index.html" />
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />
     <Content Include="AddCourse\style.css" />
@@ -147,6 +146,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Data\Models\AverageRatings.cs" />
     <Compile Include="App_Data\MappingOverride\UserMappingOverride.cs" />
     <Compile Include="App_Data\Models\Enums\AcademicDegree.cs" />
     <Compile Include="App_Data\Models\Comment.cs" />

@@ -132,6 +132,14 @@ textarea {
     align-content:center;
 }
 
+.LikesLabel {
+    color: red;
+}
+
+.DislikeLabel {
+    color: green;
+}
+
 .sendTR td button {
     text-align:center;
     height:50px;

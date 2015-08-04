@@ -111,6 +111,15 @@ function showTeacherInfoToUser() {
 
     var teacherEmailLabel = document.getElementById("teacherEmailTD");
     teacherEmailLabel.innerHTML = teacher.Email;
+
+    for (avgRating in allCriterias) {
+        var AvgRating = document.getElementById("AvgRating#").cloneNode(true);
+        AvgRating.style.display = 'block';
+        AvgRating.id = "AvgRating#"+avgRating;
+        AvgRating.cells[0].innerHTML = allCriterias[avgRating];
+        AvgRating.cells[1].innerHTML = teacher.RatingScores[avgRating];
+        document.getElementById("teacherInfo").appendChild(AvgRating);
+    }
 }
 
 function showNewCommentAction() {
@@ -140,6 +149,10 @@ function revealAddCommentViewToUser() {
 }
 
 function showTeacherComments(sortByNew) {
+    var newCommentDiv = document.getElementById("allComments").clear();
+    while (newCommentDiv.firstChild) {
+        newCommentDiv.removeChild(newCommentDiv.firstChild);
+    }
     for (courseSemester in course.CourseInSemesters) {
         var semesterComments = course.CourseInSemesters[courseSemester].CourseComments;
         if (!sortByNew) {

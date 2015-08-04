@@ -17,6 +17,8 @@ namespace WebServer.App_Data.Models
         public string CommentText { get; set; }
         [DataMember]
         public int TotalNumberOfLikes { get; set; }
+        [DataMember]
+        public int TotalNumberOfDislikes { get; set; }
 
         public Comment()
         {
@@ -34,7 +36,11 @@ namespace WebServer.App_Data.Models
         public void AddVote(Vote vote)
         {
             Votes.Add(vote);
-            TotalNumberOfLikes += vote.Liked ? 1 : -1;
+            if (vote.Liked) {
+                TotalNumberOfLikes++;
+            } else {
+                TotalNumberOfDislikes--;
+            }
         }
 
 

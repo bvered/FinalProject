@@ -22,7 +22,7 @@
     </header>
     <div class="main">
         <div class="teacherInfo">
-            <table>
+            <table id="teacherInfo">
                 <tr>
                     <td class="teacherKeyTdUp">שם המרצה:</td>
                     <td id="teacherNameTD" style="padding-right:20px"></td>
@@ -30,6 +30,10 @@
                 <tr>
                     <td class="teacherKeyTdInner">ממוצע דירוגים:</td>
                     <td id="teacherAvgTD" style="padding-right:20px"></td>
+                </tr>
+                <tr id="AvgRating#" style="display:none;">
+                    <td class="teacherKeyTdInner"></td>
+                    <td id="teacherAvgTD#" style="padding-right:20px"></td>
                 </tr>
                 <tr>
                     <td class="teacherKeyTdInner">חדר:</td>
@@ -61,6 +65,10 @@
                     <td id="textAreaTD">
                         <textarea id="teacherNewCommetBox" placeholder="תגובתך כאן"></textarea>
                     </td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdInner" style="width:200px;display:none;"></td>
+                    <td></td>
                 </tr>
                 <tr id="criteriaTR" style="display:none">
                     <td id="criteriaTextTD" class="teacherKeyTdInner" style="width: 250px;"></td>
