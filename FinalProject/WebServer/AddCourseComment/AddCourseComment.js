@@ -155,9 +155,12 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
-    var commentDate = commentView.rows[2].children[1];
-    commentDate.innerHTML = comment.DateTime.replace("T", " ");
-    var likesCell = commentView.rows[1].children[1];
+    for (rating in comment.CriteriaRatings) {
+        var loadedComment = comment.CriteriaRatings[rating];
+        var clonedCommentCriteriaTR = commentView.rows[parseInt(rating) + 1];
+        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
+    }
+    var likesCell = commentView.rows[7].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
     numberOfLikes.innerHTML = comment.TotalNumberOfLikes;
@@ -185,40 +188,18 @@ function printComment(comment, itr) {
     likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-
-    for (rating in comment.CriteriaRatings) {
-        var loadedComment = comment.CriteriaRatings[rating];
-        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
-        clonedCommentCriteriaTR.style.display = 'block';
-        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
-        commentView.appendChild(clonedCommentCriteriaTR);
-    }
+    var commentDate = commentView.rows[8].children[1];
+    commentDate.innerHTML = comment.DateTime.replace("T", " ");
     allComments.appendChild(commentView);
 }
 
 function showNewCommentAction() {
     document.getElementById("newCommentTable").style.display = "block";
     document.getElementById("showNewCommentButtonTR").style.display = "none";
-  //  revealAddCommentViewToUser();
+    revealAddCommentViewToUser();
 }
 
 function revealAddCommentViewToUser() {
-    var newCommentTable = document.getElementById("newCommentTable");
-    var newCommentCriteriaTR = document.getElementById("criteriaTR");
-    var courseSemestersTR = document.getElementById("courseSemestersTR");
-    for (ratingText in allCriterias) {
-        var clonedCommentCriteriaTR = newCommentCriteriaTR.cloneNode(true);
-        clonedCommentCriteriaTR.id = "criteriaTR" + ratingText;
-        clonedCommentCriteriaTR.style.display = "block";
-        var criteriaTextTD = clonedCommentCriteriaTR.children[0];
-        criteriaTextTD.id = "criteriaText" + ratingText;
-        criteriaTextTD.innerHTML = allCriterias[ratingText];
-        var starRatingTD = clonedCommentCriteriaTR.children[1];
-        starRatingTD.id = "criteriaRating" + ratingText;
-        starRatingTD.children[0].id = "starRating" + ratingText;
-        newCommentTable.appendChild(clonedCommentCriteriaTR);
-    }
     var courseSemesters = document.getElementById("courseSemesters");
     for (semester in course.CourseInSemesters) {
         var semesterOption = document.createElement("option");
@@ -226,9 +207,25 @@ function revealAddCommentViewToUser() {
         semesterOption.value = course.CourseInSemesters[semester].Id
         courseSemesters.add(semesterOption);
     }
-    var sendTR = document.getElementById("sendTR");
-    sendTR.parentNode.removeChild(sendTR);
-    newCommentTable.appendChild(sendTR);
+    //var newCommentTable = document.getElementById("newCommentTable");
+    //var newCommentCriteriaTR = document.getElementById("criteriaTR");
+    //var courseSemestersTR = document.getElementById("courseSemestersTR");
+    //for (ratingText in allCriterias) {
+    //    var clonedCommentCriteriaTR = newCommentCriteriaTR.cloneNode(true);
+    //    clonedCommentCriteriaTR.id = "criteriaTR" + ratingText;
+    //    clonedCommentCriteriaTR.style.display = "block";
+    //    var criteriaTextTD = clonedCommentCriteriaTR.children[0];
+    //    criteriaTextTD.id = "criteriaText" + ratingText;
+    //    criteriaTextTD.innerHTML = allCriterias[ratingText];
+    //    var starRatingTD = clonedCommentCriteriaTR.children[1];
+    //    starRatingTD.id = "criteriaRating" + ratingText;
+    //    starRatingTD.children[0].id = "starRating" + ratingText;
+    //    newCommentTable.appendChild(clonedCommentCriteriaTR);
+    //}
+    //var courseSemesters = document.getElementById("courseSemesters");
+    //var sendTR = document.getElementById("sendTR");
+    //sendTR.parentNode.removeChild(sendTR);
+    //newCommentTable.appendChild(sendTR);
 }
 
 function showLoadingCourseFailed() {
