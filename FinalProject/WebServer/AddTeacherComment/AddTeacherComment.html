@@ -14,6 +14,7 @@
     <script src="AddTeacherComment.js"></script>
     <link href="css/StyleSheet.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
+    <link href="StarsStyle.css" rel="stylesheet" />
 </head>
 <body onload="loadView()">
     <header>
@@ -67,30 +68,108 @@
                         <textarea id="teacherNewCommetBox" placeholder="תגובתך כאן"></textarea>
                     </td>
                 </tr>
-                <tr>
-                    <td class="teacherKeyTdInner" style="width:200px;display:none;"></td>
-                    <td></td>
-                </tr>
-                <tr id="criteriaTR" style="display:none">
-                    <td id="criteriaTextTD" class="teacherKeyTdInner" style="width: 250px;"></td>
-                    <td id="starRatingTD" style="direction:ltr;">
-                        <div class="stars">
-                                <form id="starRating" style="text-align: center;">
-                                    <input type="radio" name="star" class="star-1" id="star-1" checked value="1" />
-                                    <label class="star-1" for="star-1">1</label>
-                                    <input type="radio" name="star" class="star-2" id="star-2" value="2" />
-                                    <label class="star-2" for="star-2">2</label>
-                                    <input type="radio" name="star" class="star-3" id="star-3" value="3" />
-                                    <label class="star-3" for="star-3">3</label>
-                                    <input type="radio" name="star" class="star-4" id="star-4" value="4" />
-                                    <label class="star-4" for="star-4">4</label>
-                                    <input type="radio" name="star" class="star-5" id="star-5" value="5" />
-                                    <label class="star-5" for="star-5">5</label>
-                                </form>
-                        </div>
+                <tr id="criteriaTR" >
+                    <td class="teacherKeyTdUp"  style="width:200px;">יחס לסטודנטים</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm1">
+	                       <div class="stars1">
+		                      <input type="radio" name="star" class="star-1" id="star-1" value="1"/>
+		                      <label class="star-1" for="star-1">1</label>
+		                       <input type="radio" name="star" class="star-2" id="star-2" value="2"/>
+		                        <label class="star-2" for="star-2">2</label>
+		                        <input type="radio" name="star" class="star-3" id="star-3" value="3"/>
+		                        <label class="star-3" for="star-3">3</label>
+		                        <input type="radio" name="star" class="star-4" id="star-4" value="4"/>
+		                        <label class="star-4" for="star-4">4</label>
+		                        <input type="radio" name="star" class="star-5" id="star-5" value="5"/>
+		                        <label class="star-5" for="star-5">5</label>
+		                      <span></span>
+	                           </div>
+                        </form>
                     </td>
                 </tr>
-                <tr id="sendTR">
+                <tr id="criteriaTR" >
+                    <td class="teacherKeyTdUp"  style="width:200px;">רמת הוראה</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm2">
+	                   <div class="stars2">
+		                  <input type="radio" name="star2" class="star-6" id="star-6" value="1"/>
+		                    <label class="star-6" for="star-6">1</label>
+		                    <input type="radio" name="star2" class="star-7" id="star-7" value="2"/>
+		                    <label class="star-7" for="star-7">2</label>
+		                    <input type="radio" name="star2" class="star-8" id="star-8" value="3"/>
+		                    <label class="star-8" for="star-8">3</label>
+		                    <input type="radio" name="star2" class="star-9" id="star-9" value="4"/>
+		                    <label class="star-9" for="star-9">4</label>
+		                    <input type="radio" name="star2" class="star-10" id="star-10" value="5"/>
+		                    <label class="star-10" for="star-10">5</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>
+                </tr>
+                <tr id="criteriaTR" >
+                    <td class="teacherKeyTdUp"  style="width:200px;">ידע בקורס</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm3">
+	                    <div class="stars3">
+		                    <input type="radio" name="star3" class="star-11" id="star-11" value="1" />
+		                    <label class="star-11" for="star-11">11</label>
+		                    <input type="radio" name="star3" class="star-12" id="star-12" value="2"/>
+		                    <label class="star-12" for="star-12">12</label>
+		                    <input type="radio" name="star3" class="star-13" id="star-13" value="3"/>
+		                    <label class="star-13" for="star-13">13</label>
+		                    <input type="radio" name="star3" class="star-14" id="star-14" value="4"/>
+		                    <label class="star-14" for="star-14">14</label>
+		                    <input type="radio" name="star3" class="star-15" id="star-15" value="5"/>
+		                    <label class="star-15" for="star-15">15</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>
+                </tr>
+                <tr id="criteriaTR" >
+                    <td class="teacherKeyTdUp"  style="width:200px;">דרקונים??</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm4">
+	                    <div class="stars4">
+		                    <input type="radio" name="star4" class="star-16" id="star-16" value="1"/>
+		                    <label class="star-16" for="star-16">16</label>
+		                    <input type="radio" name="star4" class="star-17" id="star-17" value="2"/>
+		                    <label class="star-17" for="star-17">17</label>
+		                    <input type="radio" name="star4" class="star-18" id="star-18" value="3"/>
+		                    <label class="star-18" for="star-18">18</label>
+		                    <input type="radio" name="star4" class="star-19" id="star-19" value="4"/>
+		                    <label class="star-19" for="star-19">19</label>
+		                    <input type="radio" name="star4" class="star-20" id="star-20" value="5"/>
+		                    <label class="star-20" for="star-20">20</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>
+                </tr>
+                <tr id="criteriaTR" >
+                    <td class="teacherKeyTdUp"  style="width:200px;">התעניינות המרצה בקורס??</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm5">
+	                    <div class="stars5">
+		                    <input type="radio" name="star5" class="star-21" id="star-21" value="1"/>
+		                    <label class="star-21" for="star-21">21</label>
+		                    <input type="radio" name="star5" class="star-22" id="star-22" value="2"/>
+		                    <label class="star-22" for="star-22">22</label>
+		                    <input type="radio" name="star5" class="star-23" id="star-23" value="3"/>
+		                    <label class="star-23" for="star-23">23</label>
+		                    <input type="radio" name="star5" class="star-24" id="star-24" value="4"/>
+		                    <label class="star-24" for="star-24">24</label>
+		                    <input type="radio" name="star5" class="star-25" id="star-25" value="5"/>
+		                    <label class="star-25" for="star-25">25</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>
+                </tr>
+
+                 <tr id="sendTR">
                     <td colspan="2">
                         <center>
                            <input type="button" value="שלח" class="sendButton" onclick="addComment()" />

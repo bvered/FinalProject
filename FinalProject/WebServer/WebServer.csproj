@@ -102,9 +102,10 @@
   <ItemGroup>
     <Content Include="AddCourseComment\AddCourseComment.html" />
     <Content Include="AddCourseComment\AddCourseComment.js" />
-    <Content Include="AddTeacherComment\css\stars.png" />
+    <Content Include="AddTeacherComment\stars.png" />
     <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
+    <Content Include="AddTeacherComment\StarsStyle.css" />
     <Content Include="Images\academit.png" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="Images\site_background.jpeg" />

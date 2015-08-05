@@ -130,7 +130,7 @@ function showTeacherInfoToUser() {
 function showNewCommentAction() {
     document.getElementById("newCommentTable").style.display = "block";
     document.getElementById("showNewCommentButtonTR").style.display = "none";
-    revealAddCommentViewToUser();
+  //  revealAddCommentViewToUser();
 }
 
 function revealAddCommentViewToUser() {
@@ -258,7 +258,7 @@ function showLoadingTeacherFailed() {
     alert("מרצה לא נמצא, הנך מועבר לעמוד הראשי.");
     TeacherInfoDiv.appendChild(failedSearchLabel);
 }
-
+/*
 function addComment() {
     if (document.getElementById("teacherNewCommetBox").value == "") {
         alert("הכנס תגובה");
@@ -287,6 +287,47 @@ function addComment() {
         },
         async: false
     });
+}*/
+
+function addComment() {
+    if (document.getElementById("teacherNewCommetBox").value == "") {
+        alert("הכנס תגובה");
+        return;
+    }
+    var one = $('input[name=star]:checked', '#ratingsForm1').val();
+    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
+    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
+    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
+    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
+    var ratings = [one, two, three, four, five];
+    for(rate in ratings)
+    {
+        if (ratings[rate] == undefined) {
+            alert("עליך לדרג את כל הקריטריונים");
+            return;
+        }
+    }
+    var comment = {
+        Id: teacher.Id,
+        Ratings: ratings,
+        Comment: document.getElementById("teacherNewCommetBox").value,
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(comment),
+        url: uri2,
+        contentType: "application/json",
+        success: function (data) {
+            alert("תגובתך הוספה בהצלחה");
+            location.reload();
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("נכשל: " + textStatus);
+        },
+        async: false
+    });
+
+
 }
 
 function getSelectedRadioButtonValue(radioButtonForm) {
