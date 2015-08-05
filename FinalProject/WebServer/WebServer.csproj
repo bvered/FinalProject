@@ -102,6 +102,7 @@
   <ItemGroup>
     <Content Include="AddCourseComment\AddCourseComment.html" />
     <Content Include="AddCourseComment\AddCourseComment.js" />
+    <Content Include="AddCourseComment\StarsStyle.css" />
     <Content Include="AddTeacherComment\stars.png" />
     <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
@@ -109,7 +110,7 @@
     <Content Include="Images\academit.png" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="Images\site_background.jpeg" />
-    <Content Include="AddCourseComment\css\stars.png" />
+    <Content Include="AddCourseComment\stars.png" />
     <Content Include="AddCourseComment\css\style.css" />
     <Content Include="AddCourseComment\css\StyleSheet.css" />
     <Content Include="AddCourse\AddCourse.html" />

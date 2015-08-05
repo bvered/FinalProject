@@ -1,17 +1,22 @@
 ﻿body {
-    background: url('../../Images/site_background.jpeg') no-repeat fixed 100% 100%;
+    background: url('/Images/site_background.jpeg') no-repeat fixed 100% 100%;
+overflow-x:hidden;
 }
 
-header {
-    left: 0;
-    right: 0;
-}
-
-.logo {
-    width: 275px;
+header .logo {
+    background: url('/Images/ratemyschool.png');
+    width: 280px;
+    height: 90px;
     margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.25);
+    background-color: rgba(255,255,255,0.85);
+    border: 2px solid white;
     border-radius: 5px;
+}
+
+.logo:hover {
+    cursor: hand;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .main {

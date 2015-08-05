@@ -10,6 +10,10 @@ var allTeachers;
 var teacherInfoList;
 var numberOfCommentsLoaded;
 
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
+}
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -326,8 +330,6 @@ function addComment() {
         },
         async: false
     });
-
-
 }
 
 function getSelectedRadioButtonValue(radioButtonForm) {

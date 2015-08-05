@@ -14,12 +14,11 @@
     <script src="AddCourseComment.js"></script>
     <link href="css/StyleSheet.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
+    <link href="StarsStyle.css" rel="stylesheet" />
 </head>
 <body onload="loadView()">
     <header>
-        <div class="logo">
-            <img src="../images/ratemyschool.png" onclick="parent.location = '../HomePage/HomePage.html'" />
-        </div>
+        <div class="logo" onclick="homePage()"></div>
     </header>
     <div class="main">
         <div class="courseInfo">
@@ -69,33 +68,147 @@
                         <textarea id="CourseNewCommetBox" placeholder="תגובתך כאן"></textarea>
                     </td>
                 </tr>
-                <tr id="criteriaTR" style="display:none">
-                    <td id="criteriaTextTD" class="courseKeyTdInner" style="width:250px"></td>
-                    <td id="starRatingTD" style="align-content:center;direction:ltr; text-align:center;">
-                        <div class="stars">
-                            <form id="starRating" style="text-align: center;">
-                                <input type="radio" name="star" class="star-1" id="star-1" checked value="1" />
-                                <label class="star-1" for="star-1">1</label>
-                                <input type="radio" name="star" class="star-2" id="star-2" value="2" />
-                                <label class="star-2" for="star-2">2</label>
-                                <input type="radio" name="star" class="star-3" id="star-3" value="3" />
-                                <label class="star-3" for="star-3">3</label>
-                                <input type="radio" name="star" class="star-4" id="star-4" value="4" />
-                                <label class="star-4" for="star-4">4</label>
-                                <input type="radio" name="star" class="star-5" id="star-5" value="5" />
-                                <label class="star-5" for="star-5">5</label>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                
                 <tr id="courseSemestersTR">
                     <td class="courseKeyTdInner">סמסטר</td>
                     <td>
                         <center>
-                            <select name="courseSemesters" id="courseSemesters"></select>
+                            <select name="courseSemesters" id="courseSemesters">
+                                <option value="A">א</option>
+                                <option value="B">ב</option>
+                                <option value="C">קיץ</option>
+                            </select>
                         </center>
                     </td>
                 </tr>
+
+                <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >קלות החומר</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm1">
+	                       <div class="stars1">
+		                      <input type="radio" name="star" class="star-1" id="star-1" value="1"/>
+		                      <label class="star-1" for="star-1">1</label>
+		                       <input type="radio" name="star" class="star-2" id="star-2" value="2"/>
+		                        <label class="star-2" for="star-2">2</label>
+		                        <input type="radio" name="star" class="star-3" id="star-3" value="3"/>
+		                        <label class="star-3" for="star-3">3</label>
+		                        <input type="radio" name="star" class="star-4" id="star-4" value="4"/>
+		                        <label class="star-4" for="star-4">4</label>
+		                        <input type="radio" name="star" class="star-5" id="star-5" value="5"/>
+		                        <label class="star-5" for="star-5">5</label>
+		                      <span></span>
+	                           </div>
+                        </form>
+                    </td>     
+                </tr>
+                
+                <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >השקעה נדרשת בשיעורי הבית</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm2">
+	                   <div class="stars2">
+		                  <input type="radio" name="star2" class="star-6" id="star-6" value="1"/>
+		                    <label class="star-6" for="star-6">1</label>
+		                    <input type="radio" name="star2" class="star-7" id="star-7" value="2"/>
+		                    <label class="star-7" for="star-7">2</label>
+		                    <input type="radio" name="star2" class="star-8" id="star-8" value="3"/>
+		                    <label class="star-8" for="star-8">3</label>
+		                    <input type="radio" name="star2" class="star-9" id="star-9" value="4"/>
+		                    <label class="star-9" for="star-9">4</label>
+		                    <input type="radio" name="star2" class="star-10" id="star-10" value="5"/>
+		                    <label class="star-10" for="star-10">5</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>     
+                </tr>
+
+                <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >ממוצע ציונים</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm3">
+	                    <div class="stars3">
+		                    <input type="radio" name="star3" class="star-11" id="star-11" value="1" />
+		                    <label class="star-11" for="star-11">11</label>
+		                    <input type="radio" name="star3" class="star-12" id="star-12" value="2"/>
+		                    <label class="star-12" for="star-12">12</label>
+		                    <input type="radio" name="star3" class="star-13" id="star-13" value="3"/>
+		                    <label class="star-13" for="star-13">13</label>
+		                    <input type="radio" name="star3" class="star-14" id="star-14" value="4"/>
+		                    <label class="star-14" for="star-14">14</label>
+		                    <input type="radio" name="star3" class="star-15" id="star-15" value="5"/>
+		                    <label class="star-15" for="star-15">15</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>     
+                </tr>
+
+
+                 <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >חשיבות אקדמית</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm4">
+	                    <div class="stars4">
+		                    <input type="radio" name="star4" class="star-16" id="star-16" value="1"/>
+		                    <label class="star-16" for="star-16">16</label>
+		                    <input type="radio" name="star4" class="star-17" id="star-17" value="2"/>
+		                    <label class="star-17" for="star-17">17</label>
+		                    <input type="radio" name="star4" class="star-18" id="star-18" value="3"/>
+		                    <label class="star-18" for="star-18">18</label>
+		                    <input type="radio" name="star4" class="star-19" id="star-19" value="4"/>
+		                    <label class="star-19" for="star-19">19</label>
+		                    <input type="radio" name="star4" class="star-20" id="star-20" value="5"/>
+		                    <label class="star-20" for="star-20">20</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>     
+                </tr>
+
+                <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >חשיבות מקצועית</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm5">
+	                    <div class="stars5">
+		                    <input type="radio" name="star5" class="star-21" id="star-21" value="1"/>
+		                    <label class="star-21" for="star-21">21</label>
+		                    <input type="radio" name="star5" class="star-22" id="star-22" value="2"/>
+		                    <label class="star-22" for="star-22">22</label>
+		                    <input type="radio" name="star5" class="star-23" id="star-23" value="3"/>
+		                    <label class="star-23" for="star-23">23</label>
+		                    <input type="radio" name="star5" class="star-24" id="star-24" value="4"/>
+		                    <label class="star-24" for="star-24">24</label>
+		                    <input type="radio" name="star5" class="star-25" id="star-25" value="5"/>
+		                    <label class="star-25" for="star-25">25</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>     
+                </tr>
+
+                 <tr id="courseSemestersTR">
+                     <td  id ="criteriaTextTD" class="courseKeyTdInner"  style="width:200px;" >עניין בקורס</td>
+                    <td dir="ltr">
+                        <form id="ratingsForm6">
+	                    <div class="stars6">
+		                    <input type="radio" name="star6" class="star-26" id="star-26" value="1"/>
+		                    <label class="star-26" for="star-26">26</label>
+		                    <input type="radio" name="star6" class="star-27" id="star-27" value="2"/>
+		                    <label class="star-27" for="star-27">27</label>
+		                    <input type="radio" name="star6" class="star-28" id="star-28" value="3"/>
+		                    <label class="star-28" for="star-28">28</label>
+		                    <input type="radio" name="star6" class="star-29" id="star-29" value="4"/>
+		                    <label class="star-29" for="star-29">29</label>
+		                    <input type="radio" name="star6" class="star-30" id="star-30" value="5"/>
+		                    <label class="star-30" for="star-30">30</label>
+		                    <span></span>
+	                    </div>
+                    </form>
+                    </td>     
+                </tr>
+
                 <tr id="sendTR">
                     <td colspan="2"><center><input type="button" value="שלח" class="sendButton" onclick="addComment()" /></center></td>
                 </tr>
@@ -121,5 +234,6 @@
             </table>
         </div>
     </div>
+       
 </body>
 </html>

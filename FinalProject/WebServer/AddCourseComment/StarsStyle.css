@@ -1,4 +1,6 @@
-﻿#ratingsForm1 .stars1 {
+﻿body {
+}
+#ratingsForm1 .stars1 {
   background: url("stars.png") repeat-x 0 0;
   width: 150px;
   margin: 0 auto;
@@ -308,7 +310,68 @@
   width: 20% !important;
 }
 
-#ratingsForm5 .stars5 span ,#ratingsForm4 .stars4 span, #ratingsForm3 .stars3 span, #ratingsForm2 .stars2 span, #ratingsForm1 .stars1 span{
+
+
+#ratingsForm6 .stars6 {
+  background: url("stars.png") repeat-x 0 0;
+  width: 150px;
+  margin: 0 auto;
+}
+
+#ratingsForm6 .stars6 input[type="radio"]{
+  position: absolute;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+#ratingsForm6 .stars6 input[type="radio"].star-30:checked ~ span {
+  width: 100%;
+}
+#ratingsForm6 .stars6 input[type="radio"].star-29:checked ~ span {
+  width: 80%;
+}
+#ratingsForm6 .stars6 input[type="radio"].star-28:checked ~ span {
+  width: 60%;
+}
+#ratingsForm6 .stars6 input[type="radio"].star-27:checked ~ span {
+  width: 40%;
+}
+#ratingsForm6 .stars6 input[type="radio"].star-26:checked ~ span {
+  width: 20%;
+}
+
+
+#ratingsForm6 .stars6 label{
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0!important;
+  padding: 0!important;
+  text-indent: -999em;
+  float: left;
+  position: relative;
+  z-index: 10;
+  background: transparent!important;
+  cursor: pointer;
+}
+
+#ratingsForm6 .stars6 label.star-30:hover ~ span {
+  width: 100% !important;
+}
+#ratingsForm6 .stars6 label.star-29:hover ~ span {
+  width: 80% !important;
+}
+#ratingsForm6 .stars6 label.star-28:hover ~ span {
+  width: 60% !important;
+}
+#ratingsForm6 .stars6 label.star-27:hover ~ span {
+  width: 40% !important;
+}
+#ratingsForm6 .stars6 label.star-26:hover ~ span {
+  width: 20% !important;
+}
+
+#ratingsForm6 .stars6 span , #ratingsForm5 .stars5 span ,#ratingsForm4 .stars4 span, #ratingsForm3 .stars3 span, #ratingsForm2 .stars2 span, #ratingsForm1 .stars1 span{
   display: block;
   width: 0;
   position: relative;

@@ -14,6 +14,11 @@ var NewSyllabusDiv = document.getElementById("NewSyllabusDiv");
 var NewCourseCommentDiv = document.getElementById("NewCourseCommentDiv");
 var CommentsDiv = document.getElementById("CommentsDiv");
 
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html";
+}
+
 function getParameterByName(name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -195,7 +200,7 @@ function printComment(comment, itr) {
 function showNewCommentAction() {
     document.getElementById("newCommentTable").style.display = "block";
     document.getElementById("showNewCommentButtonTR").style.display = "none";
-    revealAddCommentViewToUser();
+  //  revealAddCommentViewToUser();
 }
 
 function revealAddCommentViewToUser() {
@@ -231,7 +236,7 @@ function showLoadingCourseFailed() {
     parent.location = "../HomePage/HomePage.html";
 }
 
-function addComment() {
+/*function addComment() {
     if (document.getElementById("CourseNewCommetBox").value == "") {
         alert("הכנס תגובה");
         return;
@@ -266,7 +271,54 @@ function addComment() {
         },
         async: false
     });
+}*/
+
+function addComment() {
+    if (document.getElementById("CourseNewCommetBox").value == "") {
+        alert("הכנס תגובה");
+        return;
+    }
+    var one = $('input[name=star]:checked', '#ratingsForm1').val();
+    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
+    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
+    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
+    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
+    var six = $('input[name=star6]:checked', '#ratingsForm6').val();
+    var ratings = [one, two, three, four, five, six];
+    for (rate in ratings) {
+        if (ratings[rate] == undefined) {
+            alert("עליך לדרג את כל הקריטריונים");
+            return;
+        }
+    }
+    var semester;
+    if (document.getElementById("courseSemesters") == null) {
+        semester = "";
+    } else {
+        semester = document.getElementById("courseSemesters").value;
+    }
+    var comment = {
+        Id: course.Id,
+        Ratings: ratings,
+        Comment: document.getElementById("CourseNewCommetBox").value,
+        SemseterId: semester,
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(comment),
+        url: uri2,
+        contentType: "application/json",
+        success: function (data) {
+            alert("תגובך הוספה בהצלחה!");
+            location.reload();
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("Request failed: " + textStatus);
+        },
+        async: false
+    });
 }
+
 
 function getSelectedRadioButtonValue(radioButtonForm) {
     for (star in radioButtonForm.children[0].children) {
