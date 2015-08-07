@@ -19,6 +19,7 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
+                filter.SearchPreferences = filter.SearchPreferences ?? new SearchPreferences();
                 var teachersQuery = GetTeachersQuery(session, filter.SearchText);
                 var coursesQuery = GetCoursesQuery(session, filter, filter.SearchPreferences);
 
@@ -126,10 +127,10 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                 
-                var searchPreferences = filter.SearchPreferences ?? new SearchPreferences();
 
-                var query = GetCoursesQuery(session, filter, searchPreferences);
+                filter.SearchPreferences = filter.SearchPreferences ?? new SearchPreferences();
+
+                var query = GetCoursesQuery(session, filter, filter.SearchPreferences);
 
                 List<Course> orderedCourses;
                 if (filter.isTop)
@@ -138,7 +139,7 @@ namespace WebServer.Controllers
                 }
                 else
                 {
-                    orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, searchPreferences)).ToList();
+                    orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, filter.SearchPreferences)).ToList();
                 }
 
                 var total = query.Count();
@@ -148,7 +149,7 @@ namespace WebServer.Controllers
                 var courseSearchResult = new CourseSearchResult
                 {
                     AllResults = courseResults,
-                    SearchPreferences = searchPreferences,
+                    SearchPreferences = filter.SearchPreferences,
                     TotalCount = total,
                 };
 

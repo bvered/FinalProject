@@ -22,6 +22,8 @@ namespace WebServer.App_Data.Models
         [DataMember]
         private int SumOfRating { get; set; }
         [DataMember]
+        public University University { get; set; }
+        [DataMember]
         public Faculty Faculty { get; set; }
         [DataMember]
         public bool IsMandatory { get; set; }
@@ -36,12 +38,12 @@ namespace WebServer.App_Data.Models
 
         public Course()
         {
-            setupCourse();
+            SetupCourse();
         }
 
         public Course(int courseId, string name, Faculty faculy)
         {
-            setupCourse();
+            SetupCourse();
             Id= new Guid();
             CourseId = courseId;
             Name = name;
@@ -58,11 +60,11 @@ namespace WebServer.App_Data.Models
             CourseInSemesters.Add(semester);
         }
 
-        public void addCourseCommnet(CourseInSemester semester,CourseComment cComment)
+        public void AddCourseCommnet(CourseInSemester semester, CourseComment cComment)
         {
             semester.CourseComments.Insert(0, cComment);
-            List<int> ratings = new List<int>();
-            for (int i = 0; i < cComment.CriteriaRatings.Count; i++)
+            var ratings = new List<int>();
+            for (var i = 0; i < cComment.CriteriaRatings.Count; i++)
             {
                 ratings.Add(cComment.CriteriaRatings[i].Rating);
             }
@@ -70,7 +72,7 @@ namespace WebServer.App_Data.Models
 
         }
 
-        private void setupCourse() {
+        private void SetupCourse() {
             CourseInSemesters = new List<CourseInSemester>();
             AverageCriteriaRatings = new AverageRatings(CourseComment.GetCourseCommentCriterias().Count);
         }

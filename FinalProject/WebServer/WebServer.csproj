@@ -133,7 +133,6 @@
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\HomePage.css" />
-    <Content Include="Images\academit.jpg" />
     <Content Include="Images\background.jpg" />
     <Content Include="JavaScripts\EngToHebConverter.js" />
     <Content Include="JavaScripts\QueryString.js" />
@@ -180,6 +179,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="App_Data\Models\University.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

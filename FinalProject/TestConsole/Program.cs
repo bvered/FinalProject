@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mime;
 using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -12,12 +13,9 @@ namespace TestConsole
         private static void Main(string[] args)
         {
             var sessionFactory = NHibernateConfig.CreateSessionFactory(true);
-            ISession session = sessionFactory.OpenSession();
-
+            var session = sessionFactory.OpenSession();
 
             CreateInitData(session);
-
-            getBestTeachers(session);
 
             session.Flush();
             session.Close();
@@ -28,27 +26,36 @@ namespace TestConsole
 
         private static void CreateInitData(ISession session)
         {
+            var MTA = new University
+            {
+                Acronyms = "MTA",
+                Name = "Academic College Tel-Aviv-Yafo",
+                SiteAddress = "www.mta.ac.il",
+            };
+
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
 
             var romina = new Teacher
             {
+                University = MTA,
                 Name = "רומינה זיגדון",
                 Cellphone = "05x-xxxxxxx",
                 Email = "xxx@xxx.xxx",
                 Room = 232,
             };
-            TeacherComment rominaComment = new TeacherComment
+            var rominaComment = new TeacherComment
             {
                 CommentText = "ממש עוזרת ללמוד",
                 DateTime = DateTime.Now,
             };
-            foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias()) {
+            foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias())
+            {
                 rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritiria, 5));
             }
             rominaComment.AddVote(new Vote(true));
-            romina.addTeacherCommnet(rominaComment);
-            
+            romina.AddTeacherCommnet(rominaComment);
+
             var teachers = new[]
             {
                 romina,
@@ -69,6 +76,7 @@ namespace TestConsole
 
             var logic = new Course
             {
+                University = MTA,
                 Name = "לוגיקה",
                 AcademicDegree = AcademicDegree.Bachelor,
                 Faculty = computersFaculty,
@@ -81,6 +89,7 @@ namespace TestConsole
                 logic,
                 new Course
                 {
+                    University = MTA,
                     Name = "אלגוריתמים",
                     AcademicDegree = AcademicDegree.Bachelor,
                     Faculty = computersFaculty,
@@ -89,6 +98,7 @@ namespace TestConsole
                 },
                 new Course
                 {
+                    University = MTA,
                     Name = "תורת הגרפים",
                     AcademicDegree = AcademicDegree.Bachelor,
                     Faculty = computersFaculty,
@@ -97,6 +107,7 @@ namespace TestConsole
                 },
                 new Course
                 {
+                    University = MTA,
                     Name = "סיבוכיות ",
                     AcademicDegree = AcademicDegree.Master,
                     Faculty = computersFaculty,
@@ -105,6 +116,7 @@ namespace TestConsole
                 },
                  new Course
                 {
+                    University = MTA,
                     Name = "ביולוגיה",
                     AcademicDegree = AcademicDegree.Master,
                     Faculty = socialityFaculty,
@@ -113,6 +125,7 @@ namespace TestConsole
                 },
                 new Course
                 {
+                    University = MTA,
                     Name = "מדעים",
                     AcademicDegree = AcademicDegree.Master,
                     Faculty = socialityFaculty,
@@ -125,7 +138,7 @@ namespace TestConsole
             {
                 CommentText = "קורס ממש מעניין",
                 DateTime = DateTime.Now,
-                Votes = {new Vote(true)}
+                Votes = { new Vote(true) }
             };
 
             foreach (var courseCriteria in CourseComment.GetCourseCommentCriterias())
@@ -149,17 +162,6 @@ namespace TestConsole
             {
                 session.Save(course);
             }
-        }
-
-        private static void getBestTeachers(ISession session)
-        {
-            IList<Teacher> bestTeachers = session.QueryOver<Teacher>().OrderBy(x => x.Score).Asc.Take(10).List();
-        }
-
-        private static void getAllTeacherPerCourse(ISession session, Course course)
-        {
-//TODO
-            //    IList<Teacher> allTeachers = session.QueryOver<Teacher>().Where(x => x.Courses.Contains(course)).List();
         }
     }
 }

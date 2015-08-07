@@ -17,7 +17,7 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                IList<Teacher> teachers = session.QueryOver<Teacher>().List();
+                var teachers = session.QueryOver<Teacher>().List();
                 return teachers;
             }
         }
@@ -106,11 +106,11 @@ namespace WebServer.Controllers
                     DateTime = DateTime.Now,
                 };
                 var criteriasDisplayName = TeacherComment.GetTeacherCommentCriterias();
-                for (int index = 0; index < criteriasDisplayName.Count; index++)
+                for (var index = 0; index < criteriasDisplayName.Count; index++)
                 {
                     newComment.CriteriaRatings.Add(new TeacherCriteriaRating(criteriasDisplayName[index], comment.Ratings[index]));
                 }
-                teacher.addTeacherCommnet(newComment);
+                teacher.AddTeacherCommnet(newComment);
                 session.Save(newComment);
                 session.Save(teacher);
                 transaction.Commit();
@@ -144,22 +144,13 @@ namespace WebServer.Controllers
 
                 var comment = session.Get<TeacherComment>(commentId);
 
-                if (comment != null)
-                {
-                    Vote v = new Vote(vote.Liked);
-                    session.Save(v);
-                    comment.AddVote(v);
-                    session.Save(comment);
-                    transaction.Commit();
-                    if (vote.Liked) {
-                        return Ok(comment.TotalNumberOfLikes);
-                    }
-                    else {
-                        return Ok(comment.TotalNumberOfDislikes);
-                    }
-                }
-
-                return NotFound();
+                if (comment == null) return NotFound();
+                var v = new Vote(vote.Liked);
+                session.Save(v);
+                comment.AddVote(v);
+                session.Save(comment);
+                transaction.Commit();
+                return Ok(vote.Liked ? comment.TotalNumberOfLikes : comment.TotalNumberOfDislikes);
             }
         }
     }

@@ -21,7 +21,7 @@ namespace WebServer.App_Data.Models
         public AverageRatings(int numberOfRatings) {
             AverageRatingsList = new List<int>();
             SumOfRatingsList = new List<int>();
-            for (int i = 0; i < numberOfRatings; i++) {
+            for (var i = 0; i < numberOfRatings; i++) {
                 AverageRatingsList.Add(0);
                 SumOfRatingsList.Add(0);
             }
@@ -29,7 +29,7 @@ namespace WebServer.App_Data.Models
 
         public void AddRatings(List<int> ratings) {
             Counter++;
-            for (int i = 0; i < ratings.Count; i++) {
+            for (var i = 0; i < ratings.Count; i++) {
                 SumOfRatingsList[i] += ratings[i];
                 AverageRatingsList[i] = SumOfRatingsList[i] / Counter;
             }

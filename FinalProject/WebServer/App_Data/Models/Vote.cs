@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace WebServer.App_Data.Models
@@ -14,7 +13,6 @@ namespace WebServer.App_Data.Models
 
         public Vote()
         {
-
         }
 
         public Vote(bool liked)

@@ -20,14 +20,14 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int TotalNumberOfDislikes { get; set; }
 
-        public Comment()
+        protected Comment()
         {
-            mutualCommentConst();
+            MutualCommentConst();
         }
 
-        public Comment(string commentText)
+        protected Comment(string commentText)
         {
-            mutualCommentConst();
+            MutualCommentConst();
             CommentText = commentText;
         }
 
@@ -41,7 +41,7 @@ namespace WebServer.App_Data.Models
             }
         }
 
-        private void mutualCommentConst() {
+        private void MutualCommentConst() {
             DateTime = DateTime.Now;
             Votes = new List<Vote>();
         }
