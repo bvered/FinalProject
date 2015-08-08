@@ -25,7 +25,7 @@ function insertTextAtCursor(text) {
 }
 
 
-$("#editable").keypress(function (evt) {
+$("#tags").keypress(function (evt) {
     if (evt.which) {
         var charStr = String.fromCharCode(evt.which);
         var transformedChar = transformTypedCharacter(charStr.toLowerCase());
@@ -36,8 +36,11 @@ $("#editable").keypress(function (evt) {
     }
 });
 
+var traslation = {
+    a: 'ש',
+};
 
-var traslation = [
+var traslation1 = [
     { "a": 'ש' },
     { "b": 'נ' },
     { "c": 'ב' },

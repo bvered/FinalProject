@@ -16,8 +16,8 @@ namespace WebServer.App_Data.Models
 
         public int GetCriteriaRatingSummed()
         {
-            int sum = 0;
-            foreach (CourseCriteriaRating rating in CriteriaRatings)
+            var sum = 0;
+            foreach (var rating in CriteriaRatings)
             {
                 sum = rating.Rating;
             }

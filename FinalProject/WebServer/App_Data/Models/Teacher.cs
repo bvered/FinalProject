@@ -16,6 +16,8 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Room { get; set; }
         [DataMember]
+        public University University { get; set; }
+        [DataMember]
         public string Cellphone { get; set; }
         [DataMember]
         public string Email { get; set; }
@@ -26,19 +28,20 @@ namespace WebServer.App_Data.Models
 
         public Teacher()
         {
-            setupTeacher();
+            SetupTeacher();
         }
 
-        public Teacher(string name, int room,string phone, string email)
+        public Teacher(string name, int room,string phone, string email, University university)
         {
-            setupTeacher();
+            SetupTeacher();
             Name = name;
             Room = room;
             Cellphone = phone;
             Email = email;
+            University = university;
         }
 
-        public void addTeacherCommnet(TeacherComment tComment)
+        public void AddTeacherCommnet(TeacherComment tComment)
         {
             TeacherComments.Insert(0, tComment);
             List<int> ratings = new List<int>();
@@ -49,7 +52,7 @@ namespace WebServer.App_Data.Models
             Score = AverageCriteriaRatings.GetAverageOfRatings();
          }
 
-        public void setupTeacher() {
+        public void SetupTeacher() {
             TeacherComments = new List<TeacherComment>();
             AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }

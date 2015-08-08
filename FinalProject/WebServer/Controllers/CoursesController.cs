@@ -11,62 +11,21 @@ namespace WebServer.Controllers
 {
     public class CoursesController : ApiController
     {
-      /*  [HttpGet]
-        [ActionName("GetAllSearchedCourses")]
-        public IList<ResultCourse> GetAllSearchedCourses()
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                IList<Course> courses = session.QueryOver<Course>().List();
-                IList<ResultCourse> result = new List<ResultCourse>();
-
-                foreach (var course in courses)
-                {
-                    string year = course.Year.ToString();
-                    string returnYear = "";
-                    switch (year)
-                    {
-                        case "Any":
-                            returnYear = "כל שנה";
-                            break;
-                        case "First":
-                            returnYear = "שנה ראשונה";
-                            break;
-                        case "Second":
-                            returnYear = "שנה שניה";
-                            break;
-                        case "Third":
-                            returnYear = "שנה שלישית";
-                            break;
-                        case "Forth":
-                            returnYear = "שנה רביעית";
-                            break;
-                    }
-
-              
-                    result.Add(new ResultCourse(course.Id, course.Name, course.Faculty.ToString(), course.Score, course.IsMandatory, returnYear));
-                }
-
-                return result;
-            }
-        }*/
-
-
         [HttpGet]
         [ActionName("GetAllSearchedCourses")]
         public IList<ResultCourse> GetAllSearchedCourses([FromUri]string id)
         {
             using (var session = DBHelper.OpenSession())
             {
-                IList<Course> courses = session.QueryOver<Course>().List();
+                var courses = session.QueryOver<Course>().List();
                 IList<ResultCourse> result = new List<ResultCourse>();
 
                 foreach (var course in courses)
                 {
                     if (id == course.Name || (course.Name).IndexOf(id) >= 0 || ((course.Name).ToLower()).IndexOf(id) >= 0 || ((course.Name).ToLower()).IndexOf(id.ToLower()) >= 0)
                     {
-                        string year = course.IntendedYear.ToString();
-                        string returnYear = "";
+                        var year = course.IntendedYear.ToString();
+                        var returnYear = "";
                         switch (year)
                         {
                             case "Any":
@@ -157,7 +116,7 @@ namespace WebServer.Controllers
                 var course = new Course
                 {
                     Name = createCommand.Name,
-                    Faculty =  createCommand.Faculty,
+                    Faculty = createCommand.Faculty,
                     IsMandatory = createCommand.IsMandatory,
                     AcademicDegree = createCommand.AcademicDegree,
                     IntendedYear = createCommand.IntendedYear,
@@ -193,12 +152,14 @@ namespace WebServer.Controllers
                 Guid semesterGuid;
                 var didSemesterGuidParseSucceed = Guid.TryParse(comment.SemseterId, out semesterGuid);
                 var courseInSemester = didSemesterGuidParseSucceed ? session.Load<CourseInSemester>(semesterGuid) : null;
-                if (courseInSemester == null) {
+                if (courseInSemester == null)
+                {
                     return NotFound();
                 }
                 var courseCriterias = CourseComment.GetCourseCommentCriterias();
                 var ratings = new List<CourseCriteriaRating>();
-                var newComment = new CourseComment {
+                var newComment = new CourseComment
+                {
                     CommentText = comment.Comment,
                     CriteriaRatings = ratings,
                     DateTime = DateTime.Now
@@ -208,7 +169,7 @@ namespace WebServer.Controllers
                     newComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriterias[index], comment.Ratings[index]));
                 }
                 session.Save(newComment);
-                courseInSemester.Course.addCourseCommnet(courseInSemester, newComment);
+                courseInSemester.Course.AddCourseCommnet(courseInSemester, newComment);
                 session.Save(courseInSemester);
                 transaction.Commit();
 
@@ -257,30 +218,22 @@ namespace WebServer.Controllers
             using (var transaction = session.BeginTransaction())
             {
                 Guid commentId;
-                if (!Guid.TryParse(vote.commentId, out commentId)) {
+                if (!Guid.TryParse(vote.commentId, out commentId))
+                {
                     return NotFound();
                 }
                 var comment = session.Get<CourseComment>(commentId);
-                if (comment != null)
-                {
-                    Vote v = new Vote(vote.Liked);
-                    session.Save(v);
-                    comment.AddVote(v);
-                    session.Save(comment);
-                    transaction.Commit();
-                    if (vote.Liked) {
-                        return Ok(comment.TotalNumberOfLikes);
-                    }
-                    else {
-                        return Ok(comment.TotalNumberOfDislikes);
-                    }
-                }
-
-                return NotFound();
+                if (comment == null) return NotFound();
+                var v = new Vote(vote.Liked);
+                session.Save(v);
+                comment.AddVote(v);
+                session.Save(comment);
+                transaction.Commit();
+                return Ok(vote.Liked ? comment.TotalNumberOfLikes : comment.TotalNumberOfDislikes);
             }
         }
     }
-    
+
 
     public class CreateCourseCommand
     {
