@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Linq;
 
 namespace WebServer.App_Data.Models
 {
@@ -33,6 +34,11 @@ namespace WebServer.App_Data.Models
                 SumOfRatingsList[i] += ratings[i];
                 AverageRatingsList[i] = SumOfRatingsList[i] / Counter;
             }
+        }
+
+        public int GetAverageOfRatings()
+        {
+            return AverageRatingsList.Sum() / AverageRatingsList.Count / Counter;
         }
     }
 }

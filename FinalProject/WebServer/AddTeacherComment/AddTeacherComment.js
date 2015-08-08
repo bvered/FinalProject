@@ -102,6 +102,7 @@ function addVote(voteValueLabel ,id, like) {
 
 function printInformationOfTeacher() {
     showTeacherInfoToUser();
+    printTeacherScores();
     showTeacherCommentsByTeacher(false);
 }
 
@@ -129,6 +130,17 @@ function showTeacherInfoToUser() {
     //    AvgRating.cells[1].innerHTML = teacher.RatingScores[avgRating];
     //    document.getElementById("teacherInfo").appendChild(AvgRating);
     //}
+}
+
+function printTeacherScores() {
+    for (criteria in allCriterias) {
+        var clonedBasedRatingTR = document.getElementById("newCriteriaRatingBase1").cloneNode(true);
+        clonedBasedRatingTR.id = "newCriteriaRatingBase" + criteria;
+        clonedBasedRatingTR.children[0].innerHTML = allCriterias[criteria];
+        clonedBasedRatingTR.children[1].innerHTML = teacher.AverageCriteriaRatings.AverageRatingsList[criteria];
+        clonedBasedRatingTR.style.display = 'block';
+        $('#teacherInfo tr:last').before(clonedBasedRatingTR);
+    }
 }
 
 function showNewCommentAction() {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Linq;
 
 namespace WebServer.App_Data.Models
 {
@@ -46,8 +45,9 @@ namespace WebServer.App_Data.Models
             for (int i = 0; i < tComment.CriteriaRatings.Count; i++) {
                 ratings.Add(tComment.CriteriaRatings[i].Rating);
             }
-            Score = AverageCriteriaRatings.AverageRatingsList.Sum() / TeacherComments.Count; ;
-        }
+            AverageCriteriaRatings.AddRatings(ratings);
+            Score = AverageCriteriaRatings.GetAverageOfRatings();
+         }
 
         public void setupTeacher() {
             TeacherComments = new List<TeacherComment>();

@@ -66,8 +66,8 @@ namespace WebServer.App_Data.Models
             {
                 ratings.Add(cComment.CriteriaRatings[i].Rating);
             }
-            Score = AverageCriteriaRatings.AverageRatingsList.Sum() / (CourseInSemesters.Count * CourseComment.GetCourseCommentCriterias().Count); ;
-
+            AverageCriteriaRatings.AddRatings(ratings);
+            Score = AverageCriteriaRatings.GetAverageOfRatings();
         }
 
         private void setupCourse() {

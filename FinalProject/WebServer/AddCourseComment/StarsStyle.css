@@ -1,5 +1,64 @@
-﻿body {
+﻿#ratingsFormBase .starsBase {
+  background: url("stars.png") repeat-x 0 0;
+  width: 150px;
+  margin: 0 auto;
 }
+
+#ratingsFormBase .starsBase input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  filter: alpha(opacity=0);
+}
+
+#ratingsFormBase .starsBase input[type="radio"].star-base-5:checked ~ span {
+  width: 100%;
+}
+#ratingsFormBase .starsBase input[type="radio"].star-base-4:checked ~ span {
+  width: 80%;
+}
+#ratingsFormBase .starsBase input[type="radio"].star-base-3:checked ~ span {
+  width: 60%;
+}
+#ratingsFormBase .starsBase input[type="radio"].star-base-2:checked ~ span {
+  width: 40%;
+}
+#ratingsFormBase .starsBase input[type="radio"].star-base-1:checked ~ span {
+  width: 20%;
+}
+#ratingsFormBase .starsBase label {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0!important;
+  padding: 0!important;
+  text-indent: -999em;
+  float: left;
+  position: relative;
+  z-index: 10;
+  background: transparent!important;
+  cursor: pointer;
+}
+
+#ratingsFormBase .starsBase label:hover ~ span {
+  background-position: 0 -30px;
+}
+#ratingsFormBase .starsBase label.star-base-1:hover ~ span {
+  width: 100% !important;
+}
+#ratingsFormBase .starsBase label.star-base-2:hover ~ span {
+  width: 80% !important;
+}
+#ratingsFormBase .starsBase label.star-base-3:hover ~ span {
+  width: 60% !important;
+}
+#ratingsFormBase .starsBase label.star-base-4:hover ~ span {
+  width: 40% !important;
+}
+#ratingsFormBase .starsBase label.star-base-5:hover ~ span {
+  width: 20% !important;
+}
+
+
 #ratingsForm1 .stars1 {
   background: url("stars.png") repeat-x 0 0;
   width: 150px;

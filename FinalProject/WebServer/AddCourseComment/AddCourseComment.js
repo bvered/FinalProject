@@ -41,7 +41,6 @@ function loadView() {
 
 function loadCommentsCriteras() {
     succeed = false;
-
     var request = $.ajax({
         type: "GET",
         url: uri,
@@ -112,6 +111,7 @@ function addVote(voteValueLabel, id, like) {
 
 function printCourseInfo() {
     printCourseProperties();
+    printCourseScores();
     showCourseComments();
 }
 
@@ -133,6 +133,17 @@ function printCourseProperties() {
 
     var courseYearTD = document.getElementById("courseYearTD");
     courseYearTD.innerHTML = intendedYearNameByEnum(course.IntendedYear);
+}
+
+function printCourseScores() {
+    for (criteria in allCriterias) {
+        var clonedBasedRatingTR = document.getElementById("newCriteriaRatingBase1").cloneNode(true);
+        clonedBasedRatingTR.id = "newCriteriaRatingBase" + criteria;
+        clonedBasedRatingTR.children[0].innerHTML = allCriterias[criteria];
+        clonedBasedRatingTR.children[1].innerHTML = course.AverageCriteriaRatings.AverageRatingsList[criteria];
+        clonedBasedRatingTR.style.display = 'block';
+        $('#courseInfoTable tr:last').before(clonedBasedRatingTR);
+    }
 }
 
 function showCourseComments(sortByNew) {

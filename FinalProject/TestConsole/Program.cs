@@ -31,13 +31,7 @@ namespace TestConsole
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
 
-            var romina = new Teacher
-            {
-                Name = "רומינה זיגדון",
-                Cellphone = "05x-xxxxxxx",
-                Email = "xxx@xxx.xxx",
-                Room = 232,
-            };
+            var romina = new Teacher("רומינה זיגדון", 232, "05x-xxxxxxx", "xxx@xxx.xxx");
             TeacherComment rominaComment = new TeacherComment
             {
                 CommentText = "ממש עוזרת ללמוד",
@@ -139,11 +133,8 @@ namespace TestConsole
                 Teacher = romina,
                 Course = logic,
                 Year = 2012,
-                CourseComments =
-                {
-                    courseComment
-                }
             });
+            logic.addCourseCommnet(logic.CourseInSemesters[0], courseComment);
 
             foreach (var course in courses)
             {

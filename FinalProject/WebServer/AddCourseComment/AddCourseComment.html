@@ -22,7 +22,7 @@
     </header>
     <div class="main">
         <div class="courseInfo">
-            <table>
+            <table id="courseInfoTable">
                 <tr>
                     <td class="courseKeyTdUp">שם הקורס:</td>
                     <td id="courseNameTD" style="padding-right:20px"></td>
@@ -43,10 +43,31 @@
                     <td class="courseKeyTdInner">מספר תואר:</td>
                     <td id="courseOfDegreeTD" style="padding-right:20px"></td>
                 </tr>
-                <tr>
-                    <td class="courseKeyTdDown">שנה:</td>
+                <tr id="courseYearTR">
+                    <td class="courseKeyTdInner">שנה:</td>
                     <td id="courseYearTD" style="padding-right:20px"></td>
                 </tr>
+                <tr id="newCriteriaRatingBase1" style="display:none">
+                    <td id="criteriaTextTD" class="courseKeyTdInner">עניין בקורס</td>
+                    <td style="padding-right: 20px;">  
+                        <!--<form id="ratingsFormBase">
+                            <div class="starsBase">
+                                <input type="radio" name="star-base" class="star-base-1" id="star-base-1" value="star-base-1" />
+                                <label class="star-base-1" for="star-base-1">star-base-1</label>
+                                <input type="radio" name="star-base" class="star-base-2" id="star-base-2" value="star-base-2" />
+                                <label class="star-base-2" for="star-base-2">star-base-2</label>
+                                <input type="radio" name="star-base" class="star-base-3" id="star-base-3" value="star-base-3" />
+                                <label class="star-base-3" for="star-base-3">star-base-3</label>
+                                <input type="radio" name="star-base" class="star-base-4" id="star-base-4" value="star-base-4" />
+                                <label class="star-base-4" for="star-base-4">star-base-4</label>
+                                <input type="radio" name="star-base" class="star-base-5" id="star-base-5" value="star-base-5" />
+                                <label class="star-base-5" for="star-base-5">star-base-5</label>
+                                <span></span>
+                            </div>
+                        </form>-->
+                    </td>
+                </tr>
+
                 <tr id="showNewCommentButtonTR">
                     <td colspan="2">
                         <center>

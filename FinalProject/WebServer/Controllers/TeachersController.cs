@@ -111,7 +111,6 @@ namespace WebServer.Controllers
                     newComment.CriteriaRatings.Add(new TeacherCriteriaRating(criteriasDisplayName[index], comment.Ratings[index]));
                 }
                 teacher.addTeacherCommnet(newComment);
-                session.Save(newComment);
                 session.Save(teacher);
                 transaction.Commit();
          
