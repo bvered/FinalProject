@@ -107,6 +107,9 @@
     <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
     <Content Include="AddTeacherComment\StarsStyle.css" />
+    <Content Include="GetAllSyllabus\GetAllSyllabus.css" />
+    <Content Include="GetAllSyllabus\GetAllSyllabus.html" />
+    <Content Include="GetAllSyllabus\GetAllSyllabus.js" />
     <Content Include="Images\academit.png" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="Images\site_background.jpeg" />
@@ -172,6 +175,7 @@
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="App_Data\DBHelper.cs" />
     <Compile Include="App_Data\Models\Enums\EnumTranslation.cs" />
+    <Compile Include="Controllers\GetFileController.cs" />
     <Compile Include="Controllers\SmartSearchController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="App_Data\Models\Enums\Faculty.cs" />

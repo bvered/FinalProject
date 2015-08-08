@@ -31,6 +31,10 @@ ul {
     height: 100%;
     background: url('../Images/site_background.jpeg');
     background-repeat: no-repeat;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    direction:ltr;
+    background-position-y: -300px;
 }
 
 .size {
