@@ -31,7 +31,7 @@ namespace WebServer.Controllers
                         int year = CourseSemester.Syllabus.Year;
                    //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.Syllabus.FileName;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year,file, fileName));
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
                     }
                     
 
