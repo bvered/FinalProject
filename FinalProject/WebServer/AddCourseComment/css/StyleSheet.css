@@ -150,3 +150,11 @@ textarea {
     height:50px;
     width:500px;
 }
+
+#filterDiv {
+    text-align:center;
+}
+
+#filterDiv h1 {
+    background-color:rgba(255, 255, 255, 0.60):
+}

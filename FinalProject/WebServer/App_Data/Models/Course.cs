@@ -18,10 +18,6 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public int Score { get; set; }
         [DataMember]
-        private int AmountOfRating { get; set; }
-        [DataMember]
-        private int SumOfRating { get; set; }
-        [DataMember]
         public University University { get; set; }
         [DataMember]
         public Faculty Faculty { get; set; }

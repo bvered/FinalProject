@@ -146,7 +146,8 @@ namespace TestConsole
                 Course = logic,
                 Year = 2012,
             });
-            logic.addCourseCommnet(logic.CourseInSemesters[0], courseComment);
+
+            logic.AddCourseCommnet(logic.CourseInSemesters[0], courseComment);
 
             foreach (var course in courses)
             {
