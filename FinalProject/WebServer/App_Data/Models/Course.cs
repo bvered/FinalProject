@@ -48,7 +48,18 @@ namespace WebServer.App_Data.Models
 
         public List<Teacher> GetTeachers()
         {
-            return CourseInSemesters.Select(x => x.Teacher).Distinct().ToList();
+            var teacherLists = CourseInSemesters.Select(x => x.Teachers);
+            List<Teacher> teachers = new List<Teacher>();
+            
+            foreach (var groupOfTeachers in teacherLists) {
+                foreach (var teacher in groupOfTeachers) {
+                    if (!teachers.Contains(teacher)) {
+                        teachers.Add(teacher);
+                    }
+                }
+            }
+
+            return teachers;
         }
 
         public void AddCourseInSemester(CourseInSemester semester)

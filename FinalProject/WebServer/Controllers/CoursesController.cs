@@ -122,11 +122,11 @@ namespace WebServer.Controllers
                     IntendedYear = createCommand.IntendedYear,
                 };
 
-                course.AddCourseInSemester(new CourseInSemester
-                {
-                    Course = course,
-                    Teacher = session.Query<Teacher>().SingleOrDefault(x => x.Name == createCommand.TeacherName),
-                });
+                var teacher = session.Query<Teacher>().SingleOrDefault(x => x.Name == createCommand.TeacherName);
+                var newCourseInSemester = new CourseInSemester();
+                newCourseInSemester.Teachers.Add(teacher);
+                newCourseInSemester.Course = course;
+                course.AddCourseInSemester(newCourseInSemester);
                 session.Save(course);
                 transaction.Commit();
             }
@@ -232,17 +232,6 @@ namespace WebServer.Controllers
                 return Ok(vote.Liked ? comment.TotalNumberOfLikes : comment.TotalNumberOfDislikes);
             }
         }
-
-        [HttpGet]
-        [ActionName("GetCommentsByTeacherName")]
-        public IHttpActionResult GetCommentsByTeacherName([FromBody] CommentsByTeacher comment)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                var comments = session.QueryOver<CourseInSemester>().Where(x => x.Course.Id.ToString() == comment.courseId).And(x => x.Teacher.Id.ToString().Equals(comment.teacherId)).List();
-                return Ok(comment);
-            }
-        }
     }
 
 
@@ -262,11 +251,5 @@ namespace WebServer.Controllers
         public List<int> Ratings { get; set; }
         public string Comment { get; set; }
         public string SemseterId { get; set; }
-    }
-
-    public class CommentsByTeacher
-    {
-        public string courseId {get; set;}
-        public string teacherId { get; set; }
     }
 }
