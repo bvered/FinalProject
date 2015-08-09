@@ -13,7 +13,7 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public Course Course { get; set; }
         [DataMember]
-        public IList<Teacher> Teachers { get; set; }
+        public Teacher Teacher { get; set; }
         [DataMember]
         public Semester Semester { get; set; }
         [DataMember]
@@ -28,7 +28,6 @@ namespace WebServer.App_Data.Models
         public CourseInSemester()
         {
             CourseComments = new List<CourseComment>();
-            Teachers = new List<Teacher>();
         }
 
         public CourseInSemester(Semester semester, int year)
@@ -36,7 +35,6 @@ namespace WebServer.App_Data.Models
             Id = new Guid();
             Semester = semester;
             Year = year;
-            Teachers = new List<Teacher>();
         }
 
     }

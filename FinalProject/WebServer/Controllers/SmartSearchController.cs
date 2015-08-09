@@ -96,7 +96,7 @@ namespace WebServer.Controllers
         private static ResultTeacher ConvertToResult(ISession session, Teacher teacher)
         {
             var courses = session.Query<CourseInSemester>()
-                .Where(x => x.Teachers.Any(t=> t.Id == teacher.Id))
+                .Where(x => x.Teacher.Id == teacher.Id)
                 .Select(x => x.Course.Name).Distinct()
                 .ToList();
 

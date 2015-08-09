@@ -122,11 +122,11 @@ namespace WebServer.Controllers
                     IntendedYear = createCommand.IntendedYear,
                 };
 
-                var teacher = session.Query<Teacher>().SingleOrDefault(x => x.Name == createCommand.TeacherName);
-                var newCourseInSemester = new CourseInSemester();
-                newCourseInSemester.Teachers.Add(teacher);
-                newCourseInSemester.Course = course;
-                course.AddCourseInSemester(newCourseInSemester);
+                course.AddCourseInSemester(new CourseInSemester
+                {
+                    Course = course,
+                    Teacher = session.Query<Teacher>().SingleOrDefault(x => x.Name == createCommand.TeacherName),
+                });
                 session.Save(course);
                 transaction.Commit();
             }

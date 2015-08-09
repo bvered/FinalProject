@@ -227,10 +227,11 @@
     <div class="main" id="filterDiv">
         <h1>סנן תגובות לפי:</h1>
         <label>מרצה</label>
-        <select id="filterByTeacher"></select>
+        <select id="filterByTeacher" onchange="filterByTeacherChanged()">
+            <option></option>
+        </select>
     </div>
-    <div class="main">
-        <div id="allComments" class="allComments">
+    <div id="divHolder" style="display:none">
             <table id="commentTable" style="display:none">
                 <tr>
                     <td class="courseKeyTdUp" style="width: 250px;">תגובה:</td>
@@ -365,6 +366,9 @@
                     <td style="text-align:center"></td>
                 </tr>
             </table>
+    </div>
+    <div class="main">
+        <div id="allComments" class="allComments">
         </div>
     </div>
 

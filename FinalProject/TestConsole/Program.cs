@@ -139,15 +139,13 @@ namespace TestConsole
                 courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria, 5));
             }
 
-            var logicCourseInSemester = new CourseInSemester
+            logic.CourseInSemesters.Add(new CourseInSemester
             {
                 Semester = Semester.A,
+                Teacher = romina,
                 Course = logic,
                 Year = 2012,
-            };
-            logicCourseInSemester.Teachers.Add(romina);
-
-            logic.CourseInSemesters.Add(logicCourseInSemester);
+            });
 
             logic.AddCourseCommnet(logic.CourseInSemesters[0], courseComment);
 

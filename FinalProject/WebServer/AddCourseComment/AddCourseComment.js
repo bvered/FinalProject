@@ -117,19 +117,18 @@ function printCourseInfo() {
 }
 
 function setupFilters() {
-    var selectTeacher = $('filterByTeacher');
     var teachersToFilterBy = [];
     for (courseInSemster in course.CourseInSemesters) {
-        teachersToFilterBy.push(course.CourseInSemesters[courseInSemster].Teacher)
+        teachersToFilterBy.push(course.CourseInSemesters[courseInSemster].Teacher);
     }
     teachersToFilterBy = teachersToFilterBy.filter(function (itm, i, a) {
         return i == a.indexOf(itm);
     });
     for (teacher in teachersToFilterBy) {
-        var teacherOption = document.createElement('option');
-        teacherOption.text = teachersToFilterBy[teacher].Name;
-        teacherOption.value = teachersToFilterBy[teacher].Id;
-        selectTeacher.add(teacherOption);
+        $('#filterByTeacher').append($('<option>', {
+            value: teachersToFilterBy[teacher].Id,
+            text: teachersToFilterBy[teacher].Name,
+        }));
     }
 }
 
@@ -165,13 +164,13 @@ function printCourseScores() {
 }
 
 function showCourseComments(sortByNew, teacher) {
-    $('allComments').empty();
+    $('#allComments').empty();
     var commentsByTeacher;
     if (teacher == null) {
         commentsByTeacher = course.CourseInSemesters;
     } else {
-        commentsByTeacher = course.CourseInSemesters[courseSemester].filter(function (courseInSemester) {
-            if (courseInSemester.Teacher.Id == teacher) {
+        commentsByTeacher = course.CourseInSemesters.filter(function (courseInSemesterTeacher) {
+            if (courseInSemesterTeacher.Teacher.Id == teacher) {
                 return true;
             } else {
                 return false;
@@ -462,25 +461,12 @@ function ChangePage2() {
     window.location = "../GetAllSyllabus/GetAllSyllabus.html?courseId=" + course.Id;
 }
 
-$('filterByTeacher').on('change', function () {
-    showCourseComments(true, $(this).val());
+function filterByTeacherChanged() {
+    var selectedValue = document.getElementById("filterByTeacher").value
+    showCourseComments(true, selectedValue);
+}
 
 
-    //var filterBy = {
-    //    courseId: course.Id,
-    //    teacherId: $(this).val(),
-    //};
-    //var request = $.ajax({
-    //    type: "POST",
-    //    data: JSON.stringify(filterBy),
-    //    url: '/api/AddFile/GetCommentsByTeacherName',
-    //    contentType: "application/json",
-    //    success: function (data) {
-    //        course.
-    //    },
-    //    fail: function (jqXhr, textStatus) {
-    //        alert("פעולה נכשלה");
-    //    },
-    //    async: false
-    //});
-});
+//$('selector').on('change', function (e) {
+//    showCourseComments(true, $(this).val());
+//});
