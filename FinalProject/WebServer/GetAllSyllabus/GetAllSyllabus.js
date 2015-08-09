@@ -30,7 +30,7 @@ function getAllSillabus()
                 var newlink = document.createElement('a');
                 newlink.text = data[i].FileName;
                 cell1.appendChild(newlink);
-                newlink.setAttribute('href', '#');
+                newlink.setAttribute('href', '/DownloadFile/DownloadFile.html?type=Syllabus&course=' + data[i].FileName + '&id=' + data[i].Id);
 
                // cell1.innerHTML = data[i].FileName;
                 cell2.innerHTML = data[i].Year;
