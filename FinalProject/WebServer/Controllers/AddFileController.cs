@@ -141,10 +141,8 @@ namespace WebServer.Controllers
                         transaction.Commit();
                     }
                 }
-
                 return Ok();
             }
-
             return BadRequest();
         }
 

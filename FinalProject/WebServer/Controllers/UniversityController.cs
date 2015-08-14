@@ -67,7 +67,6 @@ namespace WebServer.Controllers
                         return BadRequest();
                     }
 
-                    string extension = Path.GetExtension(httpPostedFile.FileName);
                     using (var session = DBHelper.OpenSession())
                     using (var transaction = session.BeginTransaction())
                     {
@@ -78,8 +77,6 @@ namespace WebServer.Controllers
                                 Name = UniversityName,
                                 SiteAddress = UniversitySite,
                                 BackgroundImage = buffer,
-                                ImageName = string.Format("{0}_{1}}", UniversityAcronyms,
-                                    Path.GetExtension(httpPostedFile.FileName)),
                             };
                             session.SaveOrUpdate(newUniversity);
                             transaction.Commit();

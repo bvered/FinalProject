@@ -12,8 +12,6 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public byte[] BackgroundImage { get; set; }
         [DataMember]
-        public String ImageName { get; set; }
-        [DataMember]
         public string Acronyms { get; set; }
         [DataMember]
         public string SiteAddress { get; set; }
