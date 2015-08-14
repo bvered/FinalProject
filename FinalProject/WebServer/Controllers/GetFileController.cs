@@ -17,20 +17,20 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                var Syllabus = session.QueryOver<Syllabus>().List();
+                var Syllabus = session.QueryOver<UplodedFile>().List();
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
 
                 var course = session.Load<Course>(new Guid(id));
 
                 foreach (var CourseSemester in course.CourseInSemesters)
                 {
-                    if (CourseSemester.Syllabus != null)
+                    if (CourseSemester.uploadedSyllabus != null)
                     {
-                        Guid syllabusId = CourseSemester.Syllabus.Id;
-                        string semester = CourseSemester.Syllabus.Semster.ToString();
-                        int year = CourseSemester.Syllabus.Year;
+                        Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
+                        string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
+                        int year = CourseSemester.uploadedSyllabus.Year;
                    //     byte[] file = CourseSemester.Syllabus.File;
-                        string fileName = CourseSemester.Syllabus.FileName;
+                        string fileName = CourseSemester.uploadedSyllabus.FileName;
                         result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
                     }
                     
@@ -62,10 +62,10 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                var Syllabus = session.QueryOver<Syllabus>().List();
+                var Syllabus = session.QueryOver<UplodedFile>().List();
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
 
-                var requestedSyllabus = session.Load<Syllabus>(new Guid(id));
+                var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
 
                 return requestedSyllabus.File;
             }

@@ -23,20 +23,21 @@
         </footer>
         <section class="content">
             <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
-                <input type="hidden" name="search" id="search" value="All" />
+                <input type="hidden" name="University" id="University" value="All"/>
+                <input type="hidden" name="search" id="search" value="All"/>
                 <div class="search-module">
-                    <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" onkeydown="sumbit()" />
+                    <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" onkeydown=" sumbit() "/>
                     <div class="search-params">
                         <button class="btn btn-primary dropdown-toggle" type="submit" value="All" id="dropDownRes1" data-toggle="dropdown" aria-expanded="false">הכל<span class="caret&quot;"></span></button>
                         <ul class="dropdown-menu" role="menu">
-                            <li role="presentation" onclick="change1(this)" value="All"><a role="menuitem" tabindex="-1" >הכל</a></li>
+                            <li role="presentation" onclick=" change1(this) " value="All"><a role="menuitem" tabindex="-1">הכל</a></li>
                             <li class="divider"></li>
-                            <li role="presentation" onclick="change1(this)" value="Teachers"><a role="menuitem" tabindex="-1">מרצים</a> </li>
-                            <li role="presentation" onclick="change1(this)" value="Courses"><a role="menuitem" tabindex="-1">קורסים</a> </li>
+                            <li role="presentation" onclick=" change1(this) " value="Teachers"><a role="menuitem" tabindex="-1">מרצים</a> </li>
+                            <li role="presentation" onclick=" change1(this) " value="Courses"><a role="menuitem" tabindex="-1">קורסים</a> </li>
                         </ul>
                     </div>
                     <button class="search-button" id="sendButton">
-                        <img src="../Images/search.svg" /></button>
+                        <img src="../Images/search.svg"/></button>
                 </div>
 
                 <div class="advanced-filter-link">
@@ -154,11 +155,22 @@
                 </div>
             </form>
         </section>
+
+        <div id="changeUniversity">
+            <div id="change">החלף מוסד לימודים</div>
+            <ul id="Universities">
+                <li> <a href="HomePage.html?University=MTA"></a>המכללה האקדמית תל אביב יפו</li>
+                <li> <a href="HomePage.html?University=BGU"></a>אוניברסיטת בן גוריון</li>
+            </ul>
+        </div>
     </div>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="../JavaScripts/QueryString.js"></script>
     <script src="HomePage.js"></script>
-<!--    <script src="../JavaScripts/EngToHebConverter.js"></script>-->
+    <!-- <script src="../JavaScripts/EngToHebConverter.js"></script>-->
+
+
 </body>
 </html>

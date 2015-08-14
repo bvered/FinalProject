@@ -29,9 +29,17 @@ namespace TestConsole
             var MTA = new University
             {
                 Acronyms = "MTA",
-                Name = "Academic College Tel-Aviv-Yafo",
+                Name = "המכללה האקדמית תל אביב יפו",
                 SiteAddress = "www.mta.ac.il",
             };
+
+            var BGU = new University
+            {
+                Acronyms = "BGU",
+                Name = "אוניברסטית בן גוריון",
+                SiteAddress = "in.bgu.ac.il/Pages/default.aspx",
+            };
+
 
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
@@ -50,8 +58,8 @@ namespace TestConsole
             romina.AddTeacherCommnet(rominaComment);
 
             //Computer Sciences Teachers
-            var oren = new Teacher("אורן איש שלום", 0, "", "ISHSHALO@MTA.AC.IL", MTA);
-            var ofer = new Teacher("עופר אריאלי", 0, "", "OARIELI@MTA.AC.IL", MTA);
+            var oren = new Teacher("אורן איש שלום", 0, "", "ISHSHALO@MTA.AC.IL", BGU);
+            var ofer = new Teacher("עופר אריאלי", 0, "", "OARIELI@MTA.AC.IL", BGU);
             var shlomit = new Teacher("שלומית אריאן", 0, "", "shlomita.mta@gmail.com", MTA);
             var baruch = new Teacher("אשל ברוך", 0, "", "BARUCHES@MTA.AC.IL", MTA);
             var hadar = new Teacher("הדר בינסקי", 0, "", "HBINSKY@MTA.AC.IL", MTA);
@@ -399,6 +407,7 @@ namespace TestConsole
                 session.Save(teacher);
             }
 
+            
 
             var logic = new Course
             {

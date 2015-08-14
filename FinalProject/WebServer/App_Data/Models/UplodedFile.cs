@@ -16,15 +16,7 @@ namespace WebServer.App_Data.Models
         public String FileName { get; set; }
         [DataMember]
         public Guid Id { get; set; }
-        
-    }
-
-    public class Syllabus : UplodedFile
-    {   
-    }
-
-    public class GradesDestribution : UplodedFile
-    {
-        public int AverageGrade { get; set; }
+        [DataMember]
+        public bool isSylabus { get; set; }
     }
 }

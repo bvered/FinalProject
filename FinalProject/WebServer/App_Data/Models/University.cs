@@ -10,5 +10,4 @@ namespace WebServer.App_Data.Models
         public string Acronyms { get; set; }
         public string SiteAddress { get; set; }
     }
-
 }

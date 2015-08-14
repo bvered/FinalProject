@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -12,7 +13,7 @@ namespace WebServer.Controllers
     public class AddFileController : ApiController
     {
         [HttpPost]
-        [ActionName("AddSyllabus")]
+        [ActionName("AddFile")]
         public IHttpActionResult AddSyllabus()
         {
             if (HttpContext.Current.Request.Files.AllKeys.Any())
@@ -32,10 +33,12 @@ namespace WebServer.Controllers
                     Guid courseId;
                     Semester semster;
                     int year;
+                    bool isSyllabus;
 
                     var hasCourseId = Guid.TryParse(HttpContext.Current.Request.Form["courseId"], out courseId);
                     var hasSemster = Enum.TryParse(HttpContext.Current.Request.Form["semester"], out semster);
                     var hasYear = int.TryParse(HttpContext.Current.Request.Form["year"], out year);
+                    bool.TryParse(HttpContext.Current.Request.Form["isSyllabus"], out isSyllabus);
 
                     if (!hasCourseId || !hasSemster || !hasYear)
                     {
@@ -63,15 +66,33 @@ namespace WebServer.Controllers
 
                         var course = session.Load<Course>(courseId);
 
-                        courseInSemester.Syllabus = new Syllabus
+                        if (!isSyllabus)
                         {
-                            File = buffer,
-                            FileName =
-                                string.Format("{0}_{1}_{2}{3}", course.Name, year, semster,
-                                    Path.GetExtension(httpPostedFile.FileName)),
-                            Semster = semster,
-                            Year = year
-                        };
+                            courseInSemester.uploadedGrades = new UplodedFile
+                            {
+                                File = buffer,
+                                FileName =
+                                    string.Format("{0}_{1}_{2}{3}", course.Name, year, semster,
+                                        Path.GetExtension(httpPostedFile.FileName)),
+                                Semster = semster,
+                                Year = year,
+                                isSylabus = false
+                            };
+                        }
+                        if (isSyllabus)
+                        {
+                            courseInSemester.uploadedSyllabus = new UplodedFile
+                            {
+                                File = buffer,
+                                FileName =
+                                    string.Format("{0}_{1}_{2}{3}", course.Name, year, semster,
+                                        Path.GetExtension(httpPostedFile.FileName)),
+                                Semster = semster,
+                                Year = year,
+                                isSylabus = true
+                            };
+                        }
+                        
 
                         session.SaveOrUpdate(courseInSemester);
 
@@ -85,12 +106,13 @@ namespace WebServer.Controllers
             return BadRequest();
         }
 
-        public class CreateSyllabusFile
+        public class CreateFile
         {
             public Semester Semster { get; set; }
             public int Year { get; set; }
             public byte[] File { get; set; }
             public String FileName { get; set; }
+            public bool isSyllabus { get; set; }
         }
     }
 }

@@ -105,16 +105,15 @@ namespace WebServer.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetAll")]
-        public IList<string> GetAll()
+        [ActionName("GetAllNames")]
+        public IList<string> GetAll([FromUri] string UnvierstiryName)
         {
             using (var session = DBHelper.OpenSession())
             {
-                var coursesNameList = session.QueryOver<Course>().Select(x => x.Name).List<string>();
-                var teachersNameList = session.QueryOver<Teacher>().Select(x => x.Name).List<string>();
+                var coursesNameList = session.Query<Course>().Where(x => x.University.Name == UnvierstiryName).Select(x => x.Name).ToList();
+                var teachersNameList = session.Query<Teacher>().Where(x => x.University.Name == UnvierstiryName).Select(x => x.Name).ToList();
 
                 var resultList = coursesNameList.ToList();
-
                 resultList.AddRange(teachersNameList);
 
                 return resultList;

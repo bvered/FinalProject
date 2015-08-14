@@ -1,13 +1,25 @@
-﻿function SmartSearch() {
+﻿var queryString;
+var currentUniversity;
+
+$(document).load(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+
+    currentUniversity = queryString["University"];
+    GetUniversities();
+    SmartSearch();
+});
+
+function SmartSearch() {
     
     var uri;
     if (($("#dropDownRes1")[0]).value.trim() == "Courses") {
-        uri = '/api/Courses/GetCourses';
+        uri = '/api/Courses/GetCoursesNames/' + currentUniversity;
     } else if (($("#dropDownRes1")[0]).value.trim() == "Teachers") {
-        uri = '/api/Teachers/GetTeachers';
+        uri = '/api/Teachers/GetTeachersNames/' + currentUniversity;
     }
     else if (($("#dropDownRes1")[0]).value.trim() == "All") {
-        uri = '/api/SmartSearch/GetAll';
+        uri = '/api/SmartSearch/GetAllNames/' + currentUniversity;
     }
     $.getJSON(uri)
         .done(function (data) {
@@ -25,8 +37,6 @@ function BestCourses() {
 function BestTeachers() {
     window.location = "../SearchResultsPage/SearchResultPage.html?search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
 }
-
-$(document).load(SmartSearch());
 
 function change1(choose) {
 
@@ -58,5 +68,20 @@ function sumbit(){
 
 function GoToSchool() {
     window.location = "https://www.mta.ac.il/he-il/";
+}
+
+function GetUniversities() {
+    var uri = '/api/UniverstiryController/GetUniversities';
+
+    var request = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",
+
+        success: function(data) {
+            var showUniversities = function(data1) { throw new Error("Not implemented"); };
+            showUniversities(data);
+        }
+    });
 }
 

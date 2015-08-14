@@ -147,9 +147,9 @@
     <Content Include="SearchResultsPage\SearchResultPage.html" />
     <Content Include="SearchResultsPage\SearchResultPage.js" />
     <Content Include="SearchResultsPage\teacherImg.jpg" />
-    <Content Include="UploadSyllabus\UploadSyllabus.css" />
-    <Content Include="UploadSyllabus\UploadSyllabus.html" />
-    <Content Include="UploadSyllabus\UploadSyllabus.js" />
+    <Content Include="UploadFile\UploadFile.css" />
+    <Content Include="UploadFile\UploadFile.html" />
+    <Content Include="UploadFile\UploadFile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -181,11 +181,13 @@
     <Compile Include="Controllers\SmartSearchController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="App_Data\Models\Enums\Faculty.cs" />
+    <Compile Include="Controllers\UniverstiryController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_Data\Models\University.cs" />
+    <Compile Include="App_Data\Models\UniversitiesContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

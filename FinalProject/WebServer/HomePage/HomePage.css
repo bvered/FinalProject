@@ -182,3 +182,44 @@ footer {
             cursor: hand;
             cursor: pointer;
         }
+
+
+#changeUniversity {
+    margin: 100px;
+    text-align: right;
+    display: inline;
+}
+
+    #changeUniversity #change {
+        text-align: right;
+        color: #fff;
+        border-color: #204d74;
+        background-color: #204d74;
+        border: 2px solid white;
+        width: 100px;
+        margin-right: 50px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    #changeUniversity ul li {
+        display: table;
+        background-color: rgba(255,255,255,0.85);
+        width: auto;
+        height: 50px;
+        border: 2px solid white;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 50px;
+        margin: 10px;
+        cursor: hand;
+        cursor: pointer;
+        color: #0d3e66;
+        font-weight: bold;
+    }
+
+        #changeUniversity ul li:hover {
+            text-decoration: none;
+            cursor: hand;
+            cursor: pointer;
+        }

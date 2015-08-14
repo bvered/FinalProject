@@ -21,9 +21,9 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public IList<CourseComment> CourseComments { get; set; }
         [DataMember]
-        public Syllabus Syllabus { get; set; }
+        public UplodedFile uploadedSyllabus { get; set; }
         [DataMember]
-        public GradesDestribution GradesDestribution { get; set; }
+        public UplodedFile uploadedGrades { get; set; }
 
         public CourseInSemester()
         {
