@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Web;
 using System.Web.Http;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.Controllers
 {
@@ -34,17 +38,72 @@ namespace WebServer.Controllers
             }
         }
 
-        public class resultUniversity
+        [HttpPost]
+        [ActionName("AddUniversity")]
+        public IHttpActionResult AddUniversity()
         {
-             public string Name { get; set; }
-             public string Acronyms { get; set; }
-             public string WebAddress { get; set; }
+            if (HttpContext.Current.Request.Files.AllKeys.Any())
+            {
+                // Get the uploaded image from the Files collection
+                var httpPostedFile = HttpContext.Current.Request.Files["UploadedFile"];
 
-             public resultUniversity(string name, string acronyms, string webAddress)
+                if (httpPostedFile != null)
+                {
+                    byte[] buffer;
+
+                    using (var br = new BinaryReader(httpPostedFile.InputStream, Encoding.UTF8))
+                    {
+                        buffer = br.ReadBytes(httpPostedFile.ContentLength);
+                    }
+
+                    string UniversityName = HttpContext.Current.Request.Form["UniversityName"];
+                    string UniversityAcronyms = HttpContext.Current.Request.Form["UniversityAcronyms"];
+                    string UniversitySite = HttpContext.Current.Request.Form["UniversitySite"];
+
+                    if (string.IsNullOrWhiteSpace(UniversityName) ||
+                        string.IsNullOrWhiteSpace(UniversityAcronyms) ||
+                        string.IsNullOrWhiteSpace(UniversitySite))
+                    {
+                        return BadRequest();
+                    }
+
+                    string extension = Path.GetExtension(httpPostedFile.FileName);
+                    using (var session = DBHelper.OpenSession())
+                    using (var transaction = session.BeginTransaction())
+                    {
+                        {
+                            var newUniversity = new University
+                            {
+                                Acronyms = UniversityAcronyms,
+                                Name = UniversityName,
+                                SiteAddress = UniversitySite,
+                                BackgroundImage = buffer,
+                                ImageName = string.Format("{0}_{1}}", UniversityAcronyms,
+                                    Path.GetExtension(httpPostedFile.FileName)),
+                            };
+                            session.SaveOrUpdate(newUniversity);
+                            transaction.Commit();
+                        }
+                    }
+                }
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
+        public class
+        resultUniversity
+        {
+            public string Name { get; set; }
+            public string Acronyms { get; set; }
+            public string WebAddress { get; set; }
+
+            public resultUniversity(string name, string acronyms, string webAddress)
             {
                 Name = name;
                 Acronyms = acronyms;
-                 WebAddress = webAddress;
+                WebAddress = webAddress;
             }
         }
     }
