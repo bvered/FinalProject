@@ -20,7 +20,7 @@ function downloadFile() {
 //                console.log('meit');
                 //need to save the extention of the file, in file upload to know what the kind of the file to open
                 //need to figure out how to restore the the content of the real file from the array byte.
-                download(data, "test.txt", "text/plain");
+         //       download(data, "test.txt", "text/plain");
 
             },
             fail: function (data)

@@ -26,7 +26,7 @@ namespace WebServer.Controllers
 
                 foreach (var CourseSemester in course.CourseInSemesters)
                 {
-                    if (CourseSemester.uploadedSyllabus != null || CourseSemester.uploadedGrades != null)
+                    if (CourseSemester.uploadedSyllabus != null)
                     {
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
@@ -35,7 +35,15 @@ namespace WebServer.Controllers
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
                         result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
                     }
-                    
+                    if (CourseSemester.uploadedGrades != null)
+                    {
+                        Guid syllabusId = CourseSemester.uploadedGrades.Id;
+                        string semester = CourseSemester.uploadedGrades.Semster.ToString();
+                        int year = CourseSemester.uploadedGrades.Year;
+                        //     byte[] file = CourseSemester.Syllabus.File;
+                        string fileName = CourseSemester.uploadedGrades.FileName;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
+                    }
 
                 }
                 return result;
@@ -60,7 +68,7 @@ namespace WebServer.Controllers
                 }
                 else
                 {
-                    File.WriteAllBytes(@"C:\temp\pic.jpg", requestedSyllabus.File);
+                    File.WriteAllBytes(@"C:\pic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
                 }
                 return 1;
 

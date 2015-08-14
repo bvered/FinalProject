@@ -67,7 +67,43 @@ namespace WebServer.Controllers
                         }
 
                         var course = session.Load<Course>(courseId);
+                        string extension = Path.GetExtension(httpPostedFile.FileName);
+                        if (string.IsNullOrEmpty(extension))
+                            throw new ArgumentException(string.Format("Unable to determine file extension for fileName: {0}", httpPostedFile.FileName));
+                        bool IsPic = false;
+                        switch (extension.ToLower())
+                        {
+                            case @".bmp":
+                                IsPic = true;
+                                break;
+                            case @".gif":
+                                IsPic = true;
+                                break;
+                            case @".ico":
+                                IsPic = true;
+                                break;
+                            case @".jpg":
+                                IsPic = true;
+                                break;
+                            case @".jpeg":
+                                IsPic = true;
+                                break;
+                            case @".png":
+                                IsPic = true;
+                                break;
+                            case @".tif":
+                                break;
+                            case @".tiff":
+                                IsPic = true;
+                                break;
+                            case @".wmf":
+                                IsPic = true;
+                                break;
+                            default:
+                                throw new NotImplementedException();
+                        }
 
+                      
                         if (!isSyllabus)
                         {
                             courseInSemester.uploadedGrades = new UplodedFile
@@ -78,45 +114,12 @@ namespace WebServer.Controllers
                                         Path.GetExtension(httpPostedFile.FileName)),
                                 Semster = semster,
                                 Year = year,
-                                isSylabus = false
+                                isSylabus = false,
+                                isPic = IsPic
                             };
                         }
 
-                        string extension = Path.GetExtension(httpPostedFile.FileName);
-                        if (string.IsNullOrEmpty(extension))
-                        throw new ArgumentException(string.Format("Unable to determine file extension for fileName: {0}", httpPostedFile.FileName));
-                        bool IsPic = false;
-                        switch (extension.ToLower())
-    {
-        case @".bmp":
-            IsPic = true;
-            break;
-        case @".gif":
-            IsPic = true;
-            break;
-        case @".ico":
-            IsPic = true;
-            break;
-        case @".jpg":
-            IsPic = true;
-            break;
-        case @".jpeg":
-          IsPic = true;
-            break;
-        case @".png":
-            IsPic = true;
-            break;
-        case @".tif":
-            break;
-        case @".tiff":
-            IsPic = true;
-            break;
-        case @".wmf":
-            IsPic = true;
-            break;
-        default:
-            throw new NotImplementedException();
-    }
+
                         if (isSyllabus)
                         {
                             courseInSemester.uploadedSyllabus = new UplodedFile
