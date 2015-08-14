@@ -1,4 +1,5 @@
-﻿var queryString;
+﻿/// <reference path="../AddUniversity/AddUniversity.html" />
+var queryString;
 var currentUniversity;
 
 $(document).ready(function () {
@@ -16,7 +17,7 @@ $(document).ready(function () {
 });
 
 function SmartSearch() {
-    
+
     var uri;
     if (($("#dropDownRes1")[0]).value.trim() == "Courses") {
         uri = '/api/Courses/GetCoursesNames/' + currentUniversity;
@@ -26,13 +27,18 @@ function SmartSearch() {
     else if (($("#dropDownRes1")[0]).value.trim() == "All") {
         uri = '/api/SmartSearch/GetAllNames/' + currentUniversity;
     }
+
     $.getJSON(uri)
-        .done(function (data) {
-            console.log(data);
-            $("#tags").autocomplete({
-                source: data
+            .done(function (data) {
+                console.log(data);
+
+                $("#tags").autocomplete({
+                    source: function (request, response) {
+                        var results = $.ui.autocomplete.filter(data, request.term);
+                        response(results.slice(0, 10));
+                    }
+                });
             });
-        });
 };
 
 function BestCourses() {
@@ -62,10 +68,10 @@ $(document).ready(function () {
 });
 
 function homePage() {
-    window.location = "HomePage.html";
+    window.location = "HomePage.html?University=" + currentUniversity;
 }
 
-function sumbit(){
+function sumbit() {
     if (event.keyCode == 13) {
         $("#sendButton").click();
     }
@@ -83,7 +89,7 @@ function GetUniversities() {
         url: uri,
         contentType: "application/json",
 
-        success: function(data) {
+        success: function (data) {
             showUniversities(data);
         }
     });
@@ -102,8 +108,10 @@ function showUniversities(universities) {
 }
 
 function changePage() {
-    window.location = "http://" +this.id;
+    window.location = "http://" + this.id;
 }
 
-
+function addUniversity() {
+    window.location = "../AddUniversity/AddUniversity.html";
+}
 

@@ -98,11 +98,11 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetCoursesNames")]
-        public IList<string> GetAllCoursesNames([FromUri] string UnvierstiryName)
+        public IList<string> GetAllCoursesNames([FromUri] string id)
         {
             using (var session = DBHelper.OpenSession())
             {
-               return session.Query<Course>().Where(x => x.University.Name == UnvierstiryName).Select(x => x.Name).ToList();
+                return session.Query<Course>().Where(x => x.University.Acronyms == id).Select(x => x.Name).ToList();
             }
         }
 
