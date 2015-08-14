@@ -181,13 +181,12 @@
     <Compile Include="Controllers\SmartSearchController.cs" />
     <Compile Include="Controllers\TeachersController.cs" />
     <Compile Include="App_Data\Models\Enums\Faculty.cs" />
-    <Compile Include="Controllers\UniverstiryController.cs" />
+    <Compile Include="Controllers\UniversityController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="App_Data\Models\University.cs" />
-    <Compile Include="App_Data\Models\UniversitiesContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

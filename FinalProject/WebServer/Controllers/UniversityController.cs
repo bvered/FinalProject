@@ -10,7 +10,7 @@ using WebServer.App_Data.Models;
 
 namespace WebServer.Controllers
 {
-    public class UniverstiryController : ApiController
+    public class UniversityController : ApiController
     {
         [HttpGet]
         [ActionName("GetUniversities")]

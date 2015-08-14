@@ -1,13 +1,18 @@
 ﻿var queryString;
 var currentUniversity;
 
-$(document).load(function () {
+$(document).ready(function () {
     queryString = getQuertyString();
-    $('#University').attr('value', queryString["University"]);
+    if (queryString["University"] == undefined) {
+        var url = window.location.href + "?University=MTA";
+        window.location.href = url;
+    } else {
+        $('#University').attr('value', queryString["University"]);
 
-    currentUniversity = queryString["University"];
-    GetUniversities();
-    SmartSearch();
+        currentUniversity = queryString["University"];
+        GetUniversities();
+        SmartSearch();
+    }
 });
 
 function SmartSearch() {
@@ -71,7 +76,7 @@ function GoToSchool() {
 }
 
 function GetUniversities() {
-    var uri = '/api/UniverstiryController/GetUniversities';
+    var uri = '/api/University/GetUniversities';
 
     var request = $.ajax({
         type: "GET",
@@ -79,9 +84,26 @@ function GetUniversities() {
         contentType: "application/json",
 
         success: function(data) {
-            var showUniversities = function(data1) { throw new Error("Not implemented"); };
             showUniversities(data);
         }
     });
 }
+
+function showUniversities(universities) {
+    for (var i = 0; i < universities.length; i++) {
+        var newUniversity = document.createElement('li');
+        newUniversity.innerText = universities[i].Name;
+        newUniversity.id = universities[i].WebAddress;
+
+        newUniversity.onclick = changePage;
+
+        $('#Universities')[0].appendChild(newUniversity);
+    }
+}
+
+function changePage() {
+    window.location = "http://" +this.id;
+}
+
+
 
