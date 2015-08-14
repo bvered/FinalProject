@@ -16,14 +16,14 @@
         </header>
         <footer>
             <ul>
-                <li onclick="GoToSchool()">אודות האקדמית</li>
+                <li onclick="GoToSchool()">אודות מוסד הלימודים</li>
                 <li onclick="BestCourses()">קורסים ממולצים</li>
                 <li onclick="BestTeachers()">מרצים מומלצים</li>
             </ul>
         </footer>
         <section class="content">
             <form action="/SearchResultsPage/SearchResultPage.html" method="GET">
-                <input type="hidden" name="University" id="University" value="All"/>
+                <input type="hidden" name="University" id="University" value=""/>
                 <input type="hidden" name="search" id="search" value="All"/>
                 <div class="search-module">
                     <input id="tags" name="SearchText" placeholder="הזן את שם הקורס או המרצה" class="search-input" type="text" onkeydown=" sumbit() "/>

@@ -107,7 +107,9 @@
     <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
     <Content Include="AddTeacherComment\StarsStyle.css" />
+    <Content Include="AddUniversity\AddUniversity.css" />
     <Content Include="AddUniversity\AddUniversity.html" />
+    <Content Include="AddUniversity\AddUniversity.js" />
     <Content Include="DownloadFile\DownloadFile.js" />
     <Content Include="DownloadFile\DownloadFile.html" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.css" />

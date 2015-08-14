@@ -1,4 +1,4 @@
-﻿/// <reference path="../AddUniversity/AddUniversity.html" />
+﻿
 var queryString;
 var currentUniversity;
 
@@ -42,15 +42,14 @@ function SmartSearch() {
 };
 
 function BestCourses() {
-    window.location = "../SearchResultsPage/SearchResultPage.html?search=Courses&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+    window.location = "../SearchResultsPage/SearchResultPage.html?University="+currentUniversity+"&search=Courses&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
 }
 
 function BestTeachers() {
-    window.location = "../SearchResultsPage/SearchResultPage.html?search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+    window.location = "../SearchResultsPage/SearchResultPage.html?University="+currentUniversity+"&search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
 }
 
 function change1(choose) {
-
     $("#dropDownRes1").html($(choose).text() + '<span class=\caret\"></span>');
     $("#dropDownRes1").attr('value', $(choose).attr('value'));
     $("#search").attr('value', $(choose).attr('value'));
@@ -78,7 +77,17 @@ function sumbit() {
 }
 
 function GoToSchool() {
-    window.location = "https://www.mta.ac.il/he-il/";
+    var uri = '/api/University/GetUniversityWebByAcronyms/' + currentUniversity;
+
+    $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",
+
+        success: function(data) {
+            window.location = "http://" + data;
+        }
+    });
 }
 
 function GetUniversities() {
@@ -99,7 +108,7 @@ function showUniversities(universities) {
     for (var i = 0; i < universities.length; i++) {
         var newUniversity = document.createElement('li');
         newUniversity.innerText = universities[i].Name;
-        newUniversity.id = universities[i].WebAddress;
+        newUniversity.id = universities[i].Acronyms;
 
         newUniversity.onclick = changePage;
 
@@ -108,10 +117,11 @@ function showUniversities(universities) {
 }
 
 function changePage() {
-    window.location = "http://" + this.id;
+    $('#University').attr('value', this.id);
+    window.location = "HomePage.html?University=" + this.id;
 }
 
 function addUniversity() {
-    window.location = "../AddUniversity/AddUniversity.html";
+    window.location = "../AddUniversity/AddUniversity.html?University=" + currentUniversity;
 }
 

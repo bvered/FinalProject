@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Web.Http;
 using NHibernate;
@@ -20,8 +19,12 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 filter.SearchPreferences = filter.SearchPreferences ?? new SearchPreferences();
+                
                 var teachersQuery = GetTeachersQuery(session, filter.SearchText);
+                teachersQuery = teachersQuery.Where(x => x.University.Acronyms == filter.University);
+                
                 var coursesQuery = GetCoursesQuery(session, filter, filter.SearchPreferences);
+                coursesQuery = coursesQuery.Where(x => x.University.Acronyms == filter.University);
 
                 var lowestResult = filter.Counter * 5;
 
@@ -68,7 +71,9 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
+                
                 var query = GetTeachersQuery(session, searchTeacher.Name.ToLower());
+                query = query.Where(x => x.University.Acronyms == searchTeacher.University);
 
                 var totalCount = query.Count();
                 if (searchTeacher.isTop)
@@ -128,18 +133,10 @@ namespace WebServer.Controllers
             {
 
                 filter.SearchPreferences = filter.SearchPreferences ?? new SearchPreferences();
-
                 var query = GetCoursesQuery(session, filter, filter.SearchPreferences);
+                query = query.Where(x => x.University.Acronyms == filter.University);
 
-                List<Course> orderedCourses;
-                if (filter.isTop)
-                {
-                    orderedCourses = query.OrderByDescending(x => x.Score).ToList();
-                }
-                else
-                {
-                    orderedCourses = query.ToList().OrderByDescending(x => GetUsageValue(x, filter.SearchPreferences)).ToList();
-                }
+                var orderedCourses = filter.isTop ? query.OrderByDescending(x => x.Score).ToList() : query.ToList().OrderByDescending(x => GetUsageValue(x, filter.SearchPreferences)).ToList();
 
                 var total = query.Count();
 
@@ -293,6 +290,7 @@ namespace WebServer.Controllers
 
         public class CourseSearchFilter
         {
+            public string University { get; set; }
             public string SearchText { get; set; }
             public string Faculty { get; set; }
             public string IsMandatory { get; set; }
@@ -316,6 +314,7 @@ namespace WebServer.Controllers
             public string Name { get; set; }
             public int counter { get; set; }
             public bool isTop { get; set; }
+            public string University { get; set; }
         }
 
         public class ResultTeacher

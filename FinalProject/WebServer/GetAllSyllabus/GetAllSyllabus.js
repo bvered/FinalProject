@@ -1,7 +1,14 @@
-﻿$(document).ready()
-{
+﻿var queryString;
+var currentUniversity;
+
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+
     getAllSillabus();
-}
+});
+
 
 function getAllSillabus()
 {
@@ -55,4 +62,8 @@ function createCell(cell, text, style) {
     div.setAttribute('class', style);        // set DIV class attribute
     div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
     cell.appendChild(div);                   // append DIV to the table cell
+}
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

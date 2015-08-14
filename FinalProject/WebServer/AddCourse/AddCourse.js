@@ -2,6 +2,15 @@
 var uri = '/api/Courses/GetCourses';
 var uri3 = '/api/Teachers/GetTeachers';
 
+var queryString;
+var currentUniversity;
+
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+});
+
 var allCourses;
 $.getJSON(uri).done(function (data) {
     allCourses = data;
@@ -95,5 +104,5 @@ function hideAllLabels() {
 }
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

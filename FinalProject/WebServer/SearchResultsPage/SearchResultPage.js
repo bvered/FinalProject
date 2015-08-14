@@ -1,20 +1,22 @@
-﻿
+﻿var queryString;
+var currentUniversity;
+
 $(document).ready(function() {
     $('body').scroll(function() {
         $('#content').animate({ top: $(this).scrollTop() });
     });
+
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
     ShowResults();
 });
 
 var coursesArrayResult = [];
 var teachersArrayResult = [];
 var maxPages;
-var queryString;
-
 
 function ShowResults() {
-
-    queryString = getQuertyString();
     createSearchText(queryString);
 
     initFilterValues(queryString);
@@ -83,7 +85,8 @@ function createSearchText(query_string) {
 function getTeacherData() {
     var uri = '/api/SmartSearch/GetAllSearchedTeachers';
 
-     var searchCourse = {
+    var searchCourse = {
+        University: currentUniversity,
         Name: $('#searchText').attr('value'),
         counter: $('#page').attr('value') - 1,
     };
@@ -108,9 +111,7 @@ function getTeacherData() {
             succeed = true;
         },
         fail: function(data) {
-            //   succeed = false;
         },
-        // async: false
     });
 }
 
@@ -118,6 +119,7 @@ function getCourseData() {
     var uri = '/api/SmartSearch/GetCourseByFilter';
 
     var searchCourse = {
+        University: currentUniversity,
         SearchText: $('#searchText').attr('value'),
         Faculty: $('input[name=faculty]:checked').val(),
         IsMandatory: $('input[name=mandatory]:checked').val(),
@@ -150,9 +152,7 @@ function getCourseData() {
             succeed = true;
         },
         fail: function(data) {
-            //   succeed = false;
-        },
-        // async: false
+        }
     });
 }
 
@@ -160,6 +160,7 @@ function getAllData() {
     var uri = '/api/SmartSearch/GetAnyResults';
 
     var searchQuery = {
+        University: currentUniversity,
         SearchText: $('#searchText').attr('value'),
         Faculty: $('input[name=faculty]:checked').val(),
         IsMandatory: $('input[name=mandatory]:checked').val(),
@@ -188,9 +189,7 @@ function getAllData() {
             }
         },
         fail: function(data) {
-            //   succeed = false;
-        },
-        // async: false
+        }
     });
 };
 
@@ -224,7 +223,7 @@ function clearResults() {
 
 function showTeachersData(arrayResult) {
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html");
+    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html?University="+ currentUniversity);
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
@@ -267,13 +266,12 @@ function showTeachersData(arrayResult) {
 }
 
 function GoToTeacher() {
-    window.location = "/AddTeacherComment/AddTeacherComment.html?id=" + this.id;
+    window.location = "/AddTeacherComment/AddTeacherComment.html?University="+ currentUniversity+"&id=" + this.id;
 }
 
 function showCoursesData(arrayResult) {
-    var uri = '/api/Courses/GetAllSearchedCourses';
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
+    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html?University="+ currentUniversity);
     $("#resultAdd").text('לא מצאת את הקורס המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
@@ -327,7 +325,7 @@ function showCoursesData(arrayResult) {
 }
 
 function GoToCourse() {
-    window.location = "/AddCourseComment/AddCourseComment.html?id=" + this.id;
+    window.location = "/AddCourseComment/AddCourseComment.html?University="+ currentUniversity + "&id=" + this.id;
 }
 
 function createPaging(resultsCounter) {
@@ -387,5 +385,5 @@ function changePage(showPage) {
 }
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

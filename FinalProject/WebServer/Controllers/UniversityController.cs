@@ -20,19 +20,31 @@ namespace WebServer.Controllers
             {
                 var universities = session.QueryOver<University>().List();
 
-                return universities.Select(university => new resultUniversity(university.Name, university.SiteAddress)).ToList();;
+                return universities.Select(university => new resultUniversity(university.Name, university.Acronyms, university.SiteAddress)).ToList(); ;
+            }
+        }
+
+        [HttpGet]
+        [ActionName("GetUniversityWebByAcronyms")]
+        public string GetUniversityWebByAcronyms([FromUri] string id)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                return session.QueryOver<University>().List().Where(x => x.Acronyms == id).Select(x => x.SiteAddress).SingleOrDefault();
             }
         }
 
         public class resultUniversity
         {
              public string Name { get; set; }
+             public string Acronyms { get; set; }
              public string WebAddress { get; set; }
 
-            public resultUniversity(string name, string web)
+             public resultUniversity(string name, string acronyms, string webAddress)
             {
                 Name = name;
-                WebAddress = web;
+                Acronyms = acronyms;
+                 WebAddress = webAddress;
             }
         }
     }

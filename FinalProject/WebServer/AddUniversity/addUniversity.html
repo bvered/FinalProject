@@ -1,9 +1,75 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
+    <title>Add University</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="AddUniversity.css" />
 </head>
 <body>
+    <div class="background">
+        <header>
+            <div class="logo" onclick=" homePage() "></div>
+            <input type="hidden" name="University" id="University" value="" />
+        </header>
+        <div class="size">
+            <section class="add-new-university">
+                <form action="#">
+                    <h1>הוספת מוסד לימודים חדש</h1>
+                    <table>
+                        <tr>
+                            <td class="label"><label>שם מוסד לימודים</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס שם מוסד לימודים" id="UniversityName" required></td>
+                        </tr>
 
+                        <tr>
+                            <td class="label"><label> ראשי תיבות באנגלית</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס ראשי תיבות באנגלית" id="UniversityAcronyms" required></td>
+                        </tr>
+
+                        <tr>
+                            <td class="label"><label> כתובת אתר מוסד הלימודים</label></td>
+                        </tr>
+                        <tr>
+                            <td><input class="form-control" type="text" placeholder="הכנס את כתובת האתר" id="UniversitySite" required></td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">
+                                <label> העלה תמונת רקע למוסד הלימודים <input id="fileUpload" type="file" /></label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input id="btnUploadFile" type="button" value="Upload File" />
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center">
+                                <label class="error" id="UniversityExists" hidden="true">המוסד לימודים כבר קיים במערכת!</label><br />
+                                <label class="error" hidden="true" id="addUniversitySuccessfuly">תודה על הוספת מוסד הלימודים! </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="submit" align="center">
+                                <button onclick=" checkAndAdd() " class="btn btn-danger">הוסף מוסד לימודים</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </section>
+        </div>
+    </div>
+    <script src="AddUniversity.js"></script>
+    <script src="../JavaScripts/QueryString.js"></script>
 </body>
 </html>

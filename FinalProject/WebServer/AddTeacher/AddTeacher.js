@@ -2,6 +2,15 @@
 var uri3 = '/api/Teachers/GetTeachers';
 
 var allTeachers;
+var queryString;
+var currentUniversity;
+
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+});
+
 $.getJSON(uri3).done(function(data) {
     allTeachers = data;
     console.log(allTeachers);
@@ -64,5 +73,5 @@ function hideAllLabels() {
 }
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

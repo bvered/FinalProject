@@ -6,7 +6,7 @@
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script src="UploadFile.js"></script>
+    <script src="UploadSyllabus.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
@@ -17,7 +17,8 @@
 <body>
     <div class="background">
         <header>
-            <div class="logo" onclick="homePage()"></div>
+            <div class="logo" onclick=" homePage() "></div>
+            <input type="hidden" name="University" id="University" value="" />
         </header>
         <div class="size">
             <section>
@@ -71,13 +72,13 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="isSyllabus[0]" name="isSyllabus" value="0" type="radio" />
+                                        <input id="isSyllabus[0]" name="isSyllabus" value="0" type="radio"/>
                                         <label for="isSyllabus[0]">התפלגות ציונים</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="isSyllabus[1]" name="isSyllabus" value="1" type="radio" />
+                                        <input id="isSyllabus[1]" name="isSyllabus" value="1" type="radio"/>
                                         <label for="isSyllabus[1]">סילבוס</label>
                                     </td>
                                 </tr>
@@ -101,5 +102,7 @@
             </section>
         </div>
     </div>
+    <script src="UploadSyllabus.js"></script>
+    <script src="../JavaScripts/QueryString.js"></script>
 </body>
 </html>
