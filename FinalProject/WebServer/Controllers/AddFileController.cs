@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.Eventing.Reader;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ namespace WebServer.Controllers
     {
         [HttpPost]
         [ActionName("AddFile")]
-        public IHttpActionResult AddSyllabus()
+        public IHttpActionResult AddFile()
         {
             if (HttpContext.Current.Request.Files.AllKeys.Any())
             {
@@ -80,6 +81,42 @@ namespace WebServer.Controllers
                                 isSylabus = false
                             };
                         }
+
+                        string extension = Path.GetExtension(httpPostedFile.FileName);
+                        if (string.IsNullOrEmpty(extension))
+                        throw new ArgumentException(string.Format("Unable to determine file extension for fileName: {0}", httpPostedFile.FileName));
+                        bool IsPic = false;
+                        switch (extension.ToLower())
+    {
+        case @".bmp":
+            IsPic = true;
+            break;
+        case @".gif":
+            IsPic = true;
+            break;
+        case @".ico":
+            IsPic = true;
+            break;
+        case @".jpg":
+            IsPic = true;
+            break;
+        case @".jpeg":
+          IsPic = true;
+            break;
+        case @".png":
+            IsPic = true;
+            break;
+        case @".tif":
+            break;
+        case @".tiff":
+            IsPic = true;
+            break;
+        case @".wmf":
+            IsPic = true;
+            break;
+        default:
+            throw new NotImplementedException();
+    }
                         if (isSyllabus)
                         {
                             courseInSemester.uploadedSyllabus = new UplodedFile
@@ -90,7 +127,8 @@ namespace WebServer.Controllers
                                         Path.GetExtension(httpPostedFile.FileName)),
                                 Semster = semster,
                                 Year = year,
-                                isSylabus = true
+                                isSylabus = true,
+                                isPic = IsPic
                             };
                         }
                         

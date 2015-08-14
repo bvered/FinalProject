@@ -26,7 +26,7 @@ namespace WebServer.Controllers
 
                 foreach (var CourseSemester in course.CourseInSemesters)
                 {
-                    if (CourseSemester.uploadedSyllabus != null)
+                    if (CourseSemester.uploadedSyllabus != null || CourseSemester.uploadedGrades != null)
                     {
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
@@ -51,10 +51,17 @@ namespace WebServer.Controllers
             {
                 var Syllabus = session.QueryOver<UplodedFile>().List();
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
-
+                string val;
                 var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
 
-                string val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                if (requestedSyllabus.isPic == false)
+                {
+                    val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                }
+                else
+                {
+                    File.WriteAllBytes(@"C:\temp\pic.jpg", requestedSyllabus.File);
+                }
                 return 1;
 
 

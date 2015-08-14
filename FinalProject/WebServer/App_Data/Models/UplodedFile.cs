@@ -18,5 +18,7 @@ namespace WebServer.App_Data.Models
         public Guid Id { get; set; }
         [DataMember]
         public bool isSylabus { get; set; }
+        [DataMember]
+        public bool isPic { get; set; }
     }
 }

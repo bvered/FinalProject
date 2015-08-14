@@ -454,7 +454,7 @@ function semesterNameByEnum(semester) {
 }
 
 function ChangePage() {
-    window.location = "../UploadSyllabus/UploadSyllabus.html?courseId=" + course.Id;
+    window.location = "../UploadFile/UploadFile.html?courseId=" + course.Id;
 }
 
 function ChangePage2() {
