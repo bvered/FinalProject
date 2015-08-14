@@ -9,7 +9,7 @@ function downloadFile() {
     var quertyString = getQuertyString();
 
     if (quertyString['type'] = 'Syllabus') {
-        uri = "/api/GetFile/GetSpecificSyllabus/" + quertyString['id'];
+        uri = "/api/GetFile/GetSyllabussss/" + quertyString['id'];
         var ajaxRequest = $.ajax({
             type: "GET",
             url: uri,

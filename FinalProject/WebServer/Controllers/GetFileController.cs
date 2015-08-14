@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Web;
 using System.Web.Http;
-using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 using WebServer.App_Data.Models.Enums;
@@ -40,22 +42,25 @@ namespace WebServer.Controllers
             }
            
         }
-        /*Todo : GradesDestribution*/
-        /*  [HttpGet]
-          [ActionName("GetGradesDestribution")]
-          public IList<ResultGrades> GetGradesDestribution([FromUri]string id)
-          {
 
-          }
-          */
-
-        /*
-          [ActionName("GetSpecificGradeDistribution")]
-        public byte[] GetSpecificGradeDistribution([FromUri]string id)
+        [HttpGet]
+        [ActionName("GetSyllabussss")]
+        public int GetSyllabussss([FromUri]string id)
         {
-         
-         }
-         */
+            using (var session = DBHelper.OpenSession())
+            {
+                var Syllabus = session.QueryOver<UplodedFile>().List();
+                IList<ResultSyllabus> result = new List<ResultSyllabus>();
+
+                var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
+
+                string val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                return 1;
+
+
+
+            }
+        }
 
         [ActionName("GetSpecificSyllabus")]
         public byte[] GetSpecificSyllabus([FromUri]string id)

@@ -2,6 +2,7 @@
 using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using WebServer.App_Data;
@@ -25,7 +26,7 @@ namespace WebServer.Controllers
                 {
                     byte[] buffer;
 
-                    using (var br = new BinaryReader(httpPostedFile.InputStream))
+                    using (var br = new BinaryReader(httpPostedFile.InputStream, Encoding.UTF8))
                     {
                         buffer = br.ReadBytes(httpPostedFile.ContentLength);
                     }
