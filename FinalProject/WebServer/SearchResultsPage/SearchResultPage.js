@@ -337,21 +337,26 @@ function createPaging(resultsCounter) {
 
     previousPage.appendChild(innerSpan);
     $('#pages')[0].appendChild(previousPage);
-   
-    for (var i = 0; i < resultsCounter; i++) {
+
+    var currentPage = parseInt($('#page').attr('value'));
+
+    var firstPage = Math.max(1, Math.min(resultsCounter - 10, currentPage - 5));
+    var lastpage = Math.min(Math.max(currentPage + 5, 11), resultsCounter);
+    
+    for (var i = firstPage; i <= lastpage; i++) {
         var newPage = document.createElement('li');
         newPage.className = "pagebutton";
-        newPage.id = i + 1;
+        newPage.id = i;
         
         innerSpan = document.createElement('span');
-        innerSpan.innerText = i + 1;
+        innerSpan.innerText = i;
 
         newPage.onclick = GoToPage;
 
-        var currentPage = $('#page').attr('value');
-        if ((i+1) == currentPage) {
+        if (i == currentPage) {
             newPage.className ='active';
         }
+
         newPage.appendChild(innerSpan);
         $('#pages')[0].appendChild(newPage);
     }
