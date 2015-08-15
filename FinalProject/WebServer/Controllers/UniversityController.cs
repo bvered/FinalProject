@@ -100,11 +100,11 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 var university = session.QueryOver<University>().List().SingleOrDefault(x => x.Acronyms == id);
+                var base64String = Convert.ToBase64String(university.BackgroundImage, 0, university.BackgroundImage.Length);
                 returnUniversity newUniversity = new returnUniversity
                 {
                     UniversityName = university.Name,
-                    Base64 = "data:image/" + university.FileExtention + ";base64" + 
-                    Convert.ToBase64String(university.BackgroundImage, 0, university.BackgroundImage.Length),
+                    Base64 = string.Format("data:image/{0};base64,{1}", university.FileExtention, base64String),
                 };
                 return newUniversity;
             }
