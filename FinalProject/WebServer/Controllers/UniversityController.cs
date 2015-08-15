@@ -88,9 +88,22 @@ namespace WebServer.Controllers
             return BadRequest();
         }
 
+        [HttpPost]
+        [ActionName("CheckIfUniversityExists")]
+        public IHttpActionResult CheckIfUniversityExists([FromBody] resultUniversity recivedUniversity)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var queryAcronyms = session.QueryOver<University>().List().Where(x => x.Acronyms == recivedUniversity.Acronyms).ToList();
+                var queryWeb = session.QueryOver<University>().List().Where(x => x.SiteAddress == recivedUniversity.WebAddress).ToList();
+                var queryName = session.QueryOver<University>().List().Where(x => x.Name == recivedUniversity.Name).ToList();
 
-        public class
-        resultUniversity
+                if (queryAcronyms.Count <= 0 && queryWeb.Count <= 0 && queryName.Count <= 0) return Ok();
+                return BadRequest();
+            }
+        }
+
+        public class resultUniversity
         {
             public string Name { get; set; }
             public string Acronyms { get; set; }

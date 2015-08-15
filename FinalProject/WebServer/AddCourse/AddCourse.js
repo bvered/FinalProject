@@ -1,6 +1,6 @@
 ﻿
-var uri = '/api/Courses/GetCourses';
-var uri3 = '/api/Teachers/GetTeachers';
+var uri = '/api/Courses/GetCoursesNames';
+var uri2 = '/api/Teachers/GetTeachersNames';
 
 var queryString;
 var currentUniversity;
@@ -22,7 +22,7 @@ $.getJSON(uri).done(function (data) {
 });
 
 var allTeachers;
-$.getJSON(uri3).done(function (data) {
+$.getJSON(uri2).done(function (data) {
     allTeachers = data;
     console.log(allTeachers);
 

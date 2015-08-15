@@ -173,16 +173,16 @@ function getAllData() {
         type: "POST",
         url: uri,
         data: JSON.stringify(searchQuery),
-        contentType: "application/json", //; charset=UTF-8",
+        contentType: "application/json",
         success: function (searchResult) {
             $.jStorage.set("SearchPreferences", searchResult.SearchPreferences);
 
-            if (searchResult.TotalCount == 0) { // we didnt found any match
+            if (searchResult.TotalCount == 0) { 
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                $("#footer").show();
                 maxPages = Math.ceil(searchResult.TotalCount / 5);
-
                 createPaging(maxPages);
                 showTeachersData(searchResult.TeacherResults);
                 showCoursesData(searchResult.CourseResults);
@@ -227,7 +227,7 @@ function showTeachersData(arrayResult) {
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    for ( i=0; i<arrayResult.length; i++) {
+    for (var i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
         teacherData.className = 'teacherData';
 
