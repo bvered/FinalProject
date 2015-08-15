@@ -15,5 +15,7 @@ namespace WebServer.App_Data.Models
         public string Acronyms { get; set; }
         [DataMember]
         public string SiteAddress { get; set; }
+        [DataMember]
+        public string FileExtention { get; set; }
     }
 }

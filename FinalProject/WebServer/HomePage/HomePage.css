@@ -21,7 +21,7 @@ ul {
     width: 100%;
     height: 100%;
     opacity: 0.9;
-    background: url('../Images/site_background.jpeg');
+    /*background: url('../Images/site_background.jpeg');*/
     background-repeat: no-repeat;
     background-position-y: -300px;
 }

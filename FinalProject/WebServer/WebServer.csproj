@@ -116,6 +116,7 @@
     <Content Include="GetAllSyllabus\GetAllSyllabus.html" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.js" />
     <Content Include="Images\academit.png" />
+    <Content Include="Images\BGU.jpg" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="Images\site_background.jpeg" />
     <Content Include="AddCourseComment\stars.png" />

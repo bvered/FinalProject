@@ -19,3 +19,7 @@
 
     return queryString;
 }
+
+function changeBackgroundImage() {
+    
+}

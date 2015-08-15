@@ -81,6 +81,7 @@ namespace WebServer.Controllers
                                 Name = UniversityName,
                                 SiteAddress = UniversitySite,
                                 BackgroundImage = buffer,
+                                FileExtention = Path.GetExtension(httpPostedFile.FileName)
                             };
                             session.SaveOrUpdate(newUniversity);
                             transaction.Commit();
@@ -90,6 +91,23 @@ namespace WebServer.Controllers
                 return Ok();
             }
             return BadRequest();
+        }
+
+        [HttpGet]
+        [ActionName("GetUvinersitryPicture")]
+        public returnUniversity GetUvinersitryPicture([FromUri] string id)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var university = session.QueryOver<University>().List().SingleOrDefault(x => x.Acronyms == id);
+                returnUniversity newUniversity = new returnUniversity
+                {
+                    UniversityName = university.Name,
+                    Base64 = "data:image/" + university.FileExtention + ";base64" + 
+                    Convert.ToBase64String(university.BackgroundImage, 0, university.BackgroundImage.Length),
+                };
+                return newUniversity;
+            }
         }
 
         public bool CheckIfUniversityExists(string UniversityName, string UniversityAcronyms, string UniversitySite)
@@ -121,5 +139,11 @@ namespace WebServer.Controllers
                 WebAddress = webAddress;
             }
         }
+    }
+
+    public class returnUniversity
+    {
+        public string UniversityName { get; set; }
+        public string Base64 { get; set; }
     }
 }

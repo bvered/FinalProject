@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Mime;
 using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 using WebServer.App_Data.Models.Enums;
+using System.Drawing;
 
 namespace TestConsole
 {
@@ -31,15 +33,34 @@ namespace TestConsole
                 Acronyms = "MTA",
                 Name = "המכללה האקדמית תל אביב יפו",
                 SiteAddress = "www.mta.ac.il",
+                FileExtention = "jpeg"
             };
+
+            Image img = Image.FromFile(@"F:\FinalProject\FinalProject\WebServer\Images\site_background.jpeg");
+            byte[] arr;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                arr = ms.ToArray();
+            }
+            MTA.BackgroundImage = arr;
 
             var BGU = new University
             {
                 Acronyms = "BGU",
                 Name = "אוניברסטית בן גוריון",
                 SiteAddress = "in.bgu.ac.il/Pages/default.aspx",
+                FileExtention = "jpg"
             };
 
+            img = Image.FromFile(@"F:\FinalProject\FinalProject\WebServer\Images\BGU.jpg");
+            byte[] arr2;
+            using (MemoryStream ms = new MemoryStream())
+            {
+                img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
+                arr2 = ms.ToArray();
+            }
+            BGU.BackgroundImage = arr2;
 
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
