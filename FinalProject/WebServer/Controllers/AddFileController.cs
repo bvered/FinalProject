@@ -100,7 +100,7 @@ namespace WebServer.Controllers
                                 IsPic = true;
                                 break;
                             default:
-                                throw new NotImplementedException();
+                                break;
                         }
 
                       

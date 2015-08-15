@@ -53,7 +53,7 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetSyllabussss")]
-        public int GetSyllabussss([FromUri]string id)
+        public RequestedFile GetSyllabussss([FromUri]string id)
         {
             using (var session = DBHelper.OpenSession())
             {
@@ -61,19 +61,21 @@ namespace WebServer.Controllers
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
                 string val;
                 var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
+                RequestedFile file = new RequestedFile();
 
                 if (requestedSyllabus.isPic == false)
                 {
                     val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                    file.isPic = false;
+                    file.str = val;
                 }
                 else
                 {
-                    File.WriteAllBytes(@"C:\pic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
+                    File.WriteAllBytes(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
+                    file.isPic = true;
+                    file.str = @"../Images/filePic.jpg";
                 }
-                return 1;
-
-
-
+                return file;
             }
         }
 
@@ -89,6 +91,12 @@ namespace WebServer.Controllers
 
                 return requestedSyllabus.File;
             }
+        }
+
+        public class RequestedFile
+        {
+            public bool isPic { get; set; }
+            public string str { get; set; }
         }
 
         public class ResultSyllabus

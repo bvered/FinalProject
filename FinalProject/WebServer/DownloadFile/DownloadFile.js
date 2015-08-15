@@ -17,9 +17,13 @@ function downloadFile() {
 
             success: function (data)
             {
-//                console.log('meit');
-                //need to save the extention of the file, in file upload to know what the kind of the file to open
-                //need to figure out how to restore the the content of the real file from the array byte.
+                if (data.isPic == true) {
+                    $("#fileImg").attr("src", "../Images/filePic.jpg");
+                }
+                else if (data.isPic == false) {
+                    $("#textFile").append(data.str);
+                }
+                
          //       download(data, "test.txt", "text/plain");
 
             },
