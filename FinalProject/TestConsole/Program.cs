@@ -35,8 +35,9 @@ namespace TestConsole
                 SiteAddress = "www.mta.ac.il",
                 FileExtention = "jpeg"
             };
-
-            Image img = Image.FromFile(@"F:\FinalProject\FinalProject\WebServer\Images\site_background.jpeg");
+//F:\FinalProject\FinalProject\TestConsole\Images\site_background.jpeg
+            string currentDir = Environment.CurrentDirectory;
+            Image img = Image.FromFile(currentDir + @"\..\..\Images\site_background.jpeg");
             byte[] arr;
             using (MemoryStream ms = new MemoryStream())
             {
@@ -53,7 +54,7 @@ namespace TestConsole
                 FileExtention = "jpg"
             };
 
-            img = Image.FromFile(@"F:\FinalProject\FinalProject\WebServer\Images\BGU.jpg");
+            img = Image.FromFile(currentDir + @"\..\..\Images\BGU.jpg");
             byte[] arr2;
             using (MemoryStream ms = new MemoryStream())
             {
