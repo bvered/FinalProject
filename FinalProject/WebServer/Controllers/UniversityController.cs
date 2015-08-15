@@ -62,9 +62,13 @@ namespace WebServer.Controllers
 
                     if (string.IsNullOrWhiteSpace(UniversityName) ||
                         string.IsNullOrWhiteSpace(UniversityAcronyms) ||
-                        string.IsNullOrWhiteSpace(UniversitySite))
+                        string.IsNullOrWhiteSpace(UniversitySite) )
                     {
                         return BadRequest();
+                    }
+                    if (CheckIfUniversityExists(UniversityName, UniversityAcronyms, UniversitySite))
+                    {
+                        return Conflict();
                     }
 
                     using (var session = DBHelper.OpenSession())
@@ -88,18 +92,19 @@ namespace WebServer.Controllers
             return BadRequest();
         }
 
-        [HttpPost]
-        [ActionName("CheckIfUniversityExists")]
-        public IHttpActionResult CheckIfUniversityExists([FromBody] resultUniversity recivedUniversity)
+        public bool CheckIfUniversityExists(string UniversityName, string UniversityAcronyms, string UniversitySite)
         {
             using (var session = DBHelper.OpenSession())
             {
-                var queryAcronyms = session.QueryOver<University>().List().Where(x => x.Acronyms == recivedUniversity.Acronyms).ToList();
-                var queryWeb = session.QueryOver<University>().List().Where(x => x.SiteAddress == recivedUniversity.WebAddress).ToList();
-                var queryName = session.QueryOver<University>().List().Where(x => x.Name == recivedUniversity.Name).ToList();
+                int query =
+                    session.QueryOver<University>()
+                        .Where(
+                            x =>
+                                x.Acronyms == UniversityAcronyms || x.SiteAddress == UniversitySite ||
+                                x.Name == UniversityName).RowCount();
 
-                if (queryAcronyms.Count <= 0 && queryWeb.Count <= 0 && queryName.Count <= 0) return Ok();
-                return BadRequest();
+                if (query == 0) return false;
+                return true;
             }
         }
 

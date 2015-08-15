@@ -1,95 +1,105 @@
 ﻿
-var uri = '/api/Courses/GetCoursesNames';
-var uri2 = '/api/Teachers/GetTeachersNames';
-
 var queryString;
 var currentUniversity;
+var allTeachers;
+var allCourses;
 
 $(document).ready(function () {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+
+    getCourses();
+    getTeachers();
 });
 
-var allCourses;
-$.getJSON(uri).done(function (data) {
-    allCourses = data;
+function getCourses() {
+    var uri = '/api/Courses/GetCoursesNames/' + currentUniversity;
 
-    console.log(allCourses);
-    $("#CourseName").autocomplete({
-        source: allCourses
+    $.getJSON(uri).done(function (data) {
+        allCourses = data;
+
+        console.log(allCourses);
+        $("#CourseName").autocomplete({
+            source: function (request, response) {
+                var results = $.ui.autocomplete.filter(allCourses, request.term);
+                response(results.slice(0, 10));
+            }
+        });
     });
-});
+}
 
-var allTeachers;
-$.getJSON(uri2).done(function (data) {
-    allTeachers = data;
-    console.log(allTeachers);
+function getTeachers() {
+    var uri2 = '/api/Teachers/GetTeachersNames/' + currentUniversity;
 
-    $("#teacherName").autocomplete({
-        source: allTeachers
+    $.getJSON(uri2).done(function (data) {
+        allTeachers = data;
+        console.log(allTeachers);
+
+        $("#teacherName").autocomplete({
+            source: function (request, response) {
+                var results = $.ui.autocomplete.filter(allTeachers, request.term);
+                response(results.slice(0, 10));
+            }
+        });
     });
-});
+}
 
 function checkAndAdd() {
-     if ((allTeachers.indexOf($("#teacherName").val()) < 0)) { //if the teacher doesn't exists
-         inputError("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
-         hideAllLabels();
-    } else if (allCourses.indexOf($("#CourseName").val()) >= 0) { //if the course already exists
-        $("#CourseExists")[0].hidden = false;
-        $("#CourseLink")[0].hidden = false;
-        $("#CourseLink")[0].href = "#" + $("#CourseName").val();
-    } else { //if we can add the new course
-        inputSuccesss("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
+    if ((allTeachers.indexOf($("#teacherName").val()) < 0)) { 
+        $("#teacherError")[0].hidden = false;
         hideAllLabels();
-        addCourse($("#CourseName").val(), $("#teacherName").val());
+    } else if (!($("#CourseName").val()) ||
+        !($("#teacherName").val()) || 
+        !($('input[name=faculty]:checked').val()) ||
+        !($('input[name=mandatory]:checked').val()) || 
+        !($('input[name=degree]:checked').val()) ||
+        !($('input[name=year]:checked').val())) {
+
+        $("#EmptyRequierments")[0].hidden = false;
+
+        $("#CourseExists")[0].hidden = true;
+        $("#CourseLink")[0].hidden = true;
+        $("#teacherError")[0].hidden = true;
+    } else { 
+        $("#teacherError")[0].hidden = true;
+        hideAllLabels();
+        addCourse();
     }
 };
 
-function checkTeacher() {
-    if (allTeachers.indexOf($("#teacherName").val()) >= 0)
-        inputSuccesss("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
-    else
-        inputError("#teacherWrap", "#teacherInput", "input2Status", "#teacherError");
-};
-
-function inputSuccesss(divId, inputId, inputStatusId, labelId) {
-    $(divId).removeClass("has-error").addClass("has-success");
-    $(inputId).removeClass("glyphicon-remove").addClass("glyphicon-ok");
-    $(inputStatusId).input = "(success)";
-    $(labelId)[0].hidden = true;
-};
-
-function inputError(divId, inputId, inputStatusId, labelId) {
-    $(divId).removeClass("has-success").addClass("has-error");
-    $(inputId).removeClass("glyphicon-ok").addClass("glyphicon-remove");
-    $(inputStatusId).input = "(error)";
-    $(labelId)[0].hidden = false;
-};
-
-function addCourse(CourseName, teacherName, faculty, mandatory, academicDegree, intendedYear) {
+function addCourse() {
     var uri4 = '/api/Courses/AddCourse';
 
     $(function () {
         var course = {
-            Name: CourseName,
-            TeacherName: teacherName,
-            Faculty: faculty,
-            Ismandatory: mandatory,
-            AcademicDegree: academicDegree,
-            IntendedYear: intendedYear,
-    };
+            Univesity: currentUniversity,
+            Name: $("#CourseName").val(),
+            TeacherName: $("#teacherName").val(),
+            Faculty: $('input[name=faculty]:checked').val(),
+            Ismandatory:  $('input[name=mandatory]:checked').val(),
+            AcademicDegree:  $('input[name=degree]:checked').val(),
+            IntendedYear: $('input[name=year]:checked').val(),
+        };
 
         var request = $.ajax({
             type: "POST",
             data: JSON.stringify(course),
             url: uri4,
-            contentType: "application/json"
-        });
+            contentType: "application/json",
 
-        request.done(function () {
-            $("#addCourseSuccessfuly")[0].hidden = false;
-            $("#HomePage")[0].hidden = false;
+            statusCode: {
+                222: function (data, textStatus, jqXHR) {
+                    $("#CourseExists")[0].hidden = false;
+                    $("#CourseLink")[0].hidden = false;
+                    $("#CourseLink")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + data;
+                },
+                200: function(data, textStatus, jqXHR) {
+                    $("#addCourseSuccessfuly")[0].hidden = false;
+                    $("#resultCourse")[0].hidden = false;
+                    $("#resultCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + data;
+                }
+            }
         });
 
         request.fail(function (jqXhr, textStatus) {
@@ -101,6 +111,7 @@ function addCourse(CourseName, teacherName, faculty, mandatory, academicDegree, 
 function hideAllLabels() {
     $("#CourseExists")[0].hidden = true;
     $("#CourseLink")[0].hidden = true;
+    $("#EmptyRequierments")[0].hidden = true;
 }
 
 function homePage() {

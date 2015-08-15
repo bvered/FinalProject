@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using NHibernate.Linq;
 using WebServer.App_Data;
@@ -108,19 +109,26 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddCourse")]
-        public void AddCourse([FromBody] CreateCourseCommand createCommand)
+        public IHttpActionResult AddCourse([FromBody] CreateCourseCommand createCommand)
         {
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                var course = new Course
+                var query = session.Query<Course>().Where(x => x.Name == createCommand.Name).ToList();
+                if (query.Count != 0)
                 {
-                    Name = createCommand.Name,
-                    Faculty = createCommand.Faculty,
-                    IsMandatory = createCommand.IsMandatory,
-                    AcademicDegree = createCommand.AcademicDegree,
-                    IntendedYear = createCommand.IntendedYear,
-                };
+                    const HttpStatusCode MyStatusCode = (HttpStatusCode) 222;
+                    return Content(MyStatusCode, query.Select(x => x.Id).FirstOrDefault());
+                }
+                var course = new Course
+                    {
+                        University = session.Query<University>().SingleOrDefault(x => x.Name == createCommand.University),
+                        Name = createCommand.Name,
+                        Faculty = createCommand.Faculty,
+                        IsMandatory = createCommand.IsMandatory,
+                        AcademicDegree = createCommand.AcademicDegree,
+                        IntendedYear = createCommand.IntendedYear,
+                    };
 
                 course.AddCourseInSemester(new CourseInSemester
                 {
@@ -129,6 +137,8 @@ namespace WebServer.Controllers
                 });
                 session.Save(course);
                 transaction.Commit();
+
+                return Ok(course.Id);
             }
         }
 
@@ -237,6 +247,7 @@ namespace WebServer.Controllers
 
     public class CreateCourseCommand
     {
+        public string University { get; set; }
         public string Name { get; set; }
         public string TeacherName { get; set; }
         public Faculty Faculty { get; set; }

@@ -4,8 +4,8 @@ var currentUniversity;
 
 $(document).ready(function () {
     queryString = getQuertyString();
-    if (queryString["University"] == undefined) {
-        var url = window.location.href + "?University=MTA";
+    if (queryString["University"] == undefined || queryString["University"] == "undefined") {
+        var url = "HomePage.html?University=MTA";
         window.location.href = url;
     } else {
         $('#University').attr('value', queryString["University"]);

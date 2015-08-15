@@ -21,11 +21,10 @@
                 <h1>הוספת קורס חדש</h1>
                 <table>
                     <tr>
-
                         <td class="label"><label>שם המרצה</label></td>
                     </tr>
                     <tr>
-                        <td><input class="form-control" type="text" id="teacherName" placeholder="הכנס שם מרצה" onkeyup=" checkTeacher() "/></td>
+                        <td><input class="form-control" type="text" id="teacherName" placeholder="הכנס שם מרצה" required /></td>
 
                     </tr>
                     <tr>
@@ -33,7 +32,7 @@
                         <td class="label"><label>שם הקורס</label></td>
                     </tr>
                     <tr>
-                        <td><input class="form-control" type="text" id="CourseName" placeholder="הכנס שם קורס"/></td>
+                        <td><input class="form-control" type="text" id="CourseName" placeholder="הכנס שם קורס" required /></td>
                     </tr>
                     <tr>
                         <td rowspan="1" class="label"><label>פקולטה</label></td>
@@ -43,55 +42,55 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="faculty[0]" name="faculty[0]" value="0" type="radio"/>
+                                        <input id="faculty[0]" name="faculty" value="0" type="radio" required />
                                         <label for="faculty[0]">מדעי המחשב</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[1]" name="faculty[0]" value="1" type="radio"/>
+                                        <input id="faculty[1]" name="faculty" value="1" type="radio" required />
                                         <label for="faculty[1]">מדעי ההתנהגות</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[2]" name="faculty[0]" value="2" type="radio"/>
+                                        <input id="faculty[2]" name="faculty" value="2" type="radio" required />
                                         <label for="faculty[2]">מערכות מידע</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[3]" name="faculty[0]" value="3" type="radio"/>
+                                        <input id="faculty[3]" name="faculty" value="3" type="radio" required />
                                         <label for="faculty[3]">סיעוד</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[4]" name="faculty[0]" value="4" type="radio"/>
+                                        <input id="faculty[4]" name="faculty" value="4" type="radio" required />
                                         <label for="faculty[4]">ניהול וכלכלה</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[5]" name="faculty[0]" value="5" type="radio"/>
+                                        <input id="faculty[5]" name="faculty" value="5" type="radio" required />
                                         <label for="faculty[5]">חברה ופוליטיקה </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[6]" name="faculty[0]" value="6" type="radio"/>
+                                        <input id="faculty[6]" name="faculty" value="6" type="radio" required />
                                         <label for="faculty[6]">ייעוץ ופיתוח ארגוני</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[7]" name="faculty[0]" value="7" type="radio"/>
+                                        <input id="faculty[7]" name="faculty" value="7" type="radio" required />
                                         <label for="faculty[7]">מנהל עסקים </label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="faculty[8]" name="faculty[0]" value="8" type="radio"/>
+                                        <input id="faculty[8]" name="faculty" value="8" type="radio" required />
                                         <label for="faculty[8]"> פסיכולוגיה</label>
                                     </td>
                                 </tr>
@@ -106,14 +105,14 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="course[0]" name="course[0]" value="0" type="radio"/>
-                                        <label for="course[0]">בחירה</label>
+                                        <input id="mandatory[0]" name="mandatory" value="0" type="radio" required />
+                                        <label for="mandatory[0]">בחירה</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="course[1]" name="course[0]" value="1" type="radio"/>
-                                        <label for="course[1]">חובה</label>
+                                        <input id="mandatory[1]" name="mandatory" value="1" type="radio" required />
+                                        <label for="mandatory[1]">חובה</label>
                                     </td>
                                 </tr>
                             </table>
@@ -127,13 +126,13 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="degree[0]" name="degree[0]" value="0" type="radio"/>
+                                        <input id="degree[0]" name="degree" value="0" type="radio" required />
                                         <label for="degree[0]">תואר ראשון</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="degree[1]" name="degree[0]" value="1" type="radio"/>
+                                        <input id="degree[1]" name="degree" value="1" type="radio" required />
                                         <label for="degree[1]">תואר שני</label>
                                     </td>
                                 </tr>
@@ -148,25 +147,25 @@
                             <table>
                                 <tr>
                                     <td>
-                                        <input id="year[0]" name="year[0]" value="0" type="radio"/>
+                                        <input id="year[0]" name="year" value="0" type="radio" required />
                                         <label for="year[0]">א</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="year[1]" name="year[0]" value="1" type="radio"/>
+                                        <input id="year[1]" name="year" value="1" type="radio" required />
                                         <label for="year[1]">ב</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="year[2]" name="year[0]" value="2" type="radio"/>
+                                        <input id="year[2]" name="year" value="2" type="radio" required />
                                         <label for="year[2]">ג</label>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <input id="year[3]" name="year[0]" value="3" type="radio"/>
+                                        <input id="year[3]" name="year" value="3" type="radio" required />
                                         <label for="year[3]">ד</label>
                                     </td>
                                 </tr>
@@ -176,9 +175,12 @@
                     <tr>
                         <td align="center">
                             <label class="error" hidden="true" id="teacherError">המורה לא קיים במערכת, נא להוסיף אותו. </label>
+                            <label class="error" hidden="true" id="EmptyRequierments">נא למלא את כל הפרמטרים! </label>
                             <label class="error" id="CourseExists" hidden="true">הקורס כבר קיים במערכת</label>
                             <a id="CourseLink" hidden="true" href="#">לחץ כאן כדי לראות את דירוג הקורס!</a>
+
                             <label class="error" hidden="true" id="addCourseSuccessfuly">תודה שהוספת את הקורס למערכת! </label>
+                            <a hidden="true" id="resultCourse" href="#">עבור לדירוג הקורס החדש! </a>
                         </td>
                     </tr>
                     <tr>

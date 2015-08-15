@@ -103,7 +103,7 @@ namespace WebServer.Controllers
                                 throw new NotImplementedException();
                         }
 
-                      
+
                         if (!isSyllabus)
                         {
                             courseInSemester.uploadedGrades = new UplodedFile
@@ -134,14 +134,12 @@ namespace WebServer.Controllers
                                 isPic = IsPic
                             };
                         }
-                        
-
                         session.SaveOrUpdate(courseInSemester);
 
                         transaction.Commit();
+                        return Ok(course.Id);
                     }
                 }
-                return Ok();
             }
             return BadRequest();
         }

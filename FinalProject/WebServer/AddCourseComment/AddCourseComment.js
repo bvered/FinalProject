@@ -462,11 +462,11 @@ function semesterNameByEnum(semester) {
 }
 
 function ChangePage() {
-    window.location = "../UploadFile/UploadFile.html?courseId=" + course.Id;
+    window.location = "../UploadFile/UploadFile.html?University="+currentUniversity +"&courseId=" + course.Id;
 }
 
 function ChangePage2() {
-    window.location = "../GetAllSyllabus/GetAllSyllabus.html?courseId=" + course.Id;
+    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University="+currentUniversity +"&courseId=" + course.Id;
 }
 
 function filterByTeacherChanged() {
