@@ -19,3 +19,16 @@
 
     return queryString;
 }
+
+function getBackground(currentUniversity) {
+    var uri = '/api/University/GetUvinersitryPicture/' + currentUniversity;
+    $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",
+
+        success: function (data) {
+            $('.background').css('background-image', 'url(' + data.Base64 + ')');
+        }
+    });
+}

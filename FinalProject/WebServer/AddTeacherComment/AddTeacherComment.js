@@ -10,8 +10,17 @@ var allTeachers;
 var teacherInfoList;
 var numberOfCommentsLoaded;
 
+var queryString;
+var currentUniversity;
+
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+});
+
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }
 
 function getParameterByName(name) {

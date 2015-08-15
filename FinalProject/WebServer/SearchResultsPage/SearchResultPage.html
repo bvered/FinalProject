@@ -14,7 +14,9 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css" />
-    <link href="SearchResultPage.css" rel="stylesheet" type="text/css" />
+   
+     <link href="SearchResultPage.css" rel="stylesheet" type="text/css"/>
+    <link href="../CSS/GeneralDesign.css" rel="stylesheet" />
 
     <meta name="viewport" content="user-scalable=yes, width=device-width" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -26,7 +28,8 @@
 <body dir="rtl">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
     <input type="hidden" name="search" id="searchText" />
-    <input type="hidden" name="page" id="page" />
+    <input type="hidden" name="page" id="page"/>
+    <input type="hidden" name="University" id="University" value="" />
     <div class="background">
         <header>
             <div class="logo" onclick="homePage()"></div>
@@ -162,7 +165,7 @@
         </div>
         <div id="results">
             <div id="title">
-                <label hidden="true" id="searchTitle">תוצאות החיפוש:</label><br />
+                <label hidden="true" id="searchTitle"></label><br />
             </div>
             <nav>
                 <ul class="pagination" id="pages"></ul>
@@ -175,11 +178,11 @@
 
         <div id="NoMatches" hidden="true" dir="rtl">
             לא נמצאו תוצאות!<br />
-            <a href="../HomePage/HomePage.html">חזרה לעמוד הראשי</a>
         </div>
+
+        <footer id="footer" hidden="true">
+            <a href="#" id="resultAdd"></a>
+        </footer>
     </div>
-    <footer id="footer" hidden="true">
-        <a href="#" id="resultAdd"></a>
-    </footer>
 </body>
 </html>

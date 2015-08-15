@@ -1,62 +1,63 @@
 ﻿
-var uri3 = '/api/Teachers/GetTeachers';
+var queryString;
+var currentUniversity;
 
-var allTeachers;
-$.getJSON(uri3).done(function(data) {
-    allTeachers = data;
-    console.log(allTeachers);
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+    getBackground(currentUniversity);
 });
 
-function checkAndAdd() {
-    if (allTeachers.indexOf($("#TeacherName").val()) >= 0) { //if the teacher already exists
-        $("#TeacherExists")[0].hidden = false;
-    } else { //if we can add the new teacher
-        hideAllLabels();
-        addTeacher($("#TeacherName").val(), $('#TeacherRoom').val(), $('#TeacherPhone').val(), $('#TeacherEmail').val());
+function addTeacher() {
+    var uri = '/api/Teachers/AddTeacher';
+
+    if (!$("#TeacherName").val() ||
+        !$("#TeacherRoom").val() ||
+        !$("#TeacherPhone").val() ||
+        !$("#TeacherEmail").val()) {
+        $("#EmptyRequierments")[0].hidden = false;
+    } else {
+        $(function () {
+            var teacher = {
+                University: currentUniversity,
+                Name: $("#TeacherName").val(),
+                Room: $('#TeacherRoom').val(),
+                Cellphone: $('#TeacherPhone').val(),
+                Email: $('#TeacherEmail').val(),
+            };
+
+            var request = $.ajax({
+                type: "POST",
+                data: JSON.stringify(teacher),
+                url: uri,
+                contentType: "application/json",
+
+
+                statusCode: {
+                    222: function (data, textStatus, jqXHR) {
+                        $("#TeacherExists")[0].hidden = false;
+                        $("#Teacherink")[0].hidden = false;
+                        $("#Teacherink")[0].href = "/AddTeacherComment/AddTeacherComment.html?University=" + currentUniversity + "&id=" + data;
+
+                        $("#addTeacherSuccessfuly")[0].hidden = true;
+                        $("#resultTeacher")[0].hidden = true;
+                        $("#EmptyRequierments")[0].hidden = true;
+                    },
+
+                    200: function (data, textStatus, jqXHR) {
+                        $("#TeacherExists")[0].hidden = true;
+                        $("#Teacherink")[0].hidden = true;
+                        $("#EmptyRequierments")[0].hidden = true;
+
+                        $("#addTeacherSuccessfuly")[0].hidden = false;
+                        $("#resultTeacher")[0].hidden = false;
+                        $("#resultTeacher")[0].href = "/AddTeacherComment/AddTeacherComment.html?University=" + currentUniversity + "&id=" + data;
+                    }
+                }
+            });
+        });
     }
-};
-
-function inputSuccesss(divId, inputId, inputStatusId, labelId) {
-    $(divId).removeClass("has-error").addClass("has-success");
-    $(inputId).removeClass("glyphicon-remove").addClass("glyphicon-ok");
-    $(inputStatusId).input = "(success)";
-    $(labelId)[0].hidden = true;
-};
-
-function inputError(divId, inputId, inputStatusId, labelId) {
-    $(divId).removeClass("has-success").addClass("has-error");
-    $(inputId).removeClass("glyphicon-ok").addClass("glyphicon-remove");
-    $(inputStatusId).input = "(error)";
-    $(labelId)[0].hidden = false;
-};
-
-function addTeacher(teacherName, teacherRoom, teacherPhone, teacherEmail) {
-    var uri4 = '/api/Teachers/AddTeacher';
-
-    $(function() {
-        var teacher = {
-            Name: teacherName,
-            Room: teacherRoom,
-            Cellphone: teacherPhone,
-            Email: teacherEmail,
-        };
-
-        var request = $.ajax({
-            type: "POST",
-            data: JSON.stringify(teacher),
-            url: uri4,
-            contentType: "application/json"
-        });
-
-        request.done(function() {
-            $("#addTeacherSuccessfuly")[0].hidden = false;
-            $("#HomePage")[0].hidden = false;
-        });
-
-        request.fail(function(jqXhr, textStatus) {
-            alert("Request failed: " + textStatus);
-        });
-    });
 }
 
 function hideAllLabels() {
@@ -64,5 +65,5 @@ function hideAllLabels() {
 }
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

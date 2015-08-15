@@ -107,15 +107,17 @@
     <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
     <Content Include="AddTeacherComment\StarsStyle.css" />
+    <Content Include="AddUniversity\AddUniversity.css" />
     <Content Include="AddUniversity\AddUniversity.html" />
+    <Content Include="AddUniversity\AddUniversity.js" />
+    <Content Include="CSS\AddTableDesign.css" />
+    <Content Include="CSS\GeneralDesign.css" />
     <Content Include="DownloadFile\DownloadFile.js" />
     <Content Include="DownloadFile\DownloadFile.html" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.css" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.html" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.js" />
-    <Content Include="Images\academit.png" />
     <Content Include="Images\ratemyschool.png" />
-    <Content Include="Images\site_background.jpeg" />
     <Content Include="AddCourseComment\stars.png" />
     <Content Include="AddCourseComment\css\style.css" />
     <Content Include="AddCourseComment\css\StyleSheet.css" />
@@ -139,7 +141,6 @@
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\HomePage.css" />
-    <Content Include="Images\background.jpg" />
     <Content Include="JavaScripts\EngToHebConverter.js" />
     <Content Include="JavaScripts\QueryString.js" />
     <Content Include="JStorage\jstorage.js" />

@@ -1,20 +1,24 @@
-﻿
+﻿var queryString;
+var currentUniversity;
+
 $(document).ready(function() {
     $('body').scroll(function() {
         $('#content').animate({ top: $(this).scrollTop() });
     });
+
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+    getBackground(currentUniversity);
+
     ShowResults();
 });
 
 var coursesArrayResult = [];
 var teachersArrayResult = [];
 var maxPages;
-var queryString;
-
 
 function ShowResults() {
-
-    queryString = getQuertyString();
     createSearchText(queryString);
 
     initFilterValues(queryString);
@@ -83,7 +87,8 @@ function createSearchText(query_string) {
 function getTeacherData() {
     var uri = '/api/SmartSearch/GetAllSearchedTeachers';
 
-     var searchCourse = {
+    var searchCourse = {
+        University: currentUniversity,
         Name: $('#searchText').attr('value'),
         counter: $('#page').attr('value') - 1,
     };
@@ -108,9 +113,7 @@ function getTeacherData() {
             succeed = true;
         },
         fail: function(data) {
-            //   succeed = false;
         },
-        // async: false
     });
 }
 
@@ -118,6 +121,7 @@ function getCourseData() {
     var uri = '/api/SmartSearch/GetCourseByFilter';
 
     var searchCourse = {
+        University: currentUniversity,
         SearchText: $('#searchText').attr('value'),
         Faculty: $('input[name=faculty]:checked').val(),
         IsMandatory: $('input[name=mandatory]:checked').val(),
@@ -150,9 +154,7 @@ function getCourseData() {
             succeed = true;
         },
         fail: function(data) {
-            //   succeed = false;
-        },
-        // async: false
+        }
     });
 }
 
@@ -160,6 +162,7 @@ function getAllData() {
     var uri = '/api/SmartSearch/GetAnyResults';
 
     var searchQuery = {
+        University: currentUniversity,
         SearchText: $('#searchText').attr('value'),
         Faculty: $('input[name=faculty]:checked').val(),
         IsMandatory: $('input[name=mandatory]:checked').val(),
@@ -172,25 +175,23 @@ function getAllData() {
         type: "POST",
         url: uri,
         data: JSON.stringify(searchQuery),
-        contentType: "application/json", //; charset=UTF-8",
+        contentType: "application/json",
         success: function (searchResult) {
             $.jStorage.set("SearchPreferences", searchResult.SearchPreferences);
 
-            if (searchResult.TotalCount == 0) { // we didnt found any match
+            if (searchResult.TotalCount == 0) { 
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                $("#footer").show();
                 maxPages = Math.ceil(searchResult.TotalCount / 5);
-
                 createPaging(maxPages);
                 showTeachersData(searchResult.TeacherResults);
                 showCoursesData(searchResult.CourseResults);
             }
         },
         fail: function(data) {
-            //   succeed = false;
-        },
-        // async: false
+        }
     });
 };
 
@@ -224,11 +225,11 @@ function clearResults() {
 
 function showTeachersData(arrayResult) {
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html");
+    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html?University="+ currentUniversity);
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    for ( i=0; i<arrayResult.length; i++) {
+    for (var i=0; i<arrayResult.length; i++) {
         var teacherData = document.createElement('div');
         teacherData.className = 'teacherData';
 
@@ -267,13 +268,12 @@ function showTeachersData(arrayResult) {
 }
 
 function GoToTeacher() {
-    window.location = "/AddTeacherComment/AddTeacherComment.html?id=" + this.id;
+    window.location = "/AddTeacherComment/AddTeacherComment.html?University="+ currentUniversity+"&id=" + this.id;
 }
 
 function showCoursesData(arrayResult) {
-    var uri = '/api/Courses/GetAllSearchedCourses';
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html");
+    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html?University="+ currentUniversity);
     $("#resultAdd").text('לא מצאת את הקורס המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
@@ -327,7 +327,7 @@ function showCoursesData(arrayResult) {
 }
 
 function GoToCourse() {
-    window.location = "/AddCourseComment/AddCourseComment.html?id=" + this.id;
+    window.location = "/AddCourseComment/AddCourseComment.html?University="+ currentUniversity + "&id=" + this.id;
 }
 
 function createPaging(resultsCounter) {
@@ -339,21 +339,26 @@ function createPaging(resultsCounter) {
 
     previousPage.appendChild(innerSpan);
     $('#pages')[0].appendChild(previousPage);
-   
-    for (var i = 0; i < resultsCounter; i++) {
+
+    var currentPage = parseInt($('#page').attr('value'));
+
+    var firstPage = Math.max(1, Math.min(resultsCounter - 10, currentPage - 5));
+    var lastpage = Math.min(Math.max(currentPage + 5, 11), resultsCounter);
+    
+    for (var i = firstPage; i <= lastpage; i++) {
         var newPage = document.createElement('li');
         newPage.className = "pagebutton";
-        newPage.id = i + 1;
+        newPage.id = i;
         
         innerSpan = document.createElement('span');
-        innerSpan.innerText = i + 1;
+        innerSpan.innerText = i;
 
         newPage.onclick = GoToPage;
 
-        var currentPage = $('#page').attr('value');
-        if ((i+1) == currentPage) {
+        if (i == currentPage) {
             newPage.className ='active';
         }
+
         newPage.appendChild(innerSpan);
         $('#pages')[0].appendChild(newPage);
     }
@@ -387,5 +392,5 @@ function changePage(showPage) {
 }
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

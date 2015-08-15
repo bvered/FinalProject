@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
 using NHibernate.Linq;
 using WebServer.App_Data;
@@ -21,7 +22,7 @@ namespace WebServer.Controllers
                 return teachers;
             }
         }
-  
+
         [HttpGet]
         [ActionName("GetTeacher")]
         public IHttpActionResult GetTeacher([FromUri]string id)
@@ -47,15 +48,17 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                var res= session.Query<Teacher>().Where(x => x.University.Acronyms == id).Select(x => x.Name).ToList();
-                return res; 
+                var res = session.Query<Teacher>().Where(x => x.University.Acronyms == id).Select(x => x.Name).ToList();
+                return res;
             }
         }
 
         [HttpGet]
         [ActionName("GetCommentById")]
-        public IHttpActionResult GetCommentById([FromUri]string commentId) {
-            using (var session = DBHelper.OpenSession()) {
+        public IHttpActionResult GetCommentById([FromUri]string commentId)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
                 Guid teacherCommentGuid;
                 var didSuccedParsingTeacherCommentGuid = Guid.TryParse(commentId, out teacherCommentGuid);
                 var comment = session.Load<TeacherComment>(teacherCommentGuid);
@@ -68,13 +71,21 @@ namespace WebServer.Controllers
 
         [HttpPost]
         [ActionName("AddTeacher")]
-        public void AddTeacher([FromBody]CreateTeacherCommand createCommand)
+        public IHttpActionResult AddTeacher([FromBody]CreateTeacherCommand createCommand)
         {
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
+                var query = session.Query<Teacher>().Where(x => x.Name == createCommand.Name).ToList();
+                if (query.Count != 0)
+                {
+                    const HttpStatusCode MyStatusCode = (HttpStatusCode)222;
+                    return Content(MyStatusCode, query.Select(x => x.Id).FirstOrDefault());
+                }
+
                 var teacher = new Teacher
                 {
+                    University = session.Query<University>().SingleOrDefault(x => x.Name == createCommand.University),
                     Name = createCommand.Name,
                     Room = createCommand.Room,
                     Cellphone = createCommand.Cellphone,
@@ -82,6 +93,8 @@ namespace WebServer.Controllers
                 };
                 session.Save(teacher);
                 transaction.Commit();
+
+                return Ok(teacher.Id);
             }
         }
 
@@ -116,14 +129,15 @@ namespace WebServer.Controllers
                 teacher.AddTeacherCommnet(newComment);
                 session.Save(teacher);
                 transaction.Commit();
-         
+
                 return Ok(newComment);
             }
         }
 
         [HttpGet]
         [ActionName("GetCriterias")]
-        public IHttpActionResult GetAllCriterias() {
+        public IHttpActionResult GetAllCriterias()
+        {
             using (var session = DBHelper.OpenSession())
             {
                 return Ok(TeacherComment.GetTeacherCommentCriterias());
@@ -157,14 +171,17 @@ namespace WebServer.Controllers
         }
     }
 
-    public class CreateTeacherCommand {
+    public class CreateTeacherCommand
+    {
+        public string University { get; set; }
         public string Name { get; set; }
         public int Room { get; set; }
         public string Cellphone { get; set; }
         public string Email { get; set; }
     }
 
-    public class CreateTeacherComment {
+    public class CreateTeacherComment
+    {
         public string Id { get; set; }
         public List<int> Ratings { get; set; }
         public string Comment { get; set; }

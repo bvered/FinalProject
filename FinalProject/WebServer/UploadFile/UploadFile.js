@@ -1,42 +1,56 @@
-﻿
+﻿var queryString;
+var currentUniversity;
+
 $(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+    getBackground(currentUniversity);
 
     $('#btnUploadFile').on('click', function () {
 
-        var files = $("#fileUpload").get(0).files;
-
-        var data = new FormData();
-
-        if (files.length == 1) {
-            data.append("UploadedFile", files[0]);
-        }
-
-        var quertyString = getQuertyString();
-
-        var courseId = quertyString["courseId"];
+        var courseId = queryString["courseId"];
         var semester = $('input[name=semester]:checked').val();
         var year = $('#Year').val();
         var isSyllabus = $('input[name=isSyllabus]:checked').val();
 
-        data.append("courseId", courseId);
-        data.append("semester", semester);
-        data.append("year", year);
-        data.append("isSyllabus", isSyllabus);
+        if (!courseId || !semester || !year || !isSyllabus) {
+            $("#EmptyRequierments")[0].hidden = false;
+            $("#AddFileSuccesfully")[0].hidden = true;
+            $("#returnToCourse")[0].hidden = true;
 
-        var ajaxRequest = $.ajax({
-            type: "POST",
-            url: "/api/AddFile/AddFile",
-            contentType: false,
-            processData: false,
-            data: data
-        });
+        } else {
+            var files = $("#fileUpload").get(0).files;
+            var data = new FormData();
+            if (files.length == 1) {
+                data.append("UploadedFile", files[0]);
+            }
+            data.append("courseId", courseId);
+            data.append("semester", semester);
+            data.append("year", year);
+            data.append("isSyllabus", isSyllabus);
 
-        ajaxRequest.done(function (xhr, textStatus) {
-            $("#AddFileSuccesfully")[0].hidden = false;
-        });
-    });
+            var ajaxRequest = $.ajax({
+                type: "POST",
+                url: "/api/AddFile/AddFile",
+                contentType: false,
+                processData: false,
+                data: data,
+                statusCode: {
+                    200: function (data, textStatus, jqXHR) {
+                        $("#EmptyRequierments")[0].hidden = true;
+                        $("#AddFileSuccesfully")[0].hidden = false;
+                        $("#returnToCourse")[0].hidden = false;
+                        $("#returnToCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
+                    }
+                }
+            });
+        }
+    }
+    );
 });
 
+
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

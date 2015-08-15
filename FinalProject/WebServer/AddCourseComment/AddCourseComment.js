@@ -14,9 +14,17 @@ var NewSyllabusDiv = document.getElementById("NewSyllabusDiv");
 var NewCourseCommentDiv = document.getElementById("NewCourseCommentDiv");
 var CommentsDiv = document.getElementById("CommentsDiv");
 
+var queryString;
+var currentUniversity;
+
+$(document).ready(function () {
+    queryString = getQuertyString();
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+});
 
 function homePage() {
-    window.location = "../HomePage/HomePage.html";
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }
 
 function getParameterByName(name) {
@@ -454,11 +462,11 @@ function semesterNameByEnum(semester) {
 }
 
 function ChangePage() {
-    window.location = "../UploadFile/UploadFile.html?courseId=" + course.Id;
+    window.location = "../UploadFile/UploadFile.html?University="+currentUniversity +"&courseId=" + course.Id;
 }
 
 function ChangePage2() {
-    window.location = "../GetAllSyllabus/GetAllSyllabus.html?courseId=" + course.Id;
+    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University="+currentUniversity +"&courseId=" + course.Id;
 }
 
 function filterByTeacherChanged() {
