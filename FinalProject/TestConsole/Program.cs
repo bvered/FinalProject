@@ -35,7 +35,7 @@ namespace TestConsole
                 SiteAddress = "www.mta.ac.il",
                 FileExtention = "jpeg"
             };
-//F:\FinalProject\FinalProject\TestConsole\Images\site_background.jpeg
+
             string currentDir = Environment.CurrentDirectory;
             Image img = Image.FromFile(currentDir + @"\..\..\Images\site_background.jpeg");
             byte[] arr;

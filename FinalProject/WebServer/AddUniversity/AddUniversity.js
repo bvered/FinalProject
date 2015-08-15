@@ -5,6 +5,7 @@ $(document).ready(function () {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+    getBackground(currentUniversity);
 });
 
 function checkAndAdd() {

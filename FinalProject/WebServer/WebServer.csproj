@@ -110,6 +110,8 @@
     <Content Include="AddUniversity\AddUniversity.css" />
     <Content Include="AddUniversity\AddUniversity.html" />
     <Content Include="AddUniversity\AddUniversity.js" />
+    <Content Include="CSS\AddTableDesign.css" />
+    <Content Include="CSS\GeneralDesign.css" />
     <Content Include="DownloadFile\DownloadFile.js" />
     <Content Include="DownloadFile\DownloadFile.html" />
     <Content Include="GetAllSyllabus\GetAllSyllabus.css" />

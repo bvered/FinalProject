@@ -10,24 +10,11 @@ $(document).ready(function () {
     } else {
         $('#University').attr('value', queryString["University"]);
         currentUniversity = queryString["University"];
-        getBackground();
+        getBackground(currentUniversity);
         GetUniversities();
         SmartSearch();
     }
 });
-
-function getBackground() {
-    var uri = '/api/University/GetUvinersitryPicture/' + currentUniversity;
-    $.ajax({
-        type: "GET",
-        url: uri,
-        contentType: "application/json",
-
-        success: function (data) {
-            $('.background').css('background-image', 'url(' + data.Base64 + ')');
-        }
-    });
-}
 
 function SmartSearch() {
 
