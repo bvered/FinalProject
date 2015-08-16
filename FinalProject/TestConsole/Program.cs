@@ -6,13 +6,10 @@ using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 using WebServer.App_Data.Models.Enums;
-<<<<<<< HEAD
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
-=======
 using System.Drawing;
->>>>>>> origin/master
 
 namespace TestConsole
 {
@@ -87,7 +84,7 @@ namespace TestConsole
 
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);
@@ -100,13 +97,13 @@ namespace TestConsole
 
             foreach (DataRow row in dtexcel.Rows)
             {
-               // Console.WriteLine(row["שם מרצה"]);
+                // Console.WriteLine(row["שם מרצה"]);
                 string teacherName = row["שם מרצה"].ToString();
-                if (teachers.ContainsKey(teacherName) ==  false)
+                if (teachers.ContainsKey(teacherName) == false)
                 {
                     string mail = row["מייל"].ToString();
-                    teachers.Add(teacherName,mail);
-                  //  teachers[teacherName]
+                    teachers.Add(teacherName, mail);
+                    //  teachers[teacherName]
                 }
             }
 
@@ -116,23 +113,23 @@ namespace TestConsole
                 var newTeacher = new Teacher(teacher.Key, 0, "05x-xxxxxxx", teacher.Value, MTA);
                 session.Save(newTeacher);
             }
-           /* var teachers = new[]
-            {
-                new Teacher {Name = "אמיר קירש"},
-                new Teacher {Name = "יוסי בצלאל"},
-                new Teacher {Name = "צבי מלמד"},
-                new Teacher {Name = "כרמי"},
-                new Teacher {Name ="הדר בינסקי"},
-                new Teacher {Name ="בוריס לוין"},
-                new Teacher {Name ="אלכס קומן"},
-            };*/
+            /* var teachers = new[]
+             {
+                 new Teacher {Name = "אמיר קירש"},
+                 new Teacher {Name = "יוסי בצלאל"},
+                 new Teacher {Name = "צבי מלמד"},
+                 new Teacher {Name = "כרמי"},
+                 new Teacher {Name ="הדר בינסקי"},
+                 new Teacher {Name ="בוריס לוין"},
+                 new Teacher {Name ="אלכס קומן"},
+             };*/
 
-           /* foreach (var teacher in teachers)
-            {
-                session.Save(teacher);
-            }
-            */
-            
+            /* foreach (var teacher in teachers)
+             {
+                 session.Save(teacher);
+             }
+             */
+
 
             var logic = new Course
             {

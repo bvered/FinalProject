@@ -229,10 +229,20 @@
     <div class="main" id="filterDiv">
         <h1>סנן תגובות לפי:</h1>
         <label>מרצה</label>
-        <select id="filterByTeacher" onchange="filterByTeacherChanged()">
+        <select id="filterByTeacher" onchange="setCourseCommentsWithFilters()">
             <option></option>
         </select>
-    </div>
+        <select id="filteredByYear" onchange="setCourseCommentsWithFilters()">
+            <option></option>
+        </select>
+        <select id="filteredBySemester" onchange="setCourseCommentsWithFilters()">
+            <option value="-1"></option>
+            <option value="0">א</option>
+            <option value="1">ב</option>
+            <option value="2">קיץ</option>
+        </select>
+        <input type="checkbox" id="filteredByNew"> תגובות חדשות
+   </div>
     <div id="divHolder" style="display:none">
             <table id="commentTable" style="display:none">
                 <tr>

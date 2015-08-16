@@ -242,6 +242,51 @@ namespace WebServer.Controllers
                 return Ok(vote.Liked ? comment.TotalNumberOfLikes : comment.TotalNumberOfDislikes);
             }
         }
+
+        [HttpPost]
+        [ActionName("GetCommentsForCourse")]
+        public IHttpActionResult GetCommentsForCourse([FromBody] CourseCommentRequest commentRequest)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                var courseComments = new List<CourseComment>();
+                Guid courseId, teacherId;
+                Course course;
+                if (!Guid.TryParse(commentRequest.courseId, out courseId))
+                {
+                    return NotFound();
+                }
+                course = session.Get<Course>(courseId);
+                if (course == null) {
+                    return NotFound();
+                }
+                Guid.TryParse(commentRequest.teacherId, out teacherId);
+                var teacher = session.Get<Teacher>(teacherId);
+                foreach (var courseInSemester in course.CourseInSemesters)
+                {
+                    if ((teacher != null) && (courseInSemester.Teacher != teacher))
+                    {
+                        continue;
+                    }
+                    if ((commentRequest.year != CourseCommentRequest.kNoInfoProvided) && (courseInSemester.Year != commentRequest.year))
+                    {
+                        continue;
+                    }
+                    if (((int)commentRequest.semester != CourseCommentRequest.kNoInfoProvided) && (courseInSemester.Semester != commentRequest.semester))
+                    {
+                        continue;
+                    }
+                    courseComments.AddRange(courseInSemester.CourseComments);
+                }
+                if (commentRequest.sortNew)
+                {
+                    courseComments.OrderByDescending(x => x.DateTime);
+                }
+                return Ok(courseComments);
+                //return Ok(courseComments.Skip(CourseCommentRequest.kNoOfCommentsPerPage * request.page).Take(CourseCommentRequest.kNoOfCommentsPerPage));
+            }
+        }
     }
 
 
@@ -262,5 +307,18 @@ namespace WebServer.Controllers
         public List<int> Ratings { get; set; }
         public string Comment { get; set; }
         public string SemseterId { get; set; }
+    }
+
+    public class CourseCommentRequest
+    {
+        public string courseId { get; set; }
+        public string teacherId { get; set; }
+        public int year { get; set; }
+        public Semester semester { get; set; }
+        public int page { get; set; }
+        public bool sortNew { get; set; }
+
+        public const int kNoInfoProvided = -1;
+        public const int kNoOfCommentsPerPage = 5;
     }
 }
