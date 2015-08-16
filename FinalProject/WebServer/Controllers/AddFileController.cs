@@ -35,12 +35,21 @@ namespace WebServer.Controllers
                     Guid courseId;
                     Semester semster;
                     int year;
-                    bool isSyllabus;
+                    bool isSyllabus=false;
 
                     var hasCourseId = Guid.TryParse(HttpContext.Current.Request.Form["courseId"], out courseId);
                     var hasSemster = Enum.TryParse(HttpContext.Current.Request.Form["semester"], out semster);
                     var hasYear = int.TryParse(HttpContext.Current.Request.Form["year"], out year);
-                    bool.TryParse(HttpContext.Current.Request.Form["isSyllabus"], out isSyllabus);
+                    string isSyll = (HttpContext.Current.Request.Form["isSyllabus"]);
+                    if (isSyll == "1")
+                    {
+                        isSyllabus = true;
+                    }
+                    else if (isSyll == "0")
+                    {
+                        isSyllabus = false;
+                    }
+                 //   bool.TryParse(HttpContext.Current.Request.Form["isSyllabus"], out isSyllabus);
 
                     if (!hasCourseId || !hasSemster || !hasYear)
                     {

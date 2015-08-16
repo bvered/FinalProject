@@ -33,7 +33,8 @@ namespace WebServer.Controllers
                         int year = CourseSemester.uploadedSyllabus.Year;
                    //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
+                        bool isSyllabus = true;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
                     }
                     if (CourseSemester.uploadedGrades != null)
                     {
@@ -42,7 +43,8 @@ namespace WebServer.Controllers
                         int year = CourseSemester.uploadedGrades.Year;
                         //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedGrades.FileName;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
+                        bool isSyllabus = false;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
                     }
 
                 }
@@ -106,14 +108,16 @@ namespace WebServer.Controllers
             public int Year { get; set; }
           //  public byte[] File { get; set; }
             public string FileName { get; set; }
+            public bool IsSyllabus { get; set; }
 
-            public ResultSyllabus(Guid id, string semester, int year/*, byte[] file*/, string fileName)
+            public ResultSyllabus(Guid id, string semester, int year/*, byte[] file*/, string fileName, bool isSyllabus)
             {
                 Id = id;
                 Semester = semester;
                 Year = year;
 //                File = file;
-                FileName = fileName; 
+                FileName = fileName;
+                IsSyllabus = isSyllabus;
             }
         }
     }

@@ -135,3 +135,51 @@ section > table > tr > td:not(.label) {
 
 section label {
 }
+
+
+
+.advanced-filter {
+    float: right;
+    margin: 0 auto 0 auto;
+}
+
+    .advanced-filter .filter-box {
+        width: 140px;
+        border-radius: 10px;
+        background-color: white;
+        margin: 5px;
+    }
+
+        .advanced-filter .filter-box ul {
+            margin: 0px;
+        }
+
+            .advanced-filter .filter-box ul li {
+                text-align: right;
+                padding-right: 10px;
+            }
+
+        .advanced-filter .filter-box .filter-title {
+            font-weight: bold;
+            color: white;
+            display: inline-block;
+            background: #4683B7;
+            width: 100%;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+            text-align: center;
+        }
+
+
+.advanced-filter-link {
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
+
+    .advanced-filter-link button {
+        border: 0;
+        font-size: 13px;
+        font-weight: bold;
+        outline: none;
+    }
