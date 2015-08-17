@@ -22,9 +22,10 @@ function downloadFile() {
                 }
                 else if (data.isPic == false) {
                     $("#textFile").append(data.str);
+                  //  download(data.str, "test.pdf", "aplication/pdf");
                 }
                 
-         //       download(data, "test.txt", "text/plain");
+         //       download(data.str, "test.pdf", "aplication/pdf");
 
             },
             fail: function (data)
@@ -41,7 +42,7 @@ function downloadFile() {
 
 function download(strData, strFileName, strMimeType) {
     var D = document, A = arguments, a = D.createElement("a"),
-         d = A[0], n = A[1], t = A[2] || "text/plain";
+         d = A[0], n = A[1], t = A[2] || "aplication/pdf";
 
     //build download link:
     a.href = "data:" + strMimeType + "," + escape(strData);
@@ -64,7 +65,7 @@ function download(strData, strFileName, strMimeType) {
 
     var f = D.createElement("iframe");
     D.body.appendChild(f);
-    f.src = "data:" + (A[2] ? A[2] : "application/octet-stream")/*+ (window.btoa?";base64"+(window.btoa?window.btoa:escape)(strData))*/;
+    f.src = "data:" + (A[2] ? A[2] : "application/octet-stream")+ (window.btoa?";base64"+(window.btoa?window.btoa:escape):(strData));
     setTimeout(function () { D.body.removeChild(f); }, 333);
     return true;
 }

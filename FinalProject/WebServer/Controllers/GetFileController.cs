@@ -30,6 +30,18 @@ namespace WebServer.Controllers
                     {
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
+                        if (semester == "A")
+                        {
+                            semester = "א";
+                        }
+                        else if (semester == "B")
+                        {
+                            semester = "ב";
+                        }
+                        else if (semester == "Summer")
+                        {
+                            semester = "קיץ";
+                        }
                         int year = CourseSemester.uploadedSyllabus.Year;
                    //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
@@ -40,6 +52,18 @@ namespace WebServer.Controllers
                     {
                         Guid syllabusId = CourseSemester.uploadedGrades.Id;
                         string semester = CourseSemester.uploadedGrades.Semster.ToString();
+                        if (semester == "A")
+                        {
+                            semester = "א";
+                        }
+                        else if (semester == "B")
+                        {
+                            semester = "ב";
+                        }
+                        else if (semester == "Summer")
+                        {
+                            semester = "קיץ";
+                        }
                         int year = CourseSemester.uploadedGrades.Year;
                         //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedGrades.FileName;

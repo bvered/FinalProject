@@ -77,64 +77,45 @@ function getAllFiles()
             //   succeed = false;
         },
 
-        //contentType: false,
-        //processData: false,
-        //data: data
     });
 }
 
-
 function ChangeResults() {
     clearResults();
-
-    var filterType = $('input[name=type]:checked').val();
-    //// צריך להתחשב פה גם בשנה שמסומנת
-    if (filterType == "All") {
-        showResults(allFiles);
-    }
-    else if (filterType == "Syllabus") {
-        showResults(syllabus);
-    }
-    
-    else if (filterType == "Grades") {
-        showResults(grades);
-    }
-}
-
-function ChangeResultsSemester() {
     var filterType = $('input[name=type]:checked').val();
     var filterSemester = $('input[name=semester]:checked').val();
-    var requestedData;
     var resultData = [];
-
-    clearResults();
-
-    if (filterType = "All") {
-        requestedData = allFiles;
+    var requestedData = [];
+    if (filterType == "All") 
+    {
+        resultData = allFiles;
     }
     else if (filterType == "Syllabus") {
-        requestedData = syllabus;
-    }
-    else if (filterType == "Grades") {
-        requestedData = grades;
+        resultData = syllabus;
     }
 
-    if (filterSemester == 'All') {
-        showResults(requestedData);
+    else if (filterType == "Grades") {
+        resultData = grades;
+    }
+
+
+    if (filterSemester == "All") {
+        showResults(resultData);
 
     }
     else if (filterSemester == "A") {
-        resultData = checkSemester(requestedData, "A");
-        showResults(resultData);
+        requestedData = checkSemester(resultData, "A");
+        showResults(requestedData);
     }
     else if (filterSemester == "B") {
-        resultData = checkSemester(requestedData, "B");
-        showResults(resultData);
+        requestedData = checkSemester(resultData, "B");
+        showResults(requestedData);
     }
     else if (filterSemester == "Summer") {
-        resultData = checkSemester(requestedData, "Summer");
-        showResults(resultData);
+        requestedData = checkSemester(resultData, "Summer");
+        showResults(requestedData);
     }
+
 }
 
 function checkSemester(requestedData, semester) {
