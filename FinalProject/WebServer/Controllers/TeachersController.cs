@@ -24,6 +24,23 @@ namespace WebServer.Controllers
         }
 
         [HttpGet]
+        [ActionName("GetAllTeacherNamesAndIds")]
+        public IHttpActionResult GetAllTeacherNamesAndIds()
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                var teachers = session.QueryOver<Teacher>().List();
+                var teacherNamesAndIdsDictionary = new Dictionary<string, string>();
+                foreach (var teacher in teachers)
+                {
+                    teacherNamesAndIdsDictionary.Add(teacher.Id.ToString(), teacher.Name);
+                }
+                return Ok(teacherNamesAndIdsDictionary);
+            }
+
+        }
+
+        [HttpGet]
         [ActionName("GetTeacher")]
         public IHttpActionResult GetTeacher([FromUri]string id)
         {

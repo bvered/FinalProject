@@ -13,9 +13,9 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public IList<int> AverageRatingsList { get; set; }
         [DataMember]
-        public IList<int> SumOfRatingsList;
+        public IList<int> SumOfRatingsList { get; set; }
         [DataMember]
-        public int Counter;
+        public int Counter { get; set; }
 
         public AverageRatings() { }
 

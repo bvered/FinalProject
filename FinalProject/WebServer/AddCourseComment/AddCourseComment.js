@@ -9,6 +9,7 @@ var course;
 var allCriterias;
 var numberOfCommentsLoaded;
 var filteredComments;
+var allCourseTeachers;
 
 var CourseInfoDiv = document.getElementById("CourseInfoDiv");
 var NewSyllabusDiv = document.getElementById("NewSyllabusDiv");
@@ -36,7 +37,7 @@ function getParameterByName(name) {
 }
 
 function loadView() {
-    if (loadCommentsCriteras() == false) {
+    if (!loadCommentsCriteras() || !allTeachers()) {
         showLoadingCourseFailed();
         return;
     }
@@ -135,12 +136,6 @@ function setupFilters() {
     teachersToFilterBy = teachersToFilterBy.filter(function (itm, i, a) {
         return i == a.indexOf(itm);
     });
-    for (teacher in teachersToFilterBy) {
-        $('#filterByTeacher').append($('<option>', {
-            value: teachersToFilterBy[teacher].Id,
-            text: teachersToFilterBy[teacher].Name,
-        }));
-    };
     yearToFilterBy = yearToFilterBy.filter(function (itm, i, a) {
         return i == a.indexOf(itm);
     });
@@ -150,6 +145,18 @@ function setupFilters() {
             text: yearToFilterBy[year],
         }));
     }
+    for (var teacher in teachersToFilterBy) {
+        $('#filterByTeacher').append($('<option>', {
+            value: teachersToFilterBy[teacher].Id,
+            text: teachersToFilterBy[teacher].Name,
+        }));
+    }
+    for (teacher in allCourseTeachers) {
+        $('#allCourseTeachers').append($('<option>', {
+            value: teacher,
+            text: allCourseTeachers[teacher],
+        }));
+    };
 }
 
 function printCourseProperties() {
@@ -185,6 +192,12 @@ function printCourseScores() {
 
 function showCourseComments() {
     $('#allComments').empty();
+    if (filteredComments == null || filteredComments.length == 0) {
+        var noCommentsErrorLabel = document.createElement("Label");
+        noCommentsErrorLabel.innerHTML = "אין תגובות להציג";
+        noCommentsErrorLabel.className = "NoComments";
+        $('#allComments').append(noCommentsErrorLabel);
+    }
     for (comment in filteredComments) {
         printComment(filteredComments[comment], comment);
     }
@@ -237,17 +250,6 @@ function printComment(comment, itr) {
 function showNewCommentAction() {
     document.getElementById("newCommentTable").style.display = "block";
     document.getElementById("showNewCommentButtonTR").style.display = "none";
-    revealAddCommentViewToUser();
-}
-
-function revealAddCommentViewToUser() {
-    var courseSemesters = document.getElementById("courseSemesters");
-    for (semester in course.CourseInSemesters) {
-        var semesterOption = document.createElement("option");
-        semesterOption.text = course.CourseInSemesters[semester].Year + " " + semesterNameByEnum(course.CourseInSemesters[semester].Semester);
-        semesterOption.value = course.CourseInSemesters[semester].Id
-        courseSemesters.add(semesterOption);
-    }
 }
 
 function showLoadingCourseFailed() {
@@ -273,17 +275,13 @@ function addComment() {
             return;
         }
     }
-    var semester;
-    if (document.getElementById("courseSemesters") == null) {
-        semester = "";
-    } else {
-        semester = document.getElementById("courseSemesters").value;
-    }
     var comment = {
         Id: course.Id,
+        teacherId: $('#allCourseTeachers').val(),
         Ratings: ratings,
-        Comment: document.getElementById("CourseNewCommetBox").value,
-        SemseterId: semester,
+        Comment: $('#CourseNewCommetBox').val(),
+        semester: $('courseSemesters').val(),
+        Year: $('#Year').val(),
     };
     var request = $.ajax({
         type: "POST",
@@ -397,30 +395,22 @@ function semesterNameByEnum(semester) {
 }
 
 function ChangePage() {
-    window.location = "../UploadFile/UploadFile.html?University="+currentUniversity +"&courseId=" + course.Id;
+    window.location = "../UploadFile/UploadFile.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }
 
 function ChangePage2() {
-    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University="+currentUniversity +"&courseId=" + course.Id;
+    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }
 
 function setCourseCommentsWithFilters() {
-    var teacherId = document.getElementById("filterByTeacher").value;
-    var year = document.getElementById("filteredByYear").value;
-    if (year == "") {
-        year = -1;
-    }
-    var semester = document.getElementById("filteredBySemester").value;
-    if (semester = "") {
-        semester = -1;
-    }
-    var sortByNew = $("#filteredByNew").is(':checked');
+    var year = $('#filteredByYear').val();
+    year = (year != "") ? year : "-1";
     var commentRequest = {
-        courseId: course.Id,
-        teacherId: teacherId,
-        year: year,
-        semester: semester,
-        sortNew: sortByNew,
+        CourseId: course.Id,
+        TeacherId: $('#filterByTeacher').val(),
+        Year: year,
+        Semester: $('#filteredBySemester').val(),
+        SortNew: $("#filteredByNew").is(':checked'),
     };
     var request = $.ajax({
         type: "POST",
@@ -438,4 +428,22 @@ function setCourseCommentsWithFilters() {
         async: false
     });
 
+}
+
+function allTeachers() {
+    var succeed = false;
+    var request = $.ajax({
+        type: "GET",
+        url: '/api/Teachers/GetAllTeacherNamesAndIds',
+        contentType: "application/json",
+        success: function (data) {
+            allCourseTeachers = data;
+            succeed = true;
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
 }
