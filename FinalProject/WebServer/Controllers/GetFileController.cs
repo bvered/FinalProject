@@ -30,19 +30,45 @@ namespace WebServer.Controllers
                     {
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
+                        if (semester == "A")
+                        {
+                            semester = "א";
+                        }
+                        else if (semester == "B")
+                        {
+                            semester = "ב";
+                        }
+                        else if (semester == "Summer")
+                        {
+                            semester = "קיץ";
+                        }
                         int year = CourseSemester.uploadedSyllabus.Year;
                    //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
+                        bool isSyllabus = true;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
                     }
                     if (CourseSemester.uploadedGrades != null)
                     {
                         Guid syllabusId = CourseSemester.uploadedGrades.Id;
                         string semester = CourseSemester.uploadedGrades.Semster.ToString();
+                        if (semester == "A")
+                        {
+                            semester = "א";
+                        }
+                        else if (semester == "B")
+                        {
+                            semester = "ב";
+                        }
+                        else if (semester == "Summer")
+                        {
+                            semester = "קיץ";
+                        }
                         int year = CourseSemester.uploadedGrades.Year;
                         //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedGrades.FileName;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName));
+                        bool isSyllabus = false;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
                     }
 
                 }
@@ -106,14 +132,16 @@ namespace WebServer.Controllers
             public int Year { get; set; }
           //  public byte[] File { get; set; }
             public string FileName { get; set; }
+            public bool IsSyllabus { get; set; }
 
-            public ResultSyllabus(Guid id, string semester, int year/*, byte[] file*/, string fileName)
+            public ResultSyllabus(Guid id, string semester, int year/*, byte[] file*/, string fileName, bool isSyllabus)
             {
                 Id = id;
                 Semester = semester;
                 Year = year;
 //                File = file;
-                FileName = fileName; 
+                FileName = fileName;
+                IsSyllabus = isSyllabus;
             }
         }
     }

@@ -20,15 +20,62 @@
             <input type="hidden" name="University" id="University" value="" />
         </header>
 
+<div class="advanced-filter">
+            <div class="filter-box">
+                <span class="filter-title">סנן לפי</span>
+                <ul>
+                    <li>
+                        <input id="type[0]" name="type" value="All" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[0]">הכל</label>
+                    </li>
+                    <li>
+                        <input id="type[1]" name="type" value="Grades" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[1]">התפלגות ציונים</label>
+                    </li>
+                    <li>
+                        <input id="type[2]" name="type" value="Syllabus" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[2]">סילבוס</label>
+                    </li>
+                </ul>
+            </div>
+
+
+
+    <div id="FilterSemester">
+                <div class="filter-box">
+                    <span class="filter-title">סמסטר</span>
+                    <ul>
+                        <li>
+                            <input id="semester[0]" name="semester" value="All" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[0]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="semester[1]" name="semester" value="A" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[1]">א</label>
+                        </li>
+                        <li>
+                            <input id="semester[2]" name="semester" value="B" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[2]">ב</label>
+                        </li>
+                        <li>
+                            <input id="semester[3]" name="semester" value="Summer" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[3]">קיץ</label>
+                        </li>
+                    </ul>
+                </div>
+    </div>
+
+    </div>
         <div class="size">
             <section class="add-new-teacher">
                 <form action="#">
-                    <h1>כל הסילבוסים</h1>
+                    <h1>כל הקבצים</h1>
                     <table id="resultsTable">
                         <tr>
                             <td class="label"><label>שם הקובץ</label></td>
                             <td class="label"><label>שנה</label></td>
                             <td class="label"><label>סמסטר</label></td>
+                            <td class="label"><label>סוג</label></td>
                         </tr>
                         <tr>
                             
