@@ -28,7 +28,7 @@ function getBackground(currentUniversity) {
         contentType: "application/json",
 
         success: function (data) {
-            $('.background').css('background-image', 'url(' + data.Base64 + ')');
+            $("body").css('background', 'url(' + data.Base64 + ') no-repeat fixed');
         }
     });
 }
