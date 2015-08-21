@@ -37,7 +37,6 @@ header .logo {
 }
 
 .logo:hover {
-    cursor: hand;
     cursor: pointer;
     text-decoration: none;
 }

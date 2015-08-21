@@ -69,7 +69,7 @@ namespace TestConsole
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
 
-            var romina = new Teacher("רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA);
+            var romina = new Teacher(13899828, "רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA, Faculty.ComputerScience);
             TeacherComment rominaComment = new TeacherComment
             {
                 CommentText = "ממש עוזרת ללמוד",
@@ -93,43 +93,28 @@ namespace TestConsole
             }
 
             //saves the teachers by name and mail
-            var teachers = new Dictionary<string, string>();
-
+            var teachersSaved = new Dictionary<int, string>();
             foreach (DataRow row in dtexcel.Rows)
             {
-                // Console.WriteLine(row["שם מרצה"]);
-                string teacherName = row["שם מרצה"].ToString();
-                if (teachers.ContainsKey(teacherName) == false)
+                var teacherIdString = row["TeacherId"].ToString();
+                int teacherId;
+                if (!Int32.TryParse(teacherIdString, out teacherId))
                 {
-                    string mail = row["מייל"].ToString();
-                    teachers.Add(teacherName, mail);
-                    //  teachers[teacherName]
+                    continue;
+                }
+                if (teachersSaved.ContainsKey(teacherId) == false)
+                {
+                    string teacherName = row["TeacherName"].ToString();
+                    if (teacherName == string.Empty) {
+                        continue;
+                    }
+                    teachersSaved.Add(teacherId, teacherName);
+                    string teacherMail = row["Mail"].ToString();
+                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, MTA, teacherFaculty);
+                    session.Save(newTeacher);
                 }
             }
-
-
-            foreach (KeyValuePair<string, string> teacher in teachers)
-            {
-                var newTeacher = new Teacher(teacher.Key, 0, "05x-xxxxxxx", teacher.Value, MTA);
-                session.Save(newTeacher);
-            }
-            /* var teachers = new[]
-             {
-                 new Teacher {Name = "אמיר קירש"},
-                 new Teacher {Name = "יוסי בצלאל"},
-                 new Teacher {Name = "צבי מלמד"},
-                 new Teacher {Name = "כרמי"},
-                 new Teacher {Name ="הדר בינסקי"},
-                 new Teacher {Name ="בוריס לוין"},
-                 new Teacher {Name ="אלכס קומן"},
-             };*/
-
-            /* foreach (var teacher in teachers)
-             {
-                 session.Save(teacher);
-             }
-             */
-
 
             var logic = new Course
             {

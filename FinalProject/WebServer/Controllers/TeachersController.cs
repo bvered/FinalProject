@@ -6,7 +6,7 @@ using System.Web.Http;
 using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
-
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.Controllers
 {
@@ -25,17 +25,33 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetAllTeacherNamesAndIds")]
-        public IHttpActionResult GetAllTeacherNamesAndIds()
+        public IHttpActionResult GetAllTeacherNamesAndIdsByFaculty(string id)
         {
             using (var session = DBHelper.OpenSession())
             {
-                var teachers = session.QueryOver<Teacher>().List();
-                var teacherNamesAndIdsDictionary = new Dictionary<string, string>();
-                foreach (var teacher in teachers)
-                {
-                    teacherNamesAndIdsDictionary.Add(teacher.Id.ToString(), teacher.Name);
+                int facultyNumber;
+                Faculty faculty;
+                if(!Int32.TryParse(id, out facultyNumber)) {
+                    return NotFound();
                 }
-                return Ok(teacherNamesAndIdsDictionary);
+                if(Enum.IsDefined(typeof(Faculty), facultyNumber)) {
+                    faculty = (Faculty)facultyNumber;
+                } else {
+                    return NotFound();
+                }
+                var teachers = session.QueryOver<Teacher>()
+                    .Where(x => x.Faculty == faculty)
+                    .List();
+                var teacherEssentials = new List<TeacherEssentials>();
+                foreach (var teacher in teachers) {
+                    var tEssentials = new TeacherEssentials
+                    {
+                        TeacherId = teacher.Id.ToString(),
+                        TeacherName = teacher.Name
+                    };
+                    teacherEssentials.Add(tEssentials);
+                }
+                return Ok(teacherEssentials);
             }
 
         }
@@ -208,5 +224,11 @@ namespace WebServer.Controllers
     {
         public string commentId { get; set; }
         public bool Liked { get; set; }
+    }
+
+    public class TeacherEssentials
+    {
+        public string TeacherId { get; set; }
+        public string TeacherName { get; set; }
     }
 }

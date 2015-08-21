@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.App_Data.Models
 {
@@ -9,6 +10,8 @@ namespace WebServer.App_Data.Models
     {
         [DataMember]
         public Guid Id { get; set; }
+        [DataMember]
+        public int TeacherId { get; set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]
@@ -24,21 +27,25 @@ namespace WebServer.App_Data.Models
         [DataMember]
         public IList<TeacherComment> TeacherComments { get; set; }
         [DataMember]
-        AverageRatings AverageCriteriaRatings { get; set; }
+        public AverageRatings AverageCriteriaRatings { get; set; }
+        [DataMember]
+        public Faculty Faculty { get; set; }
 
         public Teacher()
         {
             SetupTeacher();
         }
 
-        public Teacher(string name, int room,string phone, string email, University university)
+        public Teacher(int teacherId, string name, int room,string phone, string email, University university, Faculty faculty)
         {
             SetupTeacher();
+            TeacherId = teacherId;
             Name = name;
             Room = room;
             Cellphone = phone;
             Email = email;
             University = university;
+            Faculty = faculty;
         }
 
         public void AddTeacherCommnet(TeacherComment tComment)

@@ -10,43 +10,26 @@ var allCriterias;
 var numberOfCommentsLoaded;
 var filteredComments;
 var allCourseTeachers;
-
-var CourseInfoDiv = document.getElementById("CourseInfoDiv");
-var NewSyllabusDiv = document.getElementById("NewSyllabusDiv");
-var NewCourseCommentDiv = document.getElementById("NewCourseCommentDiv");
-var CommentsDiv = document.getElementById("CommentsDiv");
-
-var queryString;
 var currentUniversity;
 
 $(document).ready(function () {
-    queryString = getQuertyString();
-    $('#University').attr('value', queryString["University"]);
-    currentUniversity = queryString["University"];
+    $('#University').attr('value', getQuertyString()["University"]);
+    currentUniversity = getQuertyString()["University"];
+    getBackground(currentUniversity);
+    if (loadCourse()) {
+        printCourseInfo();
+    } else {
+        showLoadingCourseFailed();
+        return;
+    }
+    if (!loadCommentsCriteras()) {
+        showLoadingCourseFailed();
+        return;
+    }
 });
 
 function homePage() {
     window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-function loadView() {
-    if (!loadCommentsCriteras() || !allTeachers()) {
-        showLoadingCourseFailed();
-        return;
-    }
-    didSucceedLoadingCourse = loadCourse();
-    if (didSucceedLoadingCourse == true) {
-        printCourseInfo();
-    } else {
-        showLoadingCourseFailed();
-    }
 }
 
 function loadCommentsCriteras() {
@@ -72,7 +55,7 @@ function loadCommentsCriteras() {
 }
 
 function loadCourse() {
-    id = getParameterByName('id');
+    id = getQuertyString()["id"];
     succeed = false;
 
     var request = $.ajax({
@@ -122,6 +105,7 @@ function addVote(voteValueLabel, id, like) {
 function printCourseInfo() {
     printCourseProperties();
     printCourseScores();
+    allTeachers();
     setupFilters();
     setCourseCommentsWithFilters();
 }
@@ -153,8 +137,8 @@ function setupFilters() {
     }
     for (teacher in allCourseTeachers) {
         $('#allCourseTeachers').append($('<option>', {
-            value: teacher,
-            text: allCourseTeachers[teacher],
+            value: allCourseTeachers[teacher].TeacherId,
+            text: allCourseTeachers[teacher].TeacherName,
         }));
     };
 }
@@ -434,7 +418,7 @@ function allTeachers() {
     var succeed = false;
     var request = $.ajax({
         type: "GET",
-        url: '/api/Teachers/GetAllTeacherNamesAndIds',
+        url: '/api/Teachers/GetAllTeacherNamesAndIds/' + course.Faculty,
         contentType: "application/json",
         success: function (data) {
             allCourseTeachers = data;

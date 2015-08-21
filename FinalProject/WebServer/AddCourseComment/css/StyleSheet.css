@@ -1,7 +1,6 @@
 ﻿body {
-    background: url('/Images/site_background.jpeg') no-repeat fixed 100% 100%;
-overflow-x:hidden;
-direction:rtl;
+    overflow-x:hidden;
+    direction:rtl;
 }
 
 header .logo {
