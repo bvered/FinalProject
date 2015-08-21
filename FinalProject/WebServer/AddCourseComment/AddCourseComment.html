@@ -17,7 +17,7 @@
     <link href="css/style.css" rel="stylesheet" />
     <link href="StarsStyle.css" rel="stylesheet" />
 </head>
-<body onload="loadView()">
+<body>
     <header>
         <div class="logo" onclick=" homePage() "></div>
         <input type="hidden" name="University" id="University" value="" />
@@ -95,9 +95,16 @@
                     <td class="courseKeyTdInner">סמסטר</td>
                     <td>
                         <center>
-                            <select name="courseSemesters" id="courseSemesters">
+                            <select name="teachers" id="allCourseTeachers">
+
                             </select>
-                        </center>
+                                <select name="courseSemesters" id="courseSemesters">
+                                    <option value="0">סמסטר א</option>
+                                    <option value="1">סמסטר ב</option>
+                                    <option value="2">סמסטר קיץ</option>
+                                </select>
+                                <input style="width:100px;" class="form-control" type="text" id="Year" placeholder="הכניסו שנה" />
+</center>
                     </td>
                 </tr>
                 <tr id="newCriteriaRating1">
@@ -229,10 +236,20 @@
     <div class="main" id="filterDiv">
         <h1>סנן תגובות לפי:</h1>
         <label>מרצה</label>
-        <select id="filterByTeacher" onchange="filterByTeacherChanged()">
-            <option></option>
+        <select id="filterByTeacher" onchange="setCourseCommentsWithFilters()">
+            <option value="-1"></option>
         </select>
-    </div>
+        <select id="filteredByYear" onchange="setCourseCommentsWithFilters()">
+            <option value="-1"></option>
+        </select>
+        <select id="filteredBySemester" onchange="setCourseCommentsWithFilters()">
+            <option value="-1"></option>
+            <option value="0">א</option>
+            <option value="1">ב</option>
+            <option value="2">קיץ</option>
+        </select>
+        <input type="checkbox" id="filteredByNew"> לפי תאריך פרסום
+   </div>
     <div id="divHolder" style="display:none">
             <table id="commentTable" style="display:none">
                 <tr>

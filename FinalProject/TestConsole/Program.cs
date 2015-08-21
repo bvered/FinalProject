@@ -6,11 +6,18 @@ using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 using WebServer.App_Data.Models.Enums;
+<<<<<<< HEAD
 using System.Drawing;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
 
+=======
+using System.Data;
+using System.Data.OleDb;
+using System.Globalization;
+using System.Drawing;
+>>>>>>> origin/master
 
 namespace TestConsole
 {
@@ -67,8 +74,26 @@ namespace TestConsole
             }
             BGU.BackgroundImage = arr2;
 
+<<<<<<< HEAD
                    const Faculty computersFaculty = Faculty.ComputerScience;
                    const Faculty socialityFaculty = Faculty.SocietyPolitics;
+=======
+            const Faculty computersFaculty = Faculty.ComputerScience;
+            const Faculty socialityFaculty = Faculty.SocietyPolitics;
+
+            var romina = new Teacher(13899828, "רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA, Faculty.ComputerScience);
+            TeacherComment rominaComment = new TeacherComment
+            {
+                CommentText = "ממש עוזרת ללמוד",
+                DateTime = DateTime.Now,
+            };
+            foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias())
+            {
+                rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritiria, 5));
+            }
+            rominaComment.AddVote(new Vote(true));
+            romina.AddTeacherCommnet(rominaComment);
+>>>>>>> origin/master
 
                    var romina = new Teacher("רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA);
                    TeacherComment rominaComment = new TeacherComment
@@ -85,7 +110,7 @@ namespace TestConsole
                    
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);
@@ -94,10 +119,10 @@ namespace TestConsole
             }
 
             //saves the teachers by name and mail
-            var teachers = new Dictionary<string, string>();
-
+            var teachersSaved = new Dictionary<int, string>();
             foreach (DataRow row in dtexcel.Rows)
             {
+<<<<<<< HEAD
                 string teacherName = row["שם מרצה"].ToString();
                 if (teachers.ContainsKey(teacherName) == false)
                 {
@@ -170,6 +195,29 @@ namespace TestConsole
             * IntendedYear = IntendedYear.First,*/
             /*
             foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
+=======
+                var teacherIdString = row["TeacherId"].ToString();
+                int teacherId;
+                if (!Int32.TryParse(teacherIdString, out teacherId))
+                {
+                    continue;
+                }
+                if (teachersSaved.ContainsKey(teacherId) == false)
+                {
+                    string teacherName = row["TeacherName"].ToString();
+                    if (teacherName == string.Empty) {
+                        continue;
+                    }
+                    teachersSaved.Add(teacherId, teacherName);
+                    string teacherMail = row["Mail"].ToString();
+                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, MTA, teacherFaculty);
+                    session.Save(newTeacher);
+                }
+            }
+
+            var logic = new Course
+>>>>>>> origin/master
             {
                 Faculty faculty = new Faculty();
                 string name = course.Key.Substring(0, course.Key.IndexOf("."));
