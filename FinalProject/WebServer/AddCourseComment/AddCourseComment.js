@@ -1,15 +1,7 @@
-﻿var uri = '/api/Courses/GetCriterias';
-var uri2 = '/api/Courses/AddComment';
-var uri3 = '/api/Courses/GetTeachers';
-var uri4 = '/api/Courses/GetCourse';
-var uri5 = '/api/Courses/AddVote';
-var uri6 = '/api/AddFile/AddSyllabus';
-
-var course;
+﻿var course;
 var allCriterias;
-var numberOfCommentsLoaded;
 var filteredComments;
-var allCourseTeachers;
+var allCourseFacultyTeachers;
 var currentUniversity;
 
 $(document).ready(function () {
@@ -36,7 +28,7 @@ function loadCommentsCriteras() {
     succeed = false;
     var request = $.ajax({
         type: "GET",
-        url: uri,
+        url: '/api/Courses/GetCriterias',
         contentType: "application/json",
         success: function (data) {
             if (data.length > 0) {
@@ -60,7 +52,7 @@ function loadCourse() {
 
     var request = $.ajax({
         type: "GET",
-        url: uri4 + "/" + id,
+        url: '/api/Courses/GetCourse' + "/" + id,
         contentType: "application/json",
         success: function (data) {
             course = data;
@@ -88,7 +80,7 @@ function addVote(voteValueLabel, id, like) {
     var request = $.ajax({
         type: "POST",
         data: JSON.stringify(vote),
-        url: uri5,
+        url: '/api/Courses/AddVote',
         contentType: "application/json",
         success: function (data) {
             voteValueLabel.innerHTML = data;
@@ -135,10 +127,10 @@ function setupFilters() {
             text: teachersToFilterBy[teacher].Name,
         }));
     }
-    for (teacher in allCourseTeachers) {
-        $('#allCourseTeachers').append($('<option>', {
-            value: allCourseTeachers[teacher].TeacherId,
-            text: allCourseTeachers[teacher].TeacherName,
+    for (teacher in allCourseFacultyTeachers) {
+        $('#allCourseFacultyTeachers').append($('<option>', {
+            value: allCourseFacultyTeachers[teacher].TeacherId,
+            text: allCourseFacultyTeachers[teacher].TeacherName,
         }));
     };
 }
@@ -177,7 +169,7 @@ function printCourseScores() {
 function showCourseComments() {
     $('#allComments').empty();
     if (filteredComments == null || filteredComments.length == 0) {
-        var noCommentsErrorLabel = document.createElement("Label");
+        var noCommentsErrorLabel = document.createElement("h1");
         noCommentsErrorLabel.innerHTML = "אין תגובות להציג";
         noCommentsErrorLabel.className = "NoComments";
         $('#allComments').append(noCommentsErrorLabel);
@@ -261,7 +253,7 @@ function addComment() {
     }
     var comment = {
         Id: course.Id,
-        teacherId: $('#allCourseTeachers').val(),
+        teacherId: $('#allCourseFacultyTeachers').val(),
         Ratings: ratings,
         Comment: $('#CourseNewCommetBox').val(),
         semester: $('courseSemesters').val(),
@@ -270,7 +262,7 @@ function addComment() {
     var request = $.ajax({
         type: "POST",
         data: JSON.stringify(comment),
-        url: uri2,
+        url: '/api/Courses/AddComment',
         contentType: "application/json",
         success: function (data) {
             alert("תגובך הוספה בהצלחה!");
@@ -421,7 +413,7 @@ function allTeachers() {
         url: '/api/Teachers/GetAllTeacherNamesAndIds/' + course.Faculty,
         contentType: "application/json",
         success: function (data) {
-            allCourseTeachers = data;
+            allCourseFacultyTeachers = data;
             succeed = true;
         },
         fail: function (data) {
