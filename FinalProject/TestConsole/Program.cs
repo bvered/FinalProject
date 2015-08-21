@@ -6,18 +6,10 @@ using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
 using WebServer.App_Data.Models.Enums;
-<<<<<<< HEAD
 using System.Drawing;
 using System.Data;
 using System.Data.OleDb;
 using System.Globalization;
-
-=======
-using System.Data;
-using System.Data.OleDb;
-using System.Globalization;
-using System.Drawing;
->>>>>>> origin/master
 
 namespace TestConsole
 {
@@ -73,11 +65,7 @@ namespace TestConsole
                 arr2 = ms.ToArray();
             }
             BGU.BackgroundImage = arr2;
-
-<<<<<<< HEAD
-                   const Faculty computersFaculty = Faculty.ComputerScience;
-                   const Faculty socialityFaculty = Faculty.SocietyPolitics;
-=======
+            
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
 
@@ -93,21 +81,7 @@ namespace TestConsole
             }
             rominaComment.AddVote(new Vote(true));
             romina.AddTeacherCommnet(rominaComment);
->>>>>>> origin/master
 
-                   var romina = new Teacher("רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA);
-                   TeacherComment rominaComment = new TeacherComment
-                   {
-                       CommentText = "ממש עוזרת ללמוד",
-                       DateTime = DateTime.Now,
-                   };
-                   foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias())
-                   {
-                       rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritiria, 5));
-                   }
-                   rominaComment.AddVote(new Vote(true));
-                   romina.AddTeacherCommnet(rominaComment);
-                   
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
             using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
@@ -122,21 +96,25 @@ namespace TestConsole
             var teachersSaved = new Dictionary<int, string>();
             foreach (DataRow row in dtexcel.Rows)
             {
-<<<<<<< HEAD
-                string teacherName = row["שם מרצה"].ToString();
-                if (teachers.ContainsKey(teacherName) == false)
+                var teacherIdString = row["TeacherId"].ToString();
+                int teacherId;
+                if (!Int32.TryParse(teacherIdString, out teacherId))
                 {
-                    string mail = row["מייל"].ToString();
-                    teachers.Add(teacherName, mail);
+                    continue;
                 }
-            }
-
-            var teachersForCourses = new Dictionary<string, Teacher>();
-            foreach (KeyValuePair<string, string> teacher in teachers)
-            {
-                var newTeacher = new Teacher(teacher.Key, 0, "05x-xxxxxxx", teacher.Value, MTA);
-                teachersForCourses[teacher.Key] = newTeacher;
-                session.Save(newTeacher);
+                if (teachersSaved.ContainsKey(teacherId) == false)
+                {
+                    string teacherName = row["TeacherName"].ToString();
+                    if (teacherName == string.Empty)
+                    {
+                        continue;
+                    }
+                    teachersSaved.Add(teacherId, teacherName);
+                    string teacherMail = row["Mail"].ToString();
+                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, MTA, teacherFaculty);
+                    session.Save(newTeacher);
+                }
             }
 
             //add the courses
