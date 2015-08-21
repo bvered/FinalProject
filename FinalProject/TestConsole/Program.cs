@@ -65,7 +65,6 @@ namespace TestConsole
                 arr2 = ms.ToArray();
             }
             BGU.BackgroundImage = arr2;
-            
             const Faculty computersFaculty = Faculty.ComputerScience;
             const Faculty socialityFaculty = Faculty.SocietyPolitics;
 
@@ -84,7 +83,7 @@ namespace TestConsole
 
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);
@@ -114,8 +113,13 @@ namespace TestConsole
                     Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
                     var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, MTA, teacherFaculty);
                     session.Save(newTeacher);
+
+                    session.Flush();
                 }
             }
+
+
+
 
             //add the courses
             /*
@@ -173,29 +177,6 @@ namespace TestConsole
             * IntendedYear = IntendedYear.First,*/
             /*
             foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
-=======
-                var teacherIdString = row["TeacherId"].ToString();
-                int teacherId;
-                if (!Int32.TryParse(teacherIdString, out teacherId))
-                {
-                    continue;
-                }
-                if (teachersSaved.ContainsKey(teacherId) == false)
-                {
-                    string teacherName = row["TeacherName"].ToString();
-                    if (teacherName == string.Empty) {
-                        continue;
-                    }
-                    teachersSaved.Add(teacherId, teacherName);
-                    string teacherMail = row["Mail"].ToString();
-                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
-                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, MTA, teacherFaculty);
-                    session.Save(newTeacher);
-                }
-            }
-
-            var logic = new Course
->>>>>>> origin/master
             {
                 Faculty faculty = new Faculty();
                 string name = course.Key.Substring(0, course.Key.IndexOf("."));
@@ -268,93 +249,100 @@ namespace TestConsole
                 session.Save(newCourse);
             }
             */
-       //     Console.WriteLine("meitali");
-               var logic = new Course
-               {
-                   University = MTA,
-                   Name = "לוגיקה",
-                   AcademicDegree = AcademicDegree.Bachelor,
-                   Faculty = computersFaculty,
-                   IntendedYear = IntendedYear.First,
-                   IsMandatory = true,
-               };
+            //     Console.WriteLine("meitali");
 
-               var courses = new[]
-               {
-                   logic,
-                   new Course
-                   {
-                       University = MTA,
-                       Name = "אלגוריתמים",
-                       AcademicDegree = AcademicDegree.Bachelor,
-                       Faculty = computersFaculty,
-                       IntendedYear = IntendedYear.Second,
-                       IsMandatory = true
-                   },
-                   new Course
-                   {
-                       University = MTA,
-                       Name = "תורת הגרפים",
-                       AcademicDegree = AcademicDegree.Bachelor,
-                       Faculty = computersFaculty,
-                       IntendedYear = IntendedYear.Any,
-                       IsMandatory = false
-                   },
-                   new Course
-                   {
-                       University = MTA,
-                       Name = "סיבוכיות ",
-                       AcademicDegree = AcademicDegree.Master,
-                       Faculty = computersFaculty,
-                       IntendedYear = IntendedYear.First,
-                       IsMandatory = true
-                   },
-                    new Course
-                   {
-                       University = MTA,
-                       Name = "ביולוגיה",
-                       AcademicDegree = AcademicDegree.Master,
-                       Faculty = socialityFaculty,
-                       IntendedYear = IntendedYear.First,
-                       IsMandatory = true
-                   },
-                   new Course
-                   {
-                       University = MTA,
-                       Name = "מדעים",
-                       AcademicDegree = AcademicDegree.Master,
-                       Faculty = socialityFaculty,
-                       IntendedYear = IntendedYear.Third,
-                       IsMandatory = true
-                   },
-               };
 
-               var courseComment = new CourseComment
-               {
-                   CommentText = "קורס ממש מעניין",
-                   DateTime = DateTime.Now,
-                   Votes = { new Vote(true) }
-               };
 
-               foreach (var courseCriteria in CourseComment.GetCourseCommentCriterias())
-               {
-                   courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria, 5));
-               }
 
-               logic.CourseInSemesters.Add(new CourseInSemester
-               {
-                   Semester = Semester.A,
-                   Teacher = romina,
-                   Course = logic,
-                   Year = 2012,
-               });
 
-               logic.AddCourseCommnet(logic.CourseInSemesters[0], courseComment);
 
-               foreach (var course in courses)
-               {
-                   session.Save(course);
-               }
+
+            var logic = new Course
+            {
+                University = MTA,
+                Name = "לוגיקה",
+                AcademicDegree = AcademicDegree.Bachelor,
+                Faculty = computersFaculty,
+                IntendedYear = IntendedYear.First,
+                IsMandatory = true,
+            };
+
+            var courses = new[]
+            {
+                logic,
+                new Course
+                {
+                    University = MTA,
+                    Name = "אלגוריתמים",
+                    AcademicDegree = AcademicDegree.Bachelor,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.Second,
+                    IsMandatory = true
+                },
+                new Course
+                {
+                    University = MTA,
+                    Name = "תורת הגרפים",
+                    AcademicDegree = AcademicDegree.Bachelor,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.Any,
+                    IsMandatory = false
+                },
+                new Course
+                {
+                    University = MTA,
+                    Name = "סיבוכיות ",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = computersFaculty,
+                    IntendedYear = IntendedYear.First,
+                    IsMandatory = true
+                },
+                 new Course
+                {
+                    University = MTA,
+                    Name = "ביולוגיה",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = socialityFaculty,
+                    IntendedYear = IntendedYear.First,
+                    IsMandatory = true
+                },
+                new Course
+                {
+                    University = MTA,
+                    Name = "מדעים",
+                    AcademicDegree = AcademicDegree.Master,
+                    Faculty = socialityFaculty,
+                    IntendedYear = IntendedYear.Third,
+                    IsMandatory = true
+                },
+            };
+
+            var courseComment = new CourseComment
+            {
+                CommentText = "קורס ממש מעניין",
+                DateTime = DateTime.Now,
+                Votes = { new Vote(true) }
+            };
+
+            foreach (var courseCriteria in CourseComment.GetCourseCommentCriterias())
+            {
+                courseComment.CriteriaRatings.Add(new CourseCriteriaRating(courseCriteria, 5));
+            }
+
+            logic.CourseInSemesters.Add(new CourseInSemester
+            {
+                Semester = Semester.A,
+                Teacher = romina,
+                Course = logic,
+                Year = 2012,
+            });
+
+            logic.AddCourseCommnet(logic.CourseInSemesters[0], courseComment);
+
+            foreach (var course in courses)
+            {
+                session.Save(course);
+            }
         }
 
         private static OleDbConnection CreateConnection(string filePath, bool hasHeaders)
@@ -369,13 +357,13 @@ namespace TestConsole
             conn.Open();
             return conn;
         }
-    }
 
-    public class courseInSemester
-    {
-        public string teacherName { get; set; }
-        public string semester { get; set; }
-        public bool isMandatory { get; set; }
+        public class courseInSemester
+        {
+            public string teacherName { get; set; }
+            public string semester { get; set; }
+            public bool isMandatory { get; set; }
 
+        }
     }
 }
