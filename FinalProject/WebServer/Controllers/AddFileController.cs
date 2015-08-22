@@ -97,39 +97,7 @@ namespace WebServer.Controllers
                             default:
                                 break;
                         }
-                        /*switch (extension.ToLower())
-                        {
-                            case @".bmp":
-                                IsPic = true;
-                                break;
-                            case @".gif":
-                                IsPic = true;
-                                break;
-                            case @".ico":
-                                IsPic = true;
-                                break;
-                            case @".jpg":
-                                IsPic = true;
-                                break;
-                            case @".jpeg":
-                                IsPic = true;
-                                break;
-                            case @".png":
-                                IsPic = true;
-                                break;
-                            case @".tif":
-                                break;
-                            case @".tiff":
-                                IsPic = true;
-                                break;
-                            case @".wmf":
-                                IsPic = true;
-                                break;
-                            default:
-                                break;
-                        }
-
-                        */
+                       
                         if (!isSyllabus)
                         {
                             courseInSemester.uploadedGrades = new UplodedFile

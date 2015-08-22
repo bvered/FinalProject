@@ -104,15 +104,15 @@ function ChangeResults() {
 
     }
     else if (filterSemester == "A") {
-        requestedData = checkSemester(resultData, "A");
+        requestedData = checkSemester(resultData, "א");
         showResults(requestedData);
     }
     else if (filterSemester == "B") {
-        requestedData = checkSemester(resultData, "B");
+        requestedData = checkSemester(resultData, "ב");
         showResults(requestedData);
     }
     else if (filterSemester == "Summer") {
-        requestedData = checkSemester(resultData, "Summer");
+        requestedData = checkSemester(resultData, "קיץ");
         showResults(requestedData);
     }
 

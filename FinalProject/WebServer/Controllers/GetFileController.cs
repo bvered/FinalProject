@@ -87,17 +87,43 @@ namespace WebServer.Controllers
                 var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
                 RequestedFile file = new RequestedFile();
 
-                if (requestedSyllabus.isPic == false)
+
+                if (requestedSyllabus.ext.ToLower() == ".pdf")
                 {
-                    val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                    System.IO.FileStream stream = new FileStream(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePdf" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Append);
+                    System.IO.BinaryWriter writer = new BinaryWriter(stream);
+                    writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
+                    writer.Close();
                     file.isPic = false;
-                    file.str = val;
+                    file.str = @"../Images/filePdf.pdf";
+                    file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
+                }
+                else if (requestedSyllabus.ext.ToLower() == ".doc" || requestedSyllabus.ext.ToLower() == ".docx")
+                {
+                    System.IO.FileStream stream = new FileStream(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\fileWord" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Create);
+                    System.IO.BinaryWriter writer = new BinaryWriter(stream);
+                    writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
+                    writer.Close();
+                    file.isPic = false;
+                    file.str = @"../Images/fileWord" + Path.GetExtension(requestedSyllabus.FileName).ToLower();
+                    file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
                 }
                 else
                 {
-                    File.WriteAllBytes(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
-                    file.isPic = true;
-                    file.str = @"../Images/filePic.jpg";
+                    if (requestedSyllabus.isPic == false)
+                    {
+                        val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                        file.isPic = false;
+                        file.str = val;
+                        file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
+                    }
+                    else
+                    {
+                        File.WriteAllBytes(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
+                        file.isPic = true;
+                        file.str = @"../Images/filePic.jpg";
+                        file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
+                    }
                 }
                 return file;
             }
@@ -121,6 +147,7 @@ namespace WebServer.Controllers
         {
             public bool isPic { get; set; }
             public string str { get; set; }
+            public string ext { get; set; }
         }
 
         public class ResultSyllabus

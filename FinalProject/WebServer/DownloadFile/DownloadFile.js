@@ -6,9 +6,9 @@
 var uri;
 
 function downloadFile() {
+   // 
     var quertyString = getQuertyString();
 
-    if (quertyString['type'] = 'Syllabus') {
         uri = "/api/GetFile/GetSyllabussss/" + quertyString['id'];
         var ajaxRequest = $.ajax({
             type: "GET",
@@ -18,27 +18,32 @@ function downloadFile() {
             success: function (data)
             {
                 if (data.isPic == true) {
+                    $("#fileImg")[0].hidden = false;
                     $("#fileImg").attr("src", "../Images/filePic.jpg");
                 }
                 else if (data.isPic == false) {
-                    $("#textFile").append(data.str);
-                  //  download(data.str, "test.pdf", "aplication/pdf");
+                    if (data.ext == ".pdf") {
+                        $("#filePdf").attr("data", "../Images/filePdf.pdf");
+                        $("#filePdf")[0].hidden = false;
+                    }
+                    else if (data.ext == ".doc")
+                    {
+                        $("#fileWord")[0].hidden = false;
+                        $("#fileWord").attr("href" , "../Images/fileWord.doc");
+                    }else if( data.ext == ".docx") {
+                        $("#fileWord")[0].hidden = false;
+                        $("#fileWord").attr("href", "../Images/fileWord.docx");
+                    }
+                    else if (data.ext == ".txt") {
+                        $("#textFile").append(data.str);
+                    }
                 }
-                
-         //       download(data.str, "test.pdf", "aplication/pdf");
 
             },
             fail: function (data)
-            {
-                //   succeed = false;
-            },
+            {},
        });
     }
-    else if (quertyString[type] = Grades) {
-
-
-    }
-}
 
 function download(strData, strFileName, strMimeType) {
     var D = document, A = arguments, a = D.createElement("a"),
