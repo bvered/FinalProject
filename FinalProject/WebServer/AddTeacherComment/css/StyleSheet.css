@@ -1,9 +1,4 @@
-﻿body {
-    background: url('/Images/site_background.jpeg') no-repeat fixed 100% 100%;
-overflow-x:hidden;
-}
-
-header .logo {
+﻿header .logo {
     background: url('/Images/ratemyschool.png');
     width: 280px;
     height: 90px;

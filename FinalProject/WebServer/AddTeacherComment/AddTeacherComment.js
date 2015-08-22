@@ -1,13 +1,5 @@
-﻿var uri = '/api/Teachers/GetCriterias';
-var uri2 = '/api/Teachers/AddComment';
-var uri4 = '/api/Teachers/GetTeacher';
-var uri5 = '/api/Teachers/AddVote';
-var uri6 = '/api/AddFile/AddSyllabus';
-
-var teacher;
+﻿var teacher;
 var allCriterias;
-var allTeachers;
-var teacherInfoList;
 var numberOfCommentsLoaded;
 
 var queryString;
@@ -47,7 +39,7 @@ function loadCommentsCriteras() {
 
     var request = $.ajax({
         type: "GET",
-        url: uri,
+        url: '/api/Teachers/GetCriterias',
         contentType: "application/json",
         success: function (data) {
                 allCriterias = data;
@@ -67,7 +59,7 @@ function loadTeacher() {
 
     var request = $.ajax({
         type: "GET",
-        url: uri4 + "/" + id,
+        url: '/api/Teachers/GetTeacher' + "/" + id,
         contentType: "application/json",
         success: function (data) {
             teacher = data;
@@ -95,7 +87,7 @@ function addVote(voteValueLabel ,id, like) {
     var request = $.ajax({
         type: "POST",
         data: JSON.stringify(vote),
-        url: uri5,
+        url: '/api/Teachers/AddVote',
         contentType: "application/json",
         success: function (data) {
             voteValueLabel.innerHTML = "אהבו: " + data;
@@ -130,15 +122,6 @@ function showTeacherInfoToUser() {
 
     var teacherEmailLabel = document.getElementById("teacherEmailTD");
     teacherEmailLabel.innerHTML = teacher.Email;
-
-    //for (avgRating in allCriterias) {
-    //    var AvgRating = document.getElementById("AvgRating#").cloneNode(true);
-    //    AvgRating.style.display = 'block';
-    //    AvgRating.id = "AvgRating#"+avgRating;
-    //    AvgRating.cells[0].innerHTML = allCriterias[avgRating];
-    //    AvgRating.cells[1].innerHTML = teacher.RatingScores[avgRating];
-    //    document.getElementById("teacherInfo").appendChild(AvgRating);
-    //}
 }
 
 function printTeacherScores() {
@@ -283,36 +266,6 @@ function showLoadingTeacherFailed() {
     alert("מרצה לא נמצא, הנך מועבר לעמוד הראשי.");
     TeacherInfoDiv.appendChild(failedSearchLabel);
 }
-/*
-function addComment() {
-    if (document.getElementById("teacherNewCommetBox").value == "") {
-        alert("הכנס תגובה");
-        return;
-    }
-    var ratings = [];
-    for (criteria in allCriterias) {
-        ratings.push(getSelectedRadioButtonValue(document.getElementById("criteriaRating" + criteria).children[0]));
-    }
-    var comment = {
-        Id: teacher.Id,
-        Ratings: ratings,
-        Comment: document.getElementById("teacherNewCommetBox").value,
-    };
-    var request = $.ajax({
-        type: "POST",
-        data: JSON.stringify(comment),
-        url: uri2,
-        contentType: "application/json",
-        success: function (data) {
-            alert("תגובתך הוספה בהצלחה");
-            location.reload();
-        },
-        fail: function (jqXhr, textStatus) {
-            alert("נכשל: " + textStatus);
-        },
-        async: false
-    });
-}*/
 
 function addComment() {
     if (document.getElementById("teacherNewCommetBox").value == "") {
@@ -340,7 +293,7 @@ function addComment() {
     var request = $.ajax({
         type: "POST",
         data: JSON.stringify(comment),
-        url: uri2,
+        url: '/api/Teachers/AddComment',
         contentType: "application/json",
         success: function (data) {
             alert("תגובתך הוספה בהצלחה");
