@@ -20,5 +20,7 @@ namespace WebServer.App_Data.Models
         public bool isSylabus { get; set; }
         [DataMember]
         public bool isPic { get; set; }
+        [DataMember]
+        public string ext { get; set; }
     }
 }
