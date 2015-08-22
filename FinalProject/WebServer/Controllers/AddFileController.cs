@@ -80,7 +80,24 @@ namespace WebServer.Controllers
                         if (string.IsNullOrEmpty(extension))
                             throw new ArgumentException(string.Format("Unable to determine file extension for fileName: {0}", httpPostedFile.FileName));
                         bool IsPic = false;
+
                         switch (extension.ToLower())
+                        {
+                            case @".bmp":
+                            case @".gif":
+                            case @".ico":
+                            case @".jpg":
+                            case @".jpeg":
+                            case @".png":
+                            case @".tif":
+                            case @".tiff":
+                            case @".wmf":
+                                IsPic = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        /*switch (extension.ToLower())
                         {
                             case @".bmp":
                                 IsPic = true;
@@ -112,7 +129,7 @@ namespace WebServer.Controllers
                                 break;
                         }
 
-
+                        */
                         if (!isSyllabus)
                         {
                             courseInSemester.uploadedGrades = new UplodedFile
@@ -124,7 +141,8 @@ namespace WebServer.Controllers
                                 Semster = semster,
                                 Year = year,
                                 isSylabus = false,
-                                isPic = IsPic
+                                isPic = IsPic,
+                                ext = extension
                             };
                         }
 
@@ -140,7 +158,8 @@ namespace WebServer.Controllers
                                 Semster = semster,
                                 Year = year,
                                 isSylabus = true,
-                                isPic = IsPic
+                                isPic = IsPic,
+                                ext = extension
                             };
                         }
                         session.SaveOrUpdate(courseInSemester);

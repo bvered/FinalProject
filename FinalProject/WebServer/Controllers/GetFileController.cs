@@ -30,23 +30,20 @@ namespace WebServer.Controllers
                     {
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
-                        if (semester == "A")
-                        {
+                        if (semester == "A") {
                             semester = "א";
                         }
-                        else if (semester == "B")
-                        {
+                        else if (semester == "B") {
                             semester = "ב";
                         }
-                        else if (semester == "Summer")
-                        {
+                        else if (semester == "Summer") {
                             semester = "קיץ";
                         }
                         int year = CourseSemester.uploadedSyllabus.Year;
-                   //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
                         bool isSyllabus = true;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
+                        string extenstion = CourseSemester.uploadedSyllabus.ext;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, isSyllabus, extenstion));
                     }
                     if (CourseSemester.uploadedGrades != null)
                     {
@@ -68,7 +65,8 @@ namespace WebServer.Controllers
                         //     byte[] file = CourseSemester.Syllabus.File;
                         string fileName = CourseSemester.uploadedGrades.FileName;
                         bool isSyllabus = false;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year/*,file*/, fileName, isSyllabus));
+                        string extenstion = CourseSemester.uploadedGrades.ext;
+                        result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, isSyllabus, extenstion));
                     }
 
                 }
@@ -130,18 +128,18 @@ namespace WebServer.Controllers
             public Guid Id { get; set; }
             public string Semester { get; set; }
             public int Year { get; set; }
-          //  public byte[] File { get; set; }
             public string FileName { get; set; }
             public bool IsSyllabus { get; set; }
+            public string Extention { get; set; }
 
-            public ResultSyllabus(Guid id, string semester, int year/*, byte[] file*/, string fileName, bool isSyllabus)
+            public ResultSyllabus(Guid id, string semester, int year, string fileName, bool isSyllabus, string extention)
             {
                 Id = id;
                 Semester = semester;
                 Year = year;
-//                File = file;
                 FileName = fileName;
                 IsSyllabus = isSyllabus;
+                Extention = extention;
             }
         }
     }
