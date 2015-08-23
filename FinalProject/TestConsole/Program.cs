@@ -83,7 +83,7 @@ namespace TestConsole
 
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection( Environment.CurrentDirectory + @"\..\..\Images\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);
@@ -91,8 +91,13 @@ namespace TestConsole
                 daexcel.Fill(dtexcel);
             }
 
+            int index = 0;
+
             //saves the teachers by name and mail
             var teachersSaved = new Dictionary<int, string>();
+
+            var teachersForCourses = new Dictionary<int, Teacher>();
+
             foreach (DataRow row in dtexcel.Rows)
             {
                 var teacherIdString = row["TeacherId"].ToString();
@@ -115,40 +120,69 @@ namespace TestConsole
                     session.Save(newTeacher);
 
                     session.Flush();
+
+                    teachersForCourses.Add(teacherId, newTeacher);
+              //      teachersForCourses[teachersSaved.Key] = newTeacher;
+
+                    index++;
+                    if (index % 50 == 0)
+                    {
+                        session.Clear();
+                    }
                 }
             }
 
 
-
-
+            index = 0;
             //add the courses
-            /*
+            
             var courses = new Dictionary<string, List<courseInSemester>>();
 
             foreach (DataRow row in dtexcel.Rows)
             {
-                string courseName = row["שם הקורס"].ToString();
-                string facultyName = row["פקולטה"].ToString();
+                string courseName = row["Description"].ToString();
+                string facultyName = row["Faculty"].ToString();
                 string nameAndFculty = courseName + "." + facultyName;
 
-                string semester = row["סמסטר"].ToString();
-                string teacherName = row["שם מרצה"].ToString();
+                string semester = row["Semester"].ToString();
+                string teacherName = row["TeacherName"].ToString();
 
-                if (courses.ContainsKey(nameAndFculty) == false)
+                if (courses.ContainsKey(nameAndFculty) == false) //if the course doesnt exist
                 {
                     courseInSemester courseSemester = new courseInSemester();
-                    courseSemester.isMandatory = false;
+                    int isMandatory = 0;
+                    bool mandatory=false;
+                    if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
+                    {
+                        if (isMandatory == 0)
+                        {
+                            mandatory = false;
+                        }
+                        else
+                        {
+                            mandatory = true;
+                        }
+                    }
+                    courseSemester.isMandatory = mandatory;
                     courseSemester.semester = semester;
                     courseSemester.teacherName = teacherName;
+                    int teacherId;
+                    if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
+                    {
+                        courseSemester.id = teacherId;
+                    }
+                    else
+                    {
+                        courseSemester.id = 0;
+                    }
+                        
                     courses[nameAndFculty] = new List<courseInSemester>();
-
                     courses[nameAndFculty].Add(courseSemester);
-
                 }
-                else
+                else // the course exists
                 {
                     bool found = false;
-                    foreach (courseInSemester courseInSemester in courses[nameAndFculty])
+                    foreach (courseInSemester courseInSemester in courses[nameAndFculty]) // cross all over the teachers, to see if we need to add new teacher 
                     {
                         if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester)
                         {
@@ -156,65 +190,75 @@ namespace TestConsole
                         }
                     }
 
-                    if (found == false)
+                    if (found == false) // if the current teacher is not in the course semester yet
                     {
                         courseInSemester courseSemester = new courseInSemester();
-
-                        ///// אין את המידע הזה בקובץ EXCEL
-                        courseSemester.isMandatory = false;//////////////
-
+                        int isMandatory = 0; 
+                        bool mandatory = false;
+                        if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
+                        {
+                            if (isMandatory == 0)
+                            {
+                                mandatory = false;
+                            }
+                            else
+                            {
+                                mandatory = true;
+                            }
+                        }
+                        courseSemester.isMandatory = mandatory;
                         courseSemester.semester = semester;
                         courseSemester.teacherName = teacherName;
-
+                        int teacherId;
+                        if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
+                        {
+                            courseSemester.id = teacherId;
+                        }
+                        else
+                        {
+                            courseSemester.id = 0;
+                        }
+            
                         courses[nameAndFculty].Add(courseSemester);
                     }
                 }
             }
-            */
+            
 
             /*עבור קורס חסרים השדות הבאים:
                 *  AcademicDegree = AcademicDegree.Bachelor,
             * IntendedYear = IntendedYear.First,*/
-            /*
+            
             foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
             {
                 Faculty faculty = new Faculty();
                 string name = course.Key.Substring(0, course.Key.IndexOf("."));
                 string courseFaculty = course.Key.Substring(course.Key.IndexOf(".") + 1, course.Key.Length - name.Length - 1);
-                if (courseFaculty == "יעוץ ופותוח ארגוני")
-                {
+                if (courseFaculty == "יעוץ ופותוח ארגוני"){
                     faculty = Faculty.ConsultingOrganizationalDevelopment;
                 }
-                else if (courseFaculty == "כלכלה וניהול")
-                {
+                else if (courseFaculty == "כלכלה וניהול"){
                     faculty = Faculty.ManagementEconomics;
                 }
-                else if (courseFaculty == "מדעי המחשב")
-                {
+                else if (courseFaculty == "מדעי המחשב"){
                     faculty = Faculty.ComputerScience;
                 }
-                else if (courseFaculty == "מדעי ההתנהגות")
-                {
+                else if (courseFaculty == "מדעי ההתנהגות"){
                     faculty = Faculty.BehavioralSciences;
                 }
-                else if (courseFaculty == "מדעי הסיעוד")
-                {
+                else if (courseFaculty == "מדעי הסיעוד"){
                     faculty = Faculty.Nursing;
                 }
-                else if (courseFaculty == "ממשל וחברה")
-                {
+                else if (courseFaculty == "ממשל וחברה"){
                     faculty = Faculty.SocietyPolitics;
                 }
-                else if (courseFaculty == "מנהל עסקים")
-                {
+                else if (courseFaculty == "מנהל עסקים"){
                     faculty = Faculty.BusinessAdministration;
                 }
-                else if (courseFaculty == "ניהול מערכות מידע")
-                {
+                else if (courseFaculty == "ניהול מערכות מידע"){
                     faculty = Faculty.InformationSystems;
                 }
-                else if (courseFaculty == "פסיכולוגיה")
-                {
+                else if (courseFaculty == "פסיכולוגיה"){
                     faculty = Faculty.Psychology;
                 }
                 else
@@ -227,8 +271,16 @@ namespace TestConsole
 
                 foreach (courseInSemester courseIn in course.Value) //אקבל את הרשימה של הקורסים בסמסטר לפי המחלקה החדשה שהגדרתי
                 {
+                    
                     CourseInSemester semesterCourse = new CourseInSemester();
-                    semesterCourse.Teacher = teachersForCourses[courseIn.teacherName];
+                    if (teachersForCourses.ContainsKey(courseIn.id) == false)
+                    {
+                        semesterCourse.Teacher = null;
+                    }
+                    else
+                    {
+                        semesterCourse.Teacher = teachersForCourses[courseIn.id];
+                    }
                     semesterCourse.Year = 2016;
                     semesterCourse.Course = newCourse;
                     if (courseIn.semester == "1")
@@ -247,16 +299,17 @@ namespace TestConsole
                 }
 
                 session.Save(newCourse);
+
+                session.Flush();
+
+                index++;
+                if (index % 50 == 0)
+                {
+                    session.Clear();
+                }
             }
-            */
-            //     Console.WriteLine("meitali");
-
-
-
-
-
-
-
+            
+/*
             var logic = new Course
             {
                 University = MTA,
@@ -266,8 +319,8 @@ namespace TestConsole
                 IntendedYear = IntendedYear.First,
                 IsMandatory = true,
             };
-
-            var courses = new[]
+            */
+            /*var courses = new[]
             {
                 logic,
                 new Course
@@ -342,9 +395,9 @@ namespace TestConsole
             foreach (var course in courses)
             {
                 session.Save(course);
-            }
+            }*/
         }
-
+            
         private static OleDbConnection CreateConnection(string filePath, bool hasHeaders)
         {
             string HDR = hasHeaders ? "Yes" : "No";
@@ -363,6 +416,7 @@ namespace TestConsole
             public string teacherName { get; set; }
             public string semester { get; set; }
             public bool isMandatory { get; set; }
+            public int id { get; set; }
 
         }
     }

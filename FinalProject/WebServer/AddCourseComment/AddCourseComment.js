@@ -371,7 +371,7 @@ function ChangePage() {
 }
 
 function ChangePage2() {
-    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University=" + currentUniversity + "&courseId=" + course.Id;
+    window.location = "../GetAllFiles/GetAllFiles.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }
 
 function setCourseCommentsWithFilters() {

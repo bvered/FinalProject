@@ -116,11 +116,12 @@
     <Content Include="bootstrap-star-rating\js\star-rating.min.js" />
     <Content Include="CSS\AddTableDesign.css" />
     <Content Include="CSS\GeneralDesign.css" />
+    <Content Include="DownloadFile\DownloadFile.css" />
     <Content Include="DownloadFile\DownloadFile.js" />
     <Content Include="DownloadFile\DownloadFile.html" />
-    <Content Include="GetAllSyllabus\GetAllSyllabus.css" />
-    <Content Include="GetAllSyllabus\GetAllSyllabus.html" />
-    <Content Include="GetAllSyllabus\GetAllSyllabus.js" />
+    <Content Include="GetAllFiles\GetAllFiles.css" />
+    <Content Include="GetAllFiles\GetAllFiles.html" />
+    <Content Include="GetAllFiles\GetAllFiles.js" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="AddCourseComment\stars.png" />
     <Content Include="AddCourseComment\css\style.css" />
