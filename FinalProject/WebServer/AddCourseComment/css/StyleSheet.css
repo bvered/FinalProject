@@ -91,14 +91,14 @@ textarea {
 }
 
 select {
-        background-color: rgba(0, 0, 0, 0.6);
+        background-color: rgba(0, 0, 0, 0.1);
         border-radius:5px;
         width:150px;
         height:30px;
         color:white;
         font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
         left:0;
-
+        margin-bottom:5px;
 }
 
 .sendButton {
@@ -157,5 +157,5 @@ select {
     position: relative;
     text-align:center;
     background-color:rgba(255, 255, 255, 0.9);
-    border-radius:5px;
+    border-radius:5px;  
 }

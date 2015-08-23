@@ -130,6 +130,9 @@ function setupFilters() {
         }));
     }
     for (var teacher in teachersToFilterBy) {
+        if (teachersToFilterBy[teacher] == null) {
+            continue;
+        }
         $('#filterByTeacher').append($('<option>', {
             value: teachersToFilterBy[teacher].Id,
             text: teachersToFilterBy[teacher].Name,
@@ -147,8 +150,8 @@ function printCourseProperties() {
     var courseNameTD = document.getElementById("courseNameTD");
     courseNameTD.innerHTML = course.Name;
 
-    var courseAvgTD = document.getElementById("courseAvgTD");
-    courseAvgTD.innerHTML = course.Score;
+    $('#averageRating').rating('update', course.Score);
+    $('#averageRating').rating('refresh', { readonly: true, showClear: false, showCaption: false });
 
     var courseFacultyTD = document.getElementById("courseFacultyTD");
     courseFacultyTD.innerHTML = facultyNameByEnum(course.Faculty);
@@ -244,6 +247,12 @@ function addComment() {
         alert("הכנס תגובה");
         return;
     }
+    var parsedYear = parseInt($('#Year').val(), 10);
+    var currentYear = (new Date()).getFullYear();
+    if (parsedYear == NaN || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
+        alert("אנא הכנס שנה בתחום העשור האחרון.");
+        return;
+    }
     var one = $('input[name=star]:checked', '#ratingsForm1').val();
     var two = $('input[name=star2]:checked', '#ratingsForm2').val();
     var three = $('input[name=star3]:checked', '#ratingsForm3').val();
@@ -263,7 +272,7 @@ function addComment() {
         Ratings: ratings,
         Comment: $('#CourseNewCommetBox').val(),
         semester: $('#courseSemesters').val(),
-        Year: $('#Year').val(),
+        Year: parsedYear,
     };
     var request = $.ajax({
         type: "POST",
@@ -279,25 +288,6 @@ function addComment() {
         },
         async: false
     });
-}
-
-
-function getSelectedRadioButtonValue(radioButtonForm) {
-    for (star in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[star].checked == true) {
-            return radioButtonForm.children[0].children[star].value;
-        }
-    }
-    return 0;
-}
-
-function setSelectedRadionButtonValue(radioButtonForm, value) {
-    for (radioButton in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
-            radioButtonForm.children[0].children[radioButton].checked = true;
-            return;
-        }
-    }
 }
 
 function facultyNameByEnum(faculty) {
@@ -428,4 +418,22 @@ function allTeachers() {
         async: false
     });
     return succeed;
+}
+
+function getSelectedRadioButtonValue(radioButtonForm) {
+    for (star in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[star].checked == true) {
+            return radioButtonForm.children[0].children[star].value;
+        }
+    }
+    return 0;
+}
+
+function setSelectedRadionButtonValue(radioButtonForm, value) {
+    for (radioButton in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
+            radioButtonForm.children[0].children[radioButton].checked = true;
+            return;
+        }
+    }
 }
