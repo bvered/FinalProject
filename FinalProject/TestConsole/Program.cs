@@ -83,7 +83,7 @@ namespace TestConsole
 
 
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"\\psf\Home\Documents\FinalProject\FinalProject\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);

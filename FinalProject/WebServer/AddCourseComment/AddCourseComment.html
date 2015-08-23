@@ -16,6 +16,10 @@
     <link href="css/StyleSheet.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
     <link href="StarsStyle.css" rel="stylesheet" />
+    <link href="../bootstrap-star-rating/css/star-rating.css" rel="stylesheet" />
+    <link href="../bootstrap-star-rating/css/star-rating.min.css" rel="stylesheet" />
+    <script src="../bootstrap-star-rating/js/star-rating.js"></script>
+    <script src="../bootstrap-star-rating/js/star-rating.min.js"></script>
 </head>
 <body>
     <header>
@@ -31,7 +35,9 @@
                 </tr>
                 <tr>
                     <td class="courseKeyTdInner">ממוצע דירוגים:</td>
-                    <td id="courseAvgTD" style="padding-right:20px"></td>
+                    <td id="courseAvgTD" style="padding-right:20px">
+                        <input id="averageRating" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
                 </tr>
                 <tr>
                     <td class="courseKeyTdInner">פקולטה:</td>
@@ -49,27 +55,42 @@
                     <td class="courseKeyTdInner">שנה:</td>
                     <td id="courseYearTD" style="padding-right:20px"></td>
                 </tr>
-                <tr id="newCriteriaRatingBase1" style="display:none">
-                    <td id="criteriaTextTD" class="courseKeyTdInner">עניין בקורס</td>
+                <tr id="newCriteriaRatingBase1">
+                    <td id="criteriaTextTD0" class="courseKeyTdInner"></td>
                     <td style="padding-right: 20px;">
-                        <!--<form id="ratingsFormBase">
-                            <div class="starsBase">
-                                <input type="radio" name="star-base" class="star-base-1" id="star-base-1" value="star-base-1" />
-                                <label class="star-base-1" for="star-base-1">star-base-1</label>
-                                <input type="radio" name="star-base" class="star-base-2" id="star-base-2" value="star-base-2" />
-                                <label class="star-base-2" for="star-base-2">star-base-2</label>
-                                <input type="radio" name="star-base" class="star-base-3" id="star-base-3" value="star-base-3" />
-                                <label class="star-base-3" for="star-base-3">star-base-3</label>
-                                <input type="radio" name="star-base" class="star-base-4" id="star-base-4" value="star-base-4" />
-                                <label class="star-base-4" for="star-base-4">star-base-4</label>
-                                <input type="radio" name="star-base" class="star-base-5" id="star-base-5" value="star-base-5" />
-                                <label class="star-base-5" for="star-base-5">star-base-5</label>
-                                <span></span>
-                            </div>
-                        </form>-->
+                        <input id="avgRating0" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
                     </td>
                 </tr>
-
+                <tr id="newCriteriaRatingBase2">
+                    <td id="criteriaTextTD1" class="courseKeyTdInner"></td>
+                    <td style="padding-right: 20px;">
+                        <input id="avgRating1" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
+                </tr>
+                <tr id="newCriteriaRatingBase3">
+                    <td id="criteriaTextTD2" class="courseKeyTdInner"></td>
+                    <td style="padding-right: 20px;">
+                        <input id="avgRating2" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
+                </tr>
+                <tr id="newCriteriaRatingBase4">
+                    <td id="criteriaTextTD3" class="courseKeyTdInner"></td>
+                    <td style="padding-right: 20px;">
+                        <input id="avgRating3" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
+                </tr>
+                <tr id="newCriteriaRatingBase5">
+                    <td id="criteriaTextTD4" class="courseKeyTdInner"></td>
+                    <td style="padding-right: 20px;">
+                        <input id="avgRating4" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
+                </tr>
+                <tr id="newCriteriaRatingBase4">
+                    <td id="criteriaTextTD5" class="courseKeyTdInner"></td>
+                    <td style="padding-right: 20px;">
+                        <input id="avgRating5" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
+                </tr>
                 <tr id="showNewCommentButtonTR">
                     <td colspan="2">
                         <center>
@@ -96,7 +117,7 @@
                     <td>
                         <center>
                             <select name="teachers" id="allCourseFacultyTeachers"></select>
-                            <select name="courseSemesters" id="courseSemesters">
+                            <select id="courseSemesters">
                                 <option value="0">סמסטר א</option>
                                 <option value="1">סמסטר ב</option>
                                 <option value="2">סמסטר קיץ</option>

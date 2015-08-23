@@ -5,20 +5,28 @@ var allCourseFacultyTeachers;
 var currentUniversity;
 
 $(document).ready(function () {
+    setupUniversity();
+    setupCourse();
+});
+
+function setupUniversity() {
     $('#University').attr('value', getQuertyString()["University"]);
     currentUniversity = getQuertyString()["University"];
     getBackground(currentUniversity);
+}
+
+function setupCourse() {
+    if (!loadCommentsCriteras()) {
+        showLoadingCourseFailed();
+        return;
+    }
     if (loadCourse()) {
         printCourseInfo();
     } else {
         showLoadingCourseFailed();
         return;
     }
-    if (!loadCommentsCriteras()) {
-        showLoadingCourseFailed();
-        return;
-    }
-});
+}
 
 function homePage() {
     window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
@@ -122,6 +130,9 @@ function setupFilters() {
         }));
     }
     for (var teacher in teachersToFilterBy) {
+        if (teachersToFilterBy[teacher] == null) {
+            continue;
+        }
         $('#filterByTeacher').append($('<option>', {
             value: teachersToFilterBy[teacher].Id,
             text: teachersToFilterBy[teacher].Name,
@@ -139,8 +150,8 @@ function printCourseProperties() {
     var courseNameTD = document.getElementById("courseNameTD");
     courseNameTD.innerHTML = course.Name;
 
-    var courseAvgTD = document.getElementById("courseAvgTD");
-    courseAvgTD.innerHTML = course.Score;
+    $('#averageRating').rating('update', course.Score);
+    $('#averageRating').rating('refresh', { readonly: true, showClear: false, showCaption: false });
 
     var courseFacultyTD = document.getElementById("courseFacultyTD");
     courseFacultyTD.innerHTML = facultyNameByEnum(course.Faculty);
@@ -157,12 +168,10 @@ function printCourseProperties() {
 
 function printCourseScores() {
     for (criteria in allCriterias) {
-        var clonedBasedRatingTR = document.getElementById("newCriteriaRatingBase1").cloneNode(true);
-        clonedBasedRatingTR.id = "newCriteriaRatingBase" + criteria;
-        clonedBasedRatingTR.children[0].innerHTML = allCriterias[criteria];
-        clonedBasedRatingTR.children[1].innerHTML = course.AverageCriteriaRatings.AverageRatingsList[criteria];
-        clonedBasedRatingTR.style.display = 'block';
-        $('#courseInfoTable tr:last').before(clonedBasedRatingTR);
+        var ratingName = document.getElementById("criteriaTextTD" + criteria);
+        ratingName.innerHTML = allCriterias[criteria];
+        $('#avgRating' + criteria).rating('update', course.AverageCriteriaRatings.AverageRatingsList[criteria]);
+        $('#avgRating' + criteria).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
 }
 
@@ -238,6 +247,12 @@ function addComment() {
         alert("הכנס תגובה");
         return;
     }
+    var parsedYear = parseInt($('#Year').val(), 10);
+    var currentYear = (new Date()).getFullYear();
+    if (parsedYear == NaN || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
+        alert("אנא הכנס שנה בתחום העשור האחרון.");
+        return;
+    }
     var one = $('input[name=star]:checked', '#ratingsForm1').val();
     var two = $('input[name=star2]:checked', '#ratingsForm2').val();
     var three = $('input[name=star3]:checked', '#ratingsForm3').val();
@@ -256,8 +271,8 @@ function addComment() {
         teacherId: $('#allCourseFacultyTeachers').val(),
         Ratings: ratings,
         Comment: $('#CourseNewCommetBox').val(),
-        semester: $('courseSemesters').val(),
-        Year: $('#Year').val(),
+        semester: $('#courseSemesters').val(),
+        Year: parsedYear,
     };
     var request = $.ajax({
         type: "POST",
@@ -273,25 +288,6 @@ function addComment() {
         },
         async: false
     });
-}
-
-
-function getSelectedRadioButtonValue(radioButtonForm) {
-    for (star in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[star].checked == true) {
-            return radioButtonForm.children[0].children[star].value;
-        }
-    }
-    return 0;
-}
-
-function setSelectedRadionButtonValue(radioButtonForm, value) {
-    for (radioButton in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
-            radioButtonForm.children[0].children[radioButton].checked = true;
-            return;
-        }
-    }
 }
 
 function facultyNameByEnum(faculty) {
@@ -422,4 +418,22 @@ function allTeachers() {
         async: false
     });
     return succeed;
+}
+
+function getSelectedRadioButtonValue(radioButtonForm) {
+    for (star in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[star].checked == true) {
+            return radioButtonForm.children[0].children[star].value;
+        }
+    }
+    return 0;
+}
+
+function setSelectedRadionButtonValue(radioButtonForm, value) {
+    for (radioButton in radioButtonForm.children[0].children) {
+        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
+            radioButtonForm.children[0].children[radioButton].checked = true;
+            return;
+        }
+    }
 }

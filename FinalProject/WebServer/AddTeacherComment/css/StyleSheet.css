@@ -1,9 +1,4 @@
-﻿body {
-    background: url('/Images/site_background.jpeg') no-repeat fixed 100% 100%;
-overflow-x:hidden;
-}
-
-header .logo {
+﻿header .logo {
     background: url('/Images/ratemyschool.png');
     width: 280px;
     height: 90px;
@@ -14,7 +9,6 @@ header .logo {
 }
 
 .logo:hover {
-    cursor: hand;
     cursor: pointer;
     text-decoration: none;
 }
@@ -42,7 +36,6 @@ header .logo {
         height:30px;
         color:white;
         font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
-        position:sticky;
         left:0;
 }
 
@@ -96,7 +89,6 @@ textarea {
         height:30px;
         color:white;
         font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
-        position:sticky;
         left:0;
 }
 
@@ -106,17 +98,14 @@ textarea {
     border-width:1px;
 }
 
-.allComments {
-
-}
-
     .allComments table {
         background-color: rgba(255, 255, 255, 0.90);
-        margin-right: 100px;
         border-radius: 5px;
         width: 600px;
-        margin-bottom:5px;
-
+        margin: 0 auto;
+        margin-bottom:5px !important;
+        position: relative;
+        text-align:center;
     }
 
 .likesTR {
