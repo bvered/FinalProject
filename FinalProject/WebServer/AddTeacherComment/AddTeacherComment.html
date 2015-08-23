@@ -16,8 +16,12 @@
     <link href="css/StyleSheet.css" rel="stylesheet" />
     <link href="css/style.css" rel="stylesheet" />
     <link href="StarsStyle.css" rel="stylesheet" />
+    <link href="../bootstrap-star-rating/css/star-rating.css" rel="stylesheet" />
+    <link href="../bootstrap-star-rating/css/star-rating.min.css" rel="stylesheet" />
+    <script src="../bootstrap-star-rating/js/star-rating.js"></script>
+    <script src="../bootstrap-star-rating/js/star-rating.min.js"></script>
 </head>
-<body onload="loadView()">
+<body dir="rtl">
     <header>
         <div class="logo">
             <div class="logo" onclick=" homePage() "></div>
@@ -33,44 +37,47 @@
                 </tr>
                 <tr>
                     <td class="teacherKeyTdInner">ממוצע דירוגים:</td>
-                    <td id="teacherAvgTD" style="padding-right:20px"></td>
-                </tr>
-                <tr id="AvgRating#" style="display:none;">
-                    <td class="teacherKeyTdInner"></td>
-                    <td id="teacherAvgTD#" style="padding-right:20px"></td>
+                    <td id="teacherAvgTD" style="padding-right:20px">
+                        <input id="avgRating" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                    </td>
                 </tr>
                 <tr>
                     <td class="teacherKeyTdInner">חדר:</td>
-                    <td id="teacherRoomTD" style="padding-right:20px"></td>
+                    <td id="teacherRoomTD" style="padding-right:20px">
+                    </td>
                 </tr>
                 <tr>
                     <td class="teacherKeyTdInner">טלפון:</td>
                     <td id="teacherPhoneTD" style="padding-right:20px"></td>
                 </tr>
                 <tr>
-                    <td class="teacherKeyTdDown">אימייל:</td>
+                    <td class="teacherKeyTdInner">אימייל:</td>
                     <td id="teacherEmailTD" style="padding-right:20px"></td>
                 </tr>
-                <tr id="newCriteriaRatingBase1" style="display:none">
-                    <td id="criteriaTextTD" class="teacherKeyTdInner">עניין בקורס</td>
+                <tr id="newCriteriaRatingBase1">
+                    <td id="criteriaTextTD0" class="teacherKeyTdInner"></td>
                     <td style="padding-right: 20px;">
-                        <!--<form id="ratingsFormBase">
-                <div class="starsBase">
-                    <input type="radio" name="star-base" class="star-base-1" id="star-base-1" value="star-base-1" />
-                    <label class="star-base-1" for="star-base-1">star-base-1</label>
-                    <input type="radio" name="star-base" class="star-base-2" id="star-base-2" value="star-base-2" />
-                    <label class="star-base-2" for="star-base-2">star-base-2</label>
-                    <input type="radio" name="star-base" class="star-base-3" id="star-base-3" value="star-base-3" />
-                    <label class="star-base-3" for="star-base-3">star-base-3</label>
-                    <input type="radio" name="star-base" class="star-base-4" id="star-base-4" value="star-base-4" />
-                    <label class="star-base-4" for="star-base-4">star-base-4</label>
-                    <input type="radio" name="star-base" class="star-base-5" id="star-base-5" value="star-base-5" />
-                    <label class="star-base-5" for="star-base-5">star-base-5</label>
-                    <span></span>
-                </div>
-            </form>-->
+                        <input id="avgRating0" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
                     </td>
                 </tr>
+                    <tr id="newCriteriaRatingBase2">
+                        <td id="criteriaTextTD1" class="teacherKeyTdInner"></td>
+                        <td style="padding-right: 20px;">
+                            <input id="avgRating1" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                        </td>
+                    </tr>
+                    <tr id="newCriteriaRatingBase3">
+                        <td id="criteriaTextTD2" class="teacherKeyTdInner"></td>
+                        <td style="padding-right: 20px;">
+                            <input id="avgRating2" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                        </td>
+                    </tr>
+                    <tr id="newCriteriaRatingBase4">
+                        <td id="criteriaTextTD3" class="teacherKeyTdDown"></td>
+                        <td style="padding-right: 20px;">
+                            <input id="avgRating3" type="number" class="rating" min=1 max=5 step=1 data-size="xs">
+                        </td>
+                    </tr>
                 <tr id="showNewCommentButtonTR">
                     <td colspan="2">
                         <center>
@@ -131,7 +138,7 @@
                     </td>
                 </tr>
                 <tr id="criteriaTR" >
-                    <td class="teacherKeyTdInner" style="width:250px;">ידע בקורס</td>
+                    <td class="teacherKeyTdInner" style="width:250px;">ידע בקורסים</td>
                     <td dir="ltr">
                         <form id="ratingsForm3">
 	                    <div class="stars3">
@@ -151,7 +158,7 @@
                     </td>
                 </tr>
                 <tr id="criteriaTR" >
-                    <td class="teacherKeyTdInner" style="width:250px;">דרקונים??</td>
+                    <td class="teacherKeyTdInner" style="width:250px;">כמה המרצה מעניין</td>
                     <td dir="ltr">
                         <form id="ratingsForm4">
 	                    <div class="stars4">
@@ -170,27 +177,6 @@
                     </form>
                     </td>
                 </tr>
-                <tr id="criteriaTR" >
-                    <td class="teacherKeyTdDown" style="width:250px;">התעניינות המרצה בקורס??</td>
-                    <td dir="ltr">
-                        <form id="ratingsForm5">
-	                    <div class="stars5">
-		                    <input type="radio" name="star5" class="star-21" id="star-21" value="1"/>
-		                    <label class="star-21" for="star-21">21</label>
-		                    <input type="radio" name="star5" class="star-22" id="star-22" value="2"/>
-		                    <label class="star-22" for="star-22">22</label>
-		                    <input type="radio" name="star5" class="star-23" id="star-23" value="3"/>
-		                    <label class="star-23" for="star-23">23</label>
-		                    <input type="radio" name="star5" class="star-24" id="star-24" value="4"/>
-		                    <label class="star-24" for="star-24">24</label>
-		                    <input type="radio" name="star5" class="star-25" id="star-25" value="5"/>
-		                    <label class="star-25" for="star-25">25</label>
-		                    <span></span>
-	                    </div>
-                    </form>
-                    </td>
-                </tr>
-
                  <tr id="sendTR">
                     <td colspan="2">
                         <center>

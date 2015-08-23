@@ -1,28 +1,22 @@
 ﻿var teacher;
 var allCriterias;
 var numberOfCommentsLoaded;
-
 var queryString;
 var currentUniversity;
 
 $(document).ready(function () {
+    setupUniversity();
+    setupPage();
+});
+
+function setupUniversity() {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
-});
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
+    getBackground(currentUniversity);
 }
 
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-function loadView() {
+function setupPage() {
     if (loadCommentsCriteras() == false) {
         showLoadingTeacherFailed();
         return;
@@ -34,6 +28,11 @@ function loadView() {
         showLoadingTeacherFailed();
     }
 }
+
+function homePage() {
+    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
+}
+
 function loadCommentsCriteras() {
     succeed = false;
 
@@ -54,7 +53,7 @@ function loadCommentsCriteras() {
 }
 
 function loadTeacher() {
-    id = getParameterByName('id');
+    id = getQuertyString()["id"];
     succeed = false;
 
     var request = $.ajax({
@@ -112,7 +111,9 @@ function showTeacherInfoToUser() {
     teacherNameLabel.innerHTML = teacher.Name;
 
     var teacherScoreLabel = document.getElementById("teacherAvgTD");
-    teacherScoreLabel.innerHTML = teacher.Score;
+    var averageRatings = parseInt(teacher.Score);
+    $('#avgRating').rating('update', averageRatings);
+    $('#avgRating').rating('refresh', { readonly: true, showClear: false, showCaption: false });
 
     var teacherRoomLabel = document.getElementById("teacherRoomTD");
     teacherRoomLabel.innerHTML = teacher.Room;
@@ -126,57 +127,16 @@ function showTeacherInfoToUser() {
 
 function printTeacherScores() {
     for (criteria in allCriterias) {
-        var clonedBasedRatingTR = document.getElementById("newCriteriaRatingBase1").cloneNode(true);
-        clonedBasedRatingTR.id = "newCriteriaRatingBase" + criteria;
-        clonedBasedRatingTR.children[0].innerHTML = allCriterias[criteria];
-        clonedBasedRatingTR.children[1].innerHTML = teacher.AverageCriteriaRatings.AverageRatingsList[criteria];
-        clonedBasedRatingTR.style.display = 'block';
-        $('#teacherInfo tr:last').before(clonedBasedRatingTR);
+        var ratingName = document.getElementById("criteriaTextTD" + criteria);
+        ratingName.innerHTML = allCriterias[criteria];
+        $('#avgRating' + criteria).rating('update', teacher.AverageCriteriaRatings.AverageRatingsList[criteria]);
+        $('#avgRating' + criteria).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
 }
 
 function showNewCommentAction() {
     document.getElementById("newCommentTable").style.display = "block";
     document.getElementById("showNewCommentButtonTR").style.display = "none";
-  //  revealAddCommentViewToUser();
-}
-
-function revealAddCommentViewToUser() {
-    var newCommentTable = document.getElementById("newCommentTable");
-    var newCommentCriteriaTR = document.getElementById("criteriaTR");
-    for (ratingText in allCriterias) {
-        var clonedCommentCriteriaTR = newCommentCriteriaTR.cloneNode(true);
-        clonedCommentCriteriaTR.id = "criteriaTR" + ratingText;
-        clonedCommentCriteriaTR.style.display = "block";
-        var criteriaTextTD = clonedCommentCriteriaTR.children[0];
-        criteriaTextTD.id = "criteriaText" + ratingText;
-        criteriaTextTD.innerHTML = allCriterias[ratingText];
-        var starRatingTD = clonedCommentCriteriaTR.children[1];
-        starRatingTD.id = "criteriaRating" + ratingText;
-        starRatingTD.children[0].id = "starRating" + ratingText;
-        newCommentTable.appendChild(clonedCommentCriteriaTR);
-    }
-    var sendTR = document.getElementById("sendTR");
-    sendTR.parentNode.removeChild(sendTR);
-    newCommentTable.appendChild(sendTR);
-}
-
-function showTeacherComments(sortByNew) {
-    var newCommentDiv = document.getElementById("allComments").clear();
-    while (newCommentDiv.firstChild) {
-        newCommentDiv.removeChild(newCommentDiv.firstChild);
-    }
-    for (courseSemester in course.CourseInSemesters) {
-        var semesterComments = course.CourseInSemesters[courseSemester].CourseComments;
-        if (!sortByNew) {
-            semesterComments = semesterComments.sort(function (a, b) {
-                return b.TotalNumberOfLikes - a.TotalNumberOfLikes
-            });
-        }
-        for (comment in semesterComments) {
-            printComment(course.CourseInSemesters[courseSemester].CourseComments[comment], comment);
-        }
-    }
 }
 
 function showTeacherCommentsByTeacher(sortByNew) {
@@ -228,28 +188,6 @@ function printComment(comment, itr) {
     likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-
-
-    //var numberOfVotes = document.createElement("Label");
-    //numberOfVotes.id = "CommentNumber" + itr + "Votes";
-    //numberOfVotes.innerHTML = " אהבו: " + comment.TotalNumberOfLikes;
-    //var voteUpButton = document.createElement("Button");
-    //voteUpButton.className = "voteButton"
-    //voteUpButton.id = "CommentNumber" + itr + "VoteUp";
-    //voteUpButton.value = comment.Id;
-    //var voteUpFunctionString = function () { addVote(numberOfVotes, comment.Id, true); };
-    //voteUpButton.onclick = voteUpFunctionString;
-    //voteUpButton.innerHTML = "👍";
-    //var voteDownButton = document.createElement("Button");
-    //voteDownButton.className = "voteButton";
-    //voteDownButton.id = "CommentNumber" + itr + "VoteDown";
-    //voteDownButton.value = comment.Id;
-    //var voteDownFunctionString = function () { addVote(numberOfVotes, comment.Id, false); };
-    //voteDownButton.onclick = voteDownFunctionString;
-    //voteDownButton.innerHTML = "👎";
-    //likesCell.appendChild(voteDownButton);
-    //likesCell.appendChild(numberOfVotes);
-    //likesCell.appendChild(voteUpButton);
 
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];

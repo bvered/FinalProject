@@ -5,20 +5,28 @@ var allCourseFacultyTeachers;
 var currentUniversity;
 
 $(document).ready(function () {
+    setupUniversity();
+    setupCourse();
+});
+
+function setupUniversity() {
     $('#University').attr('value', getQuertyString()["University"]);
     currentUniversity = getQuertyString()["University"];
     getBackground(currentUniversity);
+}
+
+function setupCourse() {
+    if (!loadCommentsCriteras()) {
+        showLoadingCourseFailed();
+        return;
+    }
     if (loadCourse()) {
         printCourseInfo();
     } else {
         showLoadingCourseFailed();
         return;
     }
-    if (!loadCommentsCriteras()) {
-        showLoadingCourseFailed();
-        return;
-    }
-});
+}
 
 function homePage() {
     window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
@@ -157,12 +165,10 @@ function printCourseProperties() {
 
 function printCourseScores() {
     for (criteria in allCriterias) {
-        var clonedBasedRatingTR = document.getElementById("newCriteriaRatingBase1").cloneNode(true);
-        clonedBasedRatingTR.id = "newCriteriaRatingBase" + criteria;
-        clonedBasedRatingTR.children[0].innerHTML = allCriterias[criteria];
-        clonedBasedRatingTR.children[1].innerHTML = course.AverageCriteriaRatings.AverageRatingsList[criteria];
-        clonedBasedRatingTR.style.display = 'block';
-        $('#courseInfoTable tr:last').before(clonedBasedRatingTR);
+        var ratingName = document.getElementById("criteriaTextTD" + criteria);
+        ratingName.innerHTML = allCriterias[criteria];
+        $('#avgRating' + criteria).rating('update', course.AverageCriteriaRatings.AverageRatingsList[criteria]);
+        $('#avgRating' + criteria).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
 }
 
@@ -256,7 +262,7 @@ function addComment() {
         teacherId: $('#allCourseFacultyTeachers').val(),
         Ratings: ratings,
         Comment: $('#CourseNewCommetBox').val(),
-        semester: $('courseSemesters').val(),
+        semester: $('#courseSemesters').val(),
         Year: $('#Year').val(),
     };
     var request = $.ajax({
