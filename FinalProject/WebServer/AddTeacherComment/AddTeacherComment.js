@@ -121,8 +121,11 @@ function showTeacherInfoToUser() {
     var teacherCellphoneLabel = document.getElementById("teacherPhoneTD");
     teacherCellphoneLabel.innerHTML = teacher.Cellphone;
 
-    var teacherEmailLabel = document.getElementById("teacherEmailTD");
-    teacherEmailLabel.innerHTML = teacher.Email;
+    var teacherEmailLink = document.getElementById("teacherEmailLink");
+    var teacherEmail = "mailto:" + teacher.Email;
+    teacherEmailLink.href = teacherEmail;
+    teacherEmailLink.innerHTML =  teacher.Email;
+
 }
 
 function printTeacherScores() {
