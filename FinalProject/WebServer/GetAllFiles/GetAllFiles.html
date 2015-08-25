@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>כל הקבצים</title>
+
+    <link href="GetAllFiles.css" rel="stylesheet" />
+
+    <script src="../JavaScripts/QueryString.js"></script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script src="GetAllFiles.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+    <link href="../CSS/GeneralDesign.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="background">
+        <header>
+            <div class="logo" onclick=" homePage() "></div>
+            <input type="hidden" name="University" id="University" value="" />
+        </header>
+
+<div class="advanced-filter">
+            <div class="filter-box">
+                <span class="filter-title">סנן לפי</span>
+                <ul>
+                    <li>
+                        <input id="type[0]" name="type" value="All" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[0]">הכל</label>
+                    </li>
+                    <li>
+                        <input id="type[1]" name="type" value="Grades" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[1]">התפלגות ציונים</label>
+                    </li>
+                    <li>
+                        <input id="type[2]" name="type" value="Syllabus" type="radio" onclick=" ChangeResults() " />
+                        <label for="type[2]">סילבוס</label>
+                    </li>
+                </ul>
+            </div>
+
+
+
+    <div id="FilterSemester">
+                <div class="filter-box">
+                    <span class="filter-title">סמסטר</span>
+                    <ul>
+                        <li>
+                            <input id="semester[0]" name="semester" value="All" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[0]">הכל</label>
+                        </li>
+                        <li>
+                            <input id="semester[1]" name="semester" value="A" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[1]">א</label>
+                        </li>
+                        <li>
+                            <input id="semester[2]" name="semester" value="B" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[2]">ב</label>
+                        </li>
+                        <li>
+                            <input id="semester[3]" name="semester" value="Summer" type="radio" onclick=" ChangeResults() " />
+                            <label for="semester[3]">קיץ</label>
+                        </li>
+                    </ul>
+                </div>
+    </div>
+
+    </div>
+        <div class="size">
+            <section class="add-new-teacher">
+                <form action="#">
+                    <h1>כל הקבצים</h1>
+                    <table id="resultsTable">
+                        <tr>
+                            <td class="label"><label>שם הקובץ</label></td>
+                            <td class="label"><label>שנה</label></td>
+                            <td class="label"><label>סמסטר</label></td>
+                            <td class="label"><label>סוג</label></td>
+                        </tr>
+                        <tr>
+                            
+                        
+                        </tr>
+                    </table>
+                </form>
+            </section>
+        </div>
+
+    </div>
+    <script src="../JavaScripts/QueryString.js"></script>
+</body>
+</html>
