@@ -32,74 +32,12 @@ function homePage() {
     window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }
 
-function loadCommentsCriteras() {
-    succeed = false;
-    var request = $.ajax({
-        type: "GET",
-        url: '/api/Courses/GetCriterias',
-        contentType: "application/json",
-        success: function (data) {
-            if (data.length > 0) {
-                allCriterias = data;
-                succeed = true;
-            } else {
-                succeed == false;
-            }
-        },
-        fail: function (data) {
-            succeed = false;
-        },
-        async: false
-    });
-    return succeed;
+function ChangePage() {
+    window.location = "../UploadFile/UploadFile.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }
 
-function loadCourse() {
-    id = getQuertyString()["id"];
-    succeed = false;
-
-    var request = $.ajax({
-        type: "GET",
-        url: '/api/Courses/GetCourse' + "/" + id,
-        contentType: "application/json",
-        success: function (data) {
-            course = data;
-            succeed = true;
-        },
-        fail: function (data) {
-            succeed = false;
-        },
-        async: false
-    });
-    return succeed;
-}
-
-function addVote(voteValueLabel, id, like) {
-    succeed = false;
-    var vote = {
-        commentId: id,
-        liked: like,
-    };
-    var didLikeBefore = $.jStorage.get(id);
-    if (didLikeBefore == true) {
-        alert("מותר לדרג פעם אחת");
-        return succeed;
-    }
-    var request = $.ajax({
-        type: "POST",
-        data: JSON.stringify(vote),
-        url: '/api/Courses/AddVote',
-        contentType: "application/json",
-        success: function (data) {
-            voteValueLabel.innerHTML = data;
-            $.jStorage.set(id, true);
-        },
-        fail: function (jqXhr, textStatus) {
-            alert("נכשל: " + textStatus);
-        },
-        async: false
-    });
-    return succeed;
+function ChangePage2() {
+    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }
 
 function printCourseInfo() {
@@ -189,16 +127,26 @@ function showCourseComments() {
 }
 
 function printComment(comment, itr) {
-    var allComments = document.getElementById("allComments");
     var commentView = document.getElementById("commentTable").cloneNode(true);
+    document.getElementById("allComments").appendChild(commentView);
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
-    commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
+    var commentTextRow = commentView.rows[0];
+    commentTextRow.id = "commentTextRow" + itr;
+    var commentTextCell = commentTextRow.cells[1];
+    var commentTextLabel = commentTextCell.children[0];
+    commentTextLabel.innerHTML = comment.CommentText;
+
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
-        var clonedCommentCriteriaTR = commentView.rows[parseInt(rating) + 1];
+        var clonedCommentCriteriaTR = document.getElementById("newCriteriaRating1").cloneNode(true);
+        clonedCommentCriteriaTR.style.display = 'block';
+        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
         setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
+        document.getElementById("commentView" + itr).rows[parseInt(rating) + 1].cells[0].innerHTML = loadedComment.Criteria.DisplayName;
+        document.getElementById("commentView" + itr).rows[parseInt(rating) + 1].cells[1].appendChild(clonedCommentCriteriaTR.children[1].children[0]);
     }
+
     var likesCell = commentView.rows[7].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
@@ -229,7 +177,6 @@ function printComment(comment, itr) {
     likesCell.appendChild(voteDownButton);
     var commentDate = commentView.rows[8].children[1];
     commentDate.innerHTML = comment.DateTime.replace("T", " ");
-    allComments.appendChild(commentView);
 }
 
 function showNewCommentAction() {
@@ -242,53 +189,7 @@ function showLoadingCourseFailed() {
     parent.location = "../HomePage/HomePage.html";
 }
 
-function addComment() {
-    if (document.getElementById("CourseNewCommetBox").value == "") {
-        alert("הכנס תגובה");
-        return;
-    }
-    var parsedYear = parseInt($('#Year').val(), 10);
-    var currentYear = (new Date()).getFullYear();
-    if (parsedYear == NaN || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
-        alert("אנא הכנס שנה בתחום העשור האחרון.");
-        return;
-    }
-    var one = $('input[name=star]:checked', '#ratingsForm1').val();
-    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
-    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
-    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
-    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
-    var six = $('input[name=star6]:checked', '#ratingsForm6').val();
-    var ratings = [one, two, three, four, five, six];
-    for (rate in ratings) {
-        if (ratings[rate] == undefined) {
-            alert("עליך לדרג את כל הקריטריונים");
-            return;
-        }
-    }
-    var comment = {
-        Id: course.Id,
-        teacherId: $('#allCourseFacultyTeachers').val(),
-        Ratings: ratings,
-        Comment: $('#CourseNewCommetBox').val(),
-        semester: $('#courseSemesters').val(),
-        Year: parsedYear,
-    };
-    var request = $.ajax({
-        type: "POST",
-        data: JSON.stringify(comment),
-        url: '/api/Courses/AddComment',
-        contentType: "application/json",
-        success: function (data) {
-            alert("תגובך הוספה בהצלחה!");
-            location.reload();
-        },
-        fail: function (jqXhr, textStatus) {
-            alert("Request failed: " + textStatus);
-        },
-        async: false
-    });
-}
+
 
 function facultyNameByEnum(faculty) {
     switch (faculty) {
@@ -366,14 +267,6 @@ function semesterNameByEnum(semester) {
     }
 }
 
-function ChangePage() {
-    window.location = "../UploadFile/UploadFile.html?University=" + currentUniversity + "&courseId=" + course.Id;
-}
-
-function ChangePage2() {
-    window.location = "../GetAllSyllabus/GetAllSyllabus.html?University=" + currentUniversity + "&courseId=" + course.Id;
-}
-
 function setCourseCommentsWithFilters() {
     var year = $('#filteredByYear').val();
     year = (year != "") ? year : "-1";
@@ -436,4 +329,123 @@ function setSelectedRadionButtonValue(radioButtonForm, value) {
             return;
         }
     }
+}
+
+
+function loadCommentsCriteras() {
+    succeed = false;
+    var request = $.ajax({
+        type: "GET",
+        url: '/api/Courses/GetCriterias',
+        contentType: "application/json",
+        success: function (data) {
+            if (data.length > 0) {
+                allCriterias = data;
+                succeed = true;
+            } else {
+                succeed == false;
+            }
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
+}
+
+function loadCourse() {
+    id = getQuertyString()["id"];
+    succeed = false;
+
+    var request = $.ajax({
+        type: "GET",
+        url: '/api/Courses/GetCourse' + "/" + id,
+        contentType: "application/json",
+        success: function (data) {
+            course = data;
+            succeed = true;
+        },
+        fail: function (data) {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
+}
+
+function addVote(voteValueLabel, id, like) {
+    succeed = false;
+    var vote = {
+        commentId: id,
+        liked: like,
+    };
+    var didLikeBefore = $.jStorage.get(id);
+    if (didLikeBefore == true) {
+        alert("מותר לדרג פעם אחת");
+        return succeed;
+    }
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(vote),
+        url: '/api/Courses/AddVote',
+        contentType: "application/json",
+        success: function (data) {
+            voteValueLabel.innerHTML = data;
+            $.jStorage.set(id, true);
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("נכשל: " + textStatus);
+        },
+        async: false
+    });
+    return succeed;
+}
+
+function addComment() {
+    if (document.getElementById("CourseNewCommetBox").value == "") {
+        alert("הכנס תגובה");
+        return;
+    }
+    var parsedYear = parseInt($('#Year').val(), 10);
+    var currentYear = (new Date()).getFullYear();
+    if (parsedYear == NaN || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
+        alert("אנא הכנס שנה בתחום העשור האחרון.");
+        return;
+    }
+    var one = $('input[name=star]:checked', '#ratingsForm1').val();
+    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
+    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
+    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
+    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
+    var six = $('input[name=star6]:checked', '#ratingsForm6').val();
+    var ratings = [one, two, three, four, five, six];
+    for (rate in ratings) {
+        if (ratings[rate] == undefined) {
+            alert("עליך לדרג את כל הקריטריונים");
+            return;
+        }
+    }
+    var comment = {
+        Id: course.Id,
+        teacherId: $('#allCourseFacultyTeachers').val(),
+        Ratings: ratings,
+        Comment: $('#CourseNewCommetBox').val(),
+        semester: $('#courseSemesters').val(),
+        Year: parsedYear,
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(comment),
+        url: '/api/Courses/AddComment',
+        contentType: "application/json",
+        success: function (data) {
+            alert("תגובך הוספה בהצלחה!");
+            location.reload();
+        },
+        fail: function (jqXhr, textStatus) {
+            alert("Request failed: " + textStatus);
+        },
+        async: false
+    });
 }

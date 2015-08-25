@@ -161,6 +161,14 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
+    for (rating in comment.CriteriaRatings) {
+        var loadedComment = comment.CriteriaRatings[rating];
+        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
+        clonedCommentCriteriaTR.style.display = 'block';
+        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
+        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
+        commentView.appendChild(clonedCommentCriteriaTR);
+    }
     var commentDate = commentView.rows[2].children[1];
     commentDate.innerHTML = comment.DateTime.replace("T", " ");
     var likesCell = commentView.rows[1].children[1];
@@ -191,15 +199,6 @@ function printComment(comment, itr) {
     likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-
-    for (rating in comment.CriteriaRatings) {
-        var loadedComment = comment.CriteriaRatings[rating];
-        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
-        clonedCommentCriteriaTR.style.display = 'block';
-        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
-        commentView.appendChild(clonedCommentCriteriaTR);
-    }
     allComments.appendChild(commentView);
 }
 
