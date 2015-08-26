@@ -55,7 +55,7 @@ namespace WebServer.Controllers
 
                 var anySearchResult = new AnySearchResult
                 {
-                    CourseResults = courses == null ? new List<CourseResult>() : courses.ToList().Select(ConvertToResult).ToList(),
+                    CourseResults = courses == null ? new List<CourseResult>() : courses.ToList().Select(arg => ConvertToResult(arg.Id, arg.Name, arg.CourseId, arg.Faculty, arg.AcademicDegree, arg.IntendedYear, arg.IsMandatory, arg.Score)).ToList(),
                     TeacherResults = teachers == null ? new List<ResultTeacher>() : teachers.ToList().Select(x => ConvertToResult(session, x)).ToList(),
                     TotalCount = teachersCount + coursesQuery.Count(),
                     SearchPreferences = filter.SearchPreferences
@@ -136,11 +136,37 @@ namespace WebServer.Controllers
                 var query = GetCoursesQuery(session, filter, filter.SearchPreferences);
                 query = query.Where(x => x.University.Acronyms == filter.University);
 
-                var orderedCourses = filter.isTop ? query.OrderByDescending(x => x.Score).ToList() : query.ToList().OrderByDescending(x => GetUsageValue(x, filter.SearchPreferences)).ToList();
+                IEnumerable<CourseResult> orderedCourses;
+
+                if (filter.isTop)
+                {
+                    orderedCourses =
+                        query.OrderByDescending(x => x.Score)
+                            .Select(
+                                arg =>
+                                    ConvertToResult(arg.Id, arg.Name, arg.CourseId, arg.Faculty, arg.AcademicDegree,
+                                        arg.IntendedYear, arg.IsMandatory, arg.Score));
+                }
+                else
+                {
+                    orderedCourses = query.Select(x => new
+                    {
+                        x.Id,
+                        x.Name,
+                        x.Faculty,
+                        x.AcademicDegree,
+                        x.IntendedYear,
+                        x.IsMandatory,
+                        x.CourseId,
+                        x.Score
+                    }).ToList()
+                        .OrderByDescending(x => GetUsageValue(filter.SearchPreferences, x.Faculty, x.AcademicDegree, x.IntendedYear,x.IsMandatory))
+                        .Select(x => ConvertToResult(x.Id, x.Name, x.CourseId, x.Faculty, x.AcademicDegree, x.IntendedYear, x.IsMandatory, x.Score));
+                }
 
                 var total = query.Count();
 
-                var courseResults = orderedCourses.Select(ConvertToResult).Skip(filter.Counter * 5).Take(5).ToList();
+                var courseResults = orderedCourses.Skip(filter.Counter * 5).Take(5).ToList();
 
                 var courseSearchResult = new CourseSearchResult
                 {
@@ -218,45 +244,52 @@ namespace WebServer.Controllers
             }
         }
 
-        private int GetUsageValue(Course course, SearchPreferences searchPreferences)
+        private int GetUsageValue(SearchPreferences searchPreferences, Faculty faculty, AcademicDegree academicDegree, IntendedYear intendedYear, bool isMandatory)
         {
             int result = 0;
 
-            if (searchPreferences.SearchedFaculties.ContainsKey(course.Faculty))
+            if (searchPreferences.SearchedFaculties.ContainsKey(faculty))
             {
-                result += searchPreferences.SearchedFaculties[course.Faculty];
+                result += searchPreferences.SearchedFaculties[faculty];
             }
 
-            if (searchPreferences.SearchedAcademicDegrees.ContainsKey(course.AcademicDegree))
+            if (searchPreferences.SearchedAcademicDegrees.ContainsKey(academicDegree))
             {
-                result += searchPreferences.SearchedAcademicDegrees[course.AcademicDegree];
+                result += searchPreferences.SearchedAcademicDegrees[academicDegree];
             }
 
-            if (searchPreferences.SearchedIntendedYears.ContainsKey(course.IntendedYear))
+            if (searchPreferences.SearchedIntendedYears.ContainsKey(intendedYear))
             {
-                result += searchPreferences.SearchedIntendedYears[course.IntendedYear];
+                result += searchPreferences.SearchedIntendedYears[intendedYear];
             }
 
-            if (searchPreferences.SearchedIsMandatory.ContainsKey(course.IsMandatory))
+            if (searchPreferences.SearchedIsMandatory.ContainsKey(isMandatory))
             {
-                result += searchPreferences.SearchedIsMandatory[course.IsMandatory];
+                result += searchPreferences.SearchedIsMandatory[isMandatory];
             }
 
             return result;
         }
 
-        private CourseResult ConvertToResult(Course arg)
+        private CourseResult ConvertToResult(Guid id,
+                                             string name,
+                                             int courseId,
+                                             Faculty faculty,
+                                             AcademicDegree academicDegree,
+                                             IntendedYear intendedYear,
+                                             bool isMandatory,
+                                             int score)
         {
             return new CourseResult
             {
-                Id = arg.Id,
-                Name = arg.Name,
-                CourseId = arg.CourseId,
-                Faculty = EnumTranslation.Faculties[arg.Faculty],
-                AcademicDegree = EnumTranslation.AcademicDegrees[arg.AcademicDegree],
-                Year = EnumTranslation.IntendedYears[arg.IntendedYear],
-                IsMandatory = arg.IsMandatory,
-                Score = arg.Score,
+                Id = id,
+                Name = name,
+                CourseId = courseId,
+                Faculty = EnumTranslation.Faculties[faculty],
+                AcademicDegree = EnumTranslation.AcademicDegrees[academicDegree],
+                Year = EnumTranslation.IntendedYears[intendedYear],
+                IsMandatory = isMandatory,
+                Score = score,
             };
         }
 

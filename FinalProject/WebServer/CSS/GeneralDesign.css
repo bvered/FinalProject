@@ -22,7 +22,6 @@ ul {
     height: 100%;
     opacity: 0.9;
     background-repeat: no-repeat;
-    /*overflow:hidden;*/
     overflow-y: auto;
 }
 

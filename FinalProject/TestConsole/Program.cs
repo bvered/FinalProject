@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Mime;
 using NHibernate;
 using WebServer.App_Data;
@@ -154,14 +155,7 @@ namespace TestConsole
                     bool mandatory=false;
                     if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
                     {
-                        if (isMandatory == 0)
-                        {
-                            mandatory = false;
-                        }
-                        else
-                        {
-                            mandatory = true;
-                        }
+                        mandatory = isMandatory != 0;
                     }
                     courseSemester.isMandatory = mandatory;
                     courseSemester.semester = semester;
@@ -267,7 +261,9 @@ namespace TestConsole
                 }/////////////
 
                 var newCourse = new Course(0, name, faculty);
+
                 newCourse.University = MTA;
+                newCourse.IsMandatory = course.Value.Any(x => x.isMandatory);
 
                 foreach (courseInSemester courseIn in course.Value) //אקבל את הרשימה של הקורסים בסמסטר לפי המחלקה החדשה שהגדרתי
                 {

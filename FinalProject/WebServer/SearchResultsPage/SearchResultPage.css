@@ -16,7 +16,7 @@
 }
 
 .pagebutton {
-    cursor: hand;
+    /*cursor: hand;*/
     cursor: pointer;
     text-decoration: none;
 }
@@ -24,7 +24,7 @@
 .courseData, .teacherData {
     display: inline-block;
     background-color: #a1e1ed;
-    width: 230px;
+    width: 300px;
     height: initial;
     border: 2px solid white;
     border-radius: 15px;
@@ -36,13 +36,13 @@
 }
 
 div.courseData:hover, div.teacherData:hover {
-    width: 230px;
+    width: 300px;
     height: initial;
     text-shadow: 0 0 5px #423D39;
     color: #197759;
     background-color: #77ffd4;
     border-color: #a5e5b5;
-    cursor: hand;
+    /*cursor: hand;*/
     cursor: pointer;
     text-decoration: none;
 }
@@ -89,6 +89,11 @@ ul {
 .advanced-filter {
     float: right;
     margin: 0 auto 0 auto;
+
+    position: absolute;
+    right: 20px;
+    top: 100px;
+    bottom: 0;
 }
 
     .advanced-filter .filter-box {
@@ -131,3 +136,7 @@ ul {
         font-weight: bold;
         outline: none;
     }
+
+#results {
+    margin-bottom: 100px;
+}
