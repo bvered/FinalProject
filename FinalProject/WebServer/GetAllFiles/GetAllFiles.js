@@ -72,7 +72,10 @@ function getAllFiles()
                     cell4.innerHTML = "סילבוס";
                     syllabus.push(data[i]);
                 }
-                newlink.setAttribute('href', '/DownloadFile/DownloadFile.html?University=' + queryString["University"] + '&type=' + fileType + '&course=' + data[i].FileName + '&id=' + data[i].Id);
+               // newlink.setAttribute('href', '/DownloadFile/DownloadFile.html?University=' + queryString["University"] + '&type=' + fileType + '&course=' + data[i].FileName + '&id=' + data[i].Id);
+                "javascript:download('file.ext')"
+
+                newlink.setAttribute('href', "javascript:download('"+data[i].Id+"')");
 
                 cell4.innerHTML 
 
@@ -85,6 +88,22 @@ function getAllFiles()
     });
 }
 
+function download(fileId) {
+    uri = "/api/GetFile/GetSpecificFile/" + fileId;
+    var ajaxRequest = $.ajax({
+        type: "GET",
+        url: uri,
+        contentType: "application/json",
+
+        success: function (data) {
+                $("#downloadFile").attr("href", data.str);
+                $("#downloadFile").attr("download", data.str);
+                $('#downloadFile')[0].click();
+        },
+        fail: function (data)
+        { },
+    });
+}
 function ChangeResults() {
     clearResults();
     var filterType = $('input[name=type]:checked').val();

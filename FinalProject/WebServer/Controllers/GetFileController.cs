@@ -92,8 +92,7 @@ namespace WebServer.Controllers
 
                 if (requestedSyllabus.ext.ToLower() == ".pdf")
                 {
-                    System.IO.FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\filePdf" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Append);
-                    //System.IO.FileStream stream = new FileStream(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePdf" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Append);
+                    System.IO.FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\filePdf" + Path.GetExtension(requestedSyllabus.FileName).ToLower(), FileMode.Append);
                     System.IO.BinaryWriter writer = new BinaryWriter(stream);
                     writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
                     writer.Close();
@@ -103,8 +102,7 @@ namespace WebServer.Controllers
                 }
                 else if (requestedSyllabus.ext.ToLower() == ".doc" || requestedSyllabus.ext.ToLower() == ".docx")
                 {
-                    System.IO.FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\fileWord" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Create);
-                 //   System.IO.FileStream stream = new FileStream(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\fileWord" + Path.GetExtension(requestedSyllabus.FileName), FileMode.Create);
+                    System.IO.FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\fileWord" + Path.GetExtension(requestedSyllabus.FileName).ToLower(), FileMode.Create);
                     System.IO.BinaryWriter writer = new BinaryWriter(stream);
                     writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
                     writer.Close();
@@ -116,17 +114,16 @@ namespace WebServer.Controllers
                 {
                     if (requestedSyllabus.isPic == false)
                     {
-                        val = Encoding.UTF8.GetString(requestedSyllabus.File);
+                        File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\fileTxt" + Path.GetExtension(requestedSyllabus.FileName).ToLower(), requestedSyllabus.File);
                         file.isPic = false;
-                        file.str = val;
+                        file.str = @"../Images/fileTxt"+ Path.GetExtension(requestedSyllabus.FileName).ToLower();
                         file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
                     }
                     else
                     {
-                        File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString())+ @"\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
-                       // File.WriteAllBytes(@"C:\Users\מיטל\Desktop\לימודים\שנה ג\סדנה\FinalProject\FinalProject\WebServer\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName), requestedSyllabus.File);
+                        File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory.ToString()) + @"\Images\filePic" + Path.GetExtension(requestedSyllabus.FileName).ToLower(), requestedSyllabus.File);
                         file.isPic = true;
-                        file.str = @"../Images/filePic.jpg";
+                        file.str = @"../Images/filePic" + Path.GetExtension(requestedSyllabus.FileName).ToLower();
                         file.ext = Path.GetExtension(requestedSyllabus.FileName).ToLower();
                     }
                 }

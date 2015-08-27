@@ -28,24 +28,34 @@ function downloadFile() {
             {
                 if (data.isPic == true) {
                     $("#fileImg")[0].hidden = false;
+                    $('#meital')[0].click();
+                    $('#ortal')[0].click();
+                   // $("#meital").click();
                     $("#fileImg").attr("src", "../Images/filePic.jpg");
+                //    window.open("../Images/filePic.jpg", '_blank', '');
+                 //   window.open("../Images/filePic.jpg");
+                  //  document.location = "../Images/filePic.jpg";
+                    
                 }
                 else if (data.isPic == false) {
                     if (data.ext == ".pdf") {
                         $("#filePdf").attr("data", "../Images/filePdf.pdf");
                         $("#filePdf")[0].hidden = false;
+                     //   document.location.href = "../Images/filePdf.pdf";
                     }
                     else if (data.ext == ".doc")
                     {
                         changeText();
                         $("#fileWord")[0].hidden = false;
                         $("#fileWord").attr("href", "../Images/fileWord.doc");
+                        document.location.href = "../Images/fileWord.doc";
                         $("#link")[0].hidden = false;
                     } else if (data.ext == ".docx") {
                         changeText();
                         $("#fileWord")[0].hidden = false;
                         $("#fileWord").attr("href", "../Images/fileWord.docx");
                         $("#link")[0].hidden = false;
+                        document.location.href = "../Images/fileWord.docx";
                     }
                     else if (data.ext == ".txt") {
                         $("#textFile").append(data.str);
@@ -56,6 +66,7 @@ function downloadFile() {
             {},
        });
     }
+
 
 function changeText() {
     if (fileType == 'Grades') {
