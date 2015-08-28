@@ -148,6 +148,7 @@
     <Content Include="HomePage\HomePage.js" />
     <Content Include="HomePage\HomePage.html" />
     <Content Include="HomePage\HomePage.css" />
+    <Content Include="index.html" />
     <Content Include="JavaScripts\QueryString.js" />
     <Content Include="JStorage\jstorage.js" />
     <Content Include="SearchResultsPage\courseImg.jpg" />

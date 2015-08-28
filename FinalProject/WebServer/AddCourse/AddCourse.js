@@ -114,7 +114,3 @@ function hideAllLabels() {
     $("#CourseLink")[0].hidden = true;
     $("#EmptyRequierments")[0].hidden = true;
 }
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}

@@ -29,10 +29,6 @@ function setupPage() {
     }
 }
 
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}
-
 function loadCommentsCriteras() {
     succeed = false;
 

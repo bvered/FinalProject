@@ -63,7 +63,3 @@ function addTeacher() {
 function hideAllLabels() {
     $("#TeacherExists")[0].hidden = true;
 }
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}

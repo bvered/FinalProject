@@ -58,6 +58,9 @@ namespace TestConsole
                 FileExtention = "jpg"
             };
 
+            session.Save(MTA);
+            session.Save(BGU);
+
             img = Image.FromFile(currentDir + @"\..\..\Images\BGU.jpg");
             byte[] arr2;
             using (MemoryStream ms = new MemoryStream())

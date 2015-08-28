@@ -56,7 +56,7 @@ h4 {
     text-align: center;
     display: inline;
     position: absolute;
-    left: 25%;
+    left: 22.5%;
     top: 35%;
 }
 
@@ -87,7 +87,6 @@ h4 {
         text-align: center;
         line-height: 50px;
         margin: 10px;
-        cursor: hand;
         cursor: pointer;
         color: #0d3e66;
         font-weight: bold;
@@ -95,9 +94,11 @@ h4 {
 
         #changeUniversity ul li:hover {
             text-decoration: none;
-            cursor: hand;
             cursor: pointer;
         }
+#Universities {
+    display: inline-flex;
+}
 
 #addUniversity {
     font-size: 22px;

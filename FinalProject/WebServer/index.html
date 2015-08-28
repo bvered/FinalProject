@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="JStorage/jstorage.js"></script>
+<body>
+    <script>
+        var university = $.jStorage.get("LastUniversitiy");
+        if (university == null) {
+            window.location = "/Universities/Universities.html";
+        } else {
+            window.location = "/HomePage/HomePage.html?University=" + university;
+        }
+    </script>
+</body>
+</html>

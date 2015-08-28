@@ -26,9 +26,16 @@ function getBackground(currentUniversity) {
         type: "GET",
         url: uri,
         contentType: "application/json",
-
-        success: function (data) {
-            $("body").css('background', 'url(' + data.Base64 + ') no-repeat fixed');
-        }
+        success: SetBackgroundImage
     });
+}
+
+function SetBackgroundImage(data) {
+    $(".background").css('background-image', 'url(' + data.Base64 + ')');
+}
+
+function homePage() {
+    var queryString = getQuertyString();
+    var currentUniversity = queryString["University"];
+    window.location = "HomePage.html?University=" + currentUniversity;
 }

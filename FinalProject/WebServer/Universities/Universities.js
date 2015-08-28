@@ -29,9 +29,11 @@ function showUniversities(universities) {
 }
 
 function addUniversity() {
-    window.location = "../AddUniversity/AddUniversity.html?University=" + 'MTA';
+    window.location = "../AddUniversity/AddUniversity.html";
 }
 
 function changePage() {
-    window.location = "HomePage.html?University=" + this.id;
+    $('#University').attr('value', this.id);
+    $.jStorage.set("LastUniversitiy", this.id);
+    window.location = "/HomePage/HomePage.html?University=" + this.id;
 }

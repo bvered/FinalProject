@@ -1,14 +1,4 @@
-﻿var queryString;
-var currentUniversity;
-
-$(document).ready(function () {
-    queryString = getQuertyString();
-    $('#University').attr('value', queryString["University"]);
-    currentUniversity = queryString["University"];
-    getBackground(currentUniversity);
-});
-
-function checkAndAdd() {
+﻿function checkAndAdd() {
     var files = $("#fileUpload").get(0).files;
 
     var data = new FormData();
@@ -43,16 +33,17 @@ function checkAndAdd() {
     ajaxRequest.done(function (xhr, textStatus) {
         $("#addUniversitySuccessfuly")[0].hidden = false;
         $("#UniversityExists")[0].hidden = true;
-        currentUniversity = UniversityAcronyms;
         $("#moveToNew")[0].hidden = false;
         $("#moveToNew")[0].onclick = GoToSchool(UniversityAcronyms);
     });
 };
 
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
+function GoToSchool(universityAcronyms) {
+    window.location = "/HomePage/HomePage.html?University=" + universityAcronyms;
 }
 
-function GoToSchool(UniversityAcronyms) {
-    window.location = "HomePage.html?University=" + UniversityAcronyms;
+function currentHomePage() {
+    if (currentUniversity != null) {
+        homePage();
+    }
 }

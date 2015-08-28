@@ -28,10 +28,6 @@ function setupCourse() {
     }
 }
 
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}
-
 function ChangePage() {
     window.location = "../UploadFile/UploadFile.html?University=" + currentUniversity + "&courseId=" + course.Id;
 }

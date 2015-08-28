@@ -1,23 +1,17 @@
-﻿
-var queryString;
+﻿var queryString;
 var currentUniversity;
 
 $(document).ready(function () {
     queryString = getQuertyString();
-    if (queryString["University"] == undefined || queryString["University"] == "undefined") {
-        var url = "HomePage.html?University=MTA";
-        window.location.href = url;
-    } else {
-        $('#University').attr('value', queryString["University"]);
-        currentUniversity = queryString["University"];
-        getBackground(currentUniversity);
-        GetUniversities();
-        SmartSearch();
-    }
+
+    $('#University').attr('value', queryString["University"]);
+    currentUniversity = queryString["University"];
+    setUniversityInfo();
+
+    SmartSearch();
 });
 
 function SmartSearch() {
-
     var uri;
     if (($("#dropDownRes1")[0]).value.trim() == "Courses") {
         uri = '/api/Courses/GetCoursesNames/' + currentUniversity;
@@ -42,11 +36,11 @@ function SmartSearch() {
 };
 
 function BestCourses() {
-    window.location = "../SearchResultsPage/SearchResultPage.html?University="+currentUniversity+"&search=Courses&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+    window.location = "../SearchResultsPage/SearchResultPage.html?University=" + currentUniversity + "&search=Courses&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
 }
 
 function BestTeachers() {
-    window.location = "../SearchResultsPage/SearchResultPage.html?University="+currentUniversity+"&search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
+    window.location = "../SearchResultsPage/SearchResultPage.html?University=" + currentUniversity + "&search=Teachers&isTop=true&SearchText=&degree=&year=&faculty=&mandatory=";
 }
 
 function change1(choose) {
@@ -66,62 +60,25 @@ $(document).ready(function () {
     });
 });
 
-function homePage() {
-    window.location = "HomePage.html?University=" + currentUniversity;
-}
-
 function sumbit() {
     if (event.keyCode == 13) {
         $("#sendButton").click();
     }
 }
 
-function GoToSchool() {
-    var uri = '/api/University/GetUniversityWebByAcronyms/' + currentUniversity;
+function changeUniversity() {
+    window.location = "../Universities/Universities.html";
+}
 
+function setUniversityInfo() {
+    var uri = '/api/University/GetUvinersitryPicture/' + currentUniversity;
     $.ajax({
         type: "GET",
         url: uri,
         contentType: "application/json",
-
         success: function(data) {
-            window.location = "http://" + data;
+            SetBackgroundImage(data);
+            $("#UniversityInfo")[0].innerText +=" "+ data.UniversityName;
         }
     });
-}
-
-function GetUniversities() {
-    var uri = '/api/University/GetUniversities';
-
-    var request = $.ajax({
-        type: "GET",
-        url: uri,
-        contentType: "application/json",
-
-        success: function (data) {
-            showUniversities(data);
-        }
-    });
-}
-
-function showUniversities(universities) {
-    for (var i = 0; i < universities.length; i++) {
-        var newUniversity = document.createElement('li');
-        newUniversity.innerText = universities[i].Name;
-        newUniversity.id = universities[i].Acronyms;
-
-        newUniversity.onclick = changePage;
-
-        $('#Universities')[0].appendChild(newUniversity);
-    }
-}
-
-function changePage() {
-    $('#University').attr('value', this.id);
-    window.location = "HomePage.html?University=" + this.id;
-}
-
-function addUniversity() {
-    window.location = "../AddUniversity/AddUniversity.html?University=" + currentUniversity;
-}
-
+};

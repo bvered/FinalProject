@@ -240,7 +240,7 @@ function showTeachersData(arrayResult) {
 
         var linkText = document.createTextNode(arrayResult[i].Name);
         linkText.className = 'teacherName';
-        teacherData.id = arrayResult[i].Id
+        teacherData.id = arrayResult[i].Id;
         teacherData.onclick = GoToTeacher;
         teacherData.appendChild(linkText);
 
@@ -389,8 +389,4 @@ function changePage(showPage) {
         $('#' + showPage).removeClass('pagebutton').addClass('active');
         ChangeResults();
     }
-}
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
 }

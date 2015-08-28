@@ -66,6 +66,13 @@ namespace WebServer.Controllers
                     {
                         return BadRequest();
                     }
+
+                    UniversitySite = UniversitySite.ToLower();
+                    if (!UniversitySite.Contains("http://") && !UniversitySite.Contains("https://"))
+                    {
+                        UniversitySite = "http://" + UniversitySite;
+                    }
+
                     if (CheckIfUniversityExists(UniversityName, UniversityAcronyms, UniversitySite))
                     {
                         return Conflict();

@@ -17,7 +17,7 @@
         </header>
         <footer>
             <ul>
-                <li onclick="GoToSchool()">אודות מוסד הלימודים</li>
+                <li id="UniversityInfo" onclick="GoToSchool()"> אודות </li>
                 <li onclick="BestCourses()">קורסים ממולצים</li>
                 <li onclick="BestTeachers()">מרצים מומלצים</li>
             </ul>
@@ -157,12 +157,9 @@
             </form>
         </section>
 
-        <div id="changeUniversity">
-            <div id="change">החלף מוסד לימודים</div>
-            <ul id="Universities">
-            </ul>
-            <button type="button" class="btn-primary" onclick="addUniversity()">הוסף אוניברסיטה</button>
-        </div>
+
+     <button type="button" class="btn-primary" onclick="changeUniversity()">החלף אוניברסיטה</button>
+        
     </div>
     <script src="//code.jquery.com/jquery-1.10.2.js"></script>
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>

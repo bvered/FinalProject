@@ -76,7 +76,3 @@ function changeText() {
         $("#fileWord").text('לחץ כאן כדי להוריד את הסילבוס');
     }
 }
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}

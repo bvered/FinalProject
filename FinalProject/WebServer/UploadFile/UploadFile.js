@@ -49,8 +49,3 @@ $(document).ready(function () {
     }
     );
 });
-
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}

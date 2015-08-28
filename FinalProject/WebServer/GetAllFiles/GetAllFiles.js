@@ -193,7 +193,3 @@ function createCell(cell, text, style) {
     div.setAttribute('className', style);    // set DIV class attribute for IE (?!)
     cell.appendChild(div);                   // append DIV to the table cell
 }
-
-function homePage() {
-    window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
-}
