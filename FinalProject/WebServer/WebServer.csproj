@@ -122,6 +122,8 @@
     <Content Include="GetAllFiles\GetAllFiles.css" />
     <Content Include="GetAllFiles\GetAllFiles.html" />
     <Content Include="GetAllFiles\GetAllFiles.js" />
+    <Content Include="Images\colleges.jpg" />
+    <Content Include="Images\colleges2.jpg" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="AddCourseComment\stars.png" />
     <Content Include="AddCourseComment\css\style.css" />
@@ -153,6 +155,9 @@
     <Content Include="SearchResultsPage\SearchResultPage.html" />
     <Content Include="SearchResultsPage\SearchResultPage.js" />
     <Content Include="SearchResultsPage\teacherImg.jpg" />
+    <Content Include="Universities\Universities.css" />
+    <Content Include="Universities\Universities.html" />
+    <Content Include="Universities\Universities.js" />
     <Content Include="UploadFile\UploadFile.css" />
     <Content Include="UploadFile\UploadFile.html" />
     <Content Include="UploadFile\UploadFile.js" />

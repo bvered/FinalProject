@@ -43,10 +43,16 @@ function checkAndAdd() {
     ajaxRequest.done(function (xhr, textStatus) {
         $("#addUniversitySuccessfuly")[0].hidden = false;
         $("#UniversityExists")[0].hidden = true;
-
+        currentUniversity = UniversityAcronyms;
+        $("#moveToNew")[0].hidden = false;
+        $("#moveToNew")[0].onclick = GoToSchool(UniversityAcronyms);
     });
 };
 
 function homePage() {
     window.location = "../HomePage/HomePage.html?University=" + currentUniversity;
+}
+
+function GoToSchool(UniversityAcronyms) {
+    window.location = "HomePage.html?University=" + UniversityAcronyms;
 }
