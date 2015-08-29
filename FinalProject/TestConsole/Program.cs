@@ -69,8 +69,7 @@ namespace TestConsole
                 arr2 = ms.ToArray();
             }
             BGU.BackgroundImage = arr2;
-            const Faculty computersFaculty = Faculty.ComputerScience;
-            const Faculty socialityFaculty = Faculty.SocietyPolitics;
+            
 
             var romina = new Teacher(13899828, "רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA, Faculty.ComputerScience);
             TeacherComment rominaComment = new TeacherComment
@@ -126,8 +125,7 @@ namespace TestConsole
                     session.Flush();
 
                     teachersForCourses.Add(teacherId, newTeacher);
-              //      teachersForCourses[teachersSaved.Key] = newTeacher;
-
+         
                     index++;
                     if (index % 50 == 0)
                     {
@@ -142,6 +140,7 @@ namespace TestConsole
             
             var courses = new Dictionary<string, List<courseInSemester>>();
 
+
             foreach (DataRow row in dtexcel.Rows)
             {
                 string courseName = row["Description"].ToString();
@@ -150,157 +149,67 @@ namespace TestConsole
 
                 string semester = row["Semester"].ToString();
                 string teacherName = row["TeacherName"].ToString();
-
+                string intendedYear = row["Year"].ToString();
+        
                 if (courses.ContainsKey(nameAndFculty) == false) //if the course doesnt exist
                 {
-                    courseInSemester courseSemester = new courseInSemester();
-                    int isMandatory = 0;
-                    bool mandatory=false;
-                    if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
-                    {
-                        mandatory = isMandatory != 0;
-                    }
-                    courseSemester.isMandatory = mandatory;
-                    courseSemester.semester = semester;
-                    courseSemester.teacherName = teacherName;
-                    int teacherId;
-                    if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
-                    {
-                        courseSemester.id = teacherId;
-                    }
-                    else
-                    {
-                        courseSemester.id = 0;
-                    }
-                        
                     courses[nameAndFculty] = new List<courseInSemester>();
-                    courses[nameAndFculty].Add(courseSemester);
+                    createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                 }
                 else // the course exists
                 {
                     bool found = false;
                     foreach (courseInSemester courseInSemester in courses[nameAndFculty]) // cross all over the teachers, to see if we need to add new teacher 
                     {
-                        if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester)
-                        {
+                        if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester) {
                             found = true;
                         }
                     }
 
                     if (found == false) // if the current teacher is not in the course semester yet
                     {
-                        courseInSemester courseSemester = new courseInSemester();
-                        int isMandatory = 0; 
-                        bool mandatory = false;
-                        if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
-                        {
-                            if (isMandatory == 0)
-                            {
-                                mandatory = false;
-                            }
-                            else
-                            {
-                                mandatory = true;
-                            }
-                        }
-                        courseSemester.isMandatory = mandatory;
-                        courseSemester.semester = semester;
-                        courseSemester.teacherName = teacherName;
-                        int teacherId;
-                        if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
-                        {
-                            courseSemester.id = teacherId;
-                        }
-                        else
-                        {
-                            courseSemester.id = 0;
-                        }
-            
-                        courses[nameAndFculty].Add(courseSemester);
+                        createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                     }
                 }
             }
-            
-
-            /*עבור קורס חסרים השדות הבאים:
-                *  AcademicDegree = AcademicDegree.Bachelor,
-            * IntendedYear = IntendedYear.First,*/
             
             foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
             {
                 Faculty faculty = new Faculty();
                 string name = course.Key.Substring(0, course.Key.IndexOf("."));
                 string courseFaculty = course.Key.Substring(course.Key.IndexOf(".") + 1, course.Key.Length - name.Length - 1);
-                if (courseFaculty == "יעוץ ופותוח ארגוני"){
-                    faculty = Faculty.ConsultingOrganizationalDevelopment;
-                }
-                else if (courseFaculty == "כלכלה וניהול"){
-                    faculty = Faculty.ManagementEconomics;
-                }
-                else if (courseFaculty == "מדעי המחשב"){
-                    faculty = Faculty.ComputerScience;
-                }
-                else if (courseFaculty == "מדעי ההתנהגות"){
-                    faculty = Faculty.BehavioralSciences;
-                }
-                else if (courseFaculty == "מדעי הסיעוד"){
-                    faculty = Faculty.Nursing;
-                }
-                else if (courseFaculty == "ממשל וחברה"){
-                    faculty = Faculty.SocietyPolitics;
-                }
-                else if (courseFaculty == "מנהל עסקים"){
-                    faculty = Faculty.BusinessAdministration;
-                }
-                else if (courseFaculty == "ניהול מערכות מידע"){
-                    faculty = Faculty.InformationSystems;
-                }
-                else if (courseFaculty == "פסיכולוגיה"){
-                    faculty = Faculty.Psychology;
-                }
-                else
-                {////////צריך להוסיף משהו כללי לפקולטות שלא נמצאות ברשימה כמו למשל יחידה ללימודי אנגלית
-                    faculty = Faculty.ComputerScience;
-                }/////////////
-
+                faculty = FacultyMethod.FacultyFromString(courseFaculty);
+                
                 var newCourse = new Course(0, name, faculty);
-
                 newCourse.University = MTA;
                 newCourse.IsMandatory = course.Value.Any(x => x.isMandatory);
 
+                bool wasAdded = false;
                 foreach (courseInSemester courseIn in course.Value) //אקבל את הרשימה של הקורסים בסמסטר לפי המחלקה החדשה שהגדרתי
                 {
                     
                     CourseInSemester semesterCourse = new CourseInSemester();
-                    if (teachersForCourses.ContainsKey(courseIn.id) == false)
-                    {
+                    if (teachersForCourses.ContainsKey(courseIn.id) == false) {
                         semesterCourse.Teacher = null;
                     }
-                    else
-                    {
+                    else {
                         semesterCourse.Teacher = teachersForCourses[courseIn.id];
                     }
                     semesterCourse.Year = 2016;
                     semesterCourse.Course = newCourse;
-                    if (courseIn.semester == "1")
-                    {
-                        semesterCourse.Semester = Semester.A;
+                    semesterCourse.Semester = SemesterMethod.SemesterFromString(courseIn.semester);
+
+                    if (wasAdded == false) {
+                        newCourse.IntendedYear = IntendedYearMethod.IntendedYearFromInt(courseIn.intendedYear);
+                        newCourse.AcademicDegree = AcademicDegreeMethod.AcademicDegreeFromString(courseIn.academicDegree);
+                        wasAdded = true;
                     }
-                    else if (courseIn.semester == "2")
-                    {
-                        semesterCourse.Semester = Semester.B;
-                    }
-                    else if (courseIn.semester == "3")
-                    {
-                        semesterCourse.Semester = Semester.Summer;
-                    }
+
                     newCourse.CourseInSemesters.Add(semesterCourse);
                 }
 
                 session.Save(newCourse);
-
                 session.Flush();
-
                 index++;
                 if (index % 50 == 0)
                 {
@@ -322,13 +231,51 @@ namespace TestConsole
             return conn;
         }
 
+
+        public static void createCourseInSemester(Dictionary<string, List<courseInSemester>> courses, DataRow row, string intendedYear, string semester, string teacherName, string nameAndFculty)
+        {
+
+            courseInSemester courseSemester = new courseInSemester();
+            int isMandatory = 0;
+            bool mandatory = false;
+            if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
+            {
+                mandatory = isMandatory != 0;
+            }
+            courseSemester.isMandatory = mandatory;
+            courseSemester.semester = semester;
+            courseSemester.teacherName = teacherName;
+            int teacherId;
+            if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
+            {
+                courseSemester.id = teacherId;
+            }
+            else
+            {
+                courseSemester.id = 0;
+            }
+
+            int year;
+            if (!Int32.TryParse(intendedYear, out year))
+            {
+                year = 1;
+            }
+            courseSemester.intendedYear = year;
+
+            string academicDegree = row["AcademicDegree"].ToString();
+            courseSemester.academicDegree = academicDegree;
+            
+            courses[nameAndFculty].Add(courseSemester);
+        }
+          
         public class courseInSemester
         {
             public string teacherName { get; set; }
             public string semester { get; set; }
             public bool isMandatory { get; set; }
             public int id { get; set; }
-
+            public int intendedYear { get; set; }
+            public string academicDegree { get; set; }
         }
     }
 }
