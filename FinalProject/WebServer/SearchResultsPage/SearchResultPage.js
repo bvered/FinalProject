@@ -1,8 +1,8 @@
 ﻿var queryString;
 var currentUniversity;
 
-$(document).ready(function() {
-    $('body').scroll(function() {
+$(document).ready(function () {
+    $('body').scroll(function () {
         $('#content').animate({ top: $(this).scrollTop() });
     });
 
@@ -38,8 +38,9 @@ function ShowResults() {
 
 function initFilterValues(query_string) {
     var typeSelect = $('input:radio[name=type]');
+    var valueString;
     if (typeSelect.is(':checked') === false) {
-        var valueString = '[value=' + query_string["search"] + ']';
+        valueString = '[value=' + query_string["search"] + ']';
         typeSelect.filter(valueString).prop('checked', true);
     }
 
@@ -72,7 +73,7 @@ function createSearchText(query_string) {
     var searchText = query_string["SearchText"];
     var res = searchText.split("+");
     var searchTextToReturn = new String();
-    for (i in res) {
+     for (var i in res) {
         searchTextToReturn = searchTextToReturn + res[i];
 
         if (res.length - 1 != i) {
@@ -90,30 +91,30 @@ function getTeacherData() {
     var searchCourse = {
         University: currentUniversity,
         Name: $('#searchText').attr('value'),
-        counter: $('#page').attr('value') - 1,
+        counter: $('#page').attr('value') - 1
     };
     if (queryString["isTop"] === "true") {
         searchCourse.isTop = true;
     }
-    var request = $.ajax({
+    $.ajax({
         type: "POST",
         url: uri,
         data: JSON.stringify(searchCourse),
-        contentType: "application/json", 
-        success: function(data) {
+        contentType: "application/json",
+        success: function (data) {
             if (data.Results.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(data.TotalCount / 5);
                 createPaging(maxPages);
                 $("#footer").show();
                 showTeachersData(data.Results);
             }
-            succeed = true;
         },
-        fail: function(data) {
-        },
+        fail: function () {
+        }
     });
 }
 
@@ -134,7 +135,7 @@ function getCourseData() {
         searchCourse.isTop = true;
     }
 
-    var request = $.ajax({
+     $.ajax({
         type: "POST",
         url: uri,
         data: JSON.stringify(searchCourse),
@@ -147,13 +148,13 @@ function getCourseData() {
                 $("#footer").hide();
             } else {
                 $("#footer").show();
+                $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(data.TotalCount / 5);
                 createPaging(maxPages);
                 showCoursesData(data.AllResults);
             }
-            succeed = true;
         },
-        fail: function(data) {
+        fail: function () {
         }
     });
 }
@@ -171,7 +172,7 @@ function getAllData() {
         SearchPreferences: $.jStorage.get("SearchPreferences"),
         counter: $('#page').attr('value') - 1
     };
-    var request = $.ajax({
+   $.ajax({
         type: "POST",
         url: uri,
         data: JSON.stringify(searchQuery),
@@ -179,18 +180,19 @@ function getAllData() {
         success: function (searchResult) {
             $.jStorage.set("SearchPreferences", searchResult.SearchPreferences);
 
-            if (searchResult.TotalCount == 0) { 
+            if (searchResult.TotalCount == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
                 $("#footer").show();
+                $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(searchResult.TotalCount / 5);
                 createPaging(maxPages);
                 showTeachersData(searchResult.TeacherResults);
                 showCoursesData(searchResult.CourseResults);
             }
         },
-        fail: function(data) {
+        fail: function () {
         }
     });
 };
@@ -225,11 +227,11 @@ function clearResults() {
 
 function showTeachersData(arrayResult) {
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html?University="+ currentUniversity);
+    $("#resultAdd").attr("href", "/AddTeacher/AddTeacher.html?University=" + currentUniversity);
     $("#resultAdd").text('לא מצאת את המרצה המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    for (var i=0; i<arrayResult.length; i++) {
+    for (var i = 0; i < arrayResult.length; i++) {
         var teacherData = document.createElement('div');
         teacherData.className = 'teacherData';
 
@@ -253,12 +255,13 @@ function showTeachersData(arrayResult) {
 
         var Teach = document.createTextNode('קורסים: ');
         teacherData.appendChild(Teach);
-        for (l in arrayResult[i].Courses) {
 
+        for (var l in arrayResult[i].Courses) {
+            var Course;
             if (l == arrayResult[i].Courses.length - 1) {
-                var Course = document.createTextNode('.' + arrayResult[i].Courses[l]);
+                Course = document.createTextNode('.' + arrayResult[i].Courses[l]);
             } else {
-                var Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
+                Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
             }
             teacherData.appendChild(Course);
         }
@@ -268,16 +271,16 @@ function showTeachersData(arrayResult) {
 }
 
 function GoToTeacher() {
-    window.location = "/AddTeacherComment/AddTeacherComment.html?University="+ currentUniversity+"&id=" + this.id;
+    window.location = "/AddTeacherComment/AddTeacherComment.html?University=" + currentUniversity + "&id=" + this.id;
 }
 
 function showCoursesData(arrayResult) {
     var newLine = '<br>';
-    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html?University="+ currentUniversity);
+    $("#resultAdd").attr("href", "/AddCourse/AddCourse.html?University=" + currentUniversity);
     $("#resultAdd").text('לא מצאת את הקורס המבוקש? לחץ כאן להוספה');
     $("#searchTitle")[0].hidden = false;
 
-    for (i in arrayResult) {
+    for (var i in arrayResult) {
         var courseData = document.createElement('div');
         courseData.className = 'courseData';
 
@@ -290,7 +293,7 @@ function showCoursesData(arrayResult) {
         linkText.className = 'teacherName';
         courseData.id = arrayResult[i].Id;
         courseData.onclick = GoToCourse;
-      
+
         courseData.appendChild(linkText);
 
         courseData.appendChild(document.createElement("br"));
@@ -327,7 +330,7 @@ function showCoursesData(arrayResult) {
 }
 
 function GoToCourse() {
-    window.location = "/AddCourseComment/AddCourseComment.html?University="+ currentUniversity + "&id=" + this.id;
+    window.location = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + this.id;
 }
 
 function createPaging(resultsCounter) {
@@ -344,19 +347,19 @@ function createPaging(resultsCounter) {
 
     var firstPage = Math.max(1, Math.min(resultsCounter - 10, currentPage - 5));
     var lastpage = Math.min(Math.max(currentPage + 5, 11), resultsCounter);
-    
+
     for (var i = firstPage; i <= lastpage; i++) {
         var newPage = document.createElement('li');
         newPage.className = "pagebutton";
         newPage.id = i;
-        
+
         innerSpan = document.createElement('span');
         innerSpan.innerText = i;
 
         newPage.onclick = GoToPage;
 
         if (i == currentPage) {
-            newPage.className ='active';
+            newPage.className = 'active';
         }
 
         newPage.appendChild(innerSpan);

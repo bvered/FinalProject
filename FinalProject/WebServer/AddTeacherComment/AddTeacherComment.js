@@ -21,7 +21,7 @@ function setupPage() {
         showLoadingTeacherFailed();
         return;
     }
-    didSucceedLoadingTeacher = loadTeacher();
+    var didSucceedLoadingTeacher = loadTeacher();
     if (didSucceedLoadingTeacher == true) {
         printInformationOfTeacher();
     } else {
@@ -30,9 +30,9 @@ function setupPage() {
 }
 
 function loadCommentsCriteras() {
-    succeed = false;
+    var succeed = false;
 
-    var request = $.ajax({
+    $.ajax({
         type: "GET",
         url: '/api/Teachers/GetCriterias',
         contentType: "application/json",
@@ -40,7 +40,7 @@ function loadCommentsCriteras() {
                 allCriterias = data;
                 succeed = true;
         },
-        fail: function (data) {
+        fail: function () {
             succeed = false;
         },
         async: false
@@ -49,10 +49,10 @@ function loadCommentsCriteras() {
 }
 
 function loadTeacher() {
-    id = getQuertyString()["id"];
-    succeed = false;
+    var id = getQuertyString()["id"];
+    var succeed = false;
 
-    var request = $.ajax({
+    $.ajax({
         type: "GET",
         url: '/api/Teachers/GetTeacher' + "/" + id,
         contentType: "application/json",
@@ -60,7 +60,7 @@ function loadTeacher() {
             teacher = data;
             succeed = true;
         },
-        fail: function (data) {
+        fail: function () {
             succeed = false;
         },
         async: false
@@ -69,17 +69,16 @@ function loadTeacher() {
 }
 
 function addVote(voteValueLabel ,id, like) {
-    succeed = false;
     var didLikeBefore = $.jStorage.get(id);
     if (didLikeBefore == true) {
         alert("מותר לדרג פעם אחת");
-        return succeed;
+        return false;
     }
     var vote = {
         commentId: id,
-        liked: like,
+        liked: like
     };
-    var request = $.ajax({
+    $.ajax({
         type: "POST",
         data: JSON.stringify(vote),
         url: '/api/Teachers/AddVote',
@@ -93,7 +92,7 @@ function addVote(voteValueLabel ,id, like) {
         },
         async: false
     });
-    return succeed;
+    return false;
 }
 
 function printInformationOfTeacher() {
@@ -125,7 +124,7 @@ function showTeacherInfoToUser() {
 }
 
 function printTeacherScores() {
-    for (criteria in allCriterias) {
+    for (var criteria in allCriterias) {
         var ratingName = document.getElementById("criteriaTextTD" + criteria);
         ratingName.innerHTML = allCriterias[criteria];
         $('#avgRating' + criteria).rating('update', teacher.AverageCriteriaRatings.AverageRatingsList[criteria]);
@@ -142,11 +141,11 @@ function showTeacherCommentsByTeacher(sortByNew) {
     var allComments = teacher.TeacherComments;
     if(!sortByNew) {
         allComments = allComments.sort(function (a, b) {
-            return b.TotalNumberOfLikes - a.TotalNumberOfLikes
+            return b.TotalNumberOfLikes - a.TotalNumberOfLikes;
         });
     }
     numberOfCommentsLoaded = allComments.length;
-    for (comment = 0; comment < numberOfCommentsLoaded; comment++) {
+    for (var comment = 0; comment < numberOfCommentsLoaded; comment++) {
         printComment(allComments[comment], comment);
     }
 }
@@ -157,7 +156,7 @@ function printComment(comment, itr) {
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
-    for (rating in comment.CriteriaRatings) {
+    for (var rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
         var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
         clonedCommentCriteriaTR.style.display = 'block';
@@ -214,7 +213,7 @@ function addComment() {
     var four = $('input[name=star4]:checked', '#ratingsForm4').val();
     var five = $('input[name=star5]:checked', '#ratingsForm5').val();
     var ratings = [one, two, three, four, five];
-    for(rate in ratings)
+    for(var rate in ratings)
     {
         if (ratings[rate] == undefined) {
             alert("עליך לדרג את כל הקריטריונים");
@@ -224,14 +223,14 @@ function addComment() {
     var comment = {
         Id: teacher.Id,
         Ratings: ratings,
-        Comment: document.getElementById("teacherNewCommetBox").value,
+        Comment: document.getElementById("teacherNewCommetBox").value
     };
-    var request = $.ajax({
+    $.ajax({
         type: "POST",
         data: JSON.stringify(comment),
         url: '/api/Teachers/AddComment',
         contentType: "application/json",
-        success: function (data) {
+        success: function () {
             alert("תגובתך הוספה בהצלחה");
             location.reload();
         },
@@ -243,7 +242,7 @@ function addComment() {
 }
 
 function getSelectedRadioButtonValue(radioButtonForm) {
-    for (star in radioButtonForm.children[0].children) {
+    for (var star in radioButtonForm.children[0].children) {
         if (radioButtonForm.children[0].children[star].checked == true) {
             return radioButtonForm.children[0].children[star].value;
         }
@@ -252,7 +251,7 @@ function getSelectedRadioButtonValue(radioButtonForm) {
 }
 
 function setSelectedRadionButtonValue(radioButtonForm, value) {
-    for (radioButton in radioButtonForm.children[0].children) {
+    for (var radioButton in radioButtonForm.children[0].children) {
         if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
             radioButtonForm.children[0].children[radioButton].checked = true;
             return;

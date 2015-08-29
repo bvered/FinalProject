@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +18,6 @@ namespace WebServer.Controllers
         {
             if (HttpContext.Current.Request.Files.AllKeys.Any())
             {
-                // Get the uploaded image from the Files collection
                 var httpPostedFile = HttpContext.Current.Request.Files["UploadedFile"];
 
                 if (httpPostedFile != null)
@@ -35,7 +32,7 @@ namespace WebServer.Controllers
                     Guid courseId;
                     Semester semster;
                     int year;
-                    bool isSyllabus=false;
+                    bool isSyllabus = false;
 
                     var hasCourseId = Guid.TryParse(HttpContext.Current.Request.Form["courseId"], out courseId);
                     var hasSemster = Enum.TryParse(HttpContext.Current.Request.Form["semester"], out semster);
@@ -45,11 +42,6 @@ namespace WebServer.Controllers
                     {
                         isSyllabus = true;
                     }
-                    else if (isSyll == "0")
-                    {
-                        isSyllabus = false;
-                    }
-                 //   bool.TryParse(HttpContext.Current.Request.Form["isSyllabus"], out isSyllabus);
 
                     if (!hasCourseId || !hasSemster || !hasYear)
                     {
@@ -63,17 +55,12 @@ namespace WebServer.Controllers
                             .Where(x => x.Course.Id == courseId &&
                                         x.Semester == semster &&
                                         x.Year == year)
-                            .SingleOrDefault();
-
-                        if (courseInSemester == null)
-                        {
-                            courseInSemester = new CourseInSemester
+                            .SingleOrDefault() ?? new CourseInSemester
                             {
                                 Course = session.Load<Course>(courseId),
                                 Semester = semster,
                                 Year = year
                             };
-                        }
 
                         var course = session.Load<Course>(courseId);
                         string extension = Path.GetExtension(httpPostedFile.FileName);
@@ -94,10 +81,8 @@ namespace WebServer.Controllers
                             case @".wmf":
                                 IsPic = true;
                                 break;
-                            default:
-                                break;
                         }
-                       
+
                         if (!isSyllabus)
                         {
                             courseInSemester.uploadedGrades = new UplodedFile

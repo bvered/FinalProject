@@ -28,8 +28,9 @@ section table tr td.label {
     vertical-align: middle;
     text-align: center;
     font-size: 15px;
+    background-color: #00a9ff;
     background-color: rgba(0, 169, 255, 0.5);
-    border-radius: 0px;
+    border-radius: 0;
     width: 100%;
     display: block;
     height: 40px;

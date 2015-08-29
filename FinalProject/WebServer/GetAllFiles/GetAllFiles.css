@@ -69,8 +69,9 @@ section table tr td.label {
     vertical-align: middle;
     text-align: center;
     font-size: 15px;
+    background-color: #00a9ff;
     background-color: rgba(0, 169, 255, 0.5);
-    border-radius: 0px;
+    border-radius: 0;
     display: table-cell;
     height: 40px;
     padding-top: 10px;
@@ -83,11 +84,6 @@ section > table > tr > td:not(.label) {
     vertical-align: middle;
     text-align: center;
 }
-
-section label {
-}
-
-
 
 .advanced-filter {
     float: right;
@@ -102,7 +98,7 @@ section label {
     }
 
         .advanced-filter .filter-box ul {
-            margin: 0px;
+            margin: 0;
         }
 
             .advanced-filter .filter-box ul li {

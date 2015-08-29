@@ -5,7 +5,7 @@
 function GetUniversities() {
     var uri = '/api/University/GetUniversities';
 
-    var request = $.ajax({
+     $.ajax({
         type: "GET",
         url: uri,
         contentType: "application/json",
@@ -19,7 +19,7 @@ function GetUniversities() {
 function showUniversities(universities) {
     for (var i = 0; i < universities.length; i++) {
         var newUniversity = document.createElement('li');
-        newUniversity.innerText = universities[i].Name;
+        newUniversity.innerText = universities[i].UniversityName;
         newUniversity.id = universities[i].Acronyms;
 
         newUniversity.onclick = changePage;

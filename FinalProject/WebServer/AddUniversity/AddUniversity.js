@@ -30,17 +30,13 @@
         }
     });
 
-    ajaxRequest.done(function (xhr, textStatus) {
+    ajaxRequest.done(function () {
         $("#addUniversitySuccessfuly")[0].hidden = false;
         $("#UniversityExists")[0].hidden = true;
         $("#moveToNew")[0].hidden = false;
-        $("#moveToNew")[0].onclick = GoToSchool(UniversityAcronyms);
+        $("#moveToNew")[0].href = "/HomePage/HomePage.html?University=" + UniversityAcronyms;
     });
 };
-
-function GoToSchool(universityAcronyms) {
-    window.location = "/HomePage/HomePage.html?University=" + universityAcronyms;
-}
 
 function currentHomePage() {
     if (currentUniversity != null) {

@@ -12,6 +12,7 @@
 
 h2 {
     display: inline-block;
+    background-color: #ffffff;
     background-color: rgba(255,255,255,0.85);
     border: 2px solid white;
     border-radius: 5px;
@@ -27,6 +28,7 @@ h2 {
 
 h3 {
     display: inline-block;
+    background-color: #ffffff;
     background-color: rgba(255,255,255,0.85);
     border: 2px solid white;
     border-radius: 5px;
@@ -41,6 +43,7 @@ h3 {
 
 h4 {
     display: inline-block;
+    background-color: #ffffff;
     background-color: rgba(255,255,255,0.85);
     border: 2px solid white;
     border-radius: 5px;
@@ -79,6 +82,7 @@ h4 {
 
     #changeUniversity ul li {
         display: table;
+        background-color: #ffffff;
         background-color: rgba(255,255,255,0.85);
         width: auto;
         height: 50px;
@@ -92,7 +96,7 @@ h4 {
         font-weight: bold;
     }
 
-        #changeUniversity ul li:hover {
+#changeUniversity ul li:hover {
             text-decoration: none;
             cursor: pointer;
         }

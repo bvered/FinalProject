@@ -78,7 +78,10 @@ function setUniversityInfo() {
         contentType: "application/json",
         success: function(data) {
             SetBackgroundImage(data);
-            $("#UniversityInfo")[0].innerText +=" "+ data.UniversityName;
+            $("#UniversityInfo")[0].innerText += " " + data.UniversityName;
+            $("#UniversityInfo")[0].onclick = function() {
+                window.location =  "http://"  + data.WebAddress;
+            }
         }
     });
 };

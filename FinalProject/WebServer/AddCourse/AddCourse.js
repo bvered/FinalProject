@@ -80,7 +80,7 @@ function addCourse() {
             Faculty: $('input[name=faculty]:checked').val(),
             Ismandatory:  $('input[name=mandatory]:checked').val(),
             AcademicDegree:  $('input[name=degree]:checked').val(),
-            IntendedYear: $('input[name=year]:checked').val(),
+            IntendedYear: $('input[name=year]:checked').val()
         };
 
         var request = $.ajax({
@@ -90,12 +90,12 @@ function addCourse() {
             contentType: "application/json",
 
             statusCode: {
-                222: function (data, textStatus, jqXHR) {
+                222: function (data) {
                     $("#CourseExists")[0].hidden = false;
                     $("#CourseLink")[0].hidden = false;
                     $("#CourseLink")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + data;
                 },
-                200: function(data, textStatus, jqXHR) {
+                200: function(data) {
                     $("#addCourseSuccessfuly")[0].hidden = false;
                     $("#resultCourse")[0].hidden = false;
                     $("#resultCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + data;

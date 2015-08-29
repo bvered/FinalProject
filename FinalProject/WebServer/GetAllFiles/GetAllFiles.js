@@ -16,14 +16,14 @@ $(document).ready(function () {
 
 function initFilterValues() {
     var typeSelect = $('input:radio[name=type]');
+    var valueString;
     if (typeSelect.is(':checked') === false) {
-        var valueString = '[value=All]';
+         valueString = '[value=All]';
         typeSelect.filter(valueString).prop('checked', true);
     }
-
-    var typeSelect = $('input:radio[name=semester]');
+    typeSelect = $('input:radio[name=semester]');
     if (typeSelect.is(':checked') === false) {
-        var valueString = '[value=All]';
+         valueString = '[value=All]';
         typeSelect.filter(valueString).prop('checked', true);
     }
 }
@@ -37,7 +37,7 @@ function getAllFiles()
 
     var id = quertyString["courseId"];
     var uri = "/api/GetFile/GetAllFiles/" + id;
-    var ajaxRequest = $.ajax({
+    $.ajax({
         type: "GET",
         url: uri,
         contentType: "application/json",
@@ -54,7 +54,6 @@ function getAllFiles()
                 var cell2 = row.insertCell(1);
                 var cell3 = row.insertCell(2);
                 var cell4 = row.insertCell(3);
-                var fileType;
 
                 var newlink = document.createElement('a');
                 newlink.text = data[i].FileName;
@@ -63,34 +62,24 @@ function getAllFiles()
                 cell3.innerHTML = data[i].Semester;
                 var isSyllabus = data[i].IsSyllabus;
                 if (isSyllabus == false) {
-                    fileType = 'Grades';
                     cell4.innerHTML = "התפלגות ציונים";
                     grades.push(data[i]);
                 }
                 else {
-                    fileType = 'Syllabus';
                     cell4.innerHTML = "סילבוס";
                     syllabus.push(data[i]);
                 }
-               // newlink.setAttribute('href', '/DownloadFile/DownloadFile.html?University=' + queryString["University"] + '&type=' + fileType + '&course=' + data[i].FileName + '&id=' + data[i].Id);
-                "javascript:download('file.ext')"
-
                 newlink.setAttribute('href', "javascript:download('"+data[i].Id+"')");
-
-                cell4.innerHTML 
-
             }
         },
-        fail: function(data) {
-            //   succeed = false;
-        },
-
+        fail: function() {
+        }
     });
 }
 
 function download(fileId) {
-    uri = "/api/GetFile/GetSpecificFile/" + fileId;
-    var ajaxRequest = $.ajax({
+    var uri = "/api/GetFile/GetSpecificFile/" + fileId;
+     $.ajax({
         type: "GET",
         url: uri,
         contentType: "application/json",
@@ -100,16 +89,17 @@ function download(fileId) {
                 $("#downloadFile").attr("download", data.str);
                 $('#downloadFile')[0].click();
         },
-        fail: function (data)
-        { },
+        fail: function ()
+        { }
     });
 }
+
 function ChangeResults() {
     clearResults();
     var filterType = $('input[name=type]:checked').val();
     var filterSemester = $('input[name=semester]:checked').val();
     var resultData = [];
-    var requestedData = [];
+    var requestedData;
     if (filterType == "All") 
     {
         resultData = allFiles;
@@ -175,7 +165,6 @@ function showResults(data) {
         else {
             cell4.innerHTML = "סילבוס";
         }
-        cell4.innerHTML
     }
 }
 

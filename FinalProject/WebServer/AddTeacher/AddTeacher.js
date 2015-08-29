@@ -24,10 +24,10 @@ function addTeacher() {
                 Name: $("#TeacherName").val(),
                 Room: $('#TeacherRoom').val(),
                 Cellphone: $('#TeacherPhone').val(),
-                Email: $('#TeacherEmail').val(),
+                Email: $('#TeacherEmail').val()
             };
 
-            var request = $.ajax({
+            $.ajax({
                 type: "POST",
                 data: JSON.stringify(teacher),
                 url: uri,
@@ -35,7 +35,7 @@ function addTeacher() {
 
 
                 statusCode: {
-                    222: function (data, textStatus, jqXHR) {
+                    222: function (data) {
                         $("#TeacherExists")[0].hidden = false;
                         $("#Teacherink")[0].hidden = false;
                         $("#Teacherink")[0].href = "/AddTeacherComment/AddTeacherComment.html?University=" + currentUniversity + "&id=" + data;
@@ -45,7 +45,7 @@ function addTeacher() {
                         $("#EmptyRequierments")[0].hidden = true;
                     },
 
-                    200: function (data, textStatus, jqXHR) {
+                    200: function (data) {
                         $("#TeacherExists")[0].hidden = true;
                         $("#Teacherink")[0].hidden = true;
                         $("#EmptyRequierments")[0].hidden = true;

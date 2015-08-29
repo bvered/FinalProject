@@ -42,15 +42,10 @@ namespace WebServer.Controllers
                 var teachers = session.QueryOver<Teacher>()
                     .Where(x => x.Faculty == faculty)
                     .List();
-                var teacherEssentials = new List<TeacherEssentials>();
-                foreach (var teacher in teachers) {
-                    var tEssentials = new TeacherEssentials
-                    {
-                        TeacherId = teacher.Id.ToString(),
-                        TeacherName = teacher.Name
-                    };
-                    teacherEssentials.Add(tEssentials);
-                }
+                var teacherEssentials = teachers.Select(teacher => new TeacherEssentials
+                {
+                    TeacherId = teacher.Id.ToString(), TeacherName = teacher.Name
+                }).ToList();
                 return Ok(teacherEssentials);
             }
 
@@ -93,7 +88,7 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 Guid teacherCommentGuid;
-                var didSuccedParsingTeacherCommentGuid = Guid.TryParse(commentId, out teacherCommentGuid);
+                Guid.TryParse(commentId, out teacherCommentGuid);
                 var comment = session.Load<TeacherComment>(teacherCommentGuid);
                 if (comment == null)
                     return NotFound();
@@ -147,7 +142,7 @@ namespace WebServer.Controllers
                     return NotFound();
                 }
 
-                var teacherCriterias = session.QueryOver<TeacherCriteria>().List();
+                session.QueryOver<TeacherCriteria>().List();
 
                 var newComment = new TeacherComment
                 {
@@ -171,7 +166,7 @@ namespace WebServer.Controllers
         [ActionName("GetCriterias")]
         public IHttpActionResult GetAllCriterias()
         {
-            using (var session = DBHelper.OpenSession())
+            using (DBHelper.OpenSession())
             {
                 return Ok(TeacherComment.GetTeacherCommentCriterias());
             }

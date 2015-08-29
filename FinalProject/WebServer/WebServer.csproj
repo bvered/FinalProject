@@ -122,7 +122,6 @@
     <Content Include="GetAllFiles\GetAllFiles.css" />
     <Content Include="GetAllFiles\GetAllFiles.html" />
     <Content Include="GetAllFiles\GetAllFiles.js" />
-    <Content Include="Images\colleges.jpg" />
     <Content Include="Images\colleges2.jpg" />
     <Content Include="Images\ratemyschool.png" />
     <Content Include="AddCourseComment\stars.png" />

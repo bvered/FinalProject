@@ -30,14 +30,14 @@ $(document).ready(function () {
             data.append("year", year);
             data.append("isSyllabus", isSyllabus);
 
-            var ajaxRequest = $.ajax({
+           $.ajax({
                 type: "POST",
                 url: "/api/AddFile/AddFile",
                 contentType: false,
                 processData: false,
                 data: data,
                 statusCode: {
-                    200: function (data, textStatus, jqXHR) {
+                    200: function () {
                         $("#EmptyRequierments")[0].hidden = true;
                         $("#AddFileSuccesfully")[0].hidden = false;
                         $("#returnToCourse")[0].hidden = false;

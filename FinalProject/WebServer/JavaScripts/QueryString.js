@@ -37,5 +37,5 @@ function SetBackgroundImage(data) {
 function homePage() {
     var queryString = getQuertyString();
     var currentUniversity = queryString["University"];
-    window.location = "HomePage.html?University=" + currentUniversity;
+    window.location = "/HomePage/HomePage.html?University=" + currentUniversity;
 }

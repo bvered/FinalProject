@@ -185,8 +185,6 @@ function showLoadingCourseFailed() {
     parent.location = "../HomePage/HomePage.html";
 }
 
-
-
 function facultyNameByEnum(faculty) {
     switch (faculty) {
         case 0:
@@ -327,10 +325,9 @@ function setSelectedRadionButtonValue(radioButtonForm, value) {
     }
 }
 
-
 function loadCommentsCriteras() {
-    succeed = false;
-    var request = $.ajax({
+    var succeed = false;
+    $.ajax({
         type: "GET",
         url: '/api/Courses/GetCriterias',
         contentType: "application/json",
@@ -339,10 +336,10 @@ function loadCommentsCriteras() {
                 allCriterias = data;
                 succeed = true;
             } else {
-                succeed == false;
+                succeed = false;
             }
         },
-        fail: function (data) {
+        fail: function () {
             succeed = false;
         },
         async: false

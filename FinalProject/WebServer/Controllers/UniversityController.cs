@@ -18,23 +18,17 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetUniversities")]
-        public IList<resultUniversity> GetAllCoursesNames()
+        public IList<returnUniversity> GetAllCoursesNames()
         {
             using (var session = DBHelper.OpenSession())
             {
                 var universities = session.QueryOver<University>().List();
 
-                return universities.Select(university => new resultUniversity(university.Name, university.Acronyms, university.SiteAddress)).ToList(); ;
-            }
-        }
-
-        [HttpGet]
-        [ActionName("GetUniversityWebByAcronyms")]
-        public string GetUniversityWebByAcronyms([FromUri] string id)
-        {
-            using (var session = DBHelper.OpenSession())
-            {
-                return session.QueryOver<University>().List().Where(x => x.Acronyms == id).Select(x => x.SiteAddress).SingleOrDefault();
+                return
+                    universities.Select(
+                        university => new returnUniversity(university.Name, university.Acronyms, university.SiteAddress))
+                        .ToList();
+                ;
             }
         }
 
@@ -62,7 +56,7 @@ namespace WebServer.Controllers
 
                     if (string.IsNullOrWhiteSpace(UniversityName) ||
                         string.IsNullOrWhiteSpace(UniversityAcronyms) ||
-                        string.IsNullOrWhiteSpace(UniversitySite) )
+                        string.IsNullOrWhiteSpace(UniversitySite))
                     {
                         return BadRequest();
                     }
@@ -107,9 +101,11 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 var university = session.QueryOver<University>().List().SingleOrDefault(x => x.Acronyms == id);
-                var base64String = Convert.ToBase64String(university.BackgroundImage, 0, university.BackgroundImage.Length);
+                var base64String = Convert.ToBase64String(university.BackgroundImage, 0,
+                    university.BackgroundImage.Length);
                 returnUniversity newUniversity = new returnUniversity
                 {
+                    WebAddress = university.SiteAddress,
                     UniversityName = university.Name,
                     Base64 = string.Format("data:image/{0};base64,{1}", university.FileExtention, base64String),
                 };
@@ -133,24 +129,23 @@ namespace WebServer.Controllers
             }
         }
 
-        public class resultUniversity
+        public class returnUniversity
         {
-            public string Name { get; set; }
-            public string Acronyms { get; set; }
             public string WebAddress { get; set; }
+            public string UniversityName { get; set; }
+            public string Base64 { get; set; }
+            public string Acronyms { get; set; }
 
-            public resultUniversity(string name, string acronyms, string webAddress)
+            public returnUniversity(string name, string acronyms, string webAddress)
             {
-                Name = name;
+                UniversityName = name;
                 Acronyms = acronyms;
                 WebAddress = webAddress;
             }
-        }
-    }
 
-    public class returnUniversity
-    {
-        public string UniversityName { get; set; }
-        public string Base64 { get; set; }
+            public returnUniversity()
+            {
+            }
+        }
     }
 }

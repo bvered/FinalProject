@@ -2,24 +2,21 @@
 var currentUniversity;
 var fileType;
 
-$(document).ready()
-{
+$(document).ready(function() {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
     fileType = queryString["type"];
     getBackground(currentUniversity);
     downloadFile();
-}
-
+});
 var uri;
 
 function downloadFile() {
-   // 
     var quertyString = getQuertyString();
 
         uri = "/api/GetFile/GetSpecificFile/" + quertyString['id'];
-        var ajaxRequest = $.ajax({
+        $.ajax({
             type: "GET",
             url: uri,
             contentType: "application/json",
@@ -62,8 +59,8 @@ function downloadFile() {
                     }
                 }
             },
-            fail: function (data)
-            {},
+            fail: function ()
+            {}
        });
     }
 
