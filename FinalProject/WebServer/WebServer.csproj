@@ -102,7 +102,6 @@
   <ItemGroup>
     <Content Include="AddCourseComment\AddCourseComment.html" />
     <Content Include="AddCourseComment\AddCourseComment.js" />
-    <Content Include="AddCourseComment\StarsStyle.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
     <Content Include="AddUniversity\AddUniversity.css" />
     <Content Include="AddUniversity\AddUniversity.html" />
@@ -121,8 +120,6 @@
     <Content Include="GetAllFiles\GetAllFiles.js" />
     <Content Include="Images\colleges2.jpg" />
     <Content Include="Images\ratemyschool.png" />
-    <Content Include="AddCourseComment\stars.png" />
-    <Content Include="AddCourseComment\css\style.css" />
     <Content Include="AddCourseComment\css\StyleSheet.css" />
     <Content Include="AddCourse\AddCourse.html" />
     <Content Include="AddCourse\AddCourse.js" />

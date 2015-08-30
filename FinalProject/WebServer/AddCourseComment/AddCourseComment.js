@@ -21,6 +21,7 @@ function setupCourse() {
         return;
     }
     if (loadCourse()) {
+        setupNewComment();
         printCourseInfo();
     } else {
         showLoadingCourseFailed();
@@ -34,6 +35,15 @@ function ChangePage() {
 
 function ChangePage2() {
     window.location = "../GetAllFiles/GetAllFiles.html?University=" + currentUniversity + "&courseId=" + course.Id;
+}
+
+function setupNewComment() {
+    $('#newAvgRating0').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating1').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating2').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating3').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating4').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating5').rating('refresh', { showClear: false, showCaption: false });
 }
 
 function printCourseInfo() {
@@ -132,17 +142,14 @@ function printComment(comment, itr) {
     var commentTextCell = commentTextRow.cells[1];
     var commentTextLabel = commentTextCell.children[0];
     commentTextLabel.innerHTML = comment.CommentText;
-
     for (rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
-        var clonedCommentCriteriaTR = document.getElementById("newCriteriaRating1").cloneNode(true);
-        clonedCommentCriteriaTR.style.display = 'block';
-        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
-        document.getElementById("commentView" + itr).rows[parseInt(rating) + 1].cells[0].innerHTML = loadedComment.Criteria.DisplayName;
-        document.getElementById("commentView" + itr).rows[parseInt(rating) + 1].cells[1].appendChild(clonedCommentCriteriaTR.children[1].children[0]);
+        var commentRating = commentView.rows[parseInt(rating) + 1].cells[1].firstElementChild.firstElementChild;
+        var ratingIdName = "commentView" + itr + "Rating" + rating;
+        commentRating.setAttribute('id', ratingIdName);
+        $('#' + ratingIdName).rating('update', loadedComment.Rating);
+        $('#' + ratingIdName).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
-
     var likesCell = commentView.rows[7].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
@@ -406,15 +413,15 @@ function addComment() {
         alert("אנא הכנס שנה בתחום העשור האחרון.");
         return;
     }
-    var one = $('input[name=star]:checked', '#ratingsForm1').val();
-    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
-    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
-    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
-    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
-    var six = $('input[name=star6]:checked', '#ratingsForm6').val();
+    var one = $('#newAvgRating0').val();
+    var two = $('#newAvgRating1').val();
+    var three = $('#newAvgRating2').val();
+    var four = $('#newAvgRating3').val();
+    var five = $('#newAvgRating4').val();
+    var six = $('#newAvgRating5').val();
     var ratings = [one, two, three, four, five, six];
     for (rate in ratings) {
-        if (ratings[rate] == undefined) {
+        if (ratings[rate] == undefined || ratings[rate] == 0) {
             alert("עליך לדרג את כל הקריטריונים");
             return;
         }

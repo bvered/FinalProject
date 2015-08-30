@@ -101,7 +101,6 @@ function setupNewComment() {
     $('#newAvgRating1').rating('refresh', { showClear: false, showCaption: false });
     $('#newAvgRating2').rating('refresh', { showClear: false, showCaption: false });
     $('#newAvgRating3').rating('refresh', { showClear: false, showCaption: false });
-
 }
 
 function printInformationOfTeacher() {
