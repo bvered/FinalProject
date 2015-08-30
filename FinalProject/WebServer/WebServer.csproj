@@ -103,10 +103,7 @@
     <Content Include="AddCourseComment\AddCourseComment.html" />
     <Content Include="AddCourseComment\AddCourseComment.js" />
     <Content Include="AddCourseComment\StarsStyle.css" />
-    <Content Include="AddTeacherComment\stars.png" />
-    <Content Include="AddTeacherComment\css\style.css" />
     <Content Include="AddTeacherComment\css\StyleSheet.css" />
-    <Content Include="AddTeacherComment\StarsStyle.css" />
     <Content Include="AddUniversity\AddUniversity.css" />
     <Content Include="AddUniversity\AddUniversity.html" />
     <Content Include="AddUniversity\AddUniversity.js" />

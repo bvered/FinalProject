@@ -23,6 +23,7 @@ function setupPage() {
     }
     var didSucceedLoadingTeacher = loadTeacher();
     if (didSucceedLoadingTeacher == true) {
+        setupNewComment();
         printInformationOfTeacher();
     } else {
         showLoadingTeacherFailed();
@@ -95,6 +96,14 @@ function addVote(voteValueLabel ,id, like) {
     return false;
 }
 
+function setupNewComment() {
+    $('#newAvgRating0').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating1').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating2').rating('refresh', { showClear: false, showCaption: false });
+    $('#newAvgRating3').rating('refresh', { showClear: false, showCaption: false });
+
+}
+
 function printInformationOfTeacher() {
     showTeacherInfoToUser();
     printTeacherScores();
@@ -153,20 +162,21 @@ function showTeacherCommentsByTeacher(sortByNew) {
 function printComment(comment, itr) {
     var allComments = document.getElementById("allComments");
     var commentView = document.getElementById("commentTable").cloneNode(true);
+    allComments.appendChild(commentView);
     commentView.style.display = 'block';
     commentView.id = "commentView" + itr;
     commentView.rows[0].cells[1].children[0].innerHTML = comment.CommentText;
     for (var rating in comment.CriteriaRatings) {
         var loadedComment = comment.CriteriaRatings[rating];
-        var clonedCommentCriteriaTR = document.getElementById("criteriaTR").cloneNode(true);
-        clonedCommentCriteriaTR.style.display = 'block';
-        clonedCommentCriteriaTR.children[0].innerHTML = loadedComment.Criteria.DisplayName;
-        setSelectedRadionButtonValue(clonedCommentCriteriaTR.children[1].children[0], loadedComment.Rating);
-        commentView.appendChild(clonedCommentCriteriaTR);
+        var commentRating = commentView.rows[parseInt(rating) + 1].cells[1].firstElementChild.firstElementChild;
+        var ratingIdName = "commentView" + itr + "Rating" + rating;
+        commentRating.setAttribute('id', ratingIdName);
+        $('#' + ratingIdName).rating('update', loadedComment.Rating);
+        $('#' + ratingIdName).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
-    var commentDate = commentView.rows[2].children[1];
+    var commentDate = commentView.rows[6].children[1];
     commentDate.innerHTML = comment.DateTime.replace("T", " ");
-    var likesCell = commentView.rows[1].children[1];
+    var likesCell = commentView.rows[5].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
     numberOfLikes.innerHTML = comment.TotalNumberOfLikes;
@@ -194,7 +204,6 @@ function printComment(comment, itr) {
     likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-    allComments.appendChild(commentView);
 }
 
 function showLoadingTeacherFailed() {
@@ -207,15 +216,14 @@ function addComment() {
         alert("הכנס תגובה");
         return;
     }
-    var one = $('input[name=star]:checked', '#ratingsForm1').val();
-    var two = $('input[name=star2]:checked', '#ratingsForm2').val();
-    var three = $('input[name=star3]:checked', '#ratingsForm3').val();
-    var four = $('input[name=star4]:checked', '#ratingsForm4').val();
-    var five = $('input[name=star5]:checked', '#ratingsForm5').val();
-    var ratings = [one, two, three, four, five];
+    var one = $('#newAvgRating0').val();
+    var two = $('#newAvgRating1').val();
+    var three = $('#newAvgRating2').val();
+    var four = $('#newAvgRating3').val();
+    var ratings = [one, two, three, four];
     for(var rate in ratings)
     {
-        if (ratings[rate] == undefined) {
+        if (ratings[rate] == undefined || ratings[rate] == 0) {
             alert("עליך לדרג את כל הקריטריונים");
             return;
         }
@@ -239,22 +247,4 @@ function addComment() {
         },
         async: false
     });
-}
-
-function getSelectedRadioButtonValue(radioButtonForm) {
-    for (var star in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[star].checked == true) {
-            return radioButtonForm.children[0].children[star].value;
-        }
-    }
-    return 0;
-}
-
-function setSelectedRadionButtonValue(radioButtonForm, value) {
-    for (var radioButton in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
-            radioButtonForm.children[0].children[radioButton].checked = true;
-            return;
-        }
-    }
 }

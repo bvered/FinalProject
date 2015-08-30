@@ -14,7 +14,6 @@ header .logo {
 }
 
 .logo:hover {
-    cursor: hand;
     cursor: pointer;
     text-decoration: none;
 }
@@ -42,7 +41,6 @@ header .logo {
         height:30px;
         color:white;
         font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
-        position:sticky;
         left:0;
 }
 
@@ -108,7 +106,6 @@ select {
         height:30px;
         color:white;
         font-family: 'lucida grande',tahoma,verdana,arial,sans-serif;
-        position:sticky;
         left:0;
 }
 
