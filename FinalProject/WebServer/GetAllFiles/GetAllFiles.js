@@ -1,18 +1,17 @@
 ﻿var queryString;
 var currentUniversity;
+var allFiles;
+var grades = [];
+var syllabus = [];
 
 $(document).ready(function () {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
-
     getBackground(currentUniversity);
-
     initFilterValues();
-
     getAllFiles();
 });
-
 
 function initFilterValues() {
     var typeSelect = $('input:radio[name=type]');
@@ -27,15 +26,9 @@ function initFilterValues() {
         typeSelect.filter(valueString).prop('checked', true);
     }
 }
-var allFiles;
-var grades=[];
-var syllabus=[];
-
 function getAllFiles()
 {
-    var quertyString = getQuertyString();
-
-    var id = quertyString["courseId"];
+    var id = queryString["courseId"];
     var uri = "/api/GetFile/GetAllFiles/" + id;
     $.ajax({
         type: "GET",
@@ -61,12 +54,13 @@ function getAllFiles()
                 cell2.innerHTML = data[i].Year;
                 cell3.innerHTML = data[i].Semester;
                 var isSyllabus = data[i].IsSyllabus;
+                cell4.innerHTML = data[i].Type;
                 if (isSyllabus == false) {
-                    cell4.innerHTML = "התפלגות ציונים";
+                    
                     grades.push(data[i]);
                 }
                 else {
-                    cell4.innerHTML = "סילבוס";
+                    
                     syllabus.push(data[i]);
                 }
                 newlink.setAttribute('href', "javascript:download('"+data[i].Id+"')");

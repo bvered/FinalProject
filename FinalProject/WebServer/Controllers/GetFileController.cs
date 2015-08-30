@@ -17,7 +17,6 @@ namespace WebServer.Controllers
             {
                 session.QueryOver<UplodedFile>().List();
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
-
                 var course = session.Load<Course>(new Guid(id));
 
                 foreach (var CourseSemester in course.CourseInSemesters)
@@ -27,23 +26,24 @@ namespace WebServer.Controllers
                         Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
                         string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
                         semester = getSpecificSemester(semester);
-
                         int year = CourseSemester.uploadedSyllabus.Year;
                         string fileName = CourseSemester.uploadedSyllabus.FileName;
                         string extenstion = CourseSemester.uploadedSyllabus.ext;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, true, extenstion));
+                        result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, true, extenstion, "סילבוס"));
                     }
+
                     if (CourseSemester.uploadedGrades != null)
                     {
-                        Guid syllabusId = CourseSemester.uploadedGrades.Id;
+                        Guid gradesId = CourseSemester.uploadedGrades.Id;
                         string semester = CourseSemester.uploadedGrades.Semster.ToString();
                         semester = getSpecificSemester(semester);
                         int year = CourseSemester.uploadedGrades.Year;
                         string fileName = CourseSemester.uploadedGrades.FileName;
                         string extenstion = CourseSemester.uploadedGrades.ext;
-                        result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, false, extenstion));
+                        result.Add(new ResultSyllabus(gradesId, semester, year, fileName, false, extenstion, "התפלגות ציונים"));
                     }
                 }
+
                 return result;
             }
         }
@@ -74,24 +74,24 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 session.QueryOver<UplodedFile>().List();
-                var requestedSyllabus = session.Load<UplodedFile>(new Guid(id));
+                var requestedFile = session.Load<UplodedFile>(new Guid(id));
                 RequestedFile file = new RequestedFile();
 
-                switch (requestedSyllabus.ext.ToLower())
+                switch (requestedFile.ext.ToLower())
                 {
                     case ".pdf":
                         {
-                            var s = Path.GetExtension(requestedSyllabus.FileName);
+                            var s = Path.GetExtension(requestedFile.FileName);
                             if (s != null)
                             {
                                 FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\filePdf" + s.ToLower(), FileMode.Append);
                                 BinaryWriter writer = new BinaryWriter(stream);
-                                writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
+                                writer.Write(requestedFile.File, 0, requestedFile.File.Length);
                                 writer.Close();
                             }
                             file.isPic = false;
                             file.str = @"../Images/filePdf.pdf";
-                            var extension = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension = Path.GetExtension(requestedFile.FileName);
                             if (extension != null)
                                 file.ext = extension.ToLower();
                         }
@@ -99,47 +99,47 @@ namespace WebServer.Controllers
                     case ".doc":
                     case ".docx":
                         {
-                            var extension1 = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension1 = Path.GetExtension(requestedFile.FileName);
                             if (extension1 != null)
                             {
                                 FileStream stream = new FileStream(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\fileWord" + extension1.ToLower(), FileMode.Create);
                                 BinaryWriter writer = new BinaryWriter(stream);
-                                writer.Write(requestedSyllabus.File, 0, requestedSyllabus.File.Length);
+                                writer.Write(requestedFile.File, 0, requestedFile.File.Length);
                                 writer.Close();
                             }
                             file.isPic = false;
-                            var extension = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension = Path.GetExtension(requestedFile.FileName);
                             if (extension != null)
                                 file.str = @"../Images/fileWord" + extension.ToLower();
-                            var s = Path.GetExtension(requestedSyllabus.FileName);
+                            var s = Path.GetExtension(requestedFile.FileName);
                             if (s != null)
                                 file.ext = s.ToLower();
                         }
                         break;
                     default:
-                        if (requestedSyllabus.isPic == false)
+                        if (requestedFile.isPic == false)
                         {
-                            var extension1 = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension1 = Path.GetExtension(requestedFile.FileName);
                             if (extension1 != null)
-                                File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\fileTxt" + extension1.ToLower(), requestedSyllabus.File);
+                                File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\fileTxt" + extension1.ToLower(), requestedFile.File);
                             file.isPic = false;
-                            var extension = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension = Path.GetExtension(requestedFile.FileName);
                             if (extension != null)
                                 file.str = @"../Images/fileTxt" + extension.ToLower();
-                            var s = Path.GetExtension(requestedSyllabus.FileName);
+                            var s = Path.GetExtension(requestedFile.FileName);
                             if (s != null)
                                 file.ext = s.ToLower();
                         }
                         else
                         {
-                            var extension1 = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension1 = Path.GetExtension(requestedFile.FileName);
                             if (extension1 != null)
-                                File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\filePic" + extension1.ToLower(), requestedSyllabus.File);
+                                File.WriteAllBytes(Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + @"\Images\filePic" + extension1.ToLower(), requestedFile.File);
                             file.isPic = true;
-                            var extension = Path.GetExtension(requestedSyllabus.FileName);
+                            var extension = Path.GetExtension(requestedFile.FileName);
                             if (extension != null)
                                 file.str = @"../Images/filePic" + extension.ToLower();
-                            var s = Path.GetExtension(requestedSyllabus.FileName);
+                            var s = Path.GetExtension(requestedFile.FileName);
                             if (s != null)
                                 file.ext = s.ToLower();
                         }
@@ -164,8 +164,9 @@ namespace WebServer.Controllers
             public string FileName { get; set; }
             public bool IsSyllabus { get; set; }
             public string Extention { get; set; }
+            public string Type { get; set; }
 
-            public ResultSyllabus(Guid id, string semester, int year, string fileName, bool isSyllabus, string extention)
+            public ResultSyllabus(Guid id, string semester, int year, string fileName, bool isSyllabus, string extention, string type)
             {
                 Id = id;
                 Semester = semester;
@@ -173,6 +174,7 @@ namespace WebServer.Controllers
                 FileName = fileName;
                 IsSyllabus = isSyllabus;
                 Extention = extention;
+                Type = type;
             }
         }
     }

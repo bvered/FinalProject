@@ -105,7 +105,9 @@ function getTeacherData() {
             if (data.Results.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
+                $("#results").hide();
             } else {
+                $("#results").show();
                 $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(data.TotalCount / 5);
                 createPaging(maxPages);
@@ -146,7 +148,9 @@ function getCourseData() {
             if (data.AllResults.length == 0) {
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
+                $("#results").hide();
             } else {
+                $("#results").show();
                 $("#footer").show();
                 $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(data.TotalCount / 5);
@@ -181,9 +185,11 @@ function getAllData() {
             $.jStorage.set("SearchPreferences", searchResult.SearchPreferences);
 
             if (searchResult.TotalCount == 0) {
+                $("#results").hide();
                 $("#NoMatches")[0].hidden = false;
                 $("#footer").hide();
             } else {
+                $("#results").show();
                 $("#footer").show();
                 $("#NoMatches")[0].hidden = true;
                 maxPages = Math.ceil(searchResult.TotalCount / 5);
