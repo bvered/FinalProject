@@ -30,6 +30,7 @@ namespace WebServer.App_Data.Models.Enums
 
             Faculties = new Dictionary<Faculty, string>
             {
+                {Faculty.None, "ללא"},
                 {Faculty.ComputerScience, "מדעי המחשב"},
                 {Faculty.BehavioralSciences, "מדעי ההתנהגות"},
                 {Faculty.InformationSystems, "מערכות מידע"},

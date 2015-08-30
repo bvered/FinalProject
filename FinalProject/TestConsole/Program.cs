@@ -175,10 +175,9 @@ namespace TestConsole
             
             foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
             {
-                Faculty faculty = new Faculty();
                 string name = course.Key.Substring(0, course.Key.IndexOf("."));
                 string courseFaculty = course.Key.Substring(course.Key.IndexOf(".") + 1, course.Key.Length - name.Length - 1);
-                faculty = FacultyMethod.FacultyFromString(courseFaculty);
+                Faculty faculty = FacultyMethod.FacultyFromString(courseFaculty);
                 
                 var newCourse = new Course(0, name, faculty);
                 newCourse.University = MTA;

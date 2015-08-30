@@ -30,7 +30,7 @@ namespace WebServer.Controllers
 
                 var teachersCount = teachersQuery.Count();
 
-                IQueryable<Course> courses = null;
+                IEnumerable<CourseResult> courses = null;
                 IQueryable<Teacher> teachers = null;
 
                 if (teachersCount > lowestResult + 5)
@@ -40,7 +40,7 @@ namespace WebServer.Controllers
                 else if (teachersCount < lowestResult)
                 {
                     var coursesToSkip = lowestResult - teachersCount;
-                    courses = coursesQuery.Skip(coursesToSkip).Take(5);
+                    courses = QueryOrderedCourses(coursesQuery.Skip(coursesToSkip).Take(5), filter.SearchPreferences);
                 }
                 else
                 {
@@ -50,12 +50,12 @@ namespace WebServer.Controllers
 
                     teachers = teachersQuery.Skip(lowestResult);
 
-                    courses = coursesQuery.Skip(coursesToSkip).Take(coursesCount);
+                    courses = QueryOrderedCourses(coursesQuery.Skip(coursesToSkip).Take(coursesCount), filter.SearchPreferences);
                 }
 
                 var anySearchResult = new AnySearchResult
                 {
-                    CourseResults = courses == null ? new List<CourseResult>() : courses.ToList().Select(arg => ConvertToResult(arg.Id, arg.Name, arg.CourseId, arg.Faculty, arg.AcademicDegree, arg.IntendedYear, arg.IsMandatory, arg.Score)).ToList(),
+                    CourseResults = courses == null ? new List<CourseResult>() : courses.ToList(),
                     TeacherResults = teachers == null ? new List<ResultTeacher>() : teachers.ToList().Select(x => ConvertToResult(session, x)).ToList(),
                     TotalCount = teachersCount + coursesQuery.Count(),
                     SearchPreferences = filter.SearchPreferences
@@ -149,24 +149,12 @@ namespace WebServer.Controllers
                 }
                 else
                 {
-                    orderedCourses = query.Select(x => new
-                    {
-                        x.Id,
-                        x.Name,
-                        x.Faculty,
-                        x.AcademicDegree,
-                        x.IntendedYear,
-                        x.IsMandatory,
-                        x.CourseId,
-                        x.Score
-                    }).ToList()
-                        .OrderByDescending(x => GetUsageValue(filter.SearchPreferences, x.Faculty, x.AcademicDegree, x.IntendedYear,x.IsMandatory))
-                        .Select(x => ConvertToResult(x.Id, x.Name, x.CourseId, x.Faculty, x.AcademicDegree, x.IntendedYear, x.IsMandatory, x.Score));
+                    orderedCourses = QueryOrderedCourses(query.Skip(filter.Counter * 5).Take(5), filter.SearchPreferences);
                 }
 
                 var total = query.Count();
 
-                var courseResults = orderedCourses.Skip(filter.Counter * 5).Take(5).ToList();
+                var courseResults = orderedCourses.ToList();
 
                 var courseSearchResult = new CourseSearchResult
                 {
@@ -177,6 +165,23 @@ namespace WebServer.Controllers
 
                 return Ok(courseSearchResult);
             }
+        }
+
+        private IEnumerable<CourseResult> QueryOrderedCourses(IQueryable<Course> query, SearchPreferences searchPreferences)
+        {
+            return query.Select(x => new
+            {
+                x.Id,
+                x.Name,
+                x.Faculty,
+                x.AcademicDegree,
+                x.IntendedYear,
+                x.IsMandatory,
+                x.CourseId,
+                x.Score
+            }).ToList()
+                .OrderByDescending(x => GetUsageValue(searchPreferences, x.Faculty, x.AcademicDegree, x.IntendedYear,x.IsMandatory))
+                .Select(x => ConvertToResult(x.Id, x.Name, x.CourseId, x.Faculty, x.AcademicDegree, x.IntendedYear, x.IsMandatory, x.Score));
         }
 
         private static IQueryable<Course> GetCoursesQuery(ISession session, CourseSearchFilter filter,
