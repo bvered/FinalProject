@@ -18,7 +18,7 @@
     {
         public static Faculty FacultyFromString(string facultyName)
         {
-            if (facultyName.Equals("מד' המחשב תואר ראשון")) {
+            if (facultyName.Equals("מדעי המחשב")) {
                 return Faculty.ComputerScience;
             } else if (facultyName.Equals("מדעי התנהגות")) {
                 return Faculty.BehavioralSciences;
