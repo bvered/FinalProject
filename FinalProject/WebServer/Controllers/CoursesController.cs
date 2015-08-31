@@ -161,13 +161,20 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             using (var transaction = session.BeginTransaction())
             {
-                Guid courseGuid;
+                Guid courseGuid, teacherGuid;
+                Teacher courseTeacher;
                 var succedParsingCourseId = Guid.TryParse(comment.Id, out courseGuid);
                 if (!succedParsingCourseId)
                 {
                     return NotFound();
                 }
                 var courseToAddComment = session.Load<Course>(courseGuid);
+                var succedParsingTeacherId = Guid.TryParse(comment.teacherId, out teacherGuid);
+                if (!succedParsingTeacherId)
+                {
+                    return NotFound();
+                }
+                courseTeacher = session.Load<Teacher>(teacherGuid);
                 var courseInSemester = session.QueryOver<CourseInSemester>()
                     .Where(x => x.Course == courseToAddComment &&
                     x.Semester == comment.Semester &&
@@ -178,6 +185,7 @@ namespace WebServer.Controllers
                     courseInSemester = new CourseInSemester
                     {
                         Course = courseToAddComment,
+                        Teacher = courseTeacher,
                         Semester = comment.Semester,
                         Year = comment.Year,
                     };

@@ -58,8 +58,10 @@ function setupFilters() {
     var teachersToFilterBy = [];
     var yearToFilterBy = [];
     for (courseInSemster in course.CourseInSemesters) {
-        teachersToFilterBy.push(course.CourseInSemesters[courseInSemster].Teacher);
-        yearToFilterBy.push(course.CourseInSemesters[courseInSemster].Year);
+        if (course.CourseInSemesters[courseInSemster].CourseComments.length > 0) {
+            teachersToFilterBy.push(course.CourseInSemesters[courseInSemster].Teacher);
+            yearToFilterBy.push(course.CourseInSemesters[courseInSemster].Year);
+        }
     };
     teachersToFilterBy = teachersToFilterBy.filter(function (itm, i, a) {
         return i == a.indexOf(itm);
