@@ -238,7 +238,6 @@ function addComment() {
         url: '/api/Teachers/AddComment',
         contentType: "application/json",
         success: function () {
-            alert("תגובתך הוספה בהצלחה");
             location.reload();
         },
         fail: function (jqXhr, textStatus) {

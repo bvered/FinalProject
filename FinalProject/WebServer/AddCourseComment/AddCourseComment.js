@@ -440,7 +440,6 @@ function addComment() {
         url: '/api/Courses/AddComment',
         contentType: "application/json",
         success: function (data) {
-            alert("תגובך הוספה בהצלחה!");
             location.reload();
         },
         fail: function (jqXhr, textStatus) {
