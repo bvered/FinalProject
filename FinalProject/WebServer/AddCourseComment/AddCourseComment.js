@@ -409,7 +409,7 @@ function addComment() {
     }
     var parsedYear = parseInt($('#Year').val(), 10);
     var currentYear = (new Date()).getFullYear();
-    if (parsedYear == NaN || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
+    if (isNaN(parsedYear) || parsedYear < (currentYear - 10) || parsedYear > currentYear) {
         alert("אנא הכנס שנה בתחום העשור האחרון.");
         return;
     }

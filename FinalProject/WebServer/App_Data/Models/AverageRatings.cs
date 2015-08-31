@@ -38,7 +38,7 @@ namespace WebServer.App_Data.Models
 
         public int GetAverageOfRatings()
         {
-            return AverageRatingsList.Sum() / AverageRatingsList.Count / Counter;
+            return SumOfRatingsList.Sum() / AverageRatingsList.Count / Counter;
         }
     }
 }
