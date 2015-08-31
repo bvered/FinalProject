@@ -196,7 +196,10 @@
                 <option value="1">ב</option>
                 <option value="2">קיץ</option>
             </select>
-            <input type="checkbox" id="filteredByNew"> לפי תאריך פרסום
+            <form id="radioFilterComments">
+                <input type="radio" id="filteredByNew" name="filteredBy" value="filteredByNew" checked onclick="setCourseCommentsWithFilters()"/> תאריך
+                <input type="radio" id="filterByLikes" name="filteredBy" value=" filterbylikes" onclick="setCourseCommentsWithFilters()" /> דירוג
+            </form>
         </div>
         <div id="divHolder" style="display:none">
             <table id="commentTable" style="display:none">

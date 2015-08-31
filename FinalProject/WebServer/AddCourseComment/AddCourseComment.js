@@ -279,6 +279,7 @@ function setCourseCommentsWithFilters() {
         Year: year,
         Semester: $('#filteredBySemester').val(),
         SortNew: $("#filteredByNew").is(':checked'),
+        SortDate: $('#filterByLikes').is(':checked'),
     };
     var request = $.ajax({
         type: "POST",
@@ -314,24 +315,6 @@ function allTeachers() {
         async: false
     });
     return succeed;
-}
-
-function getSelectedRadioButtonValue(radioButtonForm) {
-    for (star in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[star].checked == true) {
-            return radioButtonForm.children[0].children[star].value;
-        }
-    }
-    return 0;
-}
-
-function setSelectedRadionButtonValue(radioButtonForm, value) {
-    for (radioButton in radioButtonForm.children[0].children) {
-        if (radioButtonForm.children[0].children[radioButton].id == ("star-" + value)) {
-            radioButtonForm.children[0].children[radioButton].checked = true;
-            return;
-        }
-    }
 }
 
 function loadCommentsCriteras() {
