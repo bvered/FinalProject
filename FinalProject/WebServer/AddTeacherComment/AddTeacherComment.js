@@ -3,6 +3,7 @@ var allCriterias;
 var numberOfCommentsLoaded;
 var queryString;
 var currentUniversity;
+var filteredComments;
 
 $(document).ready(function () {
     setupUniversity();
@@ -106,7 +107,7 @@ function setupNewComment() {
 function printInformationOfTeacher() {
     showTeacherInfoToUser();
     printTeacherScores();
-    showTeacherCommentsByTeacher(false);
+    setTeacherCommentsWithFilters();
 }
 
 function showTeacherInfoToUser() {
@@ -145,16 +146,17 @@ function showNewCommentAction() {
     document.getElementById("showNewCommentButtonTR").style.display = "none";
 }
 
-function showTeacherCommentsByTeacher(sortByNew) {
-    var allComments = teacher.TeacherComments;
-    if(!sortByNew) {
-        allComments = allComments.sort(function (a, b) {
-            return b.TotalNumberOfLikes - a.TotalNumberOfLikes;
-        });
+function showComments() {
+    $('#allComments').empty();
+    if (filteredComments == null || filteredComments.length == 0) {
+        var noCommentsErrorLabel = document.createElement("h1");
+        noCommentsErrorLabel.innerHTML = "אין תגובות להציג";
+        noCommentsErrorLabel.className = "NoComments";
+        $('#allComments').append(noCommentsErrorLabel);
+        return;
     }
-    numberOfCommentsLoaded = allComments.length;
-    for (var comment = 0; comment < numberOfCommentsLoaded; comment++) {
-        printComment(allComments[comment], comment);
+    for (comment in filteredComments) {
+        printComment(filteredComments[comment], comment);
     }
 }
 
@@ -245,4 +247,28 @@ function addComment() {
         },
         async: false
     });
+}
+
+function setTeacherCommentsWithFilters() {
+    var sortBy = {
+        TeacherId: teacher.Id,
+        sortByDate: $("#filteredByNew").is(':checked'),
+        sortByLikes: $('#filterByLikes').is(':checked'),
+    };
+    var request = $.ajax({
+        type: "POST",
+        data: JSON.stringify(sortBy),
+        url: '/api/Teachers/GetSortedTeacherComments',
+        contentType: "application/json",
+        success: function (data) {
+            filteredComments = data;
+            showComments();
+        },
+        fail: function (jqXhr, textStatus) {
+            filteredComments = null;
+            showComments();
+        },
+        async: false
+    });
+
 }

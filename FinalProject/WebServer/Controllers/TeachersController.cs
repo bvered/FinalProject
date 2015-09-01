@@ -173,6 +173,40 @@ namespace WebServer.Controllers
         }
 
         [HttpPost]
+        [ActionName("GetSortedTeacherComments")]
+        public IHttpActionResult GetSortedTeacherComments([FromBody] SortedTeacherComment sortBy)
+        {
+            using (var session = DBHelper.OpenSession())
+            using (var transaction = session.BeginTransaction())
+            {
+                IList<TeacherComment> sortedComments;
+                Guid teacherGuid;
+                Teacher teacher;
+                var successfullteacherGuidParse = Guid.TryParse(sortBy.TeacherId, out teacherGuid);
+                if (!successfullteacherGuidParse)
+                {
+                    return NotFound();
+                }
+                teacher = session.Get<Teacher>(teacherGuid);
+                if (teacher == null)
+                {
+                    return NotFound();
+                }
+                sortedComments = teacher.TeacherComments;
+                if (sortBy.sortByDate)
+                {
+                    return Ok(sortedComments.OrderByDescending(t => t.DateTime));
+                }
+                else if (sortBy.sortByLikes)
+                {
+                    return Ok(sortedComments.OrderByDescending(t => t.TotalNumberOfLikes));
+                }
+                return Ok(sortedComments);
+            }
+
+        }
+
+        [HttpPost]
         [ActionName("AddVote")]
         public IHttpActionResult Vote([FromBody] VoteCommand vote)
         {
@@ -225,5 +259,12 @@ namespace WebServer.Controllers
     {
         public string TeacherId { get; set; }
         public string TeacherName { get; set; }
+    }
+
+    public class SortedTeacherComment
+    {
+        public string TeacherId { get; set; }
+        public bool sortByDate { get; set; }
+        public bool sortByLikes { get; set; }
     }
 }

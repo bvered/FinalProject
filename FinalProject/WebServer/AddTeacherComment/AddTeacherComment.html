@@ -140,54 +140,64 @@
                 </table>
             </div>
         </div>
+        <div class="main" id="filterDiv">
+            <h1>סנן תגובות לפי:</h1>
+            <form id="radioFilterComments">
+                <input type="radio" id="filteredByNew" name="filteredBy" value="filteredByNew" checked onclick="setTeacherCommentsWithFilters()" /> תאריך
+                <input type="radio" id="filterByLikes" name="filteredBy" value=" filterbylikes" onclick="setTeacherCommentsWithFilters()" /> דירוג
+            </form>
+        </div>
+        <div id="divHolder" style="display:none">
+            <table id="commentTable" style="display: none">
+                <tr>
+                    <td class="teacherKeyTdUp" style="width: 250px;">תגובה:</td>
+                    <td><label></label></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdInner" style="width: 250px;">יחס לסטודנטים</td>
+                    <td>
+                        <center>
+                            <input id="comment0Rating0" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
+                        </center>
+                    </td>
+                </tr>
+                <tr id="criteriaTR">
+                    <td class="teacherKeyTdInner" style="width: 250px;">רמת הוראה</td>
+                    <td>
+                        <center>
+                            <input id="comment0Rating1" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
+                        </center>
+                    </td>
+                </tr>
+                <tr id="criteriaTR">
+                    <td class="teacherKeyTdInner" style="width: 250px;">ידע בקורסים</td>
+                    <td>
+                        <center>
+                            <input id="comment0Rating2" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
+                        </center>
+                    </td>
+                </tr>
+                <tr id="criteriaTR">
+                    <td class="teacherKeyTdInner" style="width: 250px;">כמה המרצה מעניין</td>
+                    <td>
+                        <center>
+                            <input id="comment0Rating3" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
+                        </center>
+                    </td>
+                </tr>
+                <tr class="likesTR">
+                    <td class="teacherKeyTdInner">דרג תגובה:</td>
+                    <td style="text-align: center"></td>
+                </tr>
+                <tr>
+                    <td class="teacherKeyTdDown">תאריך:</td>
+                    <td style="text-align: center"></td>
+                </tr>
+            </table>
+        </div>
         <div class="main">
             <div id="allComments" class="allComments">
-                <table id="commentTable" style="display: none">
-                    <tr>
-                        <td class="teacherKeyTdUp" style="width: 250px;">תגובה:</td>
-                        <td><label></label></td>
-                    </tr>
-                    <tr>
-                        <td class="teacherKeyTdInner" style="width: 250px;">יחס לסטודנטים</td>
-                        <td>
-                            <center>
-                                <input id="comment0Rating0" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
-                            </center>
-                        </td>
-                    </tr>
-                    <tr id="criteriaTR">
-                        <td class="teacherKeyTdInner" style="width: 250px;">רמת הוראה</td>
-                        <td>
-                            <center>
-                                <input id="comment0Rating1" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
-                            </center>
-                        </td>
-                    </tr>
-                    <tr id="criteriaTR">
-                        <td class="teacherKeyTdInner" style="width: 250px;">ידע בקורסים</td>
-                        <td>
-                            <center>
-                                <input id="comment0Rating2" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
-                            </center>
-                        </td>
-                    </tr>
-                    <tr id="criteriaTR">
-                        <td class="teacherKeyTdDown" style="width: 250px;">כמה המרצה מעניין</td>
-                        <td>
-                            <center>
-                                <input id="comment0Rating3" type="number" class="rating" min=0 max=5 step=1 data-size="xs">
-                            </center>
-                        </td>
-                    </tr>
-                    <tr class="likesTR">
-                        <td class="teacherKeyTdInner">דרג תגובה:</td>
-                        <td style="text-align: center"></td>
-                    </tr>
-                    <tr>
-                        <td class="teacherKeyTdDown">תאריך:</td>
-                        <td style="text-align: center"></td>
-                    </tr>
-                </table>
+
             </div>
         </div>
     </div>

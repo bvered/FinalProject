@@ -291,11 +291,11 @@ namespace WebServer.Controllers
                 {
                     courseComments.AddRange(courseInSemester.CourseComments);
                 }
-                if (commentRequest.SortNew)
+                if (commentRequest.SortByDate)
                 {
                     return Ok(courseComments.OrderByDescending(x => x.DateTime));
                 }
-                else if (commentRequest.SortDate)
+                else if (commentRequest.SortByLikes)
                 {
                     return Ok(courseComments.OrderByDescending(x => x.TotalNumberOfLikes));
                 }
@@ -333,8 +333,8 @@ namespace WebServer.Controllers
         public int Year { get; set; }
         public int Semester { get; set; }
         public int Page { get; set; }
-        public bool SortNew { get; set; }
-        public bool SortDate { get; set; }
+        public bool SortByDate { get; set; }
+        public bool SortByLikes { get; set; }
 
         public const int kNoInfoProvided = -1;
         public const int kNoOfCommentsPerPage = 5;

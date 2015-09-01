@@ -128,6 +128,7 @@ function showCourseComments() {
         noCommentsErrorLabel.innerHTML = "אין תגובות להציג";
         noCommentsErrorLabel.className = "NoComments";
         $('#allComments').append(noCommentsErrorLabel);
+        return;
     }
     for (comment in filteredComments) {
         printComment(filteredComments[comment], comment);
@@ -278,8 +279,8 @@ function setCourseCommentsWithFilters() {
         TeacherId: $('#filterByTeacher').val(),
         Year: year,
         Semester: $('#filteredBySemester').val(),
-        SortNew: $("#filteredByNew").is(':checked'),
-        SortDate: $('#filterByLikes').is(':checked'),
+        SortByDate: $("#filteredByNew").is(':checked'),
+        SortByLikes: $('#filterByLikes').is(':checked'),
     };
     var request = $.ajax({
         type: "POST",

@@ -103,16 +103,22 @@ textarea {
     border-width:1px;
 }
 
-.allComments table {
-    background-color: #ffffff;
-    background-color: rgba(255, 255, 255, 0.90);
+    .allComments h1 {
+            background-color:rgba(255, 255, 255, 0.60);
+            margin: 0 auto; 
+            text-align:center;
+    }
+
+    .allComments table {
+        background-color: #ffffff;
+        background-color: rgba(255, 255, 255, 0.90);
         border-radius: 5px;
         width: 600px;
         margin: 0 auto;
         margin-bottom:5px !important;
         position: relative;
         text-align:center;
-}
+    }
 
 .likesTR {
     align-content:center;
@@ -124,4 +130,13 @@ textarea {
 
 .DislikeLabel {
     color: red;
+}
+
+#filterDiv {
+    width: 50%;
+    margin: 0 auto; 
+    position: relative;
+    text-align:center;
+    background-color:rgba(255, 255, 255, 0.9);
+    border-radius:5px;  
 }
