@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using System.Web.Hosting;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -15,7 +16,7 @@ namespace WebServer.App_Data
 {
     public static class NHibernateConfig
     {
-        private static readonly string DBFile = Path.Combine(Path.GetTempPath(), "ProjectDB.db");
+        private static readonly string DBFile = HostingEnvironment.MapPath("~/App_Data/ProjectDB.db");
 
         public static ISessionFactory CreateSessionFactory(bool create = false)
         {
@@ -37,7 +38,7 @@ namespace WebServer.App_Data
         private static AutoPersistenceModel CreateMappings()
         {
             return AutoMap.Assembly(Assembly.GetCallingAssembly())
-                .Where(t => typeof (IPersistent).IsAssignableFrom(t))
+                .Where(t => typeof(IPersistent).IsAssignableFrom(t))
                 .Conventions.Setup(c =>
                 {
                     c.Add(DefaultCascade.SaveUpdate());

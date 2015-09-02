@@ -40,8 +40,7 @@ namespace TestConsole
                 FileExtention = "jpeg"
             };
 
-            string currentDir = Environment.CurrentDirectory;
-            Image img = Image.FromFile(currentDir + @"\..\..\Images\site_background.jpeg");
+            Image img = Image.FromFile( @"Images\site_background.jpeg");
             byte[] arr;
             using (MemoryStream ms = new MemoryStream())
             {
@@ -61,32 +60,18 @@ namespace TestConsole
             session.Save(MTA);
             session.Save(BGU);
 
-            img = Image.FromFile(currentDir + @"\..\..\Images\BGU.jpg");
+            img = Image.FromFile(@"Images\BGU.jpg");
             byte[] arr2;
             using (MemoryStream ms = new MemoryStream())
             {
                 img.Save(ms, System.Drawing.Imaging.ImageFormat.Jpeg);
                 arr2 = ms.ToArray();
             }
+
             BGU.BackgroundImage = arr2;
             
-
-            var romina = new Teacher(13899828, "רומינה זיגדון", 232, "05x-xxxxxxx", "ROMINAZI@MTA.AC.IL", MTA, Faculty.ComputerScience);
-            TeacherComment rominaComment = new TeacherComment
-            {
-                CommentText = "ממש עוזרת ללמוד",
-                DateTime = DateTime.Now,
-            };
-            foreach (var teacherCritiria in TeacherComment.GetTeacherCommentCriterias())
-            {
-                rominaComment.CriteriaRatings.Add(new TeacherCriteriaRating(teacherCritiria, 5));
-            }
-            rominaComment.AddVote(new Vote(true));
-            romina.AddTeacherCommnet(rominaComment);
-
-
             DataTable dtexcel = new DataTable("Report$".TrimEnd('$'));
-            using (OleDbConnection conn = CreateConnection( Environment.CurrentDirectory + @"\..\..\Images\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"Images\db.xlsx", true))
             {
                 string query = "SELECT  * FROM [" + "Report1$" + "]";
                 OleDbDataAdapter daexcel = new OleDbDataAdapter(query, conn);
