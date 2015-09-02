@@ -150,6 +150,7 @@ function printComment(comment, itr) {
         var commentRating = commentView.rows[parseInt(rating) + 1].cells[1].firstElementChild.firstElementChild;
         var ratingIdName = "commentView" + itr + "Rating" + rating;
         commentRating.setAttribute('id', ratingIdName);
+        $('#' + ratingIdName).rating({ 'size': 'xs' });
         $('#' + ratingIdName).rating('update', loadedComment.Rating);
         $('#' + ratingIdName).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
