@@ -123,14 +123,14 @@ namespace WebServer.Controllers
                     return Content(MyStatusCode, query.Select(x => x.Id).FirstOrDefault());
                 }
                 var course = new Course
-                    {
-                        University = session.Query<University>().SingleOrDefault(x => x.Name == createCommand.University),
-                        Name = createCommand.Name,
-                        Faculty = createCommand.Faculty,
-                        IsMandatory = createCommand.IsMandatory,
-                        AcademicDegree = createCommand.AcademicDegree,
-                        IntendedYear = createCommand.IntendedYear,
-                    };
+                {
+                    University = session.Query<University>().SingleOrDefault(x => x.Name == createCommand.University),
+                    Name = createCommand.Name,
+                    Faculty = createCommand.Faculty,
+                    IsMandatory = createCommand.IsMandatory,
+                    AcademicDegree = createCommand.AcademicDegree,
+                    IntendedYear = createCommand.IntendedYear,
+                };
 
                 course.AddCourseInSemester(new CourseInSemester
                 {
@@ -275,6 +275,7 @@ namespace WebServer.Controllers
             using (session.BeginTransaction())
             {
                 var courseComments = new List<CourseComment>();
+                IList<CommentData> commentData = new List<CommentData>();
                 Guid courseId, teacherId;
                 if (!Guid.TryParse(commentRequest.CourseId, out courseId))
                 {
@@ -293,17 +294,58 @@ namespace WebServer.Controllers
                 }
                 if (commentRequest.SortByDate)
                 {
-                    return Ok(courseComments.OrderByDescending(x => x.DateTime));
+                    foreach (CourseComment courseComment in (courseComments.OrderByDescending(x => x.DateTime)))
+                    {
+                        var commentedCourse = getCourseByComment(courseComment);
+                        if (commentedCourse == null) {
+                            return NotFound();
+                        }
+                    
+                        commentData.Add(new CommentData
+                        {
+                            Comment = courseComment,
+                            TeacherId = commentedCourse.Teacher.Id.ToString(),
+                            TeacherName = commentedCourse.Teacher.Name,
+                            Year = commentedCourse.Year,
+                            Semester = commentedCourse.Semester,
+                        });
+                    }
                 }
                 else if (commentRequest.SortByLikes)
                 {
-                    return Ok(courseComments.OrderByDescending(x => x.TotalNumberOfLikes));
+                    foreach (CourseComment courseComment in (courseComments.OrderByDescending(x => x.TotalNumberOfLikes)))
+                    {
+                        var commentedCourse = getCourseByComment(courseComment);
+                        if (commentedCourse == null)
+                        {
+                            return NotFound();
+                        }
+                        commentData.Add(new CommentData
+                        {
+                            Comment = courseComment,
+                            TeacherId = commentedCourse.Teacher.Id.ToString(),
+                            TeacherName = commentedCourse.Teacher.Name,
+                            Year = commentedCourse.Year,
+                            Semester = commentedCourse.Semester,
+                        });
+                    }
                 }
-                return Ok(courseComments);
+                return Ok(commentData);
+            }
+        }
+
+        private CourseInSemester getCourseByComment(CourseComment comment)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+                return session.Query<CourseInSemester>()
+                    .Where(c => c.CourseComments.Contains(comment))
+                    .SingleOrDefault();
             }
         }
     }
 
+        
 
     public class CreateCourseCommand
     {
@@ -338,5 +380,14 @@ namespace WebServer.Controllers
 
         public const int kNoInfoProvided = -1;
         public const int kNoOfCommentsPerPage = 5;
+    }
+
+    public class CommentData
+    {
+        public CourseComment Comment { get; set; }
+        public string TeacherId { get; set; }
+        public string TeacherName { get; set; }
+        public int Year { get; set; }
+        public Semester Semester { get; set;}
     }
 }

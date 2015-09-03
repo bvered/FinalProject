@@ -135,7 +135,8 @@ function showCourseComments() {
     }
 }
 
-function printComment(comment, itr) {
+function printComment(commentData, itr) {
+    var comment = commentData.Comment;
     var commentView = document.getElementById("commentTable").cloneNode(true);
     document.getElementById("allComments").appendChild(commentView);
     commentView.style.display = 'block';
@@ -154,7 +155,14 @@ function printComment(comment, itr) {
         $('#' + ratingIdName).rating('update', loadedComment.Rating);
         $('#' + ratingIdName).rating('refresh', { readonly: true, showClear: false, showCaption: false });
     }
-    var likesCell = commentView.rows[7].children[1];
+    var teacherButton = commentView.rows[7].cells[1].children[0];
+    teacherButton.innerHTML = commentData.TeacherName;
+    teacherButton.href = "../AddTeacherComment/AddTeacherComment.html?University=" + currentUniversity + "&id=" + commentData.TeacherId;
+    var commentYear = commentView.rows[8].cells[1];
+    commentYear.innerHTML = commentData.Year;
+    var commentSemester = commentView.rows[9].cells[1];
+    comment.innerHTML = semesterNameByEnum(commentData.Semester);
+    var likesCell = commentView.rows[10].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
     numberOfLikes.innerHTML = comment.TotalNumberOfLikes;
@@ -182,7 +190,7 @@ function printComment(comment, itr) {
     likesCell.appendChild(document.createElement("BR"));
     likesCell.appendChild(numberOfDislikes);
     likesCell.appendChild(voteDownButton);
-    var commentDate = commentView.rows[8].children[1];
+    var commentDate = commentView.rows[11].children[1];
     commentDate.innerHTML = comment.DateTime.replace("T", " ");
 }
 
