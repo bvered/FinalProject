@@ -161,7 +161,7 @@ function printComment(commentData, itr) {
     var commentYear = commentView.rows[8].cells[1];
     commentYear.innerHTML = commentData.Year;
     var commentSemester = commentView.rows[9].cells[1];
-    comment.innerHTML = semesterNameByEnum(commentData.Semester);
+    commentSemester.innerHTML = semesterNameByEnum(parseInt(commentData.Semester));
     var likesCell = commentView.rows[10].children[1];
     var numberOfLikes = document.createElement("Label");
     numberOfLikes.id = "CommentNumber" + itr + "Likes";
