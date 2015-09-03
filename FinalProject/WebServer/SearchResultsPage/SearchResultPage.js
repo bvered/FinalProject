@@ -254,7 +254,7 @@ function showTeachersData(arrayResult) {
 
         teacherData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('כמות דירוגים: ' + arrayResult[i].Score);
+        var Score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
         teacherData.appendChild(Score);
 
         teacherData.appendChild(document.createElement("br"));
@@ -304,7 +304,7 @@ function showCoursesData(arrayResult) {
 
         courseData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('כמות דירוגים: ' + arrayResult[i].Score);
+        var Score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
         courseData.appendChild(Score);
 
         courseData.appendChild(document.createElement("br"));

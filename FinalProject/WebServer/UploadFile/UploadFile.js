@@ -7,17 +7,18 @@ $(document).ready(function () {
     currentUniversity = queryString["University"];
     getBackground(currentUniversity);
 
+    var courseId = queryString["courseId"];
+    $("#returnToCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
+
     $('#btnUploadFile').on('click', function () {
 
-        var courseId = queryString["courseId"];
         var semester = $('input[name=semester]:checked').val();
         var year = $('#Year').val();
         var isSyllabus = $('input[name=isSyllabus]:checked').val();
 
-        if (!courseId || !semester || !year || !isSyllabus) {
+        if (!courseId || !semester || !year || !isSyllabus || isNaN(year)) {
             $("#EmptyRequierments")[0].hidden = false;
             $("#AddFileSuccesfully")[0].hidden = true;
-            $("#returnToCourse")[0].hidden = true;
 
         } else {
             var files = $("#fileUpload").get(0).files;
@@ -40,8 +41,6 @@ $(document).ready(function () {
                     200: function () {
                         $("#EmptyRequierments")[0].hidden = true;
                         $("#AddFileSuccesfully")[0].hidden = false;
-                        $("#returnToCourse")[0].hidden = false;
-                        $("#returnToCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
                     }
                 }
             });

@@ -9,6 +9,10 @@ $(document).ready(function () {
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
     getBackground(currentUniversity);
+
+    var courseId = queryString["courseId"];
+    $("#returnToCourse")[0].href = "/AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
+
     initFilterValues();
     getAllFiles();
 });

@@ -76,7 +76,7 @@ function setupFilters() {
         }));
     }
     for (var teacher in teachersToFilterBy) {
-        if (teachersToFilterBy[teacher] == null) {
+        if (teachersToFilterBy[teacher] == null || teachersToFilterBy[teacher].Name == undefined) {
             continue;
         }
         $('#filterByTeacher').append($('<option>', {

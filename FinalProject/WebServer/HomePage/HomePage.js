@@ -80,7 +80,8 @@ function setUniversityInfo() {
             SetBackgroundImage(data);
             $("#UniversityInfo")[0].innerText += " " + data.UniversityName;
             $("#UniversityInfo")[0].onclick = function() {
-                window.location =  "http://"  + data.WebAddress;
+                var win = window.open("http://" + data.WebAddress, "_blank");
+                win.focus();
             }
         }
     });
