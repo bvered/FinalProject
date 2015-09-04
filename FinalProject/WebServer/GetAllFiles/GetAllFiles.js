@@ -8,6 +8,8 @@ $(document).ready(function () {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+
+    ifNoUniversity(currentUniversity);
     getBackground(currentUniversity);
 
     var courseId = queryString["courseId"];

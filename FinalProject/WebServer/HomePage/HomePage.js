@@ -6,6 +6,8 @@ $(document).ready(function () {
 
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+
+    ifNoUniversity(currentUniversity);
     setUniversityInfo();
 
     SmartSearch();
@@ -78,6 +80,7 @@ function setUniversityInfo() {
         contentType: "application/json",
         success: function(data) {
             SetBackgroundImage(data);
+            document.title = "Rate My School- " + currentUniversity;
             $("#UniversityInfo")[0].innerText += " " + data.UniversityName;
             $("#UniversityInfo")[0].onclick = function() {
                 var win = window.open("http://" + data.WebAddress, "_blank");

@@ -12,6 +12,8 @@ $(document).ready(function () {
 function setupUniversity() {
     $('#University').attr('value', getQuertyString()["University"]);
     currentUniversity = getQuertyString()["University"];
+
+    ifNoUniversity(currentUniversity);
     getBackground(currentUniversity);
 }
 
@@ -95,6 +97,7 @@ function setupFilters() {
 function printCourseProperties() {
     var courseNameTD = document.getElementById("courseNameTD");
     courseNameTD.innerHTML = course.Name;
+    document.title = "Rate My School- " + course.Name;
 
     $('#averageRating').rating('update', course.Score);
     $('#averageRating').rating('refresh', { readonly: true, showClear: false, showCaption: false });

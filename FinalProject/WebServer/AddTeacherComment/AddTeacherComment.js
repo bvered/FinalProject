@@ -4,6 +4,7 @@ var numberOfCommentsLoaded;
 var queryString;
 var currentUniversity;
 var filteredComments;
+var teacherCourses;
 
 $(document).ready(function () {
     setupUniversity();
@@ -14,6 +15,8 @@ function setupUniversity() {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+
+    ifNoUniversity(currentUniversity);
     getBackground(currentUniversity);
 }
 
@@ -25,6 +28,7 @@ function setupPage() {
     var didSucceedLoadingTeacher = loadTeacher();
     if (didSucceedLoadingTeacher == true) {
         setupNewComment();
+        setupCourseInfo();
         printInformationOfTeacher();
     } else {
         showLoadingTeacherFailed();
@@ -97,6 +101,36 @@ function addVote(voteValueLabel ,id, like) {
     return false;
 }
 
+function setupCourseInfo() {
+    var id = getQuertyString()["id"];
+    var succeed = false;
+
+    $.ajax({
+        type: "POST",
+        url: '/api/Teachers/GetTeacherCourses' + "/" + id,
+        contentType: "application/json",
+        success: function (data) {
+            if (data.length > 0) {
+                $('#teacherCoursesDiv').append("<h1>קורסים</h1>");
+            }
+            for(var course in data) {
+                var courseName = data[course].CourseName;
+                var courseId = data[course].CourseId;
+                var courseLink = "../AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + course.Id;
+
+                $('#teacherCoursesDiv').append("<h1>קורסים</h1>")
+                $('#teacherCoursesDiv').append("<a href=" + courseLink + ">" + courseName + "</a></br>")
+            }
+            succeed = true;
+        },
+        fail: function () {
+            succeed = false;
+        },
+        async: false
+    });
+    return succeed;
+}
+
 function setupNewComment() {
     $('#newAvgRating0').rating('refresh', { showClear: false, showCaption: false });
     $('#newAvgRating1').rating('refresh', { showClear: false, showCaption: false });
@@ -113,6 +147,8 @@ function printInformationOfTeacher() {
 function showTeacherInfoToUser() {
     var teacherNameLabel = document.getElementById("teacherNameTD");
     teacherNameLabel.innerHTML = teacher.Name;
+
+    document.title = "Rate My School- " + teacher.Name;
 
     var teacherScoreLabel = document.getElementById("teacherAvgTD");
     var averageRatings = parseInt(teacher.Score);

@@ -207,6 +207,29 @@ namespace WebServer.Controllers
         }
 
         [HttpPost]
+        [ActionName("GetTeacherCourses")]
+        public IHttpActionResult GetTeacherCourses([FromUri]string id)
+        {
+            using (var session = DBHelper.OpenSession())
+            {
+               // Guid tGuid;
+               // var parseSucced = Guid.TryParse(id, out tGuid);
+               // //List<TeacherCoursesByTeacherId> teacherCourses =
+               //List<TeacherCoursesByTeacherId> teacherCourses =
+               //     session.Query<CourseInSemester>()
+               //     .Where(x => x.Teacher.Id == tGuid)
+               //     .Select(x => new TeacherCoursesByTeacherId
+               //     {
+               //         CourseId = x.Course.Id,
+               //         CourseName = x.Course.Name,
+               //     })
+               //     .ToList();
+                return Ok();
+            }
+        }
+
+
+        [HttpPost]
         [ActionName("AddVote")]
         public IHttpActionResult Vote([FromBody] VoteCommand vote)
         {
@@ -266,5 +289,11 @@ namespace WebServer.Controllers
         public string TeacherId { get; set; }
         public bool sortByDate { get; set; }
         public bool sortByLikes { get; set; }
+    }
+
+    public class TeacherCoursesByTeacherId
+    {
+        public string CourseName { get; set; }
+        public Guid CourseId { get; set; }
     }
 }

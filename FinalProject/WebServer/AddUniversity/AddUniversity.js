@@ -39,7 +39,5 @@
 };
 
 function currentHomePage() {
-    if (currentUniversity != null) {
-        homePage();
-    }
+    window.location = "/Universities/Universities.html";
 }

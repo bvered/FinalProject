@@ -6,6 +6,8 @@ $(document).ready(function() {
     queryString = getQuertyString();
     $('#University').attr('value', queryString["University"]);
     currentUniversity = queryString["University"];
+
+    ifNoUniversity(currentUniversity);
     fileType = queryString["type"];
     getBackground(currentUniversity);
     downloadFile();

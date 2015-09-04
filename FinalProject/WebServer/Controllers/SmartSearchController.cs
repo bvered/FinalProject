@@ -40,7 +40,7 @@ namespace WebServer.Controllers
                 else if (teachersCount < lowestResult)
                 {
                     var coursesToSkip = lowestResult - teachersCount;
-                    courses = QueryOrderedCourses(coursesQuery.Skip(coursesToSkip).Take(5), filter.SearchPreferences);
+                    courses = QueryOrderedCourses(coursesQuery, filter.SearchPreferences).Skip(coursesToSkip).Take(5);
                 }
                 else
                 {
@@ -50,7 +50,7 @@ namespace WebServer.Controllers
 
                     teachers = teachersQuery.Skip(lowestResult);
 
-                    courses = QueryOrderedCourses(coursesQuery.Skip(coursesToSkip).Take(coursesCount), filter.SearchPreferences);
+                    courses = QueryOrderedCourses(coursesQuery, filter.SearchPreferences).Skip(coursesToSkip).Take(coursesCount);
                 }
 
                 var anySearchResult = new AnySearchResult
@@ -149,7 +149,7 @@ namespace WebServer.Controllers
                 }
                 else
                 {
-                    orderedCourses = QueryOrderedCourses(query.Skip(filter.Counter * 5).Take(5), filter.SearchPreferences);
+                    orderedCourses = QueryOrderedCourses(query, filter.SearchPreferences).Skip(filter.Counter * 5).Take(5);
                 }
 
                 var total = query.Count();

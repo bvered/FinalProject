@@ -1,4 +1,5 @@
-﻿function getQuertyString() {
+﻿/// <reference path="C:\inetpub\wwwroot\FinalProject\FinalProject\WebServer\index.html" />
+function getQuertyString() {
 
     var queryString = [];
 
@@ -18,6 +19,12 @@
     }
 
     return queryString;
+}
+
+function ifNoUniversity(University) {
+    if (University === undefined || University === null) {
+        window.location = "/index.html";
+    }
 }
 
 function getBackground(currentUniversity) {
