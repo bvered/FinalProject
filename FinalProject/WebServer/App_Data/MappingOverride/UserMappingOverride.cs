@@ -33,6 +33,8 @@ namespace WebServer.App_Data.MappingOverride
         public void Override(AutoMapping<Teacher> mapping)
         {
             mapping.Map(x => x.Name).Not.Nullable();
+
+            mapping.HasMany(x => x.Faculties).Cascade.All().Element("EnumValueColumn");
         }
     }
 

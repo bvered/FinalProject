@@ -39,9 +39,9 @@ namespace WebServer.Controllers
                 } else {
                     return NotFound();
                 }
-                var teachers = session.QueryOver<Teacher>()
-                    .Where(x => x.Faculty == faculty)
-                    .List();
+                var teachers = session.Query<Teacher>()
+                    .Where(x => x.Faculties.Contains(faculty))
+                    .ToList();
                 var teacherEssentials = teachers.Select(teacher => new TeacherEssentials
                 {
                     TeacherId = teacher.Id.ToString(), TeacherName = teacher.Name
