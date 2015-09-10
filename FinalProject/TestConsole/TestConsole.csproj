@@ -99,6 +99,9 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel.DomainServices.EntityFramework">
+      <HintPath>..\..\..\..\..\..\..\..\..\Program Files (x86)\Microsoft SDKs\RIA Services\v1.0\Libraries\Server\System.ServiceModel.DomainServices.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />

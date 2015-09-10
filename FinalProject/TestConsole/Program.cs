@@ -86,11 +86,9 @@ namespace TestConsole
                 daexcel.Fill(dtexcel);
             }
 
+            // adding the teachers
             int index = 0;
-
-            //saves the teachers by name and mail
             var teachersForCourses = new Dictionary<int, Teacher>();
-
             foreach (DataRow row in dtexcel.Rows)
             {
                 var teacherIdString = row["TeacherId"].ToString();
@@ -99,6 +97,7 @@ namespace TestConsole
                 {
                     continue;
                 }
+
                 if (teachersForCourses.ContainsKey(teacherId) == false)
                 {
                     string teacherName = row["TeacherName"].ToString();
@@ -106,18 +105,16 @@ namespace TestConsole
                     {
                         continue;
                     }
+
                     string teacherMail = row["Mail"].ToString();
                     Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
                     var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, mta);
-
                     newTeacher.Faculties.Add(teacherFaculty);
-
                     teachersForCourses.Add(teacherId, newTeacher);
                 }
                 else
                 {
                     var teacher = teachersForCourses[teacherId];
-
                     var faculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
                     if (!teacher.Faculties.Contains(faculty))
                     {
@@ -129,43 +126,37 @@ namespace TestConsole
             foreach (var teacher in teachersForCourses)
             {
                 session.Save(teacher.Value);
-
                 index++;
-
                 if (index%50 == 0)
                 {
                     session.Flush();
                     session.Clear();
+                
                 }
             }
 
-
+            // adding the courses
             index = 0;
-            //add the courses
-
             var courses = new Dictionary<string, List<courseInSemester>>();
-
-
             foreach (DataRow row in dtexcel.Rows)
             {
                 string courseName = row["Description"].ToString();
                 string facultyName = row["Faculty"].ToString();
                 string nameAndFculty = courseName + "." + facultyName;
-
                 string semester = row["Semester"].ToString();
                 string teacherName = row["TeacherName"].ToString();
                 string intendedYear = row["Year"].ToString();
 
-                if (courses.ContainsKey(nameAndFculty) == false) //if the course doesnt exist
-                {
+                if (courses.ContainsKey(nameAndFculty) == false)
+                { // if the course doesnt exist
                     courses[nameAndFculty] = new List<courseInSemester>();
                     createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                 }
-                else // the course exists
-                {
+                else
+                { // if the course exists
                     bool found = false;
                     foreach (courseInSemester courseInSemester in courses[nameAndFculty])
-                        // cross all over the teachers, to see if we need to add new teacher 
+                        // cross all over the teachers, to see if we need to add new teacher to the course
                     {
                         if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester)
                         {
@@ -173,7 +164,7 @@ namespace TestConsole
                         }
                     }
 
-                    if (found == false) // if the current teacher is not in the course semester yet
+                    if (found == false)
                     {
                         createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                     }
@@ -186,7 +177,6 @@ namespace TestConsole
                 string courseFaculty = course.Key.Substring(course.Key.IndexOf(".") + 1,
                     course.Key.Length - name.Length - 1);
                 Faculty faculty = FacultyMethod.FacultyFromString(courseFaculty);
-
                 var newCourse = new Course(0, name, faculty);
                 newCourse.University = mta;
                 newCourse.IsMandatory = course.Value.Any(x => x.isMandatory);
@@ -203,6 +193,7 @@ namespace TestConsole
                     {
                         semesterCourse.Teacher = teachersForCourses[courseIn.id];
                     }
+
                     semesterCourse.Year = 2016;
                     semesterCourse.Course = newCourse;
                     semesterCourse.Semester = SemesterMethod.SemesterFromString(courseIn.semester);
@@ -249,10 +240,12 @@ namespace TestConsole
             courseInSemester courseSemester = new courseInSemester();
             int isMandatory = 0;
             bool mandatory = false;
+            
             if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
             {
                 mandatory = isMandatory != 0;
             }
+
             courseSemester.isMandatory = mandatory;
             courseSemester.semester = semester;
             courseSemester.teacherName = teacherName;
@@ -271,11 +264,10 @@ namespace TestConsole
             {
                 year = 1;
             }
-            courseSemester.intendedYear = year;
 
+            courseSemester.intendedYear = year;
             string academicDegree = row["AcademicDegree"].ToString();
             courseSemester.academicDegree = academicDegree;
-
             courses[nameAndFculty].Add(courseSemester);
         }
 
