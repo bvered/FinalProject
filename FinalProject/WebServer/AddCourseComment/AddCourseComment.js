@@ -288,8 +288,6 @@ function setCourseCommentsWithFilters() {
     year = (year != "") ? year : "-1";
     var commentRequest = {
         CourseId: course.Id,
-        TeacherId: $('#filterByTeacher').val(),
-        Year: year,
         Semester: $('#filteredBySemester').val(),
         SortByDate: $("#filteredByNew").is(':checked'),
         SortByLikes: $('#filterByLikes').is(':checked'),

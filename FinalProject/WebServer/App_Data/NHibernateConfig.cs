@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
+using System.Web.UI.WebControls;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
@@ -16,22 +17,31 @@ namespace WebServer.App_Data
 {
     public static class NHibernateConfig
     {
-        private static readonly string DBFile = HostingEnvironment.MapPath("~/App_Data/ProjectDB.db");
-
-        public static ISessionFactory CreateSessionFactory(bool create = false)
+        private static string GetDBFilePath()
         {
+            return HostingEnvironment.MapPath("~/App_Data/ProjectDB.db");
+        }
+
+        public static ISessionFactory CreateSessionFactory(bool create = false, string filePath = null)
+        {
+            filePath = filePath ?? GetDBFilePath();
+
             return Fluently.Configure()
-                .Database(SQLiteConfiguration.Standard.UsingFile(DBFile))
+                .Database(SQLiteConfiguration.Standard.UsingFile(filePath))
                 .Mappings(m => m.AutoMappings.Add(CreateMappings()))
-                .ExposeConfiguration(x => BuildSchema(x, create))
+                .ExposeConfiguration(x => BuildSchema(x, filePath, create))
                 .BuildSessionFactory();
         }
 
-        private static void BuildSchema(Configuration config, bool create = false)
+        private static void BuildSchema(Configuration config, string filePath, bool create = false)
         {
-            if (create || !File.Exists(DBFile))
+            if (create)
             {
                 new SchemaExport(config).Create(false, true);
+            }
+            else if (File.Exists(filePath))
+            {
+                new SchemaUpdate(config).Execute(true, true);                
             }
         }
 

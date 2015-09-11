@@ -28,24 +28,24 @@ namespace WebServer.App_Data.Models
         public IList<TeacherComment> TeacherComments { get; set; }
         [DataMember]
         public AverageRatings AverageCriteriaRatings { get; set; }
-        [DataMember]
-        public Faculty Faculty { get; set; }
+
+        public IList<Faculty> Faculties { get; set; }
 
         public Teacher()
         {
-            SetupTeacher();
+            Faculties = new List<Faculty>();
+            TeacherComments = new List<TeacherComment>();
+            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
         }
 
-        public Teacher(int teacherId, string name, int room,string phone, string email, University university, Faculty faculty)
+        public Teacher(int teacherId, string name, int room,string phone, string email, University university) : this()
         {
-            SetupTeacher();
             TeacherId = teacherId;
             Name = name;
             Room = room;
             Cellphone = phone;
             Email = email;
             University = university;
-            Faculty = faculty;
         }
 
         public void AddTeacherCommnet(TeacherComment tComment)
@@ -58,10 +58,5 @@ namespace WebServer.App_Data.Models
             AverageCriteriaRatings.AddRatings(ratings);
             Score = AverageCriteriaRatings.GetAverageOfRatings();
          }
-
-        public void SetupTeacher() {
-            TeacherComments = new List<TeacherComment>();
-            AverageCriteriaRatings = new AverageRatings(TeacherComment.GetTeacherCommentCriterias().Count);
-        }
     }
 }
