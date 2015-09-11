@@ -90,7 +90,7 @@ function addVote(voteValueLabel ,id, like) {
         url: '/api/Teachers/AddVote',
         contentType: "application/json",
         success: function (data) {
-            voteValueLabel.innerHTML = "אהבו: " + data;
+            voteValueLabel.innerHTML = Math.abs(parseInt(data));
             $.jStorage.set(id, true);
         },
         fail: function (jqXhr, textStatus) {
@@ -221,7 +221,7 @@ function printComment(comment, itr) {
     numberOfLikes.className = "LikesLabel";
     var numberOfDislikes = document.createElement("Label");
     numberOfDislikes.id = "CommentNumber" + itr + "Dislikes";
-    numberOfDislikes.innerHTML = comment.TotalNumberOfDislikes;
+    numberOfDislikes.innerHTML = Math.abs(comment.TotalNumberOfDislikes);
     numberOfDislikes.className = "DislikeLabel";
     var voteUpButton = document.createElement("Button");
     voteUpButton.id = "CommentNumber" + itr + "VoteUp";
