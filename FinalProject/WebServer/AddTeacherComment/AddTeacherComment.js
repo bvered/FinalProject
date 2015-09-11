@@ -110,16 +110,11 @@ function setupCourseInfo() {
         url: '/api/Teachers/GetTeacherCourses' + "/" + id,
         contentType: "application/json",
         success: function (data) {
-            if (data.length > 0) {
-                $('#teacherCoursesDiv').append("<h1>קורסים</h1>");
-            }
             for(var course in data) {
                 var courseName = data[course].CourseName;
                 var courseId = data[course].CourseId;
-                var courseLink = "../AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + course.Id;
-
-                $('#teacherCoursesDiv').append("<h1>קורסים</h1>")
-                $('#teacherCoursesDiv').append("<a href=" + courseLink + ">" + courseName + "</a></br>")
+                var courseLink = "../AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
+                $('#teacherCoursesTD').append("<a href=" + courseLink + ">" + courseName + "</a></br>")
             }
             succeed = true;
         },

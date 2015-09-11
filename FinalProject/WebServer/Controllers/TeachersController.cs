@@ -212,19 +212,18 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-               // Guid tGuid;
-               // var parseSucced = Guid.TryParse(id, out tGuid);
-               // //List<TeacherCoursesByTeacherId> teacherCourses =
-               //List<TeacherCoursesByTeacherId> teacherCourses =
-               //     session.Query<CourseInSemester>()
-               //     .Where(x => x.Teacher.Id == tGuid)
-               //     .Select(x => new TeacherCoursesByTeacherId
-               //     {
-               //         CourseId = x.Course.Id,
-               //         CourseName = x.Course.Name,
-               //     })
-               //     .ToList();
-                return Ok();
+                Guid tGuid;
+                var parseSucced = Guid.TryParse(id, out tGuid);
+                List<TeacherCoursesByTeacherId> teacherCourses =
+                     session.Query<CourseInSemester>()
+                     .Where(x => x.Teacher.Id == tGuid)
+                     .Select(x => new TeacherCoursesByTeacherId
+                     {
+                         CourseId = x.Course.Id,
+                         CourseName = x.Course.Name,
+                     })
+                     .ToList();
+                return Ok(teacherCourses);
             }
         }
 
