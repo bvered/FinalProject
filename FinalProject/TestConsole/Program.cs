@@ -79,64 +79,22 @@ namespace TestConsole
 
             var dtexcel = new DataTable("Report$".TrimEnd('$'));
             const string query = "SELECT  * FROM [Report1$]";
-            using (OleDbConnection conn = CreateConnection(@"Images\db.xlsx", true))
+            using (OleDbConnection conn = createConnection(@"Images\db.xlsx", true))
             {
                 var daexcel = new OleDbDataAdapter(query, conn);
                 dtexcel.Locale = CultureInfo.InvariantCulture;
                 daexcel.Fill(dtexcel);
             }
 
-            // adding the teachers
+            var teachersForCourses = createTeachers(dtexcel, session, mta);
+
+            createCourses(dtexcel, session, teachersForCourses, mta);
+
+        }
+
+        private static void createCourses(DataTable dtexcel, ISession session, Dictionary<int, Teacher> teachersForCourses, University mta)
+        {
             int index = 0;
-            var teachersForCourses = new Dictionary<int, Teacher>();
-            foreach (DataRow row in dtexcel.Rows)
-            {
-                var teacherIdString = row["TeacherId"].ToString();
-                int teacherId;
-                if (!Int32.TryParse(teacherIdString, out teacherId))
-                {
-                    continue;
-                }
-
-                if (teachersForCourses.ContainsKey(teacherId) == false)
-                {
-                    string teacherName = row["TeacherName"].ToString();
-                    if (teacherName == string.Empty)
-                    {
-                        continue;
-                    }
-
-                    string teacherMail = row["Mail"].ToString();
-                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
-                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, mta);
-                    newTeacher.Faculties.Add(teacherFaculty);
-                    teachersForCourses.Add(teacherId, newTeacher);
-                }
-                else
-                {
-                    var teacher = teachersForCourses[teacherId];
-                    var faculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
-                    if (!teacher.Faculties.Contains(faculty))
-                    {
-                        teacher.Faculties.Add(faculty);
-                    }
-                }
-            }
-
-            foreach (var teacher in teachersForCourses)
-            {
-                session.Save(teacher.Value);
-                index++;
-                if (index%50 == 0)
-                {
-                    session.Flush();
-                    session.Clear();
-                
-                }
-            }
-
-            // adding the courses
-            index = 0;
             var courses = new Dictionary<string, List<courseInSemester>>();
             foreach (DataRow row in dtexcel.Rows)
             {
@@ -156,7 +114,7 @@ namespace TestConsole
                 { // if the course exists
                     bool found = false;
                     foreach (courseInSemester courseInSemester in courses[nameAndFculty])
-                        // cross all over the teachers, to see if we need to add new teacher to the course
+                    // cross all over the teachers, to see if we need to add new teacher to the course
                     {
                         if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester)
                         {
@@ -211,14 +169,68 @@ namespace TestConsole
                 session.Save(newCourse);
                 session.Flush();
                 index++;
-                if (index%50 == 0)
+                if (index % 50 == 0)
                 {
                     session.Clear();
                 }
             }
         }
 
-        private static OleDbConnection CreateConnection(string filePath, bool hasHeaders)
+        private static Dictionary<int, Teacher> createTeachers(DataTable dtexcel, ISession session, University mta)
+        {
+            int index = 0;
+            var teachersForCourses = new Dictionary<int, Teacher>();
+            foreach (DataRow row in dtexcel.Rows)
+            {
+                var teacherIdString = row["TeacherId"].ToString();
+                int teacherId;
+                if (!Int32.TryParse(teacherIdString, out teacherId))
+                {
+                    continue;
+                }
+
+                if (teachersForCourses.ContainsKey(teacherId) == false)
+                {
+                    string teacherName = row["TeacherName"].ToString();
+                    if (teacherName == string.Empty)
+                    {
+                        continue;
+                    }
+
+                    string teacherMail = row["Mail"].ToString();
+                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, mta);
+                    newTeacher.Faculties.Add(teacherFaculty);
+                    teachersForCourses.Add(teacherId, newTeacher);
+                }
+                else
+                {
+                    var teacher = teachersForCourses[teacherId];
+                    var faculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    if (!teacher.Faculties.Contains(faculty))
+                    {
+                        teacher.Faculties.Add(faculty);
+                    }
+                }
+            }
+
+            foreach (var teacher in teachersForCourses)
+            {
+                session.Save(teacher.Value);
+                index++;
+                if (index % 50 == 0)
+                {
+                    session.Flush();
+                    session.Clear();
+
+                }
+            }
+
+            return teachersForCourses;
+
+        }
+
+        private static OleDbConnection createConnection(string filePath, bool hasHeaders)
         {
             string HDR = hasHeaders ? "Yes" : "No";
             string strConn;
@@ -234,13 +246,13 @@ namespace TestConsole
             return conn;
         }
 
-        public static void createCourseInSemester(Dictionary<string, List<courseInSemester>> courses, DataRow row,
+        private static void createCourseInSemester(Dictionary<string, List<courseInSemester>> courses, DataRow row,
             string intendedYear, string semester, string teacherName, string nameAndFculty)
         {
             courseInSemester courseSemester = new courseInSemester();
             int isMandatory = 0;
             bool mandatory = false;
-            
+
             if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
             {
                 mandatory = isMandatory != 0;
