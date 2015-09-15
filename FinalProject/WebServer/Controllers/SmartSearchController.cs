@@ -142,6 +142,7 @@ namespace WebServer.Controllers
                 {
                     orderedCourses =
                         query.OrderByDescending(x => x.Score)
+                        .Skip(filter.Counter * 5).Take(5)
                             .Select(
                                 arg =>
                                     ConvertToResult(arg.Id, arg.Name, arg.CourseId, arg.Faculty, arg.AcademicDegree,

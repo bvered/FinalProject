@@ -66,7 +66,7 @@ namespace WebServer.Controllers
                         string extension = Path.GetExtension(httpPostedFile.FileName);
                         if (string.IsNullOrEmpty(extension))
                             throw new ArgumentException(string.Format("Unable to determine file extension for fileName: {0}", httpPostedFile.FileName));
-                        bool IsPic = false;
+                        bool isPic = false;
 
                         switch (extension.ToLower())
                         {
@@ -79,7 +79,7 @@ namespace WebServer.Controllers
                             case @".tif":
                             case @".tiff":
                             case @".wmf":
-                                IsPic = true;
+                                isPic = true;
                                 break;
                         }
 
@@ -94,7 +94,7 @@ namespace WebServer.Controllers
                                 Semster = semster,
                                 Year = year,
                                 isSylabus = false,
-                                isPic = IsPic,
+                                isPic = isPic,
                                 ext = extension
                             };
                         }
@@ -111,7 +111,7 @@ namespace WebServer.Controllers
                                 Semster = semster,
                                 Year = year,
                                 isSylabus = true,
-                                isPic = IsPic,
+                                isPic = isPic,
                                 ext = extension
                             };
                         }

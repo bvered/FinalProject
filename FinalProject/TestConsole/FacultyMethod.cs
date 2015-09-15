@@ -1,3 +1,4 @@
+using System;
 using WebServer.App_Data.Models.Enums;
 
 namespace TestConsole
@@ -6,39 +7,39 @@ namespace TestConsole
     {
         public static Faculty FacultyFromString(string facultyName)
         {
-            if (facultyName.Equals("מדעי המחשב"))
+            if (string.Equals(facultyName, "מדעי המחשב", StringComparison.CurrentCulture))
             {
                 return Faculty.ComputerScience;
             }
-            else if (facultyName.Equals("מדעי התנהגות"))
+            if (string.Equals(facultyName, "מדעי התנהגות", StringComparison.CurrentCulture))
             {
                 return Faculty.BehavioralSciences;
             }
-            else if (facultyName.Equals("ניהול מערכות מידע"))
+            if (string.Equals(facultyName, "ניהול מערכות מידע", StringComparison.CurrentCulture))
             {
                 return Faculty.InformationSystems;
             }
-            else if (facultyName.Equals("מדעי הסיעוד"))
+            if (string.Equals(facultyName, "מדעי הסיעוד", StringComparison.CurrentCulture))
             {
                 return Faculty.Nursing;
             }
-            else if (facultyName.Equals("כלכלה וניהול"))
+            if (string.Equals(facultyName, "כלכלה וניהול", StringComparison.CurrentCulture))
             {
                 return Faculty.ManagementEconomics;
             }
-            else if (facultyName.Equals("ממשל וחברה"))
+            if (string.Equals(facultyName, "ממשל וחברה", StringComparison.CurrentCulture))
             {
                 return Faculty.SocietyPolitics;
             }
-            else if (facultyName.Equals("יעוץ ופיתוח ארגוני"))
+            if (string.Equals(facultyName, "יעוץ ופיתוח ארגוני", StringComparison.CurrentCulture))
             {
                 return Faculty.ConsultingOrganizationalDevelopment;
             }
-            else if (facultyName.Equals("מנהל עסקים"))
+            if (string.Equals(facultyName, "מנהל עסקים", StringComparison.CurrentCulture))
             {
                 return Faculty.BusinessAdministration;
             }
-            else if (facultyName.Equals("פסיכולוגיה"))
+            if (string.Equals(facultyName, "פסיכולוגיה", StringComparison.CurrentCulture))
             {
                 return Faculty.Psychology;
             }

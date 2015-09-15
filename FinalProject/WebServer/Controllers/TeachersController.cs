@@ -107,8 +107,8 @@ namespace WebServer.Controllers
                 var query = session.Query<Teacher>().Where(x => x.Name == createCommand.Name).ToList();
                 if (query.Count != 0)
                 {
-                    const HttpStatusCode MyStatusCode = (HttpStatusCode)222;
-                    return Content(MyStatusCode, query.Select(x => x.Id).FirstOrDefault());
+                    const HttpStatusCode myStatusCode = (HttpStatusCode)222;
+                    return Content(myStatusCode, query.Select(x => x.Id).FirstOrDefault());
                 }
 
                 var teacher = new Teacher
@@ -177,22 +177,20 @@ namespace WebServer.Controllers
         public IHttpActionResult GetSortedTeacherComments([FromBody] SortedTeacherComment sortBy)
         {
             using (var session = DBHelper.OpenSession())
-            using (var transaction = session.BeginTransaction())
+            using (session.BeginTransaction())
             {
-                IList<TeacherComment> sortedComments;
                 Guid teacherGuid;
-                Teacher teacher;
                 var successfullteacherGuidParse = Guid.TryParse(sortBy.TeacherId, out teacherGuid);
                 if (!successfullteacherGuidParse)
                 {
                     return NotFound();
                 }
-                teacher = session.Get<Teacher>(teacherGuid);
+                var teacher = session.Get<Teacher>(teacherGuid);
                 if (teacher == null)
                 {
                     return NotFound();
                 }
-                sortedComments = teacher.TeacherComments;
+                var sortedComments = teacher.TeacherComments;
                 if (sortBy.sortByDate)
                 {
                     return Ok(sortedComments.OrderByDescending(t => t.DateTime));
@@ -213,7 +211,7 @@ namespace WebServer.Controllers
             using (var session = DBHelper.OpenSession())
             {
                 Guid tGuid;
-                var parseSucced = Guid.TryParse(id, out tGuid);
+                Guid.TryParse(id, out tGuid);
                 List<TeacherCoursesByTeacherId> teacherCourses =
                      session.Query<CourseInSemester>()
                      .Where(x => x.Teacher.Id == tGuid)

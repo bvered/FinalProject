@@ -7,13 +7,13 @@
         data.append("UploadedFile", files[0]);
     }
 
-    var UniversityName = $('#UniversityName').val();
-    var UniversityAcronyms = $('#UniversityAcronyms').val();
-    var UniversitySite = $('#UniversitySite').val();
+    var universityName = $('#UniversityName').val();
+    var universityAcronyms = $('#UniversityAcronyms').val();
+    var universitySite = $('#UniversitySite').val();
 
-    data.append("UniversityName", UniversityName);
-    data.append("UniversityAcronyms", UniversityAcronyms);
-    data.append("UniversitySite", UniversitySite);
+    data.append("UniversityName", universityName);
+    data.append("UniversityAcronyms", universityAcronyms);
+    data.append("UniversitySite", universitySite);
 
     var ajaxRequest = $.ajax({
         type: "POST",
@@ -34,7 +34,7 @@
         $("#addUniversitySuccessfuly")[0].hidden = false;
         $("#UniversityExists")[0].hidden = true;
         $("#moveToNew")[0].hidden = false;
-        $("#moveToNew")[0].href = "/HomePage/HomePage.html?University=" + UniversityAcronyms;
+        $("#moveToNew")[0].href = "/HomePage/HomePage.html?University=" + universityAcronyms;
     });
 };
 

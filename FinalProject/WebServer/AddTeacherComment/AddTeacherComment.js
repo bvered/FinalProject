@@ -114,7 +114,7 @@ function setupCourseInfo() {
                 var courseName = data[course].CourseName;
                 var courseId = data[course].CourseId;
                 var courseLink = "../AddCourseComment/AddCourseComment.html?University=" + currentUniversity + "&id=" + courseId;
-                $('#teacherCoursesTD').append("<a href=" + courseLink + ">" + courseName + "</a></br>")
+                $('#teacherCoursesTD').append("<a href=" + courseLink + ">" + courseName + "</a></br>");
             }
             succeed = true;
         },
@@ -186,7 +186,7 @@ function showComments() {
         $('#allComments').append(noCommentsErrorLabel);
         return;
     }
-    for (comment in filteredComments) {
+    for (var comment in filteredComments) {
         printComment(filteredComments[comment], comment);
     }
 }
@@ -285,9 +285,9 @@ function setTeacherCommentsWithFilters() {
     var sortBy = {
         TeacherId: teacher.Id,
         sortByDate: $("#filteredByNew").is(':checked'),
-        sortByLikes: $('#filterByLikes').is(':checked'),
+        sortByLikes: $('#filterByLikes').is(':checked')
     };
-    var request = $.ajax({
+    $.ajax({
         type: "POST",
         data: JSON.stringify(sortBy),
         url: '/api/Teachers/GetSortedTeacherComments',
@@ -296,7 +296,7 @@ function setTeacherCommentsWithFilters() {
             filteredComments = data;
             showComments();
         },
-        fail: function (jqXhr, textStatus) {
+        fail: function () {
             filteredComments = null;
             showComments();
         },

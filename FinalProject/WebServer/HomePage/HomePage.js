@@ -53,7 +53,7 @@ function change1(choose) {
 }
 
 $(document).ready(function () {
-    $('#advancedSearch').on('click', function (event) {
+    $('#advancedSearch').on('click', function () {
         $('#advancedSearchDiv').toggle('show');
     });
 

@@ -21,8 +21,8 @@ function getQuertyString() {
     return queryString;
 }
 
-function ifNoUniversity(University) {
-    if (University === undefined || University === null) {
+function ifNoUniversity(university) {
+    if (university === undefined || university === null) {
         window.location = "/index.html";
     }
 }

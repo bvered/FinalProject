@@ -19,27 +19,27 @@ namespace WebServer.Controllers
                 IList<ResultSyllabus> result = new List<ResultSyllabus>();
                 var course = session.Load<Course>(new Guid(id));
 
-                foreach (var CourseSemester in course.CourseInSemesters)
+                foreach (var courseSemester in course.CourseInSemesters)
                 {
-                    if (CourseSemester.uploadedSyllabus != null)
+                    if (courseSemester.uploadedSyllabus != null)
                     {
-                        Guid syllabusId = CourseSemester.uploadedSyllabus.Id;
-                        string semester = CourseSemester.uploadedSyllabus.Semster.ToString();
+                        Guid syllabusId = courseSemester.uploadedSyllabus.Id;
+                        string semester = courseSemester.uploadedSyllabus.Semster.ToString();
                         semester = getSpecificSemester(semester);
-                        int year = CourseSemester.uploadedSyllabus.Year;
-                        string fileName = CourseSemester.uploadedSyllabus.FileName;
-                        string extenstion = CourseSemester.uploadedSyllabus.ext;
+                        int year = courseSemester.uploadedSyllabus.Year;
+                        string fileName = courseSemester.uploadedSyllabus.FileName;
+                        string extenstion = courseSemester.uploadedSyllabus.ext;
                         result.Add(new ResultSyllabus(syllabusId, semester, year, fileName, true, extenstion, "סילבוס"));
                     }
 
-                    if (CourseSemester.uploadedGrades != null)
+                    if (courseSemester.uploadedGrades != null)
                     {
-                        Guid gradesId = CourseSemester.uploadedGrades.Id;
-                        string semester = CourseSemester.uploadedGrades.Semster.ToString();
+                        Guid gradesId = courseSemester.uploadedGrades.Id;
+                        string semester = courseSemester.uploadedGrades.Semster.ToString();
                         semester = getSpecificSemester(semester);
-                        int year = CourseSemester.uploadedGrades.Year;
-                        string fileName = CourseSemester.uploadedGrades.FileName;
-                        string extenstion = CourseSemester.uploadedGrades.ext;
+                        int year = courseSemester.uploadedGrades.Year;
+                        string fileName = courseSemester.uploadedGrades.FileName;
+                        string extenstion = courseSemester.uploadedGrades.ext;
                         result.Add(new ResultSyllabus(gradesId, semester, year, fileName, false, extenstion, "התפלגות ציונים"));
                     }
                 }
@@ -52,17 +52,17 @@ namespace WebServer.Controllers
         {
             string specificSemester = null;
 
-            if (semester == "A")
+            switch (semester)
             {
-                specificSemester = "א";
-            }
-            else if (semester == "B")
-            {
-                specificSemester = "ב";
-            }
-            else if (semester == "Summer")
-            {
-                specificSemester = "קיץ";
+                case "A":
+                    specificSemester = "א";
+                    break;
+                case "B":
+                    specificSemester = "ב";
+                    break;
+                case "Summer":
+                    specificSemester = "קיץ";
+                    break;
             }
             return specificSemester;
         }

@@ -38,41 +38,41 @@ function ShowResults() {
     }
 }
 
-function initFilterValues(query_string) {
+function initFilterValues(queryString) {
     var typeSelect = $('input:radio[name=type]');
     var valueString;
     if (typeSelect.is(':checked') === false) {
-        valueString = '[value=' + query_string["search"] + ']';
+        valueString = '[value=' + queryString["search"] + ']';
         typeSelect.filter(valueString).prop('checked', true);
     }
 
-    var DegreeSelect = $('input:radio[name=degree]');
-    if (DegreeSelect.is(':checked') === false) {
-        valueString = '[value=' + query_string["degree"] + ']';
-        DegreeSelect.filter(valueString).prop('checked', true);
+    var degreeSelect = $('input:radio[name=degree]');
+    if (degreeSelect.is(':checked') === false) {
+        valueString = '[value=' + queryString["degree"] + ']';
+        degreeSelect.filter(valueString).prop('checked', true);
     }
 
-    var FacultySelect = $('input:radio[name=faculty]');
-    if (FacultySelect.is(':checked') === false) {
-        valueString = '[value=' + query_string["faculty"] + ']';
-        FacultySelect.filter(valueString).prop('checked', true);
+    var facultySelect = $('input:radio[name=faculty]');
+    if (facultySelect.is(':checked') === false) {
+        valueString = '[value=' + queryString["faculty"] + ']';
+        facultySelect.filter(valueString).prop('checked', true);
     }
 
-    var MandatorySelect = $('input:radio[name=mandatory]');
-    if (MandatorySelect.is(':checked') === false) {
-        valueString = '[value=' + query_string["mandatory"] + ']';
-        MandatorySelect.filter(valueString).prop('checked', true);
+    var mandatorySelect = $('input:radio[name=mandatory]');
+    if (mandatorySelect.is(':checked') === false) {
+        valueString = '[value=' + queryString["mandatory"] + ']';
+        mandatorySelect.filter(valueString).prop('checked', true);
     }
 
-    var YearSelect = $('input:radio[name=year]');
-    if (YearSelect.is(':checked') === false) {
-        valueString = '[value=' + query_string["year"] + ']';
-        YearSelect.filter(valueString).prop('checked', true);
+    var yearSelect = $('input:radio[name=year]');
+    if (yearSelect.is(':checked') === false) {
+        valueString = '[value=' + queryString["year"] + ']';
+        yearSelect.filter(valueString).prop('checked', true);
     }
 }
 
-function createSearchText(query_string) {
-    var searchText = query_string["SearchText"];
+function createSearchText(queryString) {
+    var searchText = queryString["SearchText"];
     var res = searchText.split("+");
     var searchTextToReturn = new String();
      for (var i in res) {
@@ -83,8 +83,8 @@ function createSearchText(query_string) {
         }
     }
 
-    query_string["SearchText"] = searchTextToReturn;
-    $("#searchText").attr('value', query_string["SearchText"]);
+    queryString["SearchText"] = searchTextToReturn;
+    $("#searchText").attr('value', queryString["SearchText"]);
 }
 
 function getTeacherData() {
@@ -256,22 +256,22 @@ function showTeachersData(arrayResult) {
 
         teacherData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
-        teacherData.appendChild(Score);
+        var score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
+        teacherData.appendChild(score);
 
         teacherData.appendChild(document.createElement("br"));
 
-        var Teach = document.createTextNode('קורסים: ');
-        teacherData.appendChild(Teach);
+        var teach = document.createTextNode('קורסים: ');
+        teacherData.appendChild(teach);
 
         for (var l in arrayResult[i].Courses) {
-            var Course;
+            var course;
             if (l == arrayResult[i].Courses.length - 1) {
-                Course = document.createTextNode('.' + arrayResult[i].Courses[l]);
+                course = document.createTextNode('.' + arrayResult[i].Courses[l]);
             } else {
-                Course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
+                course = document.createTextNode(arrayResult[i].Courses[l] + ', ');
             }
-            teacherData.appendChild(Course);
+            teacherData.appendChild(course);
         }
         $("#content").append(teacherData);
         $("#content").append(newLine);
@@ -306,8 +306,8 @@ function showCoursesData(arrayResult) {
 
         courseData.appendChild(document.createElement("br"));
 
-        var Score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
-        courseData.appendChild(Score);
+        var score = document.createTextNode('ממוצע דירוגים: ' + arrayResult[i].Score);
+        courseData.appendChild(score);
 
         courseData.appendChild(document.createElement("br"));
 

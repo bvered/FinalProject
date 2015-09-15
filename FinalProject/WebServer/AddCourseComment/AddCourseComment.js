@@ -59,7 +59,7 @@ function printCourseInfo() {
 function setupFilters() {
     var teachersToFilterBy = [];
     var yearToFilterBy = [];
-    for (courseInSemster in course.CourseInSemesters) {
+    for (var courseInSemster in course.CourseInSemesters) {
         if (course.CourseInSemesters[courseInSemster].CourseComments.length > 0) {
             teachersToFilterBy.push(course.CourseInSemesters[courseInSemster].Teacher);
             yearToFilterBy.push(course.CourseInSemesters[courseInSemster].Year);
@@ -74,22 +74,23 @@ function setupFilters() {
     for (year in yearToFilterBy) {
         $('#filteredByYear').append($('<option>', {
             value: yearToFilterBy[year],
-            text: yearToFilterBy[year],
+            text: yearToFilterBy[year]
         }));
     }
-    for (var teacher in teachersToFilterBy) {
+    var teacher;
+    for (teacher in teachersToFilterBy) {
         if (teachersToFilterBy[teacher] == null || teachersToFilterBy[teacher].Name == undefined) {
             continue;
         }
         $('#filterByTeacher').append($('<option>', {
             value: teachersToFilterBy[teacher].Id,
-            text: teachersToFilterBy[teacher].Name,
+            text: teachersToFilterBy[teacher].Name
         }));
     }
     for (teacher in allCourseFacultyTeachers) {
         $('#allCourseFacultyTeachers').append($('<option>', {
             value: allCourseFacultyTeachers[teacher].TeacherId,
-            text: allCourseFacultyTeachers[teacher].TeacherName,
+            text: allCourseFacultyTeachers[teacher].TeacherName
         }));
     };
 }
@@ -116,7 +117,7 @@ function printCourseProperties() {
 }
 
 function printCourseScores() {
-    for (criteria in allCriterias) {
+    for (var criteria in allCriterias) {
         var ratingName = document.getElementById("criteriaTextTD" + criteria);
         ratingName.innerHTML = allCriterias[criteria];
         $('#avgRating' + criteria).rating('update', course.AverageCriteriaRatings.AverageRatingsList[criteria]);
@@ -133,7 +134,7 @@ function showCourseComments() {
         $('#allComments').append(noCommentsErrorLabel);
         return;
     }
-    for (comment in filteredComments) {
+    for (var comment in filteredComments) {
         printComment(filteredComments[comment], comment);
     }
 }
@@ -211,34 +212,24 @@ function facultyNameByEnum(faculty) {
     switch (faculty) {
         case 0:
             return "מדעי המחשב";
-            break;
         case 1:
             return "מדעי ההתנהגות";
-            break;
         case 2:
             return "מערכות מידע";
-            break;
         case 3:
             return "אחיות";
-            break;
         case 4:
             return "כלכלה וניהול";
-            break;
         case 5:
             return "פוליטיקה וממשל";
-            break;
         case 6:
             return "פיתוח ארגוני";
-            break;
         case 7:
             return "מנהל עסקים";
-            break;
         case 8:
             return "פסיכולוגיה";
-            break;
         default:
             return "";
-            break;
     }
 }
 
@@ -266,7 +257,7 @@ function intendedYearNameByEnum(year) {
         case 4:
             return "שנה רביעית";
         default:
-            "אין";
+            return "אין";
     }
 }
 
@@ -279,7 +270,7 @@ function semesterNameByEnum(semester) {
         case 2:
             return "קיץ";
         default:
-            "";
+            return "";
     }
 }
 
@@ -290,9 +281,9 @@ function setCourseCommentsWithFilters() {
         CourseId: course.Id,
         Semester: $('#filteredBySemester').val(),
         SortByDate: $("#filteredByNew").is(':checked'),
-        SortByLikes: $('#filterByLikes').is(':checked'),
+        SortByLikes: $('#filterByLikes').is(':checked')
     };
-    var request = $.ajax({
+     $.ajax({
         type: "POST",
         data: JSON.stringify(commentRequest),
         url: '/api/Courses/GetCommentsForCourse',
@@ -301,7 +292,7 @@ function setCourseCommentsWithFilters() {
             filteredComments = data;
             showCourseComments();
         },
-        fail: function (jqXhr, textStatus) {
+        fail: function () {
             filteredComments = null;
             showCourseComments();
         },
@@ -312,7 +303,7 @@ function setCourseCommentsWithFilters() {
 
 function allTeachers() {
     var succeed = false;
-    var request = $.ajax({
+     $.ajax({
         type: "GET",
         url: '/api/Teachers/GetAllTeacherNamesAndIds/' + course.Faculty,
         contentType: "application/json",
@@ -320,7 +311,7 @@ function allTeachers() {
             allCourseFacultyTeachers = data;
             succeed = true;
         },
-        fail: function (data) {
+        fail: function () {
             succeed = false;
         },
         async: false
@@ -351,10 +342,10 @@ function loadCommentsCriteras() {
 }
 
 function loadCourse() {
-    id = getQuertyString()["id"];
-    succeed = false;
+    var id = getQuertyString()["id"];
+    var succeed = false;
 
-    var request = $.ajax({
+    $.ajax({
         type: "GET",
         url: '/api/Courses/GetCourse' + "/" + id,
         contentType: "application/json",
@@ -362,7 +353,7 @@ function loadCourse() {
             course = data;
             succeed = true;
         },
-        fail: function (data) {
+        fail: function () {
             succeed = false;
         },
         async: false
@@ -371,17 +362,16 @@ function loadCourse() {
 }
 
 function addVote(voteValueLabel, id, like) {
-    succeed = false;
     var vote = {
         commentId: id,
-        liked: like,
+        liked: like
     };
     var didLikeBefore = $.jStorage.get(id);
     if (didLikeBefore == true) {
         alert("מותר לדרג פעם אחת");
-        return succeed;
+        return false;
     }
-    var request = $.ajax({
+    $.ajax({
         type: "POST",
         data: JSON.stringify(vote),
         url: '/api/Courses/AddVote',
@@ -395,7 +385,7 @@ function addVote(voteValueLabel, id, like) {
         },
         async: false
     });
-    return succeed;
+    return false;
 }
 
 function addComment() {
@@ -416,7 +406,7 @@ function addComment() {
     var five = $('#newAvgRating4').val();
     var six = $('#newAvgRating5').val();
     var ratings = [one, two, three, four, five, six];
-    for (rate in ratings) {
+    for (var rate in ratings) {
         if (ratings[rate] == undefined || ratings[rate] == 0) {
             alert("עליך לדרג את כל הקריטריונים");
             return;
@@ -428,14 +418,14 @@ function addComment() {
         Ratings: ratings,
         Comment: $('#CourseNewCommetBox').val(),
         semester: $('#courseSemesters').val(),
-        Year: parsedYear,
+        Year: parsedYear
     };
-    var request = $.ajax({
+     $.ajax({
         type: "POST",
         data: JSON.stringify(comment),
         url: '/api/Courses/AddComment',
         contentType: "application/json",
-        success: function (data) {
+        success: function () {
             location.reload();
         },
         fail: function (jqXhr, textStatus) {

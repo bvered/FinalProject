@@ -8,6 +8,7 @@ header .logo {
     width: 280px;
     height: 90px;
     margin: 0 auto;
+    background-color: #ffffff;
     background-color: rgba(255,255,255,0.85);
     border: 2px solid white;
     border-radius: 5px;
@@ -22,10 +23,8 @@ header .logo {
     margin-top: 30px;
 }
 
-.courseInfo {
-}
-
     .courseInfo table {
+        background-color: #ffffff;
         background-color: rgba(255, 255, 255, 0.90);
         width: 500px;
         height: 200px;
@@ -33,9 +32,10 @@ header .logo {
         border-radius: 5px;
         visibility :inherit
     }
-    
-    .courseInfo table .addComment {
-        background-color: rgba(0, 50, 196, 0.60);
+
+.courseInfo table .addComment {
+    background-color: #0032c4;
+    background-color: rgba(0, 50, 196, 0.60);
         border-radius:5px;
         width:100px;
         height:30px;
@@ -45,6 +45,7 @@ header .logo {
 }
 
 .courseKeyTdUp {
+    background-color: #0032c4;
     background-color: rgba(0, 50, 196, 0.44);
     width: 150px;
     padding-right: 20px;
@@ -54,6 +55,7 @@ header .logo {
 }
 
 .courseKeyTdDown {
+    background-color: #0032c4;
     background-color: rgba(0, 50, 196, 0.44);
     width: 150px;
     padding-top:5px;
@@ -64,6 +66,7 @@ header .logo {
 }
 
 .courseKeyTdInner {
+    background-color: #0032c4;
     background-color: rgba(0, 50, 196, 0.44);
     width: 150px;
     padding-right: 20px;
@@ -71,10 +74,8 @@ header .logo {
     font-weight: bold;
 }
 
-.newComment {
-}
-
     .newComment table {
+        background-color: #ffffff;
         background-color: rgba(255, 255, 255, 0.90);
         margin-right: 100px;
         border-radius: 5px;
@@ -89,7 +90,8 @@ textarea {
 }
 
 select {
-        background-color: rgba(0, 0, 0, 0.1);
+    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.1);
         border-radius:5px;
         width:150px;
         height:30px;
@@ -99,7 +101,8 @@ select {
 }
 
 .sendButton {
-        background-color: rgba(0, 50, 196, 0.60);
+    background-color: #0032c4;
+    background-color: rgba(0, 50, 196, 0.60);
         border-radius:5px;
         width:70px;
         height:30px;
@@ -109,27 +112,29 @@ select {
 }
 
 .voteButton {
+    background-color:#ffffff;
     background-color:rgba(255, 255, 255, 0.00);
     border-radius: 5px;
     border-width:1px;
-
 }
 
-    .allComments h1 {
-            background-color:rgba(255, 255, 255, 0.60);
+.allComments h1 {
+    background-color:#ffffff;
+    background-color:rgba(255, 255, 255, 0.60);
             margin: 0 auto; 
             text-align:center;
-    }
+}
 
-    .allComments table {
-        background-color: rgba(255, 255, 255, 0.90);
+.allComments table {
+    background-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.90);
         border-radius: 5px;
         width: 600px;
         margin: 0 auto; 
         margin-bottom:5px !important;
         position: relative;
         text-align:center;
-    }
+}
 
 .likesTR {
     align-content:center;
@@ -154,8 +159,9 @@ select {
     margin: 0 auto; 
     position: relative;
     text-align:center;
+    background-color:#ffffff;
     background-color:rgba(255, 255, 255, 0.9);
-    border-radius:5px;  
+    border-radius:5px;
 }
 
 #teacherCoursesDiv {
@@ -163,6 +169,7 @@ select {
     margin: 0 auto; 
     position: relative;
     text-align:center;
+    background-color:#ffffff;
     background-color:rgba(255, 255, 255, 0.9);
-    border-radius:5px;  
+    border-radius:5px;
 }

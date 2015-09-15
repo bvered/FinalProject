@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Mime;
 using NHibernate;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
@@ -18,12 +17,12 @@ namespace TestConsole
     {
         private static void Main(string[] args)
         {
-            bool updateDB = args.Length == 1 && args[0].Contains("/update");
+            bool updateDb = args.Length == 1 && args[0].Contains("/update");
 
-            var sessionFactory = NHibernateConfig.CreateSessionFactory(!updateDB,
+            var sessionFactory = NHibernateConfig.CreateSessionFactory(!updateDb,
                 @"..\..\..\..\WebServer\App_Data\ProjectDB.db");
 
-            if (!updateDB)
+            if (!updateDb)
             {
                 var session = sessionFactory.OpenSession();
 
@@ -79,44 +78,44 @@ namespace TestConsole
 
             var dtexcel = new DataTable("Report$".TrimEnd('$'));
             const string query = "SELECT  * FROM [Report1$]";
-            using (OleDbConnection conn = createConnection(@"Images\db.xlsx", true))
+            using (OleDbConnection conn = CreateConnection(@"Images\db.xlsx", true))
             {
                 var daexcel = new OleDbDataAdapter(query, conn);
                 dtexcel.Locale = CultureInfo.InvariantCulture;
                 daexcel.Fill(dtexcel);
             }
 
-            var teachersForCourses = createTeachers(dtexcel, session, mta);
+            var teachersForCourses = CreateTeachers(dtexcel, session, mta);
 
-            createCourses(dtexcel, session, teachersForCourses, mta);
+            CreateCourses(dtexcel, session, teachersForCourses, mta);
 
         }
 
-        private static void createCourses(DataTable dtexcel, ISession session, Dictionary<int, Teacher> teachersForCourses, University mta)
+        private static void CreateCourses(DataTable dtexcel, ISession session, Dictionary<int, Teacher> teachersForCourses, University mta)
         {
             int index = 0;
-            var courses = new Dictionary<string, List<courseInSemester>>();
+            var courses = new Dictionary<Tuple<string, Faculty>, List<CourseInSemesterTemp>>();
             foreach (DataRow row in dtexcel.Rows)
             {
                 string courseName = row["Description"].ToString();
                 string facultyName = row["Faculty"].ToString();
-                string nameAndFculty = courseName + "." + facultyName;
+                var nameAndFculty = Tuple.Create(courseName, FacultyMethod.FacultyFromString(facultyName));
                 string semester = row["Semester"].ToString();
                 string teacherName = row["TeacherName"].ToString();
                 string intendedYear = row["Year"].ToString();
 
                 if (courses.ContainsKey(nameAndFculty) == false)
                 { // if the course doesnt exist
-                    courses[nameAndFculty] = new List<courseInSemester>();
-                    createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
+                    courses[nameAndFculty] = new List<CourseInSemesterTemp>();
+                    CreateCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                 }
                 else
                 { // if the course exists
                     bool found = false;
-                    foreach (courseInSemester courseInSemester in courses[nameAndFculty])
+                    foreach (CourseInSemesterTemp courseInSemester in courses[nameAndFculty])
                     // cross all over the teachers, to see if we need to add new teacher to the course
                     {
-                        if (courseInSemester.teacherName == teacherName && courseInSemester.semester == semester)
+                        if (courseInSemester.TeacherName == teacherName && courseInSemester.Semester == semester)
                         {
                             found = true;
                         }
@@ -124,42 +123,41 @@ namespace TestConsole
 
                     if (found == false)
                     {
-                        createCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
+                        CreateCourseInSemester(courses, row, intendedYear, semester, teacherName, nameAndFculty);
                     }
                 }
             }
 
-            foreach (KeyValuePair<string, List<courseInSemester>> course in courses)
+            foreach (KeyValuePair<Tuple<string, Faculty>, List<CourseInSemesterTemp>> course in courses)
             {
-                string name = course.Key.Substring(0, course.Key.IndexOf("."));
-                string courseFaculty = course.Key.Substring(course.Key.IndexOf(".") + 1,
-                    course.Key.Length - name.Length - 1);
-                Faculty faculty = FacultyMethod.FacultyFromString(courseFaculty);
-                var newCourse = new Course(0, name, faculty);
-                newCourse.University = mta;
-                newCourse.IsMandatory = course.Value.Any(x => x.isMandatory);
+                string name = course.Key.Item1;
+                var faculty = course.Key.Item2;
+
+                var newCourse = new Course(0, name, faculty)
+                {
+                    University = mta,
+                    IsMandatory = course.Value.Any(x => x.IsMandatory)
+                };
 
                 bool wasAdded = false;
-                foreach (courseInSemester courseIn in course.Value)
+                foreach (CourseInSemesterTemp courseIn in course.Value)
                 {
-                    var semesterCourse = new CourseInSemester();
-                    if (teachersForCourses.ContainsKey(courseIn.id) == false)
+                    var semesterCourse = new CourseInSemester
                     {
-                        semesterCourse.Teacher = null;
-                    }
-                    else
-                    {
-                        semesterCourse.Teacher = teachersForCourses[courseIn.id];
-                    }
+                        Teacher =
+                            teachersForCourses.ContainsKey(courseIn.Id) == false
+                                ? null
+                                : teachersForCourses[courseIn.Id],
+                        Year = 2016,
+                        Course = newCourse,
+                        Semester = SemesterMethod.SemesterFromString(courseIn.Semester)
+                    };
 
-                    semesterCourse.Year = 2016;
-                    semesterCourse.Course = newCourse;
-                    semesterCourse.Semester = SemesterMethod.SemesterFromString(courseIn.semester);
 
                     if (wasAdded == false)
                     {
-                        newCourse.IntendedYear = IntendedYearMethod.IntendedYearFromInt(courseIn.intendedYear);
-                        newCourse.AcademicDegree = AcademicDegreeMethod.AcademicDegreeFromString(courseIn.academicDegree);
+                        newCourse.IntendedYear = IntendedYearMethod.IntendedYearFromInt(courseIn.IntendedYear);
+                        newCourse.AcademicDegree = AcademicDegreeMethod.AcademicDegreeFromString(courseIn.AcademicDegree);
                         wasAdded = true;
                     }
 
@@ -176,7 +174,7 @@ namespace TestConsole
             }
         }
 
-        private static Dictionary<int, Teacher> createTeachers(DataTable dtexcel, ISession session, University mta)
+        private static Dictionary<int, Teacher> CreateTeachers(DataTable dtexcel, ISession session, University mta)
         {
             int index = 0;
             var teachersForCourses = new Dictionary<int, Teacher>();
@@ -189,6 +187,8 @@ namespace TestConsole
                     continue;
                 }
 
+                var facultyName = row["Faculty"].ToString();
+
                 if (teachersForCourses.ContainsKey(teacherId) == false)
                 {
                     string teacherName = row["TeacherName"].ToString();
@@ -198,7 +198,7 @@ namespace TestConsole
                     }
 
                     string teacherMail = row["Mail"].ToString();
-                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    Faculty teacherFaculty = FacultyMethod.FacultyFromString(facultyName);
                     var newTeacher = new Teacher(teacherId, teacherName, 0, "בקרוב", teacherMail, mta);
                     newTeacher.Faculties.Add(teacherFaculty);
                     teachersForCourses.Add(teacherId, newTeacher);
@@ -206,7 +206,7 @@ namespace TestConsole
                 else
                 {
                     var teacher = teachersForCourses[teacherId];
-                    var faculty = FacultyMethod.FacultyFromString(row["Faculty"].ToString());
+                    var faculty = FacultyMethod.FacultyFromString(facultyName);
                     if (!teacher.Faculties.Contains(faculty))
                     {
                         teacher.Faculties.Add(faculty);
@@ -230,27 +230,27 @@ namespace TestConsole
 
         }
 
-        private static OleDbConnection createConnection(string filePath, bool hasHeaders)
+        private static OleDbConnection CreateConnection(string filePath, bool hasHeaders)
         {
-            string HDR = hasHeaders ? "Yes" : "No";
+            string hdr = hasHeaders ? "Yes" : "No";
             string strConn;
             if (filePath.Substring(filePath.LastIndexOf('.')).ToLower() == ".xlsx" ||
                 filePath.Substring(filePath.LastIndexOf('.')).ToLower() == ".xlsm")
                 strConn = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=\"" + filePath +
-                          "\";Extended Properties=\"Excel 12.0;HDR=" + HDR + ";IMEX=0\"";
+                          "\";Extended Properties=\"Excel 12.0;HDR=" + hdr + ";IMEX=0\"";
             else
                 strConn = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=\"" + filePath +
-                          "\";Extended Properties=\"Excel 8.0;HDR=" + HDR + ";IMEX=0\"";
+                          "\";Extended Properties=\"Excel 8.0;HDR=" + hdr + ";IMEX=0\"";
             OleDbConnection conn = new OleDbConnection(strConn);
             conn.Open();
             return conn;
         }
 
-        private static void createCourseInSemester(Dictionary<string, List<courseInSemester>> courses, DataRow row,
-            string intendedYear, string semester, string teacherName, string nameAndFculty)
+        private static void CreateCourseInSemester(Dictionary<Tuple<string, Faculty>, List<CourseInSemesterTemp>> courses, DataRow row,
+            string intendedYear, string semester, string teacherName, Tuple<string, Faculty> nameAndFculty)
         {
-            courseInSemester courseSemester = new courseInSemester();
-            int isMandatory = 0;
+            CourseInSemesterTemp courseSemesterTemp = new CourseInSemesterTemp();
+            int isMandatory;
             bool mandatory = false;
 
             if (Int32.TryParse(row["Mandatory"].ToString(), out isMandatory))
@@ -258,18 +258,11 @@ namespace TestConsole
                 mandatory = isMandatory != 0;
             }
 
-            courseSemester.isMandatory = mandatory;
-            courseSemester.semester = semester;
-            courseSemester.teacherName = teacherName;
+            courseSemesterTemp.IsMandatory = mandatory;
+            courseSemesterTemp.Semester = semester;
+            courseSemesterTemp.TeacherName = teacherName;
             int teacherId;
-            if (Int32.TryParse(row["TeacherId"].ToString(), out teacherId))
-            {
-                courseSemester.id = teacherId;
-            }
-            else
-            {
-                courseSemester.id = 0;
-            }
+            courseSemesterTemp.Id = Int32.TryParse(row["TeacherId"].ToString(), out teacherId) ? teacherId : 0;
 
             int year;
             if (!Int32.TryParse(intendedYear, out year))
@@ -277,20 +270,20 @@ namespace TestConsole
                 year = 1;
             }
 
-            courseSemester.intendedYear = year;
+            courseSemesterTemp.IntendedYear = year;
             string academicDegree = row["AcademicDegree"].ToString();
-            courseSemester.academicDegree = academicDegree;
-            courses[nameAndFculty].Add(courseSemester);
+            courseSemesterTemp.AcademicDegree = academicDegree;
+            courses[nameAndFculty].Add(courseSemesterTemp);
         }
 
-        public class courseInSemester
+        public class CourseInSemesterTemp
         {
-            public string teacherName { get; set; }
-            public string semester { get; set; }
-            public bool isMandatory { get; set; }
-            public int id { get; set; }
-            public int intendedYear { get; set; }
-            public string academicDegree { get; set; }
+            public string TeacherName { get; set; }
+            public string Semester { get; set; }
+            public bool IsMandatory { get; set; }
+            public int Id { get; set; }
+            public int IntendedYear { get; set; }
+            public string AcademicDegree { get; set; }
         }
     }
 }

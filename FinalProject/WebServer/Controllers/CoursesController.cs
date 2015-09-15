@@ -119,8 +119,8 @@ namespace WebServer.Controllers
                 var query = session.Query<Course>().Where(x => x.Name == createCommand.Name).ToList();
                 if (query.Count != 0)
                 {
-                    const HttpStatusCode MyStatusCode = (HttpStatusCode)222;
-                    return Content(MyStatusCode, query.Select(x => x.Id).FirstOrDefault());
+                    const HttpStatusCode myStatusCode = (HttpStatusCode)222;
+                    return Content(myStatusCode, query.Select(x => x.Id).FirstOrDefault());
                 }
                 var course = new Course
                 {
@@ -162,7 +162,6 @@ namespace WebServer.Controllers
             using (var transaction = session.BeginTransaction())
             {
                 Guid courseGuid, teacherGuid;
-                Teacher courseTeacher;
                 var succedParsingCourseId = Guid.TryParse(comment.Id, out courseGuid);
                 if (!succedParsingCourseId)
                 {
@@ -174,7 +173,7 @@ namespace WebServer.Controllers
                 {
                     return NotFound();
                 }
-                courseTeacher = session.Load<Teacher>(teacherGuid);
+                var courseTeacher = session.Load<Teacher>(teacherGuid);
                 var courseInSemester = session.QueryOver<CourseInSemester>()
                     .Where(x => x.Course == courseToAddComment &&
                     x.Semester == comment.Semester &&
@@ -338,9 +337,9 @@ namespace WebServer.Controllers
         {
             using (var session = DBHelper.OpenSession())
             {
-                return session.Query<CourseInSemester>()
-                    .Where(c => c.CourseComments.Contains(comment))
-                    .SingleOrDefault();
+                return session
+                    .Query<CourseInSemester>()
+                    .SingleOrDefault(c => c.CourseComments.Contains(comment));
             }
         }
     }

@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http;
-using NHibernate.Linq;
 using WebServer.App_Data;
 using WebServer.App_Data.Models;
-using WebServer.App_Data.Models.Enums;
 
 namespace WebServer.Controllers
 {
@@ -18,7 +14,7 @@ namespace WebServer.Controllers
     {
         [HttpGet]
         [ActionName("GetUniversities")]
-        public IList<returnUniversity> GetAllCoursesNames()
+        public IList<ReturnUniversity> GetAllCoursesNames()
         {
             using (var session = DBHelper.OpenSession())
             {
@@ -26,9 +22,8 @@ namespace WebServer.Controllers
 
                 return
                     universities.Select(
-                        university => new returnUniversity(university.Name, university.Acronyms, university.SiteAddress))
+                        university => new ReturnUniversity(university.Name, university.Acronyms, university.SiteAddress))
                         .ToList();
-                ;
             }
         }
 
@@ -50,24 +45,24 @@ namespace WebServer.Controllers
                         buffer = br.ReadBytes(httpPostedFile.ContentLength);
                     }
 
-                    string UniversityName = HttpContext.Current.Request.Form["UniversityName"];
-                    string UniversityAcronyms = HttpContext.Current.Request.Form["UniversityAcronyms"];
-                    string UniversitySite = HttpContext.Current.Request.Form["UniversitySite"];
+                    string universityName = HttpContext.Current.Request.Form["UniversityName"];
+                    string universityAcronyms = HttpContext.Current.Request.Form["UniversityAcronyms"];
+                    string universitySite = HttpContext.Current.Request.Form["UniversitySite"];
 
-                    if (string.IsNullOrWhiteSpace(UniversityName) ||
-                        string.IsNullOrWhiteSpace(UniversityAcronyms) ||
-                        string.IsNullOrWhiteSpace(UniversitySite))
+                    if (string.IsNullOrWhiteSpace(universityName) ||
+                        string.IsNullOrWhiteSpace(universityAcronyms) ||
+                        string.IsNullOrWhiteSpace(universitySite))
                     {
                         return BadRequest();
                     }
 
-                    UniversitySite = UniversitySite.ToLower();
-                    if (!UniversitySite.Contains("http://") && !UniversitySite.Contains("https://"))
+                    universitySite = universitySite.ToLower();
+                    if (!universitySite.Contains("http://") && !universitySite.Contains("https://"))
                     {
-                        UniversitySite = "http://" + UniversitySite;
+                        universitySite = "http://" + universitySite;
                     }
 
-                    if (CheckIfUniversityExists(UniversityName, UniversityAcronyms, UniversitySite))
+                    if (CheckIfUniversityExists(universityName, universityAcronyms, universitySite))
                     {
                         return Conflict();
                     }
@@ -78,9 +73,9 @@ namespace WebServer.Controllers
                         {
                             var newUniversity = new University
                             {
-                                Acronyms = UniversityAcronyms,
-                                Name = UniversityName,
-                                SiteAddress = UniversitySite,
+                                Acronyms = universityAcronyms,
+                                Name = universityName,
+                                SiteAddress = universitySite,
                                 BackgroundImage = buffer,
                                 FileExtention = Path.GetExtension(httpPostedFile.FileName)
                             };
@@ -96,14 +91,14 @@ namespace WebServer.Controllers
 
         [HttpGet]
         [ActionName("GetUvinersitryPicture")]
-        public returnUniversity GetUvinersitryPicture([FromUri] string id)
+        public ReturnUniversity GetUvinersitryPicture([FromUri] string id)
         {
             using (var session = DBHelper.OpenSession())
             {
                 var university = session.QueryOver<University>().List().SingleOrDefault(x => x.Acronyms == id);
                 var base64String = Convert.ToBase64String(university.BackgroundImage, 0,
                     university.BackgroundImage.Length);
-                returnUniversity newUniversity = new returnUniversity
+                ReturnUniversity newUniversity = new ReturnUniversity
                 {
                     WebAddress = university.SiteAddress,
                     UniversityName = university.Name,
@@ -113,7 +108,7 @@ namespace WebServer.Controllers
             }
         }
 
-        public bool CheckIfUniversityExists(string UniversityName, string UniversityAcronyms, string UniversitySite)
+        public bool CheckIfUniversityExists(string universityName, string universityAcronyms, string universitySite)
         {
             using (var session = DBHelper.OpenSession())
             {
@@ -121,29 +116,29 @@ namespace WebServer.Controllers
                     session.QueryOver<University>()
                         .Where(
                             x =>
-                                x.Acronyms == UniversityAcronyms || x.SiteAddress == UniversitySite ||
-                                x.Name == UniversityName).RowCount();
+                                x.Acronyms == universityAcronyms || x.SiteAddress == universitySite ||
+                                x.Name == universityName).RowCount();
 
                 if (query == 0) return false;
                 return true;
             }
         }
 
-        public class returnUniversity
+        public class ReturnUniversity
         {
             public string WebAddress { get; set; }
             public string UniversityName { get; set; }
             public string Base64 { get; set; }
             public string Acronyms { get; set; }
 
-            public returnUniversity(string name, string acronyms, string webAddress)
+            public ReturnUniversity(string name, string acronyms, string webAddress)
             {
                 UniversityName = name;
                 Acronyms = acronyms;
                 WebAddress = webAddress;
             }
 
-            public returnUniversity()
+            public ReturnUniversity()
             {
             }
         }
